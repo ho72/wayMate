@@ -4,7 +4,7 @@
 
 모바일 웹에서 에이전트와 대화하며 프로필과 여행 계획을 준비하고, Pleos 차량 앱에서 상대의 캐릭터를 통해 서로를 알아갑니다. 짧은 만남 이후에는 다른 여행자와 함께 이어가거나, 내 캐릭터와 본인의 여정을 이어갈 수 있습니다.
 
-현재는 기획 문서와 개발용 저장소의 기본 디렉터리를 준비한 단계입니다. 앱 기능·서버·Gradle 프로젝트는 아직 구현 전입니다. 개발 가제는 **wayMate**이며, 기존 자료의 서비스 가칭은 ‘말문이 트립’입니다.
+현재는 기획 문서와 개발용 저장소의 기본 구조, **Pleos 에뮬레이터에서 실행되는 차량 앱 첫 화면**을 준비한 단계입니다. 서버·웹·여행 전달·실제 SDK 연동은 아직 구현 전입니다. 개발 가제는 **wayMate**이며, 기존 자료의 서비스 가칭은 ‘말문이 트립’입니다.
 
 ## 저장소 구조
 
@@ -34,8 +34,8 @@ wayMate/
 ## 개발 준비
 
 - 웹·서버: 명세서 기준 Node.js `22.22.2`. 버전은 `mock-app/.nvmrc`에 기록합니다.
-- 차량: Android Studio, Android SDK API 34, Pleos Connect Emulator. 차량 앱은 Kotlin·Jetpack Compose로 구현합니다.
-- 실행 스크립트·Gradle Wrapper·의존성 버전은 해당 실행 기반을 구현하고 검증할 때 추가합니다. 현재 `npm start`, `npm test`, Android 빌드는 제공하지 않습니다.
+- 차량: Kotlin·Jetpack Compose, JDK 21, 컴파일 SDK 35, 실행 대상 Pleos Connect API 34. Android Studio에서 `mock-app/vehicle/`을 엽니다. [차량 앱 빌드·실행 안내](mock-app/vehicle/README.md)를 참고하세요.
+- 차량 앱은 `assembleMockDebug` 빌드와 `lintMockDebug`, Pleos 설치·실행을 확인했습니다. 웹·서버의 `npm start`·`npm test`는 아직 제공하지 않습니다.
 
 ## 문서
 

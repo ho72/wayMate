@@ -1,14 +1,14 @@
 # wayMate 앱 개발 디렉터리
 
-현재는 디렉터리와 Node 패키지 메타정보만 준비한 상태입니다. `main.mjs`·웹 화면·공통 JSON·Android Gradle 프로젝트·실행 스크립트는 구현 전입니다. 상세 파일명과 API는 [개발 및 연동 명세서](../docs/04_개발_및_연동_명세서.md)를 따릅니다.
+현재는 디렉터리와 Node 패키지 메타정보, Android Gradle 프로젝트와 차량 앱 첫 화면을 준비한 상태입니다. `main.mjs`·웹 화면·공통 JSON·여행 전달·실제 SDK 연동은 구현 전입니다. 상세 파일명과 API는 [개발 및 연동 명세서](../docs/04_개발_및_연동_명세서.md)를 따릅니다.
 
-| 디렉터리 | 구현할 내용 |
+| 디렉터리 | 담당 내용 |
 |---|---|
 | `server/` | HTTP 서버, 상태 전환, 명령 검증, 공개 데이터 projection, 파일 저장 |
 | `server/fixtures/` | 강릉 시연 원본과 준비된 응답. 웹에 직접 제공하지 않는 데이터 |
 | `web/` | 모바일 M01~M04와 시연자 O01의 HTML·CSS·JavaScript |
 | `web/views/` | 화면별 렌더링·상호작용 |
-| `vehicle/` | Kotlin·Jetpack Compose 차량 앱. [소스 위치 안내](vehicle/README.md) |
+| `vehicle/` | Kotlin·Jetpack Compose 차량 앱. 기본 화면·mock 빌드 구현. [빌드·실행 안내](vehicle/README.md) |
 | `shared/` | `schema.json`·`assets-manifest.json` 등 공통 계약 |
 | `assets/images/`, `assets/audio/` | 공통 캐릭터·장면 이미지와 준비 음성 원본 |
 | `scripts/` | 공통 소재를 차량 assets로 복사하는 동기화 등 개발 도구 |
@@ -18,7 +18,7 @@
 ## 다음 구현 순서
 
 1. Node `22.22.2` 환경에서 전달 서버 실행 기반과 `/health`를 구현합니다.
-2. `vehicle/`에 Android Gradle 프로젝트를 만들고 `mock` 앱 빌드를 확인합니다.
+2. 기본 화면이 실행되는 `vehicle/` 앱에 차량 제한 현재값·변경 확인과 미확인 상태 잠금을 추가합니다.
 3. 서버와 차량 앱 사이에서 변경한 값 한 건을 전달하고 ACK를 확인합니다.
 4. 실제 SDK는 별도 시험으로 동작을 확인한 뒤 `real` 구성에 연결합니다.
 

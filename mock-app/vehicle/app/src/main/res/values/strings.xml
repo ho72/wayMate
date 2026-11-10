@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">wayMate</string>
+    <string name="brand_tagline">내 친구와 함께하는 여행</string>
+    <string name="preview_label">화면 미리보기</string>
+    <string name="welcome_eyebrow">반가워요, 여행자님</string>
+    <string name="welcome_title">오늘의 여행,\n여기서 이어가요.</string>
+    <string name="welcome_description">나를 알아가는 내 친구와\n새로운 여행의 순간을 만나보세요.</string>
+    <string name="journey_title">내 여행 불러오기</string>
+    <string name="journey_description">모바일에서 준비한 여행을 차 안에서 이어가요.</string>
+    <string name="journey_step_one">모바일에서 나와 여행을 준비해요</string>
+    <string name="journey_step_two">내 친구와 여행을 이어가요</string>
+    <string name="load_journey">내 여행 불러오기</string>
+    <string name="preview_notice">여행 연결을 준비 중이에요. 지금은 첫 화면을 둘러볼 수 있어요.</string>
+    <string name="travel_message">어디로 떠나든, 함께라서 좋은 여행.</string>
+</resources>
