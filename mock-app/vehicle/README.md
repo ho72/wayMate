@@ -61,7 +61,10 @@ app/src/
 │   ├── AndroidManifest.xml
 │   ├── java/com/waymate/app/
 │   │   ├── MainActivity.kt
-│   │   ├── ui/                 # 첫 화면, 테마, 가로·세로 배치
+│   │   ├── app/                # WayMateApp·향후 상태/route/의존성 조립
+│   │   ├── ui/screens/handoff/ # P01 화면·HandoffUiState·사용자 의도 콜백
+│   │   ├── ui/components/      # 공통 표시 컴포넌트
+│   │   ├── ui/theme/           # 색·타이포·테마
 │   │   ├── data/               # 전달 API·모델·저장 구현 예정
 │   │   └── platform/           # 차량 제한·음성·내비 계약 구현 예정
 │   └── res/                    # 문자열·앱 아이콘·시작 테마
@@ -71,6 +74,8 @@ app/src/
 ```
 
 현재 Gradle flavor는 `mock` 하나입니다. `real/` 디렉터리는 실제 SDK 연결을 위한 예약 경로이며 `assembleRealDebug`는 아직 제공하지 않습니다. 실제 SDK를 검증할 때 `real` flavor와 해당 의존성을 추가합니다.
+
+협업 책임은 [06 개발 아키텍처·분담 가이드](../../docs/06_개발_아키텍처_및_분담_가이드.md)를 따릅니다. UI는 state·callback을 받고, `app/`·`data/`·`platform/`이 실제 전송과 플랫폼 실행을 담당합니다. 기능별 문자열은 `strings_handoff.xml`처럼 나눕니다. mock 빌드에서도 실제 주행 제한을 읽어야 하며 현재는 해당 기능이 구현 전이라 여행 불러오기를 열지 않습니다.
 
 ## 검증 기록
 

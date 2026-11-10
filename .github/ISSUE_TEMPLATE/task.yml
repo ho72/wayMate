@@ -14,11 +14,27 @@ body:
       options:
         - 웹
         - 서버·API
-        - 차량 앱·SDK
+        - 차량 UI
+        - 차량 통신·플랫폼·SDK
         - 공통 계약·데이터
         - 디자인·소재
         - 문서·시연·검수
         - 개발 환경·저장소
+    validations:
+      required: true
+  - type: textarea
+    id: paths
+    attributes:
+      label: 수정 경로와 인계물
+      description: 소유할 폴더·파일과 다른 담당자에게 넘길 산출물을 적습니다. 분담 가이드의 책임 경계를 참고합니다.
+      placeholder: "경로: mock-app/vehicle/.../ui/screens/handoff/\n인계물: 화면 상태와 콜백을 받는 P01 화면"
+    validations:
+      required: true
+  - type: textarea
+    id: contracts
+    attributes:
+      label: 공통 계약 영향
+      description: API·필드·enum·소재 ID 변경과 생산자·소비자·예제를 적습니다. 없으면 '없음'으로 표시합니다.
     validations:
       required: true
   - type: textarea

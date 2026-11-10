@@ -1,6 +1,5 @@
-package com.waymate.app.ui
+package com.waymate.app.ui.screens.handoff
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,22 +25,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.waymate.app.R
+import com.waymate.app.ui.components.TravelFriend
+import com.waymate.app.ui.theme.Canvas
+import com.waymate.app.ui.theme.Forest
+import com.waymate.app.ui.theme.Ink
+import com.waymate.app.ui.theme.Mint
+import com.waymate.app.ui.theme.Muted
+import com.waymate.app.ui.theme.WayMateTheme
 
 @Composable
-fun WayMateHomeScreen() {
+fun HandoffScreen(
+    state: HandoffUiState,
+    onLoadJourney: () -> Unit,
+) {
     Surface(modifier = Modifier.fillMaxSize(), color = Canvas) {
         BoxWithConstraints {
             val wide = maxWidth >= 840.dp
@@ -63,12 +66,12 @@ fun WayMateHomeScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Welcome(Modifier.weight(1f), wide = true)
-                        JourneyCard(Modifier.weight(1f))
+                        JourneyCard(state, onLoadJourney, Modifier.weight(1f))
                     }
                 } else {
                     Welcome(Modifier.fillMaxWidth(), wide = false)
                     Spacer(Modifier.height(32.dp))
-                    JourneyCard(Modifier.fillMaxWidth())
+                    JourneyCard(state, onLoadJourney, Modifier.fillMaxWidth())
                 }
 
                 Spacer(Modifier.height(36.dp))
@@ -158,7 +161,11 @@ private fun Welcome(modifier: Modifier, wide: Boolean) {
 }
 
 @Composable
-private fun JourneyCard(modifier: Modifier = Modifier) {
+private fun JourneyCard(
+    state: HandoffUiState,
+    onLoadJourney: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(32.dp),
@@ -187,8 +194,8 @@ private fun JourneyCard(modifier: Modifier = Modifier) {
 
             // Enable only after real handoff and vehicle restriction checks are implemented.
             Button(
-                onClick = {},
-                enabled = false,
+                onClick = onLoadJourney,
+                enabled = state.loadEnabled && !state.isLoading,
                 modifier = Modifier.fillMaxWidth().height(64.dp),
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -197,14 +204,14 @@ private fun JourneyCard(modifier: Modifier = Modifier) {
                 ),
             ) {
                 Text(
-                    stringResource(R.string.load_journey),
+                    stringResource(if (state.isLoading) R.string.loading_journey else R.string.load_journey),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
             Spacer(Modifier.height(16.dp))
             Text(
-                stringResource(R.string.preview_notice),
+                state.notice ?: stringResource(R.string.preview_notice),
                 fontSize = 15.sp,
                 lineHeight = 24.sp,
                 color = Muted,
@@ -227,32 +234,11 @@ private fun JourneyStep(number: String, description: String) {
     }
 }
 
-@Composable
-private fun TravelFriend(modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier.clip(CircleShape).background(Mint)) {
-        val w = size.width
-        val h = size.height
-        val face = Color(0xFFFCF7E8)
-        drawOval(face, topLeft = Offset(w * .19f, h * .27f), size = Size(w * .62f, h * .58f))
-        drawOval(Forest, topLeft = Offset(w * .46f, h * .12f), size = Size(w * .22f, h * .14f))
-        drawLine(Forest, Offset(w * .5f, h * .31f), Offset(w * .54f, h * .2f), w * .025f, StrokeCap.Round)
-        drawCircle(Ink, w * .022f, Offset(w * .39f, h * .52f))
-        drawCircle(Ink, w * .022f, Offset(w * .61f, h * .52f))
-        drawCircle(Color(0xFFEABFA5), w * .044f, Offset(w * .3f, h * .61f))
-        drawCircle(Color(0xFFEABFA5), w * .044f, Offset(w * .7f, h * .61f))
-        val smile = Path().apply {
-            moveTo(w * .43f, h * .62f)
-            quadraticTo(w * .5f, h * .7f, w * .57f, h * .62f)
-        }
-        drawPath(smile, Ink, style = Stroke(width = w * .018f, cap = StrokeCap.Round))
-    }
-}
-
 @Preview(name = "Pleos wide", widthDp = 1280, heightDp = 800, showBackground = true)
 @Preview(name = "Pleos compact", widthDp = 480, heightDp = 800, showBackground = true)
 @Composable
 private fun HomePreview() {
     WayMateTheme {
-        WayMateHomeScreen()
+        HandoffScreen(state = HandoffUiState(), onLoadJourney = {})
     }
 }

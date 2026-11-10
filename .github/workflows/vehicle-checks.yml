@@ -1,0 +1,46 @@
+name: Vehicle checks
+
+on:
+  pull_request:
+    paths:
+      - "mock-app/vehicle/**"
+      - ".github/workflows/vehicle-checks.yml"
+  push:
+    branches: [main]
+    paths:
+      - "mock-app/vehicle/**"
+      - ".github/workflows/vehicle-checks.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vehicle-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: mock-app/vehicle
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up JDK 21
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6
+      - name: Prepare Android SDK
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
+          printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
+      - name: Build mock APK and run Android Lint
+        run: ./gradlew :app:assembleMockDebug :app:lintMockDebug --no-daemon --console=plain

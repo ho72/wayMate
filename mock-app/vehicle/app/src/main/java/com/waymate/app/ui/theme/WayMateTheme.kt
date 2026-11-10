@@ -1,4 +1,4 @@
-package com.waymate.app.ui
+package com.waymate.app.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography

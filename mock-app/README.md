@@ -2,6 +2,8 @@
 
 현재는 디렉터리와 Node 패키지 메타정보, Android Gradle 프로젝트와 차량 앱 첫 화면을 준비한 상태입니다. `main.mjs`·웹 화면·공통 JSON·여행 전달·실제 SDK 연동은 구현 전입니다. 상세 파일명과 API는 [개발 및 연동 명세서](../docs/04_개발_및_연동_명세서.md)를 따릅니다.
 
+개발을 나눌 때는 [06 아키텍처·분담 가이드](../docs/06_개발_아키텍처_및_분담_가이드.md)와 각 영역의 [서버](server/README.md)·[웹](web/README.md)·[공통 계약](shared/README.md)·[소재](assets/README.md)·[검증](tests/README.md) 안내를 먼저 확인합니다. 전체 팀 5명의 개발 인원과 실제 담당은 미정입니다.
+
 | 디렉터리 | 담당 내용 |
 |---|---|
 | `server/` | HTTP 서버, 상태 전환, 명령 검증, 공개 데이터 projection, 파일 저장 |
