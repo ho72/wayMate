@@ -1,0 +1,43 @@
+name: 개발 작업
+description: 기능·개발 환경·문서 작업을 등록합니다.
+title: "[작업] "
+body:
+  - type: input
+    id: references
+    attributes:
+      label: 관련 작업·기능·화면
+      placeholder: "예: W02 / DM03 / M04·P01"
+  - type: dropdown
+    id: area
+    attributes:
+      label: 작업 영역
+      options:
+        - 웹
+        - 서버·API
+        - 차량 앱·SDK
+        - 공통 계약·데이터
+        - 디자인·소재
+        - 문서·시연·검수
+        - 개발 환경·저장소
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: 목적과 구현 범위
+      description: 필요한 동작과 변경할 대상을 적습니다.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 조건
+      description: 확인할 동작·산출물·검수 방법을 적습니다.
+      placeholder: "- [ ] 확인할 동작 또는 산출물"
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 선행 작업과 참고 자료
+      description: 먼저 필요한 이슈·문서·SDK 확인 사항이 있으면 적습니다.

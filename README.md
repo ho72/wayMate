@@ -4,7 +4,38 @@
 
 모바일 웹에서 에이전트와 대화하며 프로필과 여행 계획을 준비하고, Pleos 차량 앱에서 상대의 캐릭터를 통해 서로를 알아갑니다. 짧은 만남 이후에는 다른 여행자와 함께 이어가거나, 내 캐릭터와 본인의 여정을 이어갈 수 있습니다.
 
-현재는 서비스 방향과 시나리오 중심 목업의 제작 범위를 정리하는 단계입니다. 개발 가제는 **wayMate**이며, 기존 자료의 서비스 가칭은 ‘말문이 트립’입니다.
+현재는 기획 문서와 개발용 저장소의 기본 디렉터리를 준비한 단계입니다. 앱 기능·서버·Gradle 프로젝트는 아직 구현 전입니다. 개발 가제는 **wayMate**이며, 기존 자료의 서비스 가칭은 ‘말문이 트립’입니다.
+
+## 저장소 구조
+
+모바일 웹·시연자 웹·전달 서버·Pleos 차량 앱을 하나의 저장소에서 관리합니다. 디렉터리 이름은 [개발 및 연동 명세서](docs/04_개발_및_연동_명세서.md)의 계약을 따릅니다.
+
+```text
+wayMate/
+├── .github/               # 작업·버그 이슈 양식, PR 양식
+├── docs/                  # 기획·시연·화면·연동·검수 문서
+├── mock-app/
+│   ├── server/            # 공통 상태·명령·저장·HTTP API
+│   │   └── fixtures/      # 시연용 원본 데이터
+│   ├── web/               # 모바일 M01~M04, 시연자 O01
+│   │   └── views/         # 화면별 UI
+│   ├── vehicle/           # Pleos 차량 앱 P01~P04
+│   │   └── app/src/       # main · mock · real · test
+│   ├── shared/            # 웹·서버·차량의 schema·소재 manifest
+│   ├── assets/            # 공통 이미지·준비 음성
+│   ├── scripts/           # 소재 동기화 등 개발 스크립트
+│   ├── tests/             # 서버·API·상태 전환 테스트
+│   └── runtime/           # 로컬 상태·실행 기록, Git 추적 제외
+└── CONTRIBUTING.md        # 브랜치·커밋·PR 작업 기준
+```
+
+[앱 디렉터리 안내](mock-app/README.md)와 [협업 안내](CONTRIBUTING.md)를 참고하세요. `.gitkeep`은 GitHub에 빈 디렉터리를 유지하는 파일이며, 실제 구현 파일을 추가하면 제거할 수 있습니다.
+
+## 개발 준비
+
+- 웹·서버: 명세서 기준 Node.js `22.22.2`. 버전은 `mock-app/.nvmrc`에 기록합니다.
+- 차량: Android Studio, Android SDK API 34, Pleos Connect Emulator. 차량 앱은 Kotlin·Jetpack Compose로 구현합니다.
+- 실행 스크립트·Gradle Wrapper·의존성 버전은 해당 실행 기반을 구현하고 검증할 때 추가합니다. 현재 `npm start`, `npm test`, Android 빌드는 제공하지 않습니다.
 
 ## 문서
 
