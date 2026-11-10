@@ -1,0 +1,37 @@
+name: Handoff checks
+on:
+  pull_request:
+    paths: ["mock-app/**", ".github/workflows/handoff-checks.yml"]
+  push:
+    branches: [main]
+    paths: ["mock-app/**", ".github/workflows/handoff-checks.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: handoff-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  contract-and-http:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: mock-app
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: mock-app/.nvmrc
+          cache: npm
+          cache-dependency-path: mock-app/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - name: Verify generated examples are current
+        run: |
+          npm run examples
+          git diff --exit-code -- shared/examples

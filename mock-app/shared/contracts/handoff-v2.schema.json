@@ -1,0 +1,1385 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waymate.local/contracts/handoff-v2",
+  "title": "wayMate schemaVersion 2 — my_trip first slice",
+  "$defs": {
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "ONBOARDING_ANSWER"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "enum": ["interests", "activity", "pace", "conversation"]
+                },
+                "answerPresetId": {
+                  "enum": [
+                    "sea_walk",
+                    "cafe",
+                    "sea_walk_cafe",
+                    "walk_first_photos_occasional",
+                    "relaxed",
+                    "quiet"
+                  ]
+                }
+              },
+              "required": ["questionId", "answerPresetId"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "PROFILE_CONFIRM"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "alias": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10,
+                  "pattern": "^[^\\r\\n]+$"
+                },
+                "avatarId": {
+                  "enum": ["a-01", "a-02"]
+                },
+                "speakingStyle": {
+                  "enum": ["calm", "light_humor"]
+                },
+                "summary": {
+                  "$ref": "#/$defs/summary"
+                }
+              },
+              "required": ["alias", "avatarId", "speakingStyle", "summary"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "PROFILE_PRIVATE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "profileVersion": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "publicationVersion": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": ["profileVersion", "publicationVersion"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "TRIP_SAVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "presetId": {
+                  "const": "gangneung-01"
+                },
+                "shareSummaryApproved": {
+                  "const": false
+                }
+              },
+              "required": ["presetId", "shareSummaryApproved"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "HANDOFF_PREPARE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "my_trip"
+                }
+              },
+              "required": ["mode"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CAR_SESSION_OPEN"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "deviceId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "pendingAttempts": {
+                  "type": "array",
+                  "maxItems": 0
+                }
+              },
+              "required": ["deviceId", "vehicleSessionId", "pendingAttempts"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CAR_STATUS"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "statusSeq": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "restrictionKnown": {
+                  "type": "boolean"
+                },
+                "restricted": {
+                  "type": "boolean"
+                },
+                "foreground": {
+                  "type": "boolean"
+                },
+                "uiContext": {
+                  "const": "handoff"
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "statusSeq",
+                "restrictionKnown",
+                "restricted",
+                "foreground",
+                "uiContext"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 2
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CAR_LOADED"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "handoffId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "handoffVersion": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "sourceVersions": {
+                  "$ref": "#/$defs/sourceVersions"
+                },
+                "mode": {
+                  "const": "my_trip"
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "handoffId",
+                "handoffVersion",
+                "sourceVersions",
+                "mode"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "interests": {
+          "type": "array",
+          "items": {
+            "enum": ["sea_walk", "cafe"]
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "activityPreference": {
+          "const": "walk_first_photos_occasional"
+        },
+        "pace": {
+          "const": "relaxed"
+        },
+        "conversationStyle": {
+          "const": "quiet"
+        },
+        "expressionPresetIds": {
+          "type": "array",
+          "items": {
+            "enum": ["quiet-companion"]
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "interests",
+        "activityPreference",
+        "pace",
+        "conversationStyle",
+        "expressionPresetIds"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10
+        },
+        "avatarId": {
+          "enum": ["a-01", "a-02"]
+        },
+        "summary": {
+          "$ref": "#/$defs/summary"
+        },
+        "speakingStyle": {
+          "enum": ["calm", "light_humor"]
+        }
+      },
+      "required": ["alias", "avatarId", "summary", "speakingStyle"],
+      "additionalProperties": false
+    },
+    "trip": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "nextVisit": {
+          "type": "string"
+        },
+        "nextVisitLabel": {
+          "type": "string"
+        },
+        "returnPlaceId": {
+          "type": "string"
+        },
+        "returnPlaceLabel": {
+          "type": "string"
+        },
+        "returnEstimate": {
+          "type": "string"
+        },
+        "returnDeadline": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "nextVisit",
+        "nextVisitLabel",
+        "returnPlaceId",
+        "returnPlaceLabel",
+        "returnEstimate",
+        "returnDeadline"
+      ],
+      "additionalProperties": false
+    },
+    "sourceVersions": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "publication": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trip": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["profile", "publication", "trip", "connection"],
+      "additionalProperties": false
+    },
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "runSeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "handoffId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "handoffVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sourceVersions": {
+          "$ref": "#/$defs/sourceVersions"
+        },
+        "mode": {
+          "const": "my_trip"
+        },
+        "owner": {
+          "$ref": "#/$defs/owner"
+        },
+        "ownerTrip": {
+          "$ref": "#/$defs/trip"
+        },
+        "peer": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "runSeq",
+        "runId",
+        "handoffId",
+        "handoffVersion",
+        "sourceVersions",
+        "mode",
+        "owner",
+        "ownerTrip",
+        "peer"
+      ],
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "commandId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "applied": {
+          "const": true
+        },
+        "replayed": {
+          "type": "boolean"
+        },
+        "committedVersion": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "runId",
+        "commandId",
+        "applied",
+        "replayed",
+        "committedVersion"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "storeId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runSeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "view": {
+          "enum": ["web", "car"]
+        },
+        "clientId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scope": {
+          "const": "handoff-my-trip-v1"
+        },
+        "answers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/owner"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profileVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "publicationVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "publication": {
+          "enum": ["pending", "private"]
+        },
+        "trip": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/trip"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tripVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "handoff": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "handoffId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "handoffVersion": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "sourceVersions": {
+                  "$ref": "#/$defs/sourceVersions"
+                },
+                "mode": {
+                  "const": "my_trip"
+                },
+                "acknowledged": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "handoffId",
+                "handoffVersion",
+                "sourceVersions",
+                "mode",
+                "acknowledged"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vehicle": {
+          "type": "object",
+          "properties": {
+            "vehicleSessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "vehicleEpoch": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "restrictionKnown": {
+              "type": "boolean"
+            },
+            "restricted": {
+              "type": "boolean"
+            },
+            "foreground": {
+              "type": "boolean"
+            },
+            "fresh": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "vehicleSessionId",
+            "vehicleEpoch",
+            "restrictionKnown",
+            "restricted",
+            "foreground",
+            "fresh"
+          ],
+          "additionalProperties": false
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actionBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "commandType": {
+                "type": "string"
+              },
+              "target": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              },
+              "payload": {
+                "type": "object"
+              }
+            },
+            "required": ["commandType", "target", "payload"],
+            "additionalProperties": false
+          }
+        },
+        "blockedActions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": ["code", "message"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "storeId",
+        "runSeq",
+        "runId",
+        "version",
+        "view",
+        "clientId",
+        "scope",
+        "answers",
+        "profile",
+        "profileVersion",
+        "publicationVersion",
+        "publication",
+        "trip",
+        "tripVersion",
+        "handoff",
+        "vehicle",
+        "allowedActions",
+        "actionBindings",
+        "blockedActions"
+      ],
+      "additionalProperties": false
+    },
+    "health": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "storeId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "const": "ready"
+        },
+        "scope": {
+          "const": "handoff-my-trip-v1"
+        }
+      },
+      "required": ["schemaVersion", "storeId", "status", "scope"],
+      "additionalProperties": false
+    },
+    "success": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "receipt": {
+          "$ref": "#/$defs/receipt"
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        }
+      },
+      "required": ["ok", "receipt", "state"],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "const": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": ["code", "message"],
+          "additionalProperties": false
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        }
+      },
+      "required": ["ok", "error"],
+      "additionalProperties": false
+    },
+    "store": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "storeId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runSeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "clientId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "answers": {
+          "type": "object",
+          "properties": {
+            "interests": {
+              "enum": ["sea_walk", "cafe", "sea_walk_cafe"]
+            },
+            "activity": {
+              "enum": ["walk_first_photos_occasional"]
+            },
+            "pace": {
+              "enum": ["relaxed"]
+            },
+            "conversation": {
+              "enum": ["quiet"]
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/owner"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profileVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "publication": {
+          "enum": ["pending", "private"]
+        },
+        "publicationVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "trip": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/trip"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tripVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "handoff": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/handoff"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "handoffCounter": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ack": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "handoffId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["handoffId", "vehicleSessionId"],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vehicle": {
+          "type": "object",
+          "properties": {
+            "deviceId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "vehicleSessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "vehicleEpoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "statusSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "restrictionKnown": {
+              "type": "boolean"
+            },
+            "restricted": {
+              "type": "boolean"
+            },
+            "foreground": {
+              "type": "boolean"
+            },
+            "seenAt": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "uiContext": {
+              "const": "handoff"
+            }
+          },
+          "required": [
+            "deviceId",
+            "vehicleSessionId",
+            "vehicleEpoch",
+            "statusSeq",
+            "restrictionKnown",
+            "restricted",
+            "foreground",
+            "seenAt"
+          ],
+          "additionalProperties": false
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "$ref": "#/$defs/command"
+              },
+              "clientId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "receipt": {
+                "$ref": "#/$defs/receipt"
+              }
+            },
+            "required": ["command", "clientId", "receipt"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "storeId",
+        "runSeq",
+        "runId",
+        "version",
+        "clientId",
+        "answers",
+        "profile",
+        "profileVersion",
+        "publication",
+        "publicationVersion",
+        "trip",
+        "tripVersion",
+        "handoff",
+        "handoffCounter",
+        "ack",
+        "vehicle",
+        "receipts"
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "scope": {
+          "const": "handoff-my-trip-v1"
+        },
+        "questions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "tripPresetIds": {
+          "type": "array",
+          "items": {
+            "const": "gangneung-01"
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "myTrip": {
+              "const": true
+            },
+            "connected": {
+              "const": false
+            },
+            "navigation": {
+              "const": false
+            },
+            "operator": {
+              "const": false
+            }
+          },
+          "required": ["myTrip", "connected", "navigation", "operator"],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "scope",
+        "questions",
+        "tripPresetIds",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "receiptResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "applied"
+            },
+            "receipt": {
+              "$ref": "#/$defs/receipt"
+            },
+            "state": {
+              "$ref": "#/$defs/state"
+            }
+          },
+          "required": ["status", "receipt", "state"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "not_found"
+            },
+            "state": {
+              "$ref": "#/$defs/state"
+            }
+          },
+          "required": ["status", "state"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

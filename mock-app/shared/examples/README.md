@@ -1,5 +1,5 @@
-# 역할별 계약 예제
+# 공유 wire JSON 예제
 
-아직 예제 JSON은 없습니다. W01에서 확정한 schema와 함께 web/car/operator용 정상·오류·공개 제외·my_trip·connected 예제를 준비합니다. 예제에는 역할·현재 회차·공개 범위를 구분하고 검증 가능한 고정 가상 데이터를 사용합니다.
+`mock-app/`에서 `npm run examples`로 재생성합니다. `scripts/update-contract-examples.mjs`가 실제 서버 command coordinator를 호출하며 UUID 관계는 유지한 채 값만 고정합니다. 실행 중인 시연 파일은 사용하지 않습니다.
 
-전체 인물·일정·미발생 메시지가 있는 `server/fixtures/` 원본을 복사해 client 예제로 쓰지 않습니다. WEB·CAR-UI는 이 예제를 Preview·fake transport에 사용할 수 있지만, 실제 명령 적용·차량 ACK·SDK 성공과 구분합니다. API 계약 검증은 `tests/contracts/`에서 실제 schema를 대상으로 구현합니다.
+`index.json`에 파일과 JSON Schema `$defs` 이름이 있습니다. 명령·web 전달 대기/수신 확인·car 준비·최신 my_trip 전달본·저장 영수증을 제공합니다. `npm test`가 모든 등록 예제를 검증합니다. 예제는 UI Preview와 계약 확인용이며 서버 연결 실패 때 성공 상태로 대신 표시하지 않습니다.

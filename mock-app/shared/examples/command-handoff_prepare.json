@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 2,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000009",
+  "expectedVersion": 7,
+  "actor": "web",
+  "type": "HANDOFF_PREPARE",
+  "target": {},
+  "payload": {
+    "mode": "my_trip"
+  }
+}

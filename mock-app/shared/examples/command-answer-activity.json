@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000003",
+  "expectedVersion": 1,
+  "actor": "web",
+  "type": "ONBOARDING_ANSWER",
+  "target": {},
+  "payload": {
+    "questionId": "activity",
+    "answerPresetId": "walk_first_photos_occasional"
+  }
+}

@@ -51,10 +51,10 @@ fun HandoffScreen(
             val margin = if (wide) 56.dp else 28.dp
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = margin, vertical = 28.dp),
+                modifier =
+                    Modifier.fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = margin, vertical = 28.dp)
             ) {
                 BrandHeader(wide)
                 Spacer(Modifier.height(if (wide) 52.dp else 32.dp))
@@ -65,11 +65,11 @@ fun HandoffScreen(
                         horizontalArrangement = Arrangement.spacedBy(48.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Welcome(Modifier.weight(1f), wide = true)
+                        Welcome(Modifier.weight(1f), wide = true, state = state)
                         JourneyCard(state, onLoadJourney, Modifier.weight(1f))
                     }
                 } else {
-                    Welcome(Modifier.fillMaxWidth(), wide = false)
+                    Welcome(Modifier.fillMaxWidth(), wide = false, state = state)
                     Spacer(Modifier.height(32.dp))
                     JourneyCard(state, onLoadJourney, Modifier.fillMaxWidth())
                 }
@@ -95,9 +95,7 @@ private fun BrandHeader(wide: Boolean) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(Forest, RoundedCornerShape(16.dp)),
+                modifier = Modifier.size(48.dp).background(Forest, RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center,
             ) {
                 Text("w", color = Mint, fontSize = 32.sp, fontWeight = FontWeight.Bold)
@@ -122,9 +120,9 @@ private fun BrandHeader(wide: Boolean) {
 
         Text(
             text = stringResource(R.string.preview_label),
-            modifier = Modifier
-                .background(Mint, RoundedCornerShape(50))
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier =
+                Modifier.background(Mint, RoundedCornerShape(50))
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
             color = Forest,
             style = MaterialTheme.typography.labelLarge,
         )
@@ -132,10 +130,11 @@ private fun BrandHeader(wide: Boolean) {
 }
 
 @Composable
-private fun Welcome(modifier: Modifier, wide: Boolean) {
+private fun Welcome(modifier: Modifier, wide: Boolean, state: HandoffUiState) {
     Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
         Text(
-            stringResource(R.string.welcome_eyebrow),
+            state.journey?.let { stringResource(R.string.loaded_greeting, it.alias) }
+                ?: stringResource(R.string.welcome_eyebrow),
             color = Forest,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
@@ -156,7 +155,10 @@ private fun Welcome(modifier: Modifier, wide: Boolean) {
             lineHeight = 32.sp,
         )
         Spacer(Modifier.height(30.dp))
-        TravelFriend(Modifier.size(if (wide) 176.dp else 124.dp))
+        TravelFriend(
+            Modifier.size(if (wide) 176.dp else 124.dp),
+            sunny = state.journey?.avatarId == "a-02",
+        )
     }
 }
 
@@ -174,7 +176,8 @@ private fun JourneyCard(
     ) {
         Column(modifier = Modifier.padding(32.dp)) {
             Text(
-                stringResource(R.string.journey_title),
+                if (state.journey != null) stringResource(R.string.loaded_title)
+                else stringResource(R.string.journey_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Ink,
@@ -187,24 +190,74 @@ private fun JourneyCard(
                 color = Muted,
             )
             Spacer(Modifier.height(30.dp))
-            JourneyStep("01", stringResource(R.string.journey_step_one))
-            Spacer(Modifier.height(20.dp))
-            JourneyStep("02", stringResource(R.string.journey_step_two))
+            val journey = state.journey
+            if (journey == null) {
+                JourneyStep("01", stringResource(R.string.journey_step_one))
+                Spacer(Modifier.height(20.dp))
+                JourneyStep("02", stringResource(R.string.journey_step_two))
+            } else {
+                Text(
+                    stringResource(
+                        R.string.loaded_profile,
+                        journey.alias,
+                        stringResource(
+                            if (journey.avatarId == "a-02") R.string.avatar_sun
+                            else R.string.avatar_sprout
+                        ),
+                        stringResource(
+                            if (journey.style == "calm") R.string.style_calm
+                            else R.string.style_humor
+                        ),
+                    ),
+                    color = Ink,
+                    fontSize = 20.sp,
+                    lineHeight = 32.sp,
+                )
+                Spacer(Modifier.height(14.dp))
+                val cafe = stringResource(R.string.interest_cafe)
+                val sea = stringResource(R.string.interest_sea)
+                Text(
+                    journey.interests.joinToString(" · ") { if (it == "cafe") cafe else sea },
+                    color = Forest,
+                    fontSize = 18.sp,
+                )
+                Spacer(Modifier.height(14.dp))
+                Text(
+                    stringResource(
+                        R.string.loaded_trip,
+                        journey.date,
+                        journey.nextVisit,
+                        journey.nextVisitLabel,
+                        journey.returnPlaceLabel,
+                        journey.returnEstimate,
+                        journey.returnDeadline,
+                    ),
+                    color = Muted,
+                    fontSize = 18.sp,
+                    lineHeight = 30.sp,
+                )
+            }
             Spacer(Modifier.height(32.dp))
 
-            // Enable only after real handoff and vehicle restriction checks are implemented.
             Button(
                 onClick = onLoadJourney,
                 enabled = state.loadEnabled && !state.isLoading,
                 modifier = Modifier.fillMaxWidth().height(64.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(
-                    disabledContainerColor = Mint,
-                    disabledContentColor = Forest,
-                ),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        disabledContainerColor = Mint,
+                        disabledContentColor = Forest,
+                    ),
             ) {
                 Text(
-                    stringResource(if (state.isLoading) R.string.loading_journey else R.string.load_journey),
+                    stringResource(
+                        when {
+                            state.isLoading -> R.string.loading_journey
+                            state.retryPending -> R.string.retry_pending
+                            else -> R.string.load_journey
+                        }
+                    ),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                 )

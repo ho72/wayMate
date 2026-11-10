@@ -1,0 +1,97 @@
+{
+  "ok": true,
+  "receipt": {
+    "runId": "00000000-0000-4000-8000-000000000001",
+    "commandId": "00000000-0000-4000-8000-000000000017",
+    "applied": true,
+    "replayed": false,
+    "committedVersion": 11
+  },
+  "state": {
+    "schemaVersion": 2,
+    "scope": "handoff-my-trip-v1",
+    "storeId": "00000000-0000-4000-8000-000000000010",
+    "runSeq": 1,
+    "runId": "00000000-0000-4000-8000-000000000001",
+    "version": 11,
+    "view": "car",
+    "clientId": "00000000-0000-4000-8000-000000000011",
+    "answers": {
+      "interests": "cafe",
+      "activity": "walk_first_photos_occasional",
+      "pace": "relaxed",
+      "conversation": "quiet"
+    },
+    "profile": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": "walk_first_photos_occasional",
+        "pace": "relaxed",
+        "conversationStyle": "quiet",
+        "expressionPresetIds": [
+          "quiet-companion"
+        ]
+      }
+    },
+    "profileVersion": 1,
+    "publicationVersion": 1,
+    "publication": "private",
+    "trip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    },
+    "tripVersion": 1,
+    "handoff": {
+      "handoffId": "00000000-0000-4000-8000-000000000012",
+      "handoffVersion": 1,
+      "sourceVersions": {
+        "profile": 1,
+        "publication": 1,
+        "trip": 1,
+        "connection": 0
+      },
+      "mode": "my_trip",
+      "acknowledged": true
+    },
+    "vehicle": {
+      "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+      "vehicleEpoch": 1,
+      "restrictionKnown": true,
+      "restricted": false,
+      "foreground": true,
+      "fresh": true
+    },
+    "allowedActions": [
+      "CAR_LOADED"
+    ],
+    "actionBindings": {
+      "CAR_LOADED": {
+        "commandType": "CAR_LOADED",
+        "target": {},
+        "payload": {
+          "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+          "handoffId": "00000000-0000-4000-8000-000000000012",
+          "handoffVersion": 1,
+          "sourceVersions": {
+            "profile": 1,
+            "publication": 1,
+            "trip": 1,
+            "connection": 0
+          },
+          "mode": "my_trip"
+        }
+      }
+    },
+    "blockedActions": {}
+  }
+}

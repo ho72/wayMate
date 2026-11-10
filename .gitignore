@@ -27,3 +27,8 @@ key.properties
 /mock-app/runtime/*
 !/mock-app/runtime/.gitkeep
 /mock-app/vehicle/captures/
+
+# Local browser verification artifacts
+/mock-app/.playwright-cli/
+/mock-app/output/
+/.playwright-cli/

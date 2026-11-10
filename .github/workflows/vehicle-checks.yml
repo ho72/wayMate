@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - "mock-app/vehicle/**"
+      - "mock-app/shared/**"
       - ".github/workflows/vehicle-checks.yml"
   push:
     branches: [main]
     paths:
       - "mock-app/vehicle/**"
+      - "mock-app/shared/**"
       - ".github/workflows/vehicle-checks.yml"
   workflow_dispatch:
 

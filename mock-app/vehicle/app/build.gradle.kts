@@ -7,6 +7,7 @@ plugins {
 android {
     namespace = "com.waymate.app"
     compileSdk = 35
+    useLibrary("android.car")
     buildToolsVersion = "35.0.0"
 
     defaultConfig {

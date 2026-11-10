@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000007",
+  "expectedVersion": 5,
+  "actor": "web",
+  "type": "PROFILE_PRIVATE",
+  "target": {},
+  "payload": {
+    "profileVersion": 1,
+    "publicationVersion": 0
+  }
+}

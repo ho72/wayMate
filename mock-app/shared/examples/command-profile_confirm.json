@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000006",
+  "expectedVersion": 4,
+  "actor": "web",
+  "type": "PROFILE_CONFIRM",
+  "target": {},
+  "payload": {
+    "alias": "구름여행",
+    "avatarId": "a-02",
+    "speakingStyle": "light_humor",
+    "summary": {
+      "interests": [
+        "cafe"
+      ],
+      "activityPreference": "walk_first_photos_occasional",
+      "pace": "relaxed",
+      "conversationStyle": "quiet",
+      "expressionPresetIds": [
+        "quiet-companion"
+      ]
+    }
+  }
+}

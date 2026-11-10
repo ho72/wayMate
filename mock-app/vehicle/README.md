@@ -1,8 +1,8 @@
 # wayMate Pleos 차량 앱
 
-Kotlin·Jetpack Compose로 작성한 Android Automotive 앱입니다. 현재는 P01 ‘내 여행 불러오기’의 **첫 화면 미리보기**를 구현했습니다. `mockDebug` APK를 Pleos Connect 2.1.0 에뮬레이터에 설치해 화면 표시를 확인했습니다.
+Kotlin·Jetpack Compose 차량 앱입니다. **웹에서 저장한 본인 프로필·고정 여행을 HTTP로 불러오고 서버에 ACK하는 P01**을 Pleos Connect 2.1.0에서 확인했습니다. 서버·웹을 먼저 실행한 뒤 정차 상태에서 불러오기를 누릅니다. [전체 실행·지원 범위](../../docs/07_첫_전달_실행_및_계약.md)를 참고하세요.
 
-여행 불러오기 버튼은 비활성 상태입니다. 서버·여행 전달·차량 제한 확인·음성·실제 Pleos SDK는 아직 연결하지 않았고, 샘플 여행을 불러온 것처럼 성공을 표시하지 않습니다. 이 단계가 W04의 전체 완료나 실제 SDK 검증을 뜻하지는 않습니다.
+실제 CarUxRestrictions 현재값·리스너, 화면 수명주기, 500ms 통신·2초 서버 보고 만료를 적용했습니다. 상대 연결·음성·내비 SDK·real flavor는 구현 전입니다. W04 전체 완료를 의미하지 않습니다.
 
 ## 확인한 개발 환경
 
@@ -65,8 +65,8 @@ app/src/
 │   │   ├── ui/screens/handoff/ # P01 화면·HandoffUiState·사용자 의도 콜백
 │   │   ├── ui/components/      # 공통 표시 컴포넌트
 │   │   ├── ui/theme/           # 색·타이포·테마
-│   │   ├── data/               # 전달 API·모델·저장 구현 예정
-│   │   └── platform/           # 차량 제한·음성·내비 계약 구현 예정
+│   │   ├── data/               # HTTP·파싱·Repository·미확인 명령 저장
+│   │   └── platform/           # 실제 차량 제한 / 음성·내비는 구현 예정
 │   └── res/                    # 문자열·앱 아이콘·시작 테마
 ├── mock/java/com/waymate/app/platform/
 ├── real/java/com/waymate/app/platform/
@@ -75,19 +75,10 @@ app/src/
 
 현재 Gradle flavor는 `mock` 하나입니다. `real/` 디렉터리는 실제 SDK 연결을 위한 예약 경로이며 `assembleRealDebug`는 아직 제공하지 않습니다. 실제 SDK를 검증할 때 `real` flavor와 해당 의존성을 추가합니다.
 
-협업 책임은 [06 개발 아키텍처·분담 가이드](../../docs/06_개발_아키텍처_및_분담_가이드.md)를 따릅니다. UI는 state·callback을 받고, `app/`·`data/`·`platform/`이 실제 전송과 플랫폼 실행을 담당합니다. 기능별 문자열은 `strings_handoff.xml`처럼 나눕니다. mock 빌드에서도 실제 주행 제한을 읽어야 하며 현재는 해당 기능이 구현 전이라 여행 불러오기를 열지 않습니다.
+협업 책임은 [06 개발 아키텍처·분담 가이드](../../docs/06_개발_아키텍처_및_분담_가이드.md)를 따릅니다. UI는 state·callback을 받고, `app/`·`data/`·`platform/`이 실제 전송과 플랫폼 실행을 담당합니다. 기능별 문자열은 `strings_handoff.xml`처럼 나눕니다. mock 빌드에서도 실제 제한을 읽고 서버 허용과 함께 불러오기를 잠급니다. `model/Journey`는 순수 표시 데이터, `data/api/JourneyParser`는 JSON 매핑, MainActivity는 Repository 결과→화면 상태 조립을 담당합니다.
 
 ## 검증 기록
 
-2026년 11월 11일 Apple Silicon 맥에서 다음을 확인했습니다.
+2026-11-11 APK 빌드·Lint 성공(오류 0, 경고 14), 실제 Pleos 설치·실행·웹의 선택 값 표시·서버 ACK·웹 수신 확인을 검증했습니다. 제한 미확인/활성/만료 서버 검증과 설정 앱 전환→비활성 잠금→복귀도 확인했습니다. 자세한 증거·실제 주행 제한 전환의 미확인 범위는 [07](../../docs/07_첫_전달_실행_및_계약.md)에 기록했습니다.
 
-- `:app:assembleMockDebug`: 성공.
-- `:app:lintMockDebug`: 오류 0개·경고 11개. target API·의존성 버전 업데이트 안내와 백업 설정 관련 경고가 남아 있습니다.
-- Android Studio 프로젝트 열기·Gradle Sync: 성공. `app` 실행 구성을 인식했습니다.
-- Pleos 에뮬레이터: API 34 부팅, 앱 설치 성공, `MainActivity`의 cold launch 성공.
-- 실제 에뮬레이터 화면: wayMate 로고·첫 인사·캐릭터·여행 준비 카드·미리보기 안내 표시 확인.
-- 시스템의 `car_service`·VHAL 서비스 존재 확인. 앱에서 해당 서비스를 사용하거나 주행 제한을 읽는 기능은 아직 구현 전입니다.
-
-실행 로그·스크린샷·환경 기록은 Git 추적에서 제외한 `../runtime/`에 보관합니다. 서버 연결·실제 SDK·다른 화면 크기의 기기 검수는 별도 단계입니다.
-
-설정 기준: [Pleos 시작 안내](https://document.pleos.ai/docs/pleos-only/getting-started), [AGP 8.9 호환성](https://developer.android.com/build/releases/agp-8-9-0-release-notes), [Gradle 8.11.1 Java 호환성](https://docs.gradle.org/8.11.1/userguide/compatibility.html).
+에뮬레이터 로컬 HTTP 허용은 `src/debug/`의 10.0.2.2에만 있습니다. 현재 차량 API는 이미지의 부팅 클래스 경로에서 제공되어 manifest shared library는 optional로 선언합니다. 일반 Android car API를 컴파일에 쓰고 별도 SDK 바이너리를 복사하지 않습니다.

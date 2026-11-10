@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>wayMate · 내 여행 준비</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a href="/" class="brand">w <span>wayMate</span></a
+        ><span class="badge">내 여행 연결</span>
+      </header>
+      <section class="intro">
+        <p class="eyebrow">나를 닮은 친구와, 다음 여행까지</p>
+        <h1>차 안에서도<br />내 여행을 이어가요.</h1>
+        <p>
+          친구의 모습과 여행 취향을 저장하면,<br />차량 화면에서 그대로 불러올
+          수 있어요.
+        </p>
+      </section>
+      <form id="profile-form">
+        <section class="card">
+          <div class="step">01 · 나와 친구</div>
+          <h2>함께할 친구를 골라요</h2>
+          <label for="alias">내 별명 <span>1~10자</span></label
+          ><input
+            id="alias"
+            name="alias"
+            maxlength="20"
+            required
+            placeholder="예: 바다산책"
+          />
+          <fieldset>
+            <legend>친구 모습</legend>
+            <div class="choices">
+              <label
+                ><input type="radio" name="avatar" value="a-01" checked /> 🌿
+                새싹 친구</label
+              ><label
+                ><input type="radio" name="avatar" value="a-02" /> ☀️ 햇살
+                친구</label
+              >
+            </div>
+          </fieldset>
+          <label for="style">말투</label
+          ><select id="style">
+            <option value="calm">차분하고 편안하게</option>
+            <option value="light_humor">가벼운 유머와 함께</option>
+          </select>
+          <label for="interests">좋아하는 여행</label
+          ><select id="interests">
+            <option value="sea_walk_cafe">바다 산책과 카페</option>
+            <option value="sea_walk">바다 산책</option>
+            <option value="cafe">카페</option>
+          </select>
+          <div class="summary">
+            산책을 먼저, 사진은 가끔 · 여유로운 속도<br />조용히 함께하는 대화를
+            좋아해요.
+          </div>
+          <p class="hint">
+            이번 연결은 본인 여행 모드예요. 내 소개와 여행 요약을 다른 사람에게
+            공개하지 않아요.
+          </p>
+          <button id="save" type="submit" disabled>프로필과 여행 저장</button>
+        </section>
+        <section class="card">
+          <div class="step">02 · 오늘의 여행</div>
+          <h2>강릉 해안에서의 하루</h2>
+          <p>시연용 여행 · 2026년 11월 14일</p>
+          <dl>
+            <div>
+              <dt>여유 시간</dt>
+              <dd>13:00–15:00</dd>
+            </div>
+            <div>
+              <dt>다음 일정</dt>
+              <dd>15:20 · 기존 개인 방문지</dd>
+            </div>
+            <div>
+              <dt>복귀 장소</dt>
+              <dd>내 숙소</dd>
+            </div>
+            <div>
+              <dt>도착 예상 / 마감</dt>
+              <dd>15:45 / 16:00</dd>
+            </div>
+          </dl>
+          <p class="hint">프로필과 함께 이 여행 계획을 저장해요.</p>
+        </section>
+      </form>
+      <section class="card delivery">
+        <div class="step">03 · 차량으로 이어가기</div>
+        <h2 id="delivery-title">저장 후 차량으로 전달해요</h2>
+        <p id="delivery-detail">웹에서 저장한 뒤 전달을 준비해 주세요.</p>
+        <button id="prepare" disabled>차량에 전달 준비</button
+        ><button id="recover" class="secondary" hidden>저장 결과 확인</button
+        ><button id="retry" class="secondary" hidden>
+          같은 요청 다시 전송
+        </button>
+        <p id="status" role="status" aria-live="polite">
+          서버에 연결 중이에요.
+        </p>
+      </section>
+      <footer>
+        프로필·여행 전달 1차 구현 · 연결·대화·내비게이션은 준비 중
+      </footer>
+    </main>
+  </body>
+</html>

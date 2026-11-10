@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000008",
+  "expectedVersion": 6,
+  "actor": "web",
+  "type": "TRIP_SAVE",
+  "target": {},
+  "payload": {
+    "presetId": "gangneung-01",
+    "shareSummaryApproved": false
+  }
+}
