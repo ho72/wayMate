@@ -4,7 +4,7 @@
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 OV-06</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.4  |  2026-11-11  |  피드백 번호 OV-06</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">근거·구현 의존사항·피드백 방법</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
@@ -52,6 +52,6 @@
 <text x="520" y="631.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">지 않는다.</text>
 <text x="45" y="678.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">구현 의존사항</text>
 <line x1="45" y1="690" x2="1145" y2="690" stroke="#B8B8B8" stroke-width="1"/>
-<text x="45" y="711" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">E 확장은 개인 장소/일정 제안의 ID·승인·source/outcome·취소·중복 방지 계약이 필요하다. 04의 MEETING 전용 API를 그대로 실행하지 않는다. 07의 현재 지원 범위는 my_trip 전달까지이며 음성·순정 내비·분할 배치의 실제</text>
-<text x="45" y="729" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">동작 완료를 이 설계도로 대신하지 않는다.</text>
+<text x="45" y="711" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">E 확장은 개인 장소/일정 제안의 ID·승인·source/outcome·취소·중복 방지 계약이 필요하다. 04의 MEETING 전용 API를 그대로 실행하지 않는다. 현재 v3는 10~12의 준비/차량 홈/본인 내비 범위. 모바일 매칭·connected 전</text>
+<text x="45" y="729" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">달은 새 v4 목표다. 음성·분할 배치 검증은 별도다.</text>
 </svg>

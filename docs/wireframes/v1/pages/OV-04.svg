@@ -4,34 +4,34 @@
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 OV-04</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.4  |  2026-11-11  |  피드백 번호 OV-04</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">화면 흐름과 기본·확장·추가 범위</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
 <text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">04</text>
-<text x="48" y="152.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">탑승 전 모바일</text>
+<text x="48" y="152.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">모바일 준비</text>
 <rect x="250" y="135" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
-<text x="270" y="157.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-001~005 → WF-009 전달 준비</text>
-<text x="270" y="184.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">여기서 휴대폰을 닫음. 공개·매칭은 차량에서도 확인</text>
-<text x="48" y="253.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">Pleos 시작·큰 홈</text>
+<text x="270" y="157.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-001~005 → 공개 미확인 시 WF-052</text>
+<text x="270" y="184.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">자유 입력·캐릭터/소개·고정 여행·공개 범위를 확인</text>
+<text x="48" y="253.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">모바일 추천·매칭</text>
 <rect x="250" y="236" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
-<text x="270" y="258.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-011 → WF-012 / 준비 없음·재시연 WF-053</text>
-<text x="270" y="285.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">prepared_trip ACK 또는 별도 차량 시작. 아직 상대 연결 전</text>
-<text x="48" y="354.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">차량 추천·매칭</text>
+<text x="270" y="258.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-006 → WF-007 → WF-008 → WF-009</text>
+<text x="270" y="285.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">추천·요청/B 수락·시간 확인·전달 준비. 보류/거절은 WF-010</text>
+<text x="48" y="354.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">Pleos 수신·큰 홈</text>
 <rect x="250" y="337" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
-<text x="270" y="359.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-012 → (공개 미확인 WF-052) → WF-006~008</text>
-<text x="270" y="386.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">연결 후 WF-013. 보류·거절은 WF-010 → 차량 내 친구</text>
-<text x="48" y="455.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">대화·만남·결말</text>
+<text x="270" y="359.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-011 → WF-012 → WF-013~018</text>
+<text x="270" y="386.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">connected/my_trip 구분. 폰 닫고 콘텐츠. WF-053은 본인 여행 전용</text>
+<text x="48" y="455.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">만남·내비·결말</text>
 <rect x="250" y="438" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
-<text x="270" y="460.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-013~018 → WF-019~027 → WF-028~031</text>
+<text x="270" y="460.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-019~027 → WF-028~031</text>
 <text x="270" y="487.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">실패 WF-024 / 미확인 WF-025 / 취소·제거 WF-026</text>
 <text x="48" y="556.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">차량 특화 E 확장</text>
 <rect x="250" y="539" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
 <text x="270" y="561.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">WF-012 → WF-034~039 / WF-044~050</text>
-<text x="270" y="588.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">개인 휴식·식사·일정과 공유 만남의 승인·데이터를 분리</text>
+<text x="270" y="588.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">개인 휴식·식사·일정과 공유 만남의 승인·데이터 분리</text>
 <text x="48" y="657.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">제한·복원·시연</text>
 <rect x="250" y="640" width="880" height="70" rx="0" fill="#F4F4F4" stroke="none" stroke-width="1"/>
-<text x="270" y="662.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">주행 음성 WF-051 / 차단 WF-032 / 복귀 WF-033</text>
-<text x="270" y="689.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">O01 WF-040~041 · MC WF-042 · 후기 WF-043. 모바일 복귀 불필요</text>
+<text x="270" y="662.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">음성 WF-051 / 차단 WF-032 / 복귀 WF-033</text>
+<text x="270" y="689.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">O01 WF-040~041 · MC WF-042 · 후기 WF-043. 새 전체 매칭은 모바일</text>
 </svg>

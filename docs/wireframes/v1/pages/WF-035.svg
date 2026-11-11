@@ -4,7 +4,7 @@
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 WF-035</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.4  |  2026-11-11  |  피드백 번호 WF-035</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-035  시간 조건에 맞춘 장소 목록</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>

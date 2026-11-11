@@ -1,7 +1,7 @@
 {
-  "version": "0.3",
+  "version": "0.4",
   "date": "2026-11-11",
-  "baseCommit": "a1f0b8c",
+  "baseCommit": "0e898e3",
   "screens": [
     {
       "id": "WF-001",
@@ -29,13 +29,13 @@
         }
       ],
       "purpose": "설문보다 친구와의 대화로 시작하는 첫 인상을 만든다.",
-      "entry": "새 시연의 모바일 진입",
+      "entry": "새 시연의 탑승 전 모바일 진입",
       "guard": "가입·성인 인증을 완료한 화면으로 표현하지 않음",
       "failure": "필수 대사·캐릭터 누락은 오류로 표시",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "현재 07의 입력 폼과 다른 목표 화면이다.",
+      "note": "07의 v2 입력 폼은 역사 기록이며 현재 원문 구현은 10을 따른다.",
       "owner": "미정",
       "deadline": "미정"
     },
@@ -198,14 +198,14 @@
     },
     {
       "id": "WF-005",
-      "title": "대화로 여행 계획·전달 준비",
+      "title": "대화로 여행 계획 확인",
       "channel": "mobile",
       "mapping": "M02.CHAT / REVIEW",
       "scene": "S02",
       "dm": "DM02",
       "mode": "compact",
       "speaker": "내 친구",
-      "speech": "네 여행은 먼저 준비해둘게. 친구 추천과 연결은 차에서 이어가자.",
+      "speech": "네 일정에 맞춰 알아갈 친구를 찾아볼게. 먼저 이 계획이 맞는지 봐줘.",
       "cards": [
         {
           "title": "만남 가능 시간",
@@ -219,28 +219,28 @@
         },
         {
           "title": "여행 요약 공개 · 선택",
-          "body": "날짜·권역·가능 시간만. 차량에서도 확인 가능",
+          "body": "날짜·권역·가능 시간만. 상세 일정 제외",
           "meta": ""
         }
       ],
       "actions": [
         {
           "label": "이 계획 저장하기",
-          "target": 9,
-          "event": "TRIP_SAVE 성공 → 본인 준비 전달. 공개 보류도 가능",
+          "target": 6,
+          "event": "TRIP_SAVE 성공·공개 유효면 추천. 미확인은 WF-052, 보류는 WF-010",
           "enabled": true
         },
         {
           "label": "소개 다시 확인",
           "target": 4,
-          "event": "탑승 전 소개 확인. 모바일 추천·매칭 없음",
+          "event": "모바일에서 현재 소개/공개 범위 확인",
           "enabled": true
         }
       ],
-      "purpose": "모바일에서 본인 준비를 마치고 Pleos의 핵심 경험으로 넘긴다.",
+      "purpose": "계획 저장에서 모바일 추천으로 자연스럽게 이어간다.",
       "entry": "WF-004 이후·탑승 전",
-      "guard": "고정 계획만 지원. 상대·만남 장소는 아직 없음",
-      "failure": "저장 실패 시 입력 유지. 성공·추천으로 바꾸지 않음",
+      "guard": "고정 계획만 지원. 만남 장소·시각은 아직 미정",
+      "failure": "저장 실패 시 입력 유지. 임의 성공·추천 대체 없음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
@@ -250,9 +250,9 @@
     },
     {
       "id": "WF-006",
-      "title": "Pleos에서 내 친구가 후보 제안",
-      "channel": "car",
-      "mapping": "P06.LIST",
+      "title": "모바일에서 내 친구가 후보 제안",
+      "channel": "mobile",
+      "mapping": "M03.LIST",
       "scene": "S03",
       "dm": "DM03",
       "mode": "compact",
@@ -279,37 +279,37 @@
         {
           "label": "솔바람 자세히 보기",
           "target": 7,
-          "event": "차량에서 B 상세 확인. 요청은 다음 화면",
+          "event": "모바일 B 상세. 연결 요청은 다음 화면에서 확인",
           "enabled": true
         },
         {
           "label": "내 여행만 이어가기",
           "target": 10,
-          "event": "연결 없이 차량 내 친구·일정 유지",
+          "event": "상대 없이 본인 여행 전달 준비",
           "enabled": true
         }
       ],
-      "purpose": "여행 준비를 받은 Pleos가 추천 이유와 다음 행동을 먼저 제안한다.",
-      "entry": "차량 활성·주차·소개/여행 요약 공개 유효. 미확인은 WF-052",
-      "guard": "B만 연결 가능. 취향 미공개면 일정 중심 설명",
-      "failure": "조회 실패와 후보 없음 구분. 모바일 재진입 요구 없음",
+      "purpose": "여행 전에 에이전트 추천과 이유를 살펴보고 연결을 준비한다.",
+      "entry": "계획 저장·소개/여행 요약 공개 유효. 미확인은 WF-052",
+      "guard": "차량 접속 불필요. B만 연결 가능·취향 미공개면 일정 중심",
+      "failure": "조회 실패와 후보 없음 구분. 차량 추천으로 우회하지 않음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "기존 WF-006 번호 유지. M03에서 차량 P06으로 이동. 홈에 추천 알림을 먼저 보여주고 열면 이 목록이다.",
+      "note": "WF 번호 유지. M03 모바일 추천으로 확정. 준비된 추천 알림을 열어 이 목록을 확인한다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-007",
-      "title": "차량에서 상대 소개·연결 요청",
-      "channel": "car",
-      "mapping": "P06.B_DETAIL / P07.REQUEST_WAITING",
+      "title": "모바일 상대 소개·연결 요청",
+      "channel": "mobile",
+      "mapping": "M03.B_DETAIL / M04.REQUEST_WAITING",
       "scene": "S04",
       "dm": "DM04",
       "mode": "compact",
       "speaker": "내 친구",
-      "speech": "먼저 알아갈 준비를 해볼까? 통화나 만남은 나중에 따로 선택해.",
+      "speech": "여행 전에 알아갈 연결부터 해볼까? 통화나 만남은 나중에 따로 선택해.",
       "cards": [
         {
           "title": "솔바람의 공개 소개",
@@ -326,32 +326,32 @@
         {
           "label": "대화 연결 요청",
           "target": 8,
-          "event": "car CONNECT_REQUEST → B 수락 뒤 WF-008. 대기 시 취소",
+          "event": "web CONNECT_REQUEST → B 수락 후 WF-008. 대기 중 취소",
           "enabled": true
         },
         {
           "label": "지금은 내 여행으로",
           "target": 10,
-          "event": "요청 전 복귀. 취소 뒤 새 연결은 초기화",
+          "event": "요청 전 복귀. 취소 후 새 연결은 초기화",
           "enabled": true
         }
       ],
-      "purpose": "상대 확인부터 연결 요청·응답 대기까지 차량 안에서 끝낸다.",
-      "entry": "차량 추천 B 상세·최신 공개 조건 유효",
-      "guard": "한 회차 한 연결 시도. B 대기 중 완료 표시 금지",
-      "failure": "거절·취소는 WF-010. 주행 전환 시 잠금, 주차 후 복원",
+      "purpose": "상대 확인부터 연결 요청·응답 대기를 모바일에서 진행한다.",
+      "entry": "모바일 B 상세·계획·최신 공개 조건 유효",
+      "guard": "한 회차 한 연결 시도. 대기 중 완료 표시 금지",
+      "failure": "거절·취소는 WF-010. 늦은 수락으로 연결 부활 금지",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "B 수락은 O01의 현재 요청 이벤트다. B도 A 공개 소개를 확인하는 사전 경험을 대본으로 재현한다.",
+      "note": "B 연결 응답은 O01 현재 요청 이벤트이며 차량 세션이 없어도 가능하다. 실제 B 접속 증빙은 아니다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-008",
-      "title": "차량에서 공통 시간 재확인",
-      "channel": "car",
-      "mapping": "P07.TIME_REVIEW",
+      "title": "모바일 공통 시간·연결 확인",
+      "channel": "mobile",
+      "mapping": "M04.TIME_REVIEW",
       "scene": "S04",
       "dm": "DM04",
       "mode": "hidden",
@@ -372,85 +372,85 @@
       "actions": [
         {
           "label": "이 시간대로 연결하기",
-          "target": 13,
-          "event": "car CONFIRM_WINDOW 성공 → connected → 콘텐츠",
+          "target": 9,
+          "event": "web CONFIRM_WINDOW 성공 → linked → connected 전달 준비",
           "enabled": true
         },
         {
           "label": "연결 취소",
           "target": 10,
-          "event": "CONNECT_CANCEL. 차량 본인 여행으로 복귀",
+          "event": "CONNECT_CANCEL. 본인 여행 준비로",
           "enabled": true
         }
       ],
-      "purpose": "연결 이후 모바일 재전달 없이 Pleos 콘텐츠로 이어간다.",
-      "entry": "유효한 B 수락 이벤트 이후·주차",
+      "purpose": "모바일에서 알아갈 연결을 마치고 차량 경험으로 넘긴다.",
+      "entry": "유효한 B 수락 이벤트 이후·탑승 전",
       "guard": "지원 시간 프리셋만 사용. 자유 시간 편집 없음",
-      "failure": "저장 확인 전 상대 콘텐츠 잠금. 실패는 이 화면에서 재확인",
+      "failure": "저장 확인 전 연결 완료/connected 전달 잠금",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "준비 전달의 ACK와 연결은 별개다. 연결 완료로 통화·만남을 자동 실행하지 않는다.",
+      "note": "매칭은 서로 알아갈 연결이다. 실제로 함께 여행할지는 만남 뒤 차량에서 따로 선택한다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-009",
-      "title": "탑승 전 준비 완료 · 이제 Pleos로",
+      "title": "연결 준비 완료 · 이제 Pleos로",
       "channel": "mobile",
-      "mapping": "M02.TRANSFER_READY / VEHICLE_CONFIRMED",
-      "scene": "S02→S05",
+      "mapping": "M04.TRANSFER_READY / VEHICLE_CONFIRMED",
+      "scene": "S04→S05",
       "dm": "DM05",
       "mode": "compact",
       "speaker": "내 친구",
-      "speech": "준비됐어. 휴대폰을 닫고 차에서 나를 만나줘.",
+      "speech": "솔바람과 연결됐어. 차에서는 캐릭터랑 편하게 알아가 보자.",
       "cards": [
         {
-          "title": "본인 준비만 전달",
-          "body": "파도 · 외형·표현 · 현재 여행 계획",
-          "meta": "상대 없음 · prepared_trip / peer=null"
+          "title": "차량으로 이어갈 정보",
+          "body": "내 친구·계획 + 솔바람 공개 소개·공통 시간",
+          "meta": "connected · 현재 연결/공개 버전 확인"
         },
         {
           "title": "수신 표시는 선택 사항",
           "body": "전달 준비 → 차량 불러오기 → ACK",
-          "meta": "휴대폰 확인 클릭 없이 차량 진행"
+          "meta": "모바일 확인 클릭 없이 차량 진행"
         }
       ],
       "actions": [
         {
           "label": "차량에서 이어가기",
           "target": 11,
-          "event": "HANDOFF_PREPARE 저장 뒤 Pleos P01로 전환",
+          "event": "HANDOFF_PREPARE(mode=connected) 저장 → Pleos P01",
           "enabled": true
         },
         {
-          "label": "탑승 전 계획 확인",
-          "target": 5,
-          "event": "본인 준비 편집. 매칭은 차량에서",
+          "label": "연결 마무리하고 내 여행",
+          "target": 10,
+          "event": "탑승 전 CONNECT_END 확인 → my_trip 준비",
           "enabled": true
         }
       ],
-      "purpose": "모바일의 역할을 탑승 전 준비에서 끝낸다.",
-      "entry": "본인 프로필·여행 준비 저장. 공개·연결은 선행 조건 아님",
-      "guard": "GET·애니메이션을 ACK로 표시하지 않음",
-      "failure": "실패 시 원인 표시. 탑승 후 복구는 차량 WF-053에서도 가능",
+      "purpose": "모바일에서 마친 연결과 여행 맥락을 Pleos로 넘긴다.",
+      "entry": "현재 linked·공개/계획/공통 시간 유효",
+      "guard": "원문·상대 비공개 일정 제외. GET을 ACK로 표시하지 않음",
+      "failure": "오래된 연결/공개는 재조회. 종료면 본인 여행으로, 임의 상대 유지 없음",
       "scope": "B",
       "nav": "D",
-      "state": "목표 v3 설계 / 현재 v2와 구분",
-      "note": "현재 실행은 07의 my_trip 전달까지만 구현. 목표 prepared_trip은 새 계약이다.",
+      "state": "목표 v4 설계 / 현재 v3와 구분",
+      "note": "현재 v3는 prepared_trip 본인 준비만 지원. 연결 포함 전달은 새 v4 계약이며 문서만으로 구현되지 않는다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-010",
-      "title": "Pleos에서 내 친구와 내 여행",
-      "channel": "car",
-      "mapping": "P02.MY_TRIP",
+      "title": "내 친구와 본인 여행 준비",
+      "channel": "mobile",
+      "mapping": "M02.MY_TRIP",
       "scene": "본인 여행",
       "dm": "DM02·DM04",
       "mode": "hero",
       "speaker": "내 친구",
-      "speech": "지금은 나랑 여행하자. 네 다음 일정도 여기서 이어갈게.",
+      "speech": "지금은 나랑 여행하자. 차에서도 네 다음 일정을 이어갈게.",
       "cards": [
         {
           "title": "내 다음 일정",
@@ -458,75 +458,75 @@
           "meta": ""
         },
         {
-          "title": "현재 상태",
-          "body": "본인 여행 · 상대 기능 잠금",
+          "title": "전달할 모드",
+          "body": "my_trip · 상대 정보 없음",
           "meta": ""
         }
       ],
       "actions": [
         {
-          "label": "내 친구 홈으로",
-          "target": 12,
-          "event": "본인 여행 유지. 새 연결 자동 시작 안 함",
+          "label": "차량에서 내 여행 이어가기",
+          "target": 11,
+          "event": "HANDOFF_PREPARE(mode=my_trip). peer=null",
           "enabled": true
         },
         {
-          "label": "차량에서 공개 확인",
+          "label": "공개 범위 다시 확인",
           "target": 52,
-          "event": "요청 전은 공개 확인. 종료 뒤는 철회만 가능",
+          "event": "연결 미시도 회차만 재진입. 시도 후 재요청 잠금",
           "enabled": true
         }
       ],
-      "purpose": "공개 보류·연결 거절 뒤에도 차량 안에서 동행감을 유지한다.",
-      "entry": "공개 보류·요청 전 본인 여행 선택·거절/취소/종료",
-      "guard": "상대 기능은 잠금. 새 연결 시도는 전체 초기화",
-      "failure": "공개 철회는 연결 종료 뒤 차량에서 처리. 모바일 재전달 없음",
+      "purpose": "공개 보류·거절 뒤에도 내 친구와 여행을 준비할 수 있다.",
+      "entry": "공개 보류·요청 전 본인 여행·거절/취소/종료",
+      "guard": "한 번 시도한 회차의 새 연결은 전체 초기화",
+      "failure": "전달 준비 실패는 원인 표시. 가짜 상대/ACK 없음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "한 번도 요청하지 않은 회차는 공개 확인 후 추천을 열 수 있다. 한 번 시도한 회차는 다시 요청하지 않는다.",
+      "note": "탑승 후 본인 여행은 WF-012/031에서 이어간다. 차량 홈에서 이 모바일 화면으로 복귀시키지 않는다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-011",
-      "title": "Pleos에서 여행 시작",
+      "title": "Pleos에서 여행·연결 불러오기",
       "channel": "car",
       "mapping": "P01.READY / LOADING",
       "scene": "S05",
       "dm": "DM05",
       "mode": "hero",
       "speaker": "내 친구",
-      "speech": "준비한 여행을 불러오고, 여기서 여행 친구도 알아보자.",
+      "speech": "준비한 여행과 연결을 불러올게. 여기서부터는 나랑 이어가자.",
       "cards": [
         {
-          "title": "시작할 본인 여행",
+          "title": "이어갈 여행",
           "body": "파도 · 11월 14일 강릉",
-          "meta": "상대 연결 전 · 모바일 재확인 없음"
+          "meta": "모바일 연결: 솔바람 / 없으면 본인 여행"
         }
       ],
       "actions": [
         {
           "label": "내 여행 불러오기",
           "target": 12,
-          "event": "GET handoff → core 검증 → CAR_LOADED ACK",
+          "event": "GET handoff → mode/참조/현재 연결 검증 → CAR_LOADED",
           "enabled": true
         },
         {
-          "label": "차량에서 여행 준비",
+          "label": "내 여행만 시작 확인",
           "target": 53,
-          "event": "미준비/오래된 전달/실패는 원인 유지 후 별도 확인",
+          "event": "미준비/오래된 연결은 원인 유지. 본인 여행 전용",
           "enabled": true
         }
       ],
-      "purpose": "캐릭터가 중심인 Pleos 경험을 연결 이전부터 시작한다.",
+      "purpose": "모바일 연결을 받아 Pleos의 이동 경험을 시작한다.",
       "entry": "안전한 주차·foreground·현재 차량 세션",
-      "guard": "prepared_trip만 ACK. 공개·연결 버전은 live 상태로 확인",
-      "failure": "불러오기 실패를 기본값 성공으로 바꾸지 않음. 저장 준비는 차량에서 재확인",
+      "guard": "connected/my_trip 구분. 상대 기능은 live 연결도 유효해야 함",
+      "failure": "실패를 기본값 성공으로 바꾸지 않음. 연결 종료는 내 친구 유지",
       "scope": "B",
       "nav": "D",
-      "state": "목표 v3 설계 / 현재 v2와 구분",
-      "note": "서버가 응답하지 않으면 차량 시작도 대기한다. 별도 시작은 모바일 전달 성공으로 표시하지 않는다.",
+      "state": "목표 v4 설계 / 현재 v3와 구분",
+      "note": "차량에서 새 후보·연결 요청은 제공하지 않는다. 별도 본인 시작은 모바일 ACK/상대 동의를 만들지 않는다.",
       "owner": "미정",
       "deadline": "미정"
     },
@@ -535,23 +535,23 @@
       "title": "Pleos 기본 홈 · 큰 내 친구",
       "channel": "car",
       "mapping": "P02.MY_AGENT",
-      "scene": "S05→S03·S06",
-      "dm": "DM05·DM03·DM06",
+      "scene": "S05·S06",
+      "dm": "DM05·DM06",
       "mode": "hero",
       "speaker": "내 친구",
       "speech": "바다 보고 쉬어가는 여행, 오늘도 네 속도로 가보자.",
       "cards": [
         {
-          "title": "내 여행 · 친구 제안",
-          "body": "다음 방문 15:20 / 숙소 예상 15:45",
-          "meta": "준비되면 여행 친구 추천을 알려줄게."
+          "title": "연결한 친구 · 내 다음 일정",
+          "body": "솔바람 / 공통 14:00~15:00",
+          "meta": "다음 방문 15:20 / 숙소 예상 15:45"
         }
       ],
       "actions": [
         {
-          "label": "여행 친구 추천받기",
-          "target": 6,
-          "event": "공개 미확인은 WF-052. connected면 ‘대화 고르기’ → WF-013",
+          "label": "대화 고르기",
+          "target": 13,
+          "event": "connected면 콘텐츠. my_trip은 ‘내 친구와 계속’ → WF-012 본인 대화",
           "enabled": true
         },
         {
@@ -567,14 +567,14 @@
           "enabled": true
         }
       ],
-      "purpose": "Pleos 홈을 추천·매칭·콘텐츠·여정의 중심으로 둔다.",
-      "entry": "준비 전달 ACK 또는 별도 차량 시작·현재 업무 복원 뒤",
+      "purpose": "큰 캐릭터 홈에서 연결된 상대와의 대화·만남·이동으로 이어간다.",
+      "entry": "connected/my_trip 수신 또는 본인 여행 별도 시작·현재 상태 복원",
       "guard": "큰 캐릭터는 주차용. 음성 목표 WF-051, 차단 WF-032",
-      "failure": "실패·공개 보류 뒤에도 이 홈으로 복귀. 모바일 필수 단계 없음",
+      "failure": "종료/철회는 상대 기능 정리·내 친구 유지. 신규 매칭 버튼 없음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "ready_to_match: 추천 / connected: 대화 / my_trip: 내 친구와 계속. 시도 후 새 매칭은 초기화. 추천은 알림을 먼저 보여주며 버튼은 상세 진입이다.",
+      "note": "내 친구는 항상 이용 가능. my_trip은 상대 카드/콘텐츠를 숨기고 본인 일정만 보여준다. 폰 재조작 없이 계속하며 새 매칭은 제공하지 않는다.",
       "owner": "미정",
       "deadline": "미정"
     },
@@ -626,7 +626,7 @@
         }
       ],
       "purpose": "목록을 읽을 때 캐릭터를 상단으로 줄여 선택 영역을 확보한다.",
-      "entry": "Pleos P07에서 linked·현재 공개 프로필 유효",
+      "entry": "모바일 연결·차량 수신 후 live linked·공개 유효",
       "guard": "정차 상태. MC는 추가 기능 채택 때만 표시",
       "failure": "콘텐츠 이동으로 기존 동의 재사용·자동 전송 금지",
       "scope": "B",
@@ -2026,9 +2026,9 @@
           "enabled": true
         },
         {
-          "label": "차량에서 새 시연 시작",
-          "target": 53,
-          "event": "정리·필수 ACK 완료 후 새 run. 탑승 전 시연만 WF-001",
+          "label": "처음부터 새 시연",
+          "target": 1,
+          "event": "정리/ACK 완료 후 모바일 매칭부터. 차량 본인 시작만 WF-053",
           "enabled": true
         },
         {
@@ -2547,10 +2547,10 @@
     },
     {
       "id": "WF-052",
-      "title": "차량에서 공개 범위 확인",
-      "channel": "car",
-      "mapping": "P06.PUBLIC_REVIEW",
-      "scene": "S03 전 / 공개 철회",
+      "title": "모바일에서 공개 범위 확인",
+      "channel": "mobile",
+      "mapping": "M03.PUBLIC_REVIEW",
+      "scene": "S03 전",
       "dm": "DM03·DM04",
       "mode": "hidden",
       "speaker": "내 친구",
@@ -2576,42 +2576,42 @@
         {
           "label": "확인한 범위로 추천 보기",
           "target": 6,
-          "event": "각 체크 확인 후 PROFILE_PUBLISH·TRIP_SHARE_CONFIRM 모두 성공해야 열림",
+          "event": "각 체크 후 web PROFILE_PUBLISH·TRIP_SHARE_CONFIRM 성공 확인",
           "enabled": false
         },
         {
           "label": "지금은 내 여행만",
           "target": 10,
-          "event": "공개/요약 미동의 유지. 본인 여행은 계속",
+          "event": "공개 보류. my_trip 준비로 계속",
           "enabled": true
         }
       ],
-      "purpose": "탑승 전 공개를 미뤘어도 차량 안에서 추천을 준비한다.",
-      "entry": "차량 활성·주차·확인한 본인 준비. 연결 시도 전",
+      "purpose": "공개 확인부터 후보 추천까지 탑승 전 모바일에서 마친다.",
+      "entry": "모바일 계획/소개 확인·연결 시도 전",
       "guard": "체크는 미확인 기본. 명시 확인한 값만 승인",
-      "failure": "하나라도 저장 실패하면 추천 잠금·각 영수증 확인. 휴대폰 복귀 없음",
+      "failure": "하나라도 실패하면 후보 잠금·각 영수증 확인. 원문 공개 없음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "기존 공개는 재승인 강요 없이 현재 범위를 표시. 연결 종료 뒤 이 상태는 철회만 제공하고 새 추천 버튼은 숨긴다.",
+      "note": "기존 승인 유효 시 재확인을 강요하지 않는다. 연결 시도 후 재공개/새 요청은 초기화. 차량의 공개 철회는 본인 여행 설정에서 별도 처리한다.",
       "owner": "미정",
       "deadline": "미정"
     },
     {
       "id": "WF-053",
-      "title": "차량에서 시작할 여행 확인",
+      "title": "차량에서 본인 여행 시작 확인",
       "channel": "car",
       "mapping": "P01.START_REVIEW",
-      "scene": "S05 대안 / 재시연",
+      "scene": "S05 본인 여행 대안",
       "dm": "DM05·DM11",
       "mode": "hidden",
       "speaker": "내 친구",
-      "speech": "저장해 둔 네 여행이 있어. 이 준비로 차에서 시작할까?",
+      "speech": "지금은 네 여행만 이어갈 수 있어. 이 준비로 나랑 시작할까?",
       "cards": [
         {
           "title": "내 친구 · 저장한 준비",
-          "body": "파도 · 외형 a-02 · 가벼운 표현",
-          "meta": "본인이 확인한 소개값 사용"
+          "body": "파도 · 외형 a-01 · 가벼운 표현",
+          "meta": "본인이 확인한 소개값만 사용"
         },
         {
           "title": "강릉 여행 · 11월 14일",
@@ -2619,33 +2619,33 @@
           "meta": "숙소 예상 15:45 / 마감 16:00"
         },
         {
-          "title": "차량에서 시작",
-          "body": "모바일 전달 성공·ACK와 다른 시작 방식",
+          "title": "본인 여행만 시작",
+          "body": "상대 기능·매칭·모바일 ACK를 생성하지 않음",
           "meta": ""
         }
       ],
       "actions": [
         {
-          "label": "이 준비로 차량에서 시작",
+          "label": "내 여행만 차량에서 시작",
           "target": 12,
-          "event": "CAR_START_TRIP. 저장 core 버전 확인. 준비 없으면 기본 시연 확인으로 변경",
+          "event": "CAR_START_TRIP. 확인한 core로 my_trip. 기존 연결/SDK 기록 보존",
           "enabled": true
         },
         {
-          "label": "불러오기 다시 확인",
+          "label": "연결 불러오기 다시 확인",
           "target": 11,
-          "event": "읽기 재시도. 서버 실패는 그대로 표시",
+          "event": "현재 전달/연결 조회. 서버 실패는 그대로 표시",
           "enabled": true
         }
       ],
-      "purpose": "준비 누락·오래된 전달·재시연도 Pleos에서 이어간다.",
-      "entry": "주차·현재 세션·연결 요청 전·정리/초기화 완료",
-      "guard": "임의 차량 온보딩/일정 편집 아님. 서버 응답 필요",
-      "failure": "현재 core 버전 불일치·서버 실패 시 대기. 자동 기본값·가짜 ACK 금지",
+      "purpose": "연결 수신이 안 돼도 본인 여행을 차량에서 이어갈 수 있다.",
+      "entry": "주차·현재 세션·확인한 본인 준비·미정리/복구 잠금 없음",
+      "guard": "새 상대 생성·기존 연결 덮어쓰기·가짜 ACK 금지",
+      "failure": "버전 불일치/서버 실패는 대기. 기존 기록을 지워 우회하지 않음",
       "scope": "B",
       "nav": "D",
       "state": "설계",
-      "note": "저장 준비가 있을 때의 예시다. 준비 없음은 기본 캐릭터·중립 소개·동일 고정 일정을 보여주고 ‘이 시연 여행으로 시작’. 기존 준비 덮어쓰기·자동 선택 없음.",
+      "note": "저장 준비가 있을 때의 예시다. 준비가 전혀 없을 때만 기본 캐릭터/고정 여행을 명시 확인한다. 본인 시작을 매칭 포함 전체 시연으로 설명하지 않는다.",
       "owner": "미정",
       "deadline": "미정"
     }
