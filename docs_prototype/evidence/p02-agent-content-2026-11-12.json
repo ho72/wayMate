@@ -927,11 +927,17 @@
   "apkSha256": "5ba57043e862430acf52bff82427fab7d33cc6b1676b197691b3b9eec2ff4e16",
   "speech": {
     "platformTtsLifecycleImplemented": true,
-    "emulatorTtsPackageFound": false,
     "actualNarrationVerified": false,
     "captionFallbackVerified": true,
     "callbackGateRegressionTests": 5,
-    "realAudioFocusAndDrivingVerification": "not performed"
+    "realAudioFocusAndDrivingVerification": "not performed",
+    "registeredTtsServices": [
+      "ai.pleos.playground.caas/.service.speech.SpeechService"
+    ],
+    "defaultTtsSynthSetting": null,
+    "platformLogObservation": "stop failed: not bound to TTS engine",
+    "engineBindingVerified": false,
+    "failureRootCauseVerified": false
   },
   "limits": [
     "B is a prepared fixture, not a live remote person; send success is local demo-server persistence.",
