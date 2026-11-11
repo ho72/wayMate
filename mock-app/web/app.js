@@ -15,7 +15,9 @@ let busy = false,
   currentQuestion = null,
   inputSource = "typed",
   exampleText = null,
-  historyKey = null;
+  historyKey = null,
+  profileStep = "character",
+  scrollKey = null;
 const status = (text) => {
   $("status").textContent = text;
 };
@@ -69,8 +71,7 @@ function showQuestion(id) {
 function render() {
   const s = api.state;
   if (!s) return;
-  document.querySelector(".character").hidden =
-    document.querySelector("input[name=avatar]:checked").value !== "a-01";
+  renderProfilePreview();
   const owns = !s.clientId || s.clientId === api.id,
     active = !!s.vehicleActivation,
     locked =
@@ -82,43 +83,89 @@ function render() {
       s.social?.connection.attempted;
   const order = questionOrder(s.onboarding),
     next = editing || order.find((k) => !s.onboarding[k]);
-  const historyVersion = JSON.stringify([s.onboarding, locked]);
+  const historyVersion = JSON.stringify([
+    s.onboarding,
+    s.profile,
+    s.trip,
+    s.publication,
+    s.social?.tripShareApproved,
+    locked,
+  ]);
   if (historyVersion !== historyKey) {
     historyKey = historyVersion;
-    $("history").replaceChildren();
+    const history = $("history");
+    history.replaceChildren();
     for (const id of order) {
       const a = s.onboarding[id];
       if (!a) continue;
-      const wrap = document.createElement("div");
-      wrap.className = "chat-answer";
-      const q = document.createElement("p");
-      q.textContent = QUESTIONS[id].prompt;
-      const raw = document.createElement("p");
-      raw.className = "raw";
-      raw.textContent = a.answerText;
-      const edit = document.createElement("button");
+      const agent = node("div", null, "message agent");
+      agent.append(
+        node("span", "wayMate", "speaker"),
+        node("p", questionLine(id)),
+      );
+      const user = node("div", null, "message user"),
+        raw = node("p", a.answerText, "raw"),
+        edit = node("button", "수정", "edit-answer");
       edit.type = "button";
-      edit.className = "secondary";
-      edit.textContent = "답변 수정";
       edit.disabled = locked;
+      edit.setAttribute("aria-label", QUESTIONS[id].prompt + " 답변 수정");
       edit.onclick = () => {
         preserveDraft();
         editing = id;
         render();
         $("answer").focus();
       };
-      wrap.append(q, raw, edit);
-      $("history").append(wrap);
+      user.append(raw, edit);
+      history.append(agent, user);
     }
+    if (s.profile)
+      history.append(
+        confirmedTurn(
+          "직접 확인한 소개",
+          profileLine(
+            s.profile.alias,
+            s.profile.avatarId,
+            s.profile.privateSummary,
+          ),
+        ),
+      );
+    if (s.trip)
+      history.append(
+        confirmedTurn(
+          "저장한 여행 계획",
+          `${s.trip.date} · 강릉 해변권의 여행 계획`,
+        ),
+      );
+    if (s.publication === "published")
+      history.append(
+        confirmedTurn(
+          "확인한 공개 범위",
+          "선택한 소개 항목을 공개하기로 했어요.",
+        ),
+      );
+    if (s.social?.tripShareApproved)
+      history.append(
+        confirmedTurn(
+          "공유 확인",
+          "여행일·권역·가능 시간만 함께 볼 수 있어요.",
+        ),
+      );
   }
   showQuestion(next);
-  $("answer-form").hidden = !next || !owns || active;
+  $("answer-form").hidden =
+    !next || !owns || active || !!s.social?.connection.attempted;
+  $("composer-hint").hidden = !$("answer-form").hidden;
   for (const el of $("answer-form").elements) el.disabled = locked;
   $("send").disabled =
     locked || !$("answer").value.trim() || [...$("answer").value].length > 500;
   $("food-example").hidden = currentQuestion !== "interests";
   for (const el of $("profile-form").elements) el.disabled = locked;
-  $("save").disabled = locked || !s.allowedActions.includes("PROFILE_CONFIRM");
+  $("save").disabled =
+    locked ||
+    !validAlias() ||
+    profileStep !== "summary" ||
+    !s.allowedActions.includes("PROFILE_CONFIRM");
+  $("profile-next").disabled = locked || !validAlias();
   $("save-trip").disabled = locked || !s.allowedActions.includes("TRIP_SAVE");
   $("prepare").disabled =
     busy ||
@@ -208,7 +255,8 @@ $("answer-form").onsubmit = (e) => {
     });
     editing = null;
     currentQuestion = null;
-    $("confirmed").checked = false;
+    profileStep = "character";
+    persistProfileDraft();
     status("답변 원문을 저장했어요.");
   });
 };
@@ -223,29 +271,22 @@ $("no-summary").onclick = () => {
   ])
     $(id).checked = false;
   $("style").value = "";
-  $("confirmed").checked = false;
+  renderProfilePreview();
+  persistProfileDraft();
   status("소개값을 모두 비웠어요. 원문 확인 후 소개를 저장해 주세요.");
 };
 $("profile-form").onsubmit = (e) => {
   e.preventDefault();
+  if (profileStep !== "summary") {
+    advanceCharacter();
+    return;
+  }
   const alias = $("alias").value.normalize("NFC").trim();
   if (!alias || [...alias].length > 10 || /[\r\n]/.test(alias)) {
     status("별명은 줄바꿈 없이 1~10자로 입력해 주세요.");
     return;
   }
-  const summary = emptySummary();
-  summary.interests = ["sea", "cafe"]
-    .filter((id) => $(id).checked)
-    .map((id) => (id === "sea" ? "sea_walk" : "cafe"));
-  summary.activityPreference = $("activity").checked
-    ? "walk_first_photos_occasional"
-    : null;
-  summary.pace = $("pace").checked ? "relaxed" : null;
-  summary.conversationStyle = $("conversation").checked ? "quiet" : null;
-  summary.speakingStyle = $("style").value || null;
-  summary.expressionPresetIds = $("expression").checked
-    ? ["quiet-companion"]
-    : [];
+  const summary = localSummary();
   work(async () => {
     await api.command("PROFILE_CONFIRM", {
       alias,
@@ -310,6 +351,185 @@ async function poll() {
     polling = false;
   }
 }
+const summaryInputs = [
+  "sea",
+  "cafe",
+  "activity",
+  "pace",
+  "conversation",
+  "expression",
+];
+function localSummary() {
+  const v = emptySummary();
+  v.interests = ["sea", "cafe"]
+    .filter((id) => $(id).checked)
+    .map((id) => (id === "sea" ? "sea_walk" : "cafe"));
+  v.activityPreference = $("activity").checked
+    ? "walk_first_photos_occasional"
+    : null;
+  v.pace = $("pace").checked ? "relaxed" : null;
+  v.conversationStyle = $("conversation").checked ? "quiet" : null;
+  v.speakingStyle = $("style").value || null;
+  v.expressionPresetIds = $("expression").checked ? ["quiet-companion"] : [];
+  return v;
+}
+function profileLine(alias, avatar, summary) {
+  const labels = [alias, avatar === "a-01" ? "블루 드래곤" : "햇살 친구"];
+  const interests = summary.interests.map((i) =>
+    i === "sea_walk" ? "바다 산책" : "카페",
+  );
+  if (interests.length) labels.push(interests.join(" · "));
+  if (summary.activityPreference) labels.push("산책 먼저, 사진은 가끔");
+  if (summary.pace) labels.push("여유로운 여행");
+  if (summary.conversationStyle) labels.push("조용한 대화");
+  if (summary.speakingStyle)
+    labels.push(
+      summary.speakingStyle === "calm"
+        ? "차분하고 편안하게"
+        : "가벼운 농담도 조금",
+    );
+  if (summary.expressionPresetIds.length) labels.push("조용히 함께하는 친구");
+  return labels.join(" / ");
+}
+function validAlias() {
+  const v = $("alias").value.normalize("NFC").trim();
+  return [...v].length >= 1 && [...v].length <= 10 && !/[\r\n]/.test(v);
+}
+function renderProfilePreview() {
+  const a = $("alias").value.normalize("NFC").trim();
+  $("profile-preview").textContent = profileLine(
+    a || "아직 정하지 않은 별명",
+    document.querySelector("input[name=avatar]:checked").value,
+    localSummary(),
+  );
+  for (const b of document.querySelectorAll("[data-tone]"))
+    b.setAttribute("aria-pressed", String(b.dataset.tone === $("style").value));
+  $("alias-help").textContent = validAlias()
+    ? "네가 편한 별명이면 좋아."
+    : "줄바꿈 없이 1~10자로 알려줘.";
+}
+function profileDraftKey() {
+  return `waymate.profileDraft.v4.${api.id}.${api.state?.runId}`;
+}
+function persistProfileDraft() {
+  if (!api.state) return;
+  localStorage.setItem(
+    profileDraftKey(),
+    JSON.stringify({
+      revision: answerRevision(),
+      step: profileStep,
+      alias: $("alias").value,
+      avatar: document.querySelector("input[name=avatar]:checked").value,
+      selected: summaryInputs.filter((id) => $(id).checked),
+      style: $("style").value,
+    }),
+  );
+}
+function restoreProfileDraft() {
+  if (api.state.profile) return;
+  try {
+    const d = JSON.parse(localStorage.getItem(profileDraftKey()) || "null");
+    if (!d || d.revision !== answerRevision()) return;
+    $("alias").value = typeof d.alias === "string" ? d.alias : "파도";
+    if (["a-01", "a-02"].includes(d.avatar))
+      document.querySelector(
+        `input[name=avatar][value="${d.avatar}"]`,
+      ).checked = true;
+    for (const id of summaryInputs)
+      $(id).checked = Array.isArray(d.selected) && d.selected.includes(id);
+    $("style").value = ["", "calm", "light_humor"].includes(d.style)
+      ? d.style
+      : "";
+    profileStep =
+      d.step === "summary" && validAlias() ? "summary" : "character";
+  } catch {
+    /* Keep the unreadable draft; never submit it. */
+  }
+}
+function advanceCharacter() {
+  if (!validAlias()) return;
+  profileStep = "summary";
+  persistProfileDraft();
+  render();
+}
+$("profile-next").onclick = advanceCharacter;
+$("profile-back").onclick = () => {
+  profileStep = "character";
+  persistProfileDraft();
+  render();
+};
+$("alias").addEventListener("input", () => {
+  persistProfileDraft();
+  render();
+});
+for (const id of summaryInputs)
+  $(id).addEventListener("change", () => {
+    persistProfileDraft();
+    renderProfilePreview();
+  });
+for (const b of document.querySelectorAll("[data-tone]"))
+  b.onclick = () => {
+    $("style").value = b.dataset.tone;
+    persistProfileDraft();
+    renderProfilePreview();
+  };
+function questionLine(id) {
+  const lead =
+    {
+      activity: "고마워, 네 이야기 그대로 적어둘게. ",
+      conversation: "이번엔 사람과 함께할 때를 생각해보자. ",
+      expression: "친구로서 널 소개할 때도 편했으면 해. ",
+      food_detail: "음식 이야기도 조금 더 들려줘. ",
+    }[id] || "";
+  return lead + QUESTIONS[id].prompt;
+}
+function confirmedTurn(label, text) {
+  const n = node("div", null, "message confirmation");
+  n.append(node("small", label), node("p", text));
+  return n;
+}
+function guideConversation(s, stage) {
+  let line = "";
+  if (stage === "onboarding") {
+    line = currentQuestion
+      ? questionLine(currentQuestion)
+      : profileStep === "character"
+        ? "이야기해줘서 고마워. 이제 널 어떻게 부르면 좋을까? 함께할 친구 모습도 골라줘."
+        : "좋아. 다른 사람에게 소개할 내용도 네가 직접 정해보자. 지금은 별명과 친구 모습만으로 시작해도 괜찮아.";
+  } else if (stage === "trip")
+    line = `${s.profile.alias}, 이제 여행 계획도 같이 보자. 먼저 강릉 해안의 이 계획으로 준비해볼까?`;
+  else if (stage === "public")
+    line =
+      "우리끼리 나눈 이야기와 다른 사람에게 보여줄 소개는 나눠둘게. 어디까지 함께 볼지 네가 골라줘.";
+  else if (stage === "candidates")
+    line =
+      "네가 공유하기로 한 여행을 기준으로, 같은 날 알아갈 수 있는 사람을 준비했어. 한 번 살펴볼까?";
+  else if (stage === "connection")
+    line =
+      "대화 연결과 실제 만남은 따로 확인할 거야. 지금 연결 상태를 같이 보자.";
+  else
+    line = s.vehicleActivation
+      ? "준비한 여행이 차에 잘 도착했어. 이제 차 안에서도 나와 함께 이어가자."
+      : "여기까지 함께 준비했어. 이 소개와 계획으로 차에서도 이야기 이어갈까?";
+  $("conversation-prompt").textContent = line;
+  const nextScroll = JSON.stringify([
+    stage,
+    currentQuestion,
+    profileStep,
+    s.onboardingRevision ?? answerRevision(),
+    s.profileVersion,
+    s.tripVersion,
+    s.publication,
+    s.social?.connection.status,
+  ]);
+  if (scrollKey !== nextScroll) {
+    scrollKey = nextScroll;
+    requestAnimationFrame(() => {
+      const viewport = document.querySelector(".conversation");
+      viewport.scrollTop = viewport.scrollHeight;
+    });
+  }
+}
 let candidateDetail = false;
 let manualStage = null;
 let reviewBinding = null,
@@ -368,10 +588,13 @@ function renderFlow(s, owns) {
                 : s.publication !== "published" || !s.social.tripShareApproved
                   ? "public"
                   : "candidates";
-  $("chat-card").hidden = stage !== "onboarding";
+  $("chat-card").hidden = false;
+  $("delivery-card").hidden = stage !== "transfer";
   $("profile-card").hidden =
     stage !== "onboarding" ||
     questionOrder(s.onboarding).some((k) => !s.onboarding[k]);
+  $("character-review").hidden = profileStep !== "character";
+  $("summary-review").hidden = profileStep !== "summary";
   $("trip-card").hidden = stage !== "trip";
   $("profile-form").hidden = !["onboarding", "trip"].includes(stage);
   $("social-card").hidden = ![
@@ -384,7 +607,7 @@ function renderFlow(s, owns) {
     stage !== "transfer" &&
     !(con.attempted && ["cancelled", "declined", "ended"].includes(con.status));
   $("steps").replaceChildren(
-    ...["1 내 이야기", "2 여행 계획", "3 공개·추천", "4 연결 확인"].map(
+    ...["나눈 이야기", "여행 계획", "공개·추천", "연결 확인"].map(
       (label, i) => {
         const n = node(
           !con.attempted &&
@@ -422,6 +645,7 @@ function renderFlow(s, owns) {
       },
     ),
   );
+  guideConversation(s, stage);
   const key = JSON.stringify([
     stage,
     candidateDetail,
@@ -439,16 +663,16 @@ function renderFlow(s, owns) {
   const root = $("social-content");
   root.replaceChildren();
   $("social-step").textContent = ["public", "candidates"].includes(stage)
-    ? "M03 · 모바일 추천"
-    : "M04 · 연결·공통 시간 확인";
+    ? "함께 알아가기"
+    : "서로 알아가기";
   $("social-title").textContent =
     {
-      public: "상대에게 보일 내용만 확인해요",
-      candidates: "여행이 겹치는 사람을 찾았어요",
-      connection: "서로 알아갈 의사를 확인해요",
+      public: "이 소개, 다른 여행자에게도 보여줄까?",
+      candidates: "여행이 겹치는 친구가 있어",
+      connection: "서로를 알아갈 준비",
       transfer: s.vehicleActivation
         ? "차량에서 여행을 이어가요"
-        : "차량으로 이어갈 준비가 됐어요",
+        : "이제 차에서도 함께할 수 있어",
     }[stage] || "내 여행 준비";
   if (stage === "public") {
     root.append(
@@ -478,6 +702,8 @@ function renderFlow(s, owns) {
         "소개 말투",
         "소개 표현",
       ];
+      const publicEditor = node("details", null, "optional-editor");
+      publicEditor.append(node("summary", "공개할 항목을 조정할래"));
       const chosen = [];
       const intro = node("p", publicPreview(s, publicSelection), "summary");
       fields.forEach((key, i) => {
@@ -493,11 +719,11 @@ function renderFlow(s, owns) {
         input.disabled = i < 2;
         input.dataset.field = key;
         l.append(input, document.createTextNode(labels[i]));
-        root.append(l);
+        publicEditor.append(l);
         chosen.push(input);
       });
-      root.append(intro);
-      const publish = node("button", "이 소개 공개 승인");
+      root.append(intro, publicEditor);
+      const publish = node("button", "이 소개로 연결해볼래");
       publish.disabled = busy || !!api.pending || !online;
       publish.onclick = () =>
         confirmBinding(
@@ -531,7 +757,7 @@ function renderFlow(s, owns) {
       action(
         root,
         "TRIP_SHARE_CONFIRM",
-        "여행 요약 공유 승인",
+        "응, 여행 요약도 공유할게",
         "여행일·권역·가능 시간만 공개해요. 다음 일정·숙소 계획은 본인용이에요.",
       );
     else root.append(node("p", "✓ 여행 요약 공유 승인 저장 완료"));
@@ -700,6 +926,7 @@ try {
     $("style").value = s.speakingStyle || "";
     $("expression").checked = !!s.expressionPresetIds.length;
   }
+  restoreProfileDraft();
   if (api.pending) await api.recover();
   status(
     localStorage.getItem("waymate.pending.v3") ||
@@ -715,4 +942,7 @@ setInterval(poll, POLL_MS);
 document.addEventListener("visibilitychange", poll);
 
 for (const radio of document.querySelectorAll("input[name=avatar]"))
-  radio.addEventListener("change", render);
+  radio.addEventListener("change", () => {
+    persistProfileDraft();
+    render();
+  });

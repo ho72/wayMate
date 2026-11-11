@@ -2,182 +2,296 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>wayMate · 여행과 연결 준비</title>
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>wayMate · 내 친구와 여행 이야기</title>
     <link rel="stylesheet" href="/style.css" />
     <script type="module" src="/app.js"></script>
   </head>
-  <body>
-    <main class="mobile-shell">
-      <header>
-        <a href="/" class="brand">w <span>wayMate</span></a
-        ><span class="badge">탑승 전 · 모바일에서 연결</span>
+  <body class="conversation-page">
+    <main class="mobile-shell chat-app">
+      <header class="chat-header">
+        <a href="/" class="chat-identity" aria-label="wayMate 대화"
+          ><span class="friend-mark" aria-hidden="true">w</span
+          ><span><strong>wayMate</strong><small>나의 여행 친구</small></span></a
+        >
+        <details class="journey-menu">
+          <summary>내 여행</summary>
+          <nav id="steps" aria-label="여행 준비 다시 보기"></nav>
+          <p>준비 중에는 이전 이야기를 다시 확인할 수 있어요.</p>
+        </details>
       </header>
-      <nav id="steps" aria-label="여행 준비 단계"></nav>
-      <section class="intro">
-        <p class="eyebrow">나를 알아가는 작은 대화</p>
-        <h1>내 친구와 준비하고,<br />여행자를 알아가요.</h1>
-        <p>
-          편하게 답하고, 친구가 사용할 소개를 직접 확인해요.<br />차량에서
-          시작한 뒤에는 플레오스 화면에서 여행을 이어가요.
-        </p>
-      </section>
-      <section class="card" id="chat-card">
-        <div class="step">01 · 나와 알아가기</div>
-        <h2>네 이야기를 들려줘</h2>
-        <p class="hint">
-          준비된 시연 대화예요. 문장으로 성격을 자동 분석하지 않아요. 답변
-          원문은 다른 사람이나 차량에 전달하지 않아요.
-        </p>
-        <div id="history"></div>
-        <form id="answer-form">
-          <label id="question" for="answer">질문을 불러오고 있어요.</label
-          ><textarea
-            id="answer"
-            rows="3"
-            placeholder="내 말투로 편하게 써 주세요"
-            required
-          ></textarea>
-          <p id="count" class="hint">0 / 500자</p>
-          <div class="choices">
-            <button type="button" class="secondary" id="example">
-              답변 예시 넣기</button
-            ><button type="button" class="secondary" id="food-example">
-              맛집 시연 예시 넣기
+      <section class="conversation" aria-label="내 친구와의 대화" tabindex="0">
+        <div class="thread">
+          <div class="conversation-start">
+            <img src="/character.png" alt="함께 여행할 파란 드래곤 친구" />
+            <p>여행 전에, 우리 조금 알아갈까?</p>
+            <span>편하게 말해줘. 한 번에 하나씩 준비하자.</span>
+          </div>
+          <section id="chat-card" aria-label="나눈 이야기">
+            <div id="history"></div>
+          </section>
+          <div class="agent-turn current-turn" id="current-turn">
+            <span class="speaker">wayMate</span>
+            <p id="conversation-prompt"></p>
+          </div>
+          <form id="profile-form" hidden>
+            <section
+              class="inline-card"
+              id="profile-card"
+              aria-label="내 친구와 소개 확인"
+            >
+              <div id="character-review">
+                <p class="card-kicker">함께할 친구</p>
+                <h2>나를 어떻게 불러줄까?</h2>
+                <label for="alias">내 별명</label
+                ><input
+                  id="alias"
+                  value="파도"
+                  placeholder="예: 파도"
+                  autocomplete="nickname"
+                  maxlength="40"
+                  aria-describedby="alias-help"
+                />
+                <p id="alias-help" class="hint">줄바꿈 없이 1~10자로 알려줘.</p>
+                <fieldset class="avatar-picker">
+                  <legend>너와 함께할 모습도 골라줘</legend>
+                  <label
+                    ><input
+                      type="radio"
+                      name="avatar"
+                      value="a-01"
+                      checked
+                    /><span class="avatar-art"
+                      ><img src="/character.png" alt="파란 드래곤" /></span
+                    ><span>블루 드래곤</span></label
+                  >
+                  <label
+                    ><input type="radio" name="avatar" value="a-02" /><span
+                      class="avatar-art sun-friend"
+                      aria-hidden="true"
+                      >☀</span
+                    ><span>햇살 친구</span></label
+                  >
+                </fieldset>
+                <button type="button" id="profile-next">
+                  이 친구와 함께할래
+                </button>
+              </div>
+              <div id="summary-review" hidden>
+                <p class="card-kicker">네가 확인하는 소개</p>
+                <h2>이렇게 시작해볼까?</h2>
+                <p id="profile-preview" class="intro-preview"></p>
+                <details class="optional-editor">
+                  <summary>소개에 조금 더 담고 싶어</summary>
+                  <p class="hint">
+                    네가 쓰고 싶은 표현만 골라줘. 고르지 않아도 괜찮아.
+                  </p>
+                  <fieldset class="preference-chips">
+                    <legend>나를 소개할 때 함께 담을 이야기</legend>
+                    <label
+                      ><input type="checkbox" id="sea" /><span
+                        >바다 산책</span
+                      ></label
+                    ><label
+                      ><input type="checkbox" id="cafe" /><span
+                        >카페</span
+                      ></label
+                    ><label
+                      ><input type="checkbox" id="activity" /><span
+                        >산책 먼저, 사진은 가끔</span
+                      ></label
+                    ><label
+                      ><input type="checkbox" id="pace" /><span
+                        >여유로운 여행</span
+                      ></label
+                    ><label
+                      ><input type="checkbox" id="conversation" /><span
+                        >조용한 대화</span
+                      ></label
+                    ><label
+                      ><input type="checkbox" id="expression" /><span
+                        >조용히 함께하는 친구</span
+                      ></label
+                    >
+                  </fieldset>
+                  <fieldset class="tone-picker">
+                    <legend>소개할 때의 말투는?</legend>
+                    <input type="hidden" id="style" value="" /><button
+                      type="button"
+                      data-tone=""
+                      class="secondary"
+                      aria-pressed="true"
+                    >
+                      기본으로</button
+                    ><button
+                      type="button"
+                      data-tone="calm"
+                      class="secondary"
+                      aria-pressed="false"
+                    >
+                      차분하고 편안하게</button
+                    ><button
+                      type="button"
+                      data-tone="light_humor"
+                      class="secondary"
+                      aria-pressed="false"
+                    >
+                      가벼운 농담도 조금
+                    </button>
+                  </fieldset>
+                  <button id="no-summary" class="text-button" type="button">
+                    별명과 친구 모습만 사용할래
+                  </button>
+                </details>
+                <p class="hint">
+                  이 소개는 네가 확인한 뒤 저장해. 다른 사람에게 공개할지는 따로
+                  물어볼게.
+                </p>
+                <div class="card-actions">
+                  <button id="save" type="submit" disabled>
+                    응, 이 소개로 좋아</button
+                  ><button id="profile-back" type="button" class="text-button">
+                    별명·친구 다시 보기
+                  </button>
+                </div>
+              </div>
+            </section>
+            <section
+              class="inline-card"
+              id="trip-card"
+              aria-label="함께 확인할 여행 계획"
+            >
+              <p class="card-kicker">함께 살펴볼 여행</p>
+              <h2>강릉 해안에서의 하루</h2>
+              <p>2026년 11월 14일 · 강릉 해변권</p>
+              <dl>
+                <div>
+                  <dt>만남 가능 시간</dt>
+                  <dd>13:00–15:00</dd>
+                </div>
+                <div>
+                  <dt>기존 다음 일정 도착</dt>
+                  <dd>15:20 · 기존 개인 방문지</dd>
+                </div>
+                <div>
+                  <dt>내 숙소 도착 예상</dt>
+                  <dd>15:45</dd>
+                </div>
+                <div>
+                  <dt>내 숙소 도착 마감</dt>
+                  <dd>16:00</dd>
+                </div>
+              </dl>
+              <p class="hint">
+                함께 검토하는 시연 계획이야. 개인 일정은 너만 보고, 공유할
+                내용은 다음에 따로 확인하자.
+              </p>
+              <button id="save-trip" type="button" disabled>
+                좋아, 이 계획으로 준비해줘
+              </button>
+            </section>
+          </form>
+          <section
+            class="inline-card"
+            id="social-card"
+            hidden
+            aria-labelledby="social-title"
+          >
+            <p class="card-kicker" id="social-step">함께 준비하기</p>
+            <h2 id="social-title"></h2>
+            <div id="social-content"></div>
+          </section>
+          <section
+            class="inline-card delivery"
+            id="delivery-card"
+            hidden
+            aria-labelledby="delivery-title"
+          >
+            <p class="card-kicker">차에서도 이어지는 우리 여행</p>
+            <h2 id="delivery-title"></h2>
+            <p id="delivery-detail"></p>
+            <button id="prepare" disabled>이 준비를 차량에 전달</button>
+          </section>
+          <div class="recovery-actions">
+            <button id="recover" class="secondary" hidden>저장 결과 확인</button
+            ><button id="retry" class="secondary" hidden>
+              같은 요청 다시 전송</button
+            ><button id="cancel-pending" class="secondary" hidden>
+              미확인 연결 요청 취소
             </button>
           </div>
-          <button id="send" type="submit" disabled>이 답변 보내기</button>
-        </form>
+          <div id="thread-end"></div>
+        </div>
       </section>
-      <form id="profile-form">
-        <section class="card" id="profile-card">
-          <div class="step">M01 · 내 소개 확인</div>
-          <h2>나와 맞는 내용만 확인해요</h2>
-          <p class="hint">
-            아래 항목은 시연용 소개값이에요. 원문에서 자동 선택하지 않아요.
-            선택하지 않은 값은 사용하지 않아요.
-          </p>
-          <label for="alias">내 별명 <span>1~10자</span></label
-          ><input id="alias" required value="파도" placeholder="예: 파도" />
-          <fieldset>
-            <legend>친구 모습</legend>
-            <div class="choices">
-              <label
-                ><input type="radio" name="avatar" value="a-01" checked /> 블루
-                드래곤</label
-              ><label
-                ><input type="radio" name="avatar" value="a-02" /> 햇살
-                친구</label
-              >
-            </div>
-            <img
-              class="character"
-              src="/character.png"
-              alt="파란 아기 드래곤 캐릭터"
-              width="152"
-              height="160"
-            />
-          </fieldset>
-          <fieldset>
-            <legend>내가 사용할 소개값</legend>
-            <label class="check"
-              ><input type="checkbox" id="sea" /> 바다 산책을 좋아해요</label
-            ><label class="check"
-              ><input type="checkbox" id="cafe" /> 카페를 좋아해요</label
-            ><label class="check"
-              ><input type="checkbox" id="activity" /> 산책을 먼저, 사진은 가끔
-              찍어요</label
-            ><label class="check"
-              ><input type="checkbox" id="pace" /> 여유롭게 여행해요</label
-            ><label class="check"
-              ><input type="checkbox" id="conversation" /> 조용히 함께하는
-              대화가 편해요</label
-            >
-          </fieldset>
-          <label for="style">소개할 때 사용할 말투</label
-          ><select id="style">
-            <option value="">선택 안 함 · 중립 표현</option>
-            <option value="calm">차분하고 편안하게</option>
-            <option value="light_humor">가벼운 농담과 함께</option></select
-          ><label class="check"
-            ><input type="checkbox" id="expression" /> ‘조용히 함께하는 친구’
-            소개 표현을 사용해요</label
-          ><label class="check"
-            ><input type="checkbox" id="confirmed" required /> 위 원문과 내가
-            선택한 소개값을 확인했어요</label
+      <footer class="composer-area">
+        <form id="answer-form" aria-label="대화 입력">
+          <label id="question" for="answer" class="sr-only"
+            >내 친구에게 답하기</label
           >
-          <button id="save" type="submit" disabled>내 소개 확인하고 저장</button
-          ><button id="no-summary" class="secondary" type="button">
-            소개값 사용 안 함
-          </button>
-        </section>
-        <section class="card" id="trip-card">
-          <div class="step">M02 · 오늘의 여행</div>
-          <h2>강릉 해안에서의 하루</h2>
-          <p>시연용 고정 여행 · 2026년 11월 14일</p>
-          <dl>
-            <div>
-              <dt>만남 가능 시간</dt>
-              <dd>13:00–15:00</dd>
-            </div>
-            <div>
-              <dt>기존 다음 일정 도착</dt>
-              <dd>15:20 · 기존 개인 방문지</dd>
-            </div>
-            <div>
-              <dt>복귀 장소</dt>
-              <dd>내 숙소</dd>
-            </div>
-            <div>
-              <dt>내 숙소 도착 예상</dt>
-              <dd>15:45</dd>
-            </div>
-            <div>
-              <dt>내 숙소 도착 마감</dt>
-              <dd>16:00</dd>
-            </div>
-          </dl>
-          <p class="hint">
-            소개를 확인한 뒤 이 계획을 별도로 저장해요. 본인 여행만 준비하며
-            공개할 여행 요약은 다음 단계에서 따로 확인해요.
-          </p>
-          <button id="save-trip" type="button" disabled>
-            이 여행 계획 저장
-          </button>
-        </section>
-      </form>
-      <section class="card" id="social-card" hidden>
-        <p class="step" id="social-step">M03 · 공개 소개 확인</p>
-        <h2 id="social-title">연결 준비</h2>
-        <div id="social-content"></div>
-      </section>
-      <section class="card delivery">
-        <div class="step">04 · 차량으로 이어가기</div>
-        <h2 id="delivery-title">저장 후 차량으로 전달해요</h2>
-        <p id="delivery-detail">내 소개와 여행을 저장해 주세요.</p>
-        <button id="prepare" disabled>이 준비를 차량에 전달</button
-        ><button id="recover" class="secondary" hidden>저장 결과 확인</button
-        ><button id="retry" class="secondary" hidden>
-          같은 요청 다시 전송
-        </button>
-        <button id="cancel-pending" class="secondary" hidden>
-          미확인 연결 요청 취소
-        </button>
-        <p id="status" role="status" aria-live="polite">
-          서버에 연결 중이에요.
+          <div class="composer-box">
+            <textarea
+              id="answer"
+              rows="2"
+              placeholder="내 친구에게 편하게 이야기해줘"
+              required
+              aria-describedby="count"
+            ></textarea
+            ><button
+              id="send"
+              type="submit"
+              aria-label="메시지 보내기"
+              disabled
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 19V5m-6 6 6-6 6 6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="composer-meta">
+            <details id="examples">
+              <summary>말문이 막힌다면</summary>
+              <button type="button" id="example" class="example-chip">
+                답변 예시 넣기</button
+              ><button type="button" id="food-example" class="example-chip">
+                맛집 이야기 예시</button
+              ><small>예시는 입력만 채워줘. 직접 고치고 보내도 좋아.</small>
+            </details>
+            <span id="count">0 / 500자</span>
+          </div>
+        </form>
+        <p id="composer-hint" hidden>
+          이야기는 그대로 남겨둘게. 위 카드에서 함께 준비해보자.
         </p>
-      </section>
+        <p id="status" role="status" aria-live="polite">
+          친구와 연결하고 있어요.
+        </p>
+        <small class="demo-note">준비된 대화로 함께하는 프로토타입</small>
+      </footer>
       <dialog id="review-dialog" aria-labelledby="review-title">
         <h2 id="review-title"></h2>
         <p id="review-detail"></p>
-        <div class="choices">
+        <div class="card-actions">
           <button type="button" id="review-confirm">확인하고 진행</button
           ><button type="button" id="review-cancel" class="secondary">
-            취소
+            다시 생각할게
           </button>
         </div>
       </dialog>
-      <footer>여행 준비 · 탑승 후에는 플레오스에서 이어가요</footer>
     </main>
   </body>
 </html>
