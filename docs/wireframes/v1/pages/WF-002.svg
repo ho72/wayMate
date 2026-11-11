@@ -18,14 +18,15 @@
 <text x="40" y="236" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">다.</text>
 <text x="40" y="274.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">진입 조건</text>
 <line x1="40" y1="286" x2="350" y2="286" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="307" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">WF-001에서 시작·질문 1~4</text>
+<text x="40" y="307" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">WF-001에서 시작·기본 질문 1~4와 필요한 후속 질문</text>
 <text x="40" y="345.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터 배치</text>
 <line x1="40" y1="357" x2="350" y2="357" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="378" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">상단으로 축소. 목록·답변 영역을 우선.</text>
 <text x="40" y="416.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">시연·범위 메모</text>
 <line x1="40" y1="428" x2="350" y2="428" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">빈 입력 상태의 도식이다. ㅋㅋ·띄어쓰기·이모지 원문 보존. 키</text>
-<text x="40" y="467" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">보드가 떠도 입력창·전송 버튼이 가려지지 않게 한다.</text>
+<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">답변에 따라 후속 질문을 추가·변경한다. 예: 맛집 탐방 → 좋아</text>
+<text x="40" y="467" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">하는 음식 종류. 목업은 준비된 분기로 재현한다. 원문 보존·키</text>
+<text x="40" y="485" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">보드 가림 검수는 유지한다.</text>
 <text x="378" y="129.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">화면 확대 / 구성·버튼의 상대적 배치</text>
 <rect x="378" y="138" width="354" height="612" rx="4" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
 <text x="395" y="166.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">wayMate</text>
@@ -94,8 +95,9 @@
 <line x1="762" y1="378" x2="1151" y2="378" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="397.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">5  버튼 → 결과</text>
 <text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">이 답변 보내기 [조건 충족 후]</text>
-<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">유효한 answerText 저장 후 다음 준비 질문. 질문 1~4 완료 뒤 WF-003 → WF-002</text>
-<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">직접 답변 쓰기</text>
-<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">입력창 초점. 예시 선택·자동 전송 없음 → WF-002</text>
+<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">answerText 저장 후 해당 후속 또는 다음 기본 질문. 추가 문답 포함 완료 뒤 WF-003</text>
+<text x="762" y="455" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">→ WF-002</text>
+<text x="762" y="482.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">직접 답변 쓰기</text>
+<text x="762" y="501" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">입력창 초점. 예시 선택·자동 전송 없음 → WF-002</text>
 <text x="40" y="786.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">피드백 예: WF-002 / 요소 4 / 표시·문구·동작 중 수정할 점</text>
 </svg>
