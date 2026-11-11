@@ -164,6 +164,9 @@ def context(p,x,y,w,nav="D",ratio="2:1",label=True,mode="hero"):
     elif mode=="compact":
         p.agent(ax+7,y+bar+25,own*.23)
         for j in range(3):p.rect(ax+8,y+bar+own*.28+33+j*13,own-16,9,fill=PALE,stroke=LINE)
+    elif mode=="voice":
+        p.agent(ax+7,y+bar+27,own*.23)
+        p.text("음성 대화",ax+8,y+bar+65,8,width=own-16)
     elif mode=="restricted":
         p.text("조작 제한\n주차 후 계속",ax+8,y+bar+38,8,width=own-16)
     else:
@@ -173,15 +176,60 @@ def context(p,x,y,w,nav="D",ratio="2:1",label=True,mode="hero"):
     if label:p.text(f"배치 개념도 · 앱 창 비율 {ratio} · 실차 해상도/순정 UI 재현 아님",x,y+h+8,8.5,color=MUTED,width=w)
     return h+34
 
+def chat_editor(p,s,x,y,w,h):
+    pad=17; inner=w-2*pad
+    p.agent(x+pad,y+58,47);p.marker(2,x+w-20,y+82)
+    p.text("내 친구",x+pad+61,y+70,11)
+    p.rect(x+pad,y+120,inner,69,fill=PALE,stroke=None,radius=3)
+    p.text(s["speech"],x+pad+12,y+131,12,width=inner-24,lineheight=18)
+    p.marker(3,x+5,y+141)
+    p.text("보낸 답변은 네 말투 그대로 남겨둘게.",x+pad,y+210,10.5,width=inner)
+    p.text("예시 · 안 골라도 괜찮아",x+pad,y+278,10,color=MUTED)
+    for i,label in enumerate(["바다 보며 쉬기", "카페 가는 날"]):
+        xx=x+pad+i*(inner/2+4)
+        p.rect(xx,y+301,inner/2-4,34,fill="#F4F4F4",radius=14)
+        p.text(label,xx+(inner/2-4)/2,y+311,10,align="center")
+    p.text("답변 입력",x+pad,y+352,11)
+    p.rect(x+pad,y+374,inner,94,stroke=INK,radius=3)
+    p.text("편하게 네 말로 적어줘…",x+pad+12,y+388,12,color=MUTED,width=inner-24)
+    p.text("0 / 500 · Enter 줄바꿈",x+w-pad,y+476,9,color=MUTED,align="right")
+    p.marker(4,x+5,y+401)
+    for i,a in enumerate(s["actions"]):
+        yy=y+h-110+i*49
+        p.rect(x+pad,yy,inner,41,fill="#FAFAFA" if i==0 else PALE,stroke=LINE if i==0 else INK,radius=3,dash=i==0)
+        p.text(a["label"]+(" [입력 후]" if i==0 else ""),x+w/2,yy+12,11.5,align="center",color=MUTED if i==0 else INK)
+        if i==0:p.marker(5,x+5,yy+20)
+
+def driving_voice(p,s,x,y,w,h):
+    pad=17;inner=w-2*pad
+    p.agent(x+pad,y+67,48,peer=True);p.marker(2,x+w-20,y+91)
+    p.text(s["speaker"],x+pad+63,y+80,12,width=inner-66)
+    p.text("공개 소개 기반",x+pad,y+145,10,color=MUTED)
+    p.rect(x+pad,y+208,inner,84,fill=PALE,stroke=None,radius=3)
+    p.text(s["speech"],x+w/2,y+235,19,align="center");p.marker(3,x+5,y+240)
+    p.text("편하게 말하고, 원할 때 쉬어가요.",x+pad,y+325,10,color=MUTED,width=inner)
+    p.marker(4,x+5,y+340)
+    p.line(x+pad,y+h-111,x+w-pad,y+h-111)
+    p.text("음성 명령",x+pad,y+h-96,10,color=MUTED)
+    p.text("“잠깐 쉬자”     “대화 그만”",x+pad,y+h-69,12,width=inner)
+    p.marker(5,x+5,y+h-61)
+
+
 def app(p,s,x=378,y=138,w=354,h=612):
     p.rect(x,y,w,h,stroke=INK,radius=4)
     pad=17;inner=w-pad*2
     p.text("wayMate",x+pad,y+14,14)
     tag="주차 · 모의 시연" if s["scope"] in ["B","E","O"] else "설계"
-    if s["id"]=="WF-032":tag="제한 상태"
+    if s["channel"]=="mobile":tag="모바일 · 목업"
+    if s["id"]=="WF-032":tag="사용 제한"
+    if s["id"]=="WF-051":tag="목표 · 지원 검증 전"
     p.text(tag,x+w-pad,y+18,9,color=MUTED,align="right")
     p.marker(1,x+5,y+23)
     p.line(x+pad,y+46,x+w-pad,y+46)
+    if s["id"]=="WF-002":
+        chat_editor(p,s,x,y,w,h);return
+    if s["id"]=="WF-051":
+        driving_voice(p,s,x,y,w,h);return
     yy=y+58
     mode=s["mode"]
     if mode=="hero":
@@ -246,7 +294,7 @@ def screenpage(p,s):
     if s["channel"]!="operator":
         yy=section(p,"화면 목적",left,yy,lw,s["purpose"])
         yy=section(p,"진입 조건",left,yy,lw,s["entry"])
-        yy=section(p,"캐릭터 배치",left,yy,lw,{"hero":"중앙 크게. 하단에 현재 대사와 필요한 정보.","compact":"상단으로 축소. 목록·답변 영역을 우선.","hidden":"설명·판단·제어가 우선. 캐릭터는 화면에서 잠시 제외."}[s["mode"]])
+        yy=section(p,"캐릭터 배치",left,yy,lw,{"hero":"중앙 크게. 하단에 현재 대사와 필요한 정보.","compact":"상단으로 축소. 목록·답변 영역을 우선.","hidden":"설명·판단·제어가 우선. 캐릭터는 화면에서 잠시 제외.","voice":"작은 정적 표시·짧은 상태만. 말하고 듣는 경험은 음성으로, 시각 허용 범위에서만 표시."}[s["mode"]])
         if s["note"]:yy=section(p,"시연·범위 메모",left,yy,lw,s["note"])
         if yy>H-55:ERRORS.append((s["id"],"left annotation overflow",yy,H-55))
         p.text("화면 확대 / 구성·버튼의 상대적 배치",378,119,10,color=MUTED)
@@ -276,7 +324,7 @@ def screenpage(p,s):
     p.text("요소 번호 / 동작 명세",rx,139,14)
     notes=[
         ("1  역할·상태",f"{s['speaker']} / {s['state']}"),
-        ("2  캐릭터",{"hero":"현재 대화 주체를 크게 표시. 사용자 입력을 재촉하는 반복 움직임은 사용하지 않음.","compact":"한 명의 발화자만 상단에 축소해 출처를 유지.","hidden":"캐릭터를 숨겨 선택·경로 확인 정보가 읽히게 함."}[s["mode"]]),
+        ("2  캐릭터",{"hero":"현재 대화 주체를 크게 표시. 사용자 입력을 재촉하는 반복 움직임은 사용하지 않음.","compact":"한 명의 발화자만 상단에 축소해 출처를 유지.","hidden":"캐릭터를 숨겨 선택·경로 확인 정보가 읽히게 함.","voice":"시각 표시가 허용되면 작은 정적 캐릭터. 반복 움직임·긴 자막 없음."}[s["mode"]]),
         ("3  대사·조건",s["guard"]),
         ("4  정보·실패",s["failure"]),
     ]
@@ -285,7 +333,7 @@ def screenpage(p,s):
         p.text(label,rx,yy,11.5);yy+=21
         yy+=p.text(body,rx,yy,10.7,width=rw,lineheight=16)+17
         p.line(rx,yy-8,rx+rw,yy-8)
-    p.text("5  버튼 → 결과",rx,yy,11.5);yy+=25
+    p.text("5  음성 명령 → 결과" if s["mode"]=="voice" else "5  버튼 → 결과",rx,yy,11.5);yy+=25
     for a in s["actions"]:
         target=f"WF-{a['target']:03d}"
         p.text(a["label"]+(" [조건 충족 후]" if not a["enabled"] else ""),rx,yy,10.7,width=rw,lineheight=16)
@@ -302,7 +350,7 @@ def overview(pdf):
     yy=section(p,"내비와의 관계",790,220,350,"순정 내비는 시스템 앱 창. wayMate는 별도 앱 창 안에서 캐릭터·제안·확인·결과를 제공한다.")
     yy=section(p,"캐릭터의 역할",790,yy,350,"큰 내 친구 → 조건을 읽는 작은 친구 → 목록·경로 확인 → 결과를 알려주는 친구의 흐름.")
     yy=section(p,"이번 설계의 결과물",790,yy,350,"색·장식보다 화면 구조, 발화자, 동의, 내비 실행 경계, 실패와 제한 분기를 우선한 저해상도 설계도.")
-    section(p,"검토 기준",60,565,690,f"Git docs 01~05 v0.5 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 {BASE_COMMIT}. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완료 현황은 07이 기준.")
+    section(p,"검토 기준",60,565,690,f"Git docs 01~05 v0.6 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 {BASE_COMMIT}. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완료 현황은 07이 기준.")
     p.text("피드백: WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요.",60,718,16)
     p.finish()
 
@@ -310,7 +358,7 @@ def overview(pdf):
     groups=[
         ("창 배치","대표 검토안은 순정 내비 + 우측 wayMate. S는 1:1, W는 2:1/1:2에 대응한다. 앱이 우측 고정·비율·내비 상시 표시를 강제할 수 있다고 가정하지 않는다.","P1 · P2"),
         ("법령과 플랫폼","내비 표시 예외를 대화·캐릭터·장소 선택의 포괄 허용으로 확대하지 않는다. 상세 조작은 안전한 주차 상태로 제한한다. 이 문서는 법적 적합성 인증이나 출시 심사 결과가 아니다.","L1 · P3 · P4"),
-        ("정차와 주행","신호 대기·속도 0만으로 조작을 열지 않는다. 실제 제한·foreground·fresh 상태를 확인하며 앱이 가려지면 우회하지 않는다. 주행 중 큰 캐릭터·움직임·긴 목록은 기본안에서 제외한다.","P3 · P4"),
+        ("정차와 주행","parked / driving_voice / blocked를 구분한다. 검증된 주행 음성은 핵심으로 유지하고 큰 캐릭터·목록·긴 자막·새 승인은 잠근다. 미검증·가림은 차단하며 속도 0만으로 주차를 열지 않는다.","P3 · P4 · P5"),
         ("내비 실행","선택지의 탐색은 경로 변경이 아니다. '경유지로 추가/목적지로 설정'을 명확히 확인한 뒤 요청한다. 사용자가 내비에 주소를 다시 입력하지 않게 연결하되 결과 콜백 전에는 성공시키지 않는다.","N1 · N2 · N3"),
         ("범위","기본 B는 01~05 흐름. E는 이번 요청의 개인 장소/일정 연동 시연으로 고정 질문·가상 장소를 사용한다. 기존 MEETING 전용 명령을 개인 추천에 우회 재사용하지 않는다.","docs 01~07"),
     ]
@@ -321,21 +369,21 @@ def overview(pdf):
     p.text("공식 문서 확인: 2026-11-11. 실제 SDK·에뮬레이터·차종에서 창 배치와 지원 범위를 추가 검증한다.",45,710,12)
     p.finish()
 
-    p=Page("OV-03","캐릭터가 주인공인 네 가지 화면 모드",3,pdf)
-    modes=[("H · 기본 홈","hero","큰 캐릭터\n현재 대사\n아래 일정·바로가기"),
-           ("C · 선택·목록","compact","상단 작은 캐릭터\n조건·장소 목록\n명시적 실행 버튼"),
-           ("F · 판단·확인","hidden","캐릭터 잠시 숨김\n공개·경로·선택 정보\n승인과 취소"),
-           ("R · 제한 상태","hidden","정적 최소 안내\n새 질문·목록 잠금\n플랫폼 가림 우선")]
+    p=Page("OV-03","캐릭터 화면 모드와 주행 중 음성 대화",3,pdf)
+    modes=[("H · 기본 홈","hero","큰 캐릭터\n현재 대사\n아래 일정·행동"),
+           ("C · 선택·목록","compact","상단 작은 캐릭터\n조건·목록\n실행 전 확인"),
+           ("F · 판단·확인","hidden","캐릭터 잠시 숨김\n공개·경로 확인\n승인과 취소"),
+           ("V · 주행 음성","voice","작은 정적 표시\n짧은 발화 상태\n음성으로 쉬기·종료"),
+           ("R · 사용 차단","hidden","지원 미확인·차단\n녹음·재생 중단\n플랫폼 가림 우선")]
     for i,(title,mode,body) in enumerate(modes):
-        x=45+i*280
-        p.text(title,x,135,17)
-        p.rect(x,177,250,380,fill="#FAFAFA",stroke=INK)
-        if mode=="hero":p.agent(x+62,210,126)
-        elif mode=="compact":p.agent(x+14,192,45)
-        p.text(body,x+18,350 if mode=="hero" else 270,15,width=215,lineheight=27)
-        p.rect(x+18,497,214,40,fill="#E7E7E7",stroke=LINE)
-        p.text("상태별 핵심 행동",x+125,509,12,align="center")
-    section(p,"반응형 기준",45,605,1080,"확대도는 세로 앱 창의 논리 배치다. 넓고 낮은 창에서는 캐릭터·현재 정보와 선택 영역을 나란히 둔다. 창이 좁아지면 캐릭터부터 줄이고 한 번에 읽을 정보량을 낮춘다. 상태·행동·자막이 잘리면 시스템 창을 가리지 않고 스크롤/페이지로 분리한다.")
+        x=40+i*225
+        p.text(title,x,135,16);p.rect(x,177,210,380,fill="#FAFAFA",stroke=INK)
+        if mode=="hero":p.agent(x+42,210,126)
+        elif mode in ["compact","voice"]:p.agent(x+14,192,45)
+        p.text(body,x+15,350 if mode=="hero" else 270,13,width=180,lineheight=25)
+        p.rect(x+15,497,180,40,fill="#E7E7E7",stroke=LINE)
+        p.text("음성 제어" if mode=="voice" else "상태별 행동",x+105,509,11,align="center")
+    section(p,"반응형·검증 기준",45,605,1080,"확대도는 앱 창의 논리 배치다. 넓고 낮은 창은 캐릭터/현재 정보와 선택 영역을 나란히 두고, 좁으면 캐릭터부터 줄인다. V는 실제 지원 검증이 필요한 목표 모드다. 현재 미검증 목업은 주차/발표용 대본으로 재현하고 실제 주행은 blocked를 유지한다.")
     p.finish()
 
     p=Page("OV-04","화면 흐름과 기본·확장·추가 범위",4,pdf)
@@ -344,7 +392,7 @@ def overview(pdf):
         ("캐릭터와 알아가기","WF-011 → WF-012 ↔ WF-013~018", "콘텐츠를 모두 완료하지 않아도 WF-019 만남 제안"),
         ("만남·내비·결말","WF-019~023 → WF-027 → WF-028~031", "실패 WF-024 / 미확인 WF-025 / 취소·제거 WF-026"),
         ("차량 특화 E 확장","WF-012 → WF-034~039 / WF-044~045 → WF-046~050", "30분 휴식과 점심 요청을 분리. 개인 장소와 공유 만남의 승인·데이터도 분리"),
-        ("공통·시연·추가","제한 WF-032 → 복귀 WF-033 / 운영 WF-040~041", "MC WF-042 · 후기 WF-043은 추가 기능"),
+        ("공통·시연·추가","검증된 주행 음성 WF-051 / 차단 WF-032 / 복귀 WF-033", "운영 WF-040~041 · MC WF-042 · 후기 WF-043"),
     ]
     yy=145
     for a,b,c in lanes:
@@ -356,7 +404,7 @@ def overview(pdf):
     p=Page("OV-05","검토용 화면 목록 / 번호는 이후 수정에도 유지",5,pdf)
     rows=math.ceil(len(SCREENS)/2)
     for i,s in enumerate(SCREENS):
-        col=i//rows;row=i%rows;x=45+col*560;y=133+row*25
+        col=i//rows;row=i%rows;x=45+col*560;y=133+row*24
         p.text(s["id"],x,y,11,link=s["id"],width=75)
         p.text(s["title"],x+88,y,10.8,width=385,link=s["id"])
         p.text(s["scope"],x+495,y,10,color=MUTED)
@@ -370,18 +418,19 @@ def sources_page(pdf,page_no):
         p.text(code,45,y,11)
         p.text(title,95,y,12,width=400,link=url)
         p.text(summary,520,y,10.7,width=620,lineheight=16)
-        y+=63
+        y+=47
     section(p,"구현 의존사항",45,665,1100,"E 확장은 개인 장소/일정 제안의 ID·승인·source/outcome·취소·중복 방지 계약이 필요하다. 04의 MEETING 전용 API를 그대로 실행하지 않는다. 07의 현재 지원 범위는 my_trip 전달까지이며 음성·순정 내비·분할 배치의 실제 동작 완료를 이 설계도로 대신하지 않는다.")
     p.finish()
 
 INTRO = """# wayMate 목업 화면 설계서와 와이어프레임
 
-작성일 2026년 11월 11일 · 버전 0.1 · 화면 구조·피드백용
+작성일 2026년 11월 11일 · 버전 0.2 · 자유 입력·주행 음성 목표 반영
 
-이 문서는 01~05 v0.5, 06 협업 가이드, 07 현재 구현 계약을 분석한 **목업 목표 화면의 시각 설계서**다. 기준 커밋은 `17126ff`다. 실제 앱 구현 상태는 07을 따른다. 디자인 완성도보다 화면 구성·버튼 의미·상태 전환을 우선한다.
+이 문서는 01~05 v0.6, 06 협업 가이드, 07 현재 구현 계약을 분석한 **목업 목표 화면의 시각 설계서**다. 기준 커밋은 `450c4fa`다. 실제 앱 구현 상태는 07을 따른다. 디자인 완성도보다 화면 구성·버튼 의미·상태 전환을 우선한다.
 
-- [전체 화면 PDF](wireframes/v1/waymate-screen-spec-v0.1.pdf)
+- [전체 화면 PDF](wireframes/v1/waymate-screen-spec-v0.2.pdf)
 - [화면별 검토 뷰어](wireframes/v1/index.html): 저장소를 받은 뒤 브라우저에서 연다. GitHub 파일 화면에서는 HTML이 실행되지 않는다.
+- 이전 PDF v0.1은 이력으로 보존한다. 현재 기준은 이 문서·v0.2 PDF·갱신된 SVG다.
 - 피드백 형식: **WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요.** 화면 번호는 고정하고 삭제·추가 시 재번호를 붙이지 않는다.
 - 담당자·마감은 미정이다. 이 설계는 기능·사용자·실제 주행·SDK 검증의 완료 기록이 아니다.
 
@@ -389,9 +438,9 @@ INTRO = """# wayMate 목업 화면 설계서와 와이어프레임
 
 | 기준 | 화면에 반영한 판단 |
 |---|---|
-| 01 서비스 범위 | 친구 캐릭터를 중심에 두고 연결·통화·만남·내비·최종 동의를 분리 |
+| 01 서비스 범위 | 자유 입력 온보딩과 이동 중 음성 대화 핵심을 유지. 원문·소개 확인·연결·동의 분리 |
 | 02 시나리오 | A/B 대사 출처·사전 소개 조건·첫 만남 20분·두 결말 유지 |
-| 03 상호작용 | M/P/O ID를 보존하고 피드백용 WF 번호를 추가. 기본 홈·목록·확인·제한 모드로 시각화 |
+| 03 상호작용 | 기존 WF 번호 유지. WF-002 자유 입력·예시 초안, WF-032 차단, 신규 WF-051 주행 음성 목표로 구분 |
 | 04 연동 | 사용자 승인 → 요청 → 반영 확인. mock/real 출처와 처리 결과 분리. unknown에서 중복 요청 금지 |
 | 05 검수 | Q 기능 검수와 V01~V05 가치/주행 검증 분리. 미정 담당·마감 유지 |
 | 06 협업 | 앱 UI·차량 플랫폼·서버의 책임 경계 유지. 이 산출물은 문서·설계 자산만 추가 |
@@ -423,10 +472,13 @@ Connect-S의 1:1, Connect-W의 2:1/1:2, 앱 단독·가로/세로·앱 가림에
 | 상태 | 화면·행동 기준 |
 |---|---|
 | 안전한 주차·실제 제한 없음 | 큰 캐릭터, 질문·목록·공개·동의·경로 변경 확인 제공 |
-| 실제 제한·미확인·비활성·보고 만료 | 새 질문·목록·전송·동의·SDK 승인 잠금. 움직이는 캐릭터·긴 자막·새 콘텐츠 재생 시작 금지 |
+| driving_voice · 검증 조건 충족 | 상대 캐릭터와 음성 문답·쉬기·종료. 목록·키보드·긴 자막·큰 애니메이션·새 전송/동의/SDK 승인은 잠금 |
+| blocked · 플랫폼 차단·지원 미검증·비활성·보고 만료 | 녹음·재생 중단. 현재 v2와 미검증 환경은 차단 유지. 운영자 전환으로 실제 제한 해제 금지 |
 | 플랫폼이 앱을 가림 | 가림을 따르고 오버레이로 우회하지 않음. 순정 내비도 시스템 정책에 따름 |
 | 주차·앱 복귀 | 최신 제한·상태 확인 뒤 현재 장면 복원. 전송·SDK·음성 자동 재실행 없음 |
 | 내비 음성 안내 | 오디오 포커스 우선. 캐릭터 음성 중단/감쇄·수동 재개 |
+
+주행 음성 목표는 핸즈프리 UI 지침을 근거로 검토하는 설계다. DO 선언·카테고리 심사·기능별 실제 제한·마이크/오디오·fresh 세션·foreground·실제 환경 증빙을 충족해야 하며 Boolean 제한 하나로 음성 전체를 허용/금지하지 않는다. 공식 API 문서는 있어도 프로젝트 안내의 STT/TTS는 준비 중으로 표시되어 콘솔·제공 SDK 검증이 필요하다. Gleo function 연동도 자유 캐릭터 대화의 자동 지원이 아니다. 실제 제공 조건은 04번 7.3절과 05번 V05가 기준이다.
 
 법령의 지리안내 표시 예외를 캐릭터 대화·장소 목록 조작의 포괄 허용으로 확대하지 않는다. 상세 조작은 안전한 주차 상태로 제한하며 신호 대기·속도 0만으로 해제하지 않는다. DO·카테고리·지역·실제 제한·차종/버전 검증이 필요하고 이 문서로 법적 적합성이나 주행 지원을 인증하지 않는다.
 
@@ -437,13 +489,16 @@ Connect-S의 1:1, Connect-W의 2:1/1:2, 앱 단독·가로/세로·앱 가림에
 | H 큰 캐릭터 | 앱 창 중앙의 캐릭터·현재 발화, 아래 일정/바로가기 | 기본 홈·내 친구·상대 캐릭터·결말 |
 | C 축소 | 발화자를 상단에 줄이고 조건·목록·답장을 우선 | 콘텐츠·장소 리스트·메시지 |
 | F 숨김 | 캐릭터를 제외하고 정보·승인·취소만 명확히 표시 | 공개·경로 변경·불확실 결과 |
-| R 제한 | 최소 정적 안내 또는 플랫폼 가림 | 주행 제한·상태 미확인 |
+| V 주행 음성 | 작은 정적 표시·짧은 상태, 음성 문답·쉬기·종료 | 지원 검증이 필요한 기본 목표 WF-051 |
+| R 사용 차단 | 최소 정적 안내 또는 플랫폼 가림, 녹음·재생 중단 | 플랫폼 차단·지원 미검증 WF-032 |
 
 캐릭터는 기존 TravelFriend의 기하 형태를 회색조로 재사용한 구조 표시이며 최종 아트 확정이 아니다. 큰 캐릭터는 차량 전체 중앙이 아니라 **wayMate 앱 창 안의 중앙**이다. 목록에서는 상단 축소, 경로·동의 확인에서는 숨김으로 전환한다. 반복 애니메이션·게임·자동 화면 이동으로 시선을 끌지 않는다.
 
 확대도는 세로 창의 논리 배치이며 실제 해상도·sp/dp 규격값이 아니다. 넓고 낮은 앱 창은 캐릭터/현재 정보와 선택 영역을 나란히 놓는다. 실제 구현은 03의 글자·터치 기준, 시스템 인셋·가림·실제 창 크기·글자 확대에서 재검수한다.
 
-공통 요소 번호: **1 역할/상태, 2 캐릭터, 3 발화/조건, 4 필요한 정보, 5 실행 버튼**. 숨김 모드는 2가 없는 것이 의도다. 준비·전송·동의·경로 반영 상태를 합치지 않는다.
+WF-002의 빈 자유 입력창이 기본이다. 예시 칩은 초안만 채우고 직접 수정·삭제하거나 예시 없이 전송할 수 있다. 원문 1~500 코드 포인트 검증·저장 실패/재시도·키보드 가림을 확인한다. 후속 질문은 준비 대사이며 원문의 AI 분석 결과가 아니다. WF-003에서 원문과 소개값을 구분하고 확인하지 않은 소개값은 비워둔다. 원문은 상대·차량 전달본에 포함하지 않는다.
+
+공통 요소 번호: **1 역할/상태, 2 캐릭터, 3 발화/조건, 4 필요한 정보·입력, 5 실행 버튼·음성 제어**. 숨김 모드는 2가 없는 것이 의도다. 준비·전송·동의·경로 반영 상태를 합치지 않는다.
 
 ## 5. 번호별 화면 목록
 
@@ -462,7 +517,7 @@ def markdown():
             f'범위 {s["scope"]} · {s["mapping"]} · {s["scene"]} · {s["dm"]} · 담당자 미정 · 마감 미정\n',
             f'**목적:** {s["purpose"]}\n\n**진입:** {s["entry"]}\n',
             f'**조건:** {s["guard"]}\n\n**실패·분기:** {s["failure"]}\n',
-            '| 버튼 | 동작·조건 | 다음 번호 |\n|---|---|---|',
+            ('| 음성 명령 | 동작·조건 | 다음 번호 |\n|---|---|---|' if s["mode"]=="voice" else '| 버튼 | 동작·조건 | 다음 번호 |\n|---|---|---|'),
         ]
         for a in s["actions"]:
             out.append(f'| {a["label"]}{" (조건 충족 후)" if not a["enabled"] else ""} | {a["event"]} | WF-{a["target"]:03d} |')
@@ -475,6 +530,8 @@ def markdown():
         "- E 확장: 개인 제안의 식별자·승인·설정/경유지 구분·중복·실패/unknown·취소·현재 경로 변경 감지를 별도 계약으로 확정.",
         "- V01~V05: 캐릭터 효과·동행감·상대 응답 시점·총 시간 부담·실제 주행 실현성 검증. 목업을 클릭했다는 이유로 통과 처리하지 않음.",
         "- Connect-S/W·좁은 창·가로·앱 가림·글자 확대에서 잘림, 초점, 읽기·실행 영역 확인.",
+        "- 자유 입력: 예시 없는 입력·초안 수정·이모지/줄바꿈·500자 경계·실패/재시도·원문 비공개·미확인 소개값·v2 거부/목표 v3 전환 검수.\n",
+        "- 주행 음성: parked/driving_voice/blocked·실제 지원 증빙·마이크/포커스/제한·음성 종료·자동 재개 방지를 V05에서 검증.\n",
         "- 모든 담당자·마감·추가 실제 검증 결과는 미정/미실시 유지.\n",
         "| 피드백 번호 | 요소 | 관찰한 문제 | 원하는 변경 | 담당자 | 마감 |\n|---|---|---|---|---|---|",
         "| WF-___ | 1~5 | 작성 | 작성 | 미정 | 미정 |\n",
@@ -489,7 +546,7 @@ def viewer():
     data=json.dumps([{k:s[k] for k in ["id","title","channel","scope"]} for s in SCREENS],ensure_ascii=False)
     tpl="""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>wayMate 화면 설계 검토 v0.1</title><style>
+<title>wayMate 화면 설계 검토 v0.2</title><style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,'Apple SD Gothic Neo',sans-serif;color:#222;background:#eee}
 header{position:sticky;top:0;background:white;border-bottom:1px solid #bbb;padding:16px 24px;z-index:2}
 h1{font-size:19px;margin:0 0 10px}nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -504,7 +561,7 @@ aside{font-size:13px;color:#555;margin:12px 0 0}button:focus-visible,a:focus-vis
 <nav><label>구간 <select id="group"><option value="all">전체</option><option value="mobile">모바일</option><option value="car">차량</option><option value="operator">시연자</option><option value="E">확장 E</option></select></label>
 <label>번호·제목 <input id="query" type="search" placeholder="WF-019 또는 장소" aria-label="화면 번호 또는 제목 검색"></label>
 <label>화면 <select id="jump" aria-label="화면 선택"></select></label>
-<a href="waymate-screen-spec-v0.1.pdf">전체 PDF</a><a href="../../08_목업_화면_설계서_및_와이어프레임.md">상세 명세 MD</a></nav>
+<a href="waymate-screen-spec-v0.2.pdf">전체 PDF</a><a href="../../08_목업_화면_설계서_및_와이어프레임.md">상세 명세 MD</a></nav>
 <aside>피드백 예: WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요. B 기본 · E 요청 확장 · O 추가. 도식은 실제 앱·순정 내비 화면이 아닙니다.</aside>
 </header><main id="book"></main><script>
 const screens=__DATA__;
@@ -524,8 +581,8 @@ render();if(location.hash){const id=location.hash.slice(1);if(screens.some(s=>s.
 
 def main():
     ROOT.mkdir(parents=True,exist_ok=True);(ROOT/"pages").mkdir(exist_ok=True)
-    pdf=canvas.Canvas(str(ROOT/"waymate-screen-spec-v0.1.pdf"),pagesize=(W,H),pageCompression=1)
-    pdf.setTitle("wayMate 목업 화면 설계서 v0.1")
+    pdf=canvas.Canvas(str(ROOT/"waymate-screen-spec-v0.2.pdf"),pagesize=(W,H),pageCompression=1)
+    pdf.setTitle("wayMate 목업 화면 설계서 v0.2")
     pdf.setAuthor("wayMate")
     overview(pdf)
     for i,s in enumerate(SCREENS,6):

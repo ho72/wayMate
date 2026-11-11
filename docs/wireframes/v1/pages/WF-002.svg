@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
-<title id="title">WF-002  에이전트와 온보딩 대화</title>
+<title id="title">WF-002  에이전트와 자유 입력 온보딩</title>
 <desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.1  |  2026-11-11  |  피드백 번호 WF-002</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.2  |  2026-11-11  |  피드백 번호 WF-002</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-002  에이전트와 온보딩 대화</text>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-002  에이전트와 자유 입력 온보딩</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
 <text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">07</text>
@@ -14,21 +14,22 @@
 <text x="40" y="152.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">모바일 준비 / 차량과 동일 정보</text>
 <text x="40" y="185.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">화면 목적</text>
 <line x1="40" y1="197" x2="350" y2="197" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="218" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">한 번에 한 질문을 주고 답변 전송을 구분한다.</text>
-<text x="40" y="256.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">진입 조건</text>
-<line x1="40" y1="268" x2="350" y2="268" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="289" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">WF-001에서 시작</text>
-<text x="40" y="327.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터 배치</text>
-<line x1="40" y1="339" x2="350" y2="339" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="360" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">상단으로 축소. 목록·답변 영역을 우선.</text>
-<text x="40" y="398.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">시연·범위 메모</text>
-<line x1="40" y1="410" x2="350" y2="410" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="431" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">도식은 대표 문답 한 장. 질문 2~5도 같은 패턴이고 마지막 별</text>
-<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">명은 직접 입력한다.</text>
+<text x="40" y="218" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">사용자가 자신의 말투로 답하고 친구와 채팅하는 경험을 만든</text>
+<text x="40" y="236" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">다.</text>
+<text x="40" y="274.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">진입 조건</text>
+<line x1="40" y1="286" x2="350" y2="286" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="307" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">WF-001에서 시작·질문 1~4</text>
+<text x="40" y="345.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터 배치</text>
+<line x1="40" y1="357" x2="350" y2="357" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="378" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">상단으로 축소. 목록·답변 영역을 우선.</text>
+<text x="40" y="416.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">시연·범위 메모</text>
+<line x1="40" y1="428" x2="350" y2="428" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">빈 입력 상태의 도식이다. ㅋㅋ·띄어쓰기·이모지 원문 보존. 키</text>
+<text x="40" y="467" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">보드가 떠도 입력창·전송 버튼이 가려지지 않게 한다.</text>
 <text x="378" y="129.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">화면 확대 / 구성·버튼의 상대적 배치</text>
 <rect x="378" y="138" width="354" height="612" rx="4" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
 <text x="395" y="166.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">wayMate</text>
-<text x="650.335" y="165.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">주차 · 모의 시연</text>
+<text x="662.215" y="165.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">모바일 · 목업</text>
 <ellipse cx="383.0" cy="161.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="379.6" y="164.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">1</text>
 <line x1="395" y1="184" x2="715" y2="184" stroke="#B8B8B8" stroke-width="1"/>
@@ -52,28 +53,32 @@
 <line x1="420.145" y1="226.55" x2="420.6933333333333" y2="226.18444444444444" stroke="#242424" stroke-width="0.8"/>
 <line x1="420.6933333333333" y1="226.18444444444444" x2="421.2416666666667" y2="225.71444444444444" stroke="#242424" stroke-width="0.8"/>
 <line x1="421.2416666666667" y1="225.71444444444444" x2="421.79" y2="225.14" stroke="#242424" stroke-width="0.8"/>
-<text x="455" y="219.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">내 친구</text>
 <ellipse cx="712.0" cy="220.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="708.6" y="223.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">2</text>
-<rect x="395" y="258" width="320" height="52" rx="3" fill="#F1F1F1" stroke="none" stroke-width="1"/>
-<text x="407" y="280" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">쉬는 날에는 어떤 시간을 제일 좋아해?</text>
-<ellipse cx="383.0" cy="278.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
-<text x="379.6" y="281.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">3</text>
-<rect x="395" y="324" width="320" height="145.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
-<text x="405" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">질문 1 / 5</text>
-<text x="405" y="360.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">바다 보면서 쉬다가 카페 가는 게 좋아</text>
-<ellipse cx="383.0" cy="342.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
-<text x="379.6" y="345.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">4</text>
-<rect x="395" y="477.0" width="320" height="145.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
-<text x="405" y="496.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">답변 선택</text>
-<text x="405" y="513.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">느긋하게 쉬기 / 조용한 대화 / 표현 선택</text>
-<text x="405" y="528.3" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9.3" fill="#666666">기존 답변은 위로 스크롤</text>
-<rect x="395" y="640" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
-<text x="516.82" y="663.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">이 답변 보내기</text>
+<text x="456" y="219.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">내 친구</text>
+<rect x="395" y="258" width="320" height="69" rx="3" fill="#F4F4F4" stroke="none" stroke-width="1"/>
+<text x="407" y="281" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">쉬는 날에는 어떤 시간을 제일 좋아해? 네 말로 편하게</text>
+<text x="407" y="299" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">얘기해줘.</text>
+<ellipse cx="383.0" cy="279.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="282.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">3</text>
+<text x="395" y="358.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">보낸 답변은 네 말투 그대로 남겨둘게.</text>
+<text x="395" y="426.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">예시 · 안 골라도 괜찮아</text>
+<rect x="395.0" y="439" width="156.0" height="34" rx="14" fill="#F4F4F4" stroke="#B8B8B8" stroke-width="1"/>
+<text x="439.8" y="459.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">바다 보며 쉬기</text>
+<rect x="559.0" y="439" width="156.0" height="34" rx="14" fill="#F4F4F4" stroke="#B8B8B8" stroke-width="1"/>
+<text x="608.8" y="459.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">카페 가는 날</text>
+<text x="395" y="501.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">답변 입력</text>
+<rect x="395" y="512" width="320" height="94" rx="3" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
+<text x="407" y="538.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#666666">편하게 네 말로 적어줘…</text>
+<text x="621.1659999999999" y="623.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">0 / 500 · Enter 줄바꿈</text>
+<ellipse cx="383.0" cy="539.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="542.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">4</text>
+<rect x="395" y="640" width="320" height="41" rx="3" fill="#FAFAFA" stroke="#B8B8B8" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="490.14" y="663.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#666666">이 답변 보내기 [입력 후]</text>
 <ellipse cx="383.0" cy="660.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="379.6" y="663.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">5</text>
-<rect x="395" y="689" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
-<text x="511.07" y="712.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">답변 다시 고르기</text>
+<rect x="395" y="689" width="320" height="41" rx="3" fill="#F4F4F4" stroke="#242424" stroke-width="1"/>
+<text x="516.82" y="712.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">직접 답변 쓰기</text>
 <text x="762" y="153.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">요소 번호 / 동작 명세</text>
 <text x="762" y="181.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">1  역할·상태</text>
 <text x="762" y="201.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">내 친구 / 설계</text>
@@ -82,15 +87,15 @@
 <text x="762" y="255.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">한 명의 발화자만 상단에 축소해 출처를 유지.</text>
 <line x1="762" y1="270" x2="1151" y2="270" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="289.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">3  대사·조건</text>
-<text x="762" y="309.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">칩 선택만으로 전송하지 않음. 자유 성격 분석·STT 없음</text>
+<text x="762" y="309.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">예시는 전송하지 않음. 자유 입력과 AI 자동 분석은 별개</text>
 <line x1="762" y1="324" x2="1151" y2="324" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">4  정보·실패</text>
-<text x="762" y="363.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">저장 실패 시 답변을 유지하고 같은 명령 재시도</text>
+<text x="762" y="363.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">공백/500자 초과/저장 중 전송 잠금. 실패 시 초안·원문 보존</text>
 <line x1="762" y1="378" x2="1151" y2="378" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="397.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">5  버튼 → 결과</text>
-<text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">이 답변 보내기</text>
-<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">선택 후 ONBOARDING_ANSWER. 5차례를 반복한 뒤 요약 → WF-003</text>
-<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">답변 다시 고르기</text>
-<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">미전송 답변만 수정 → WF-002</text>
+<text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">이 답변 보내기 [조건 충족 후]</text>
+<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">유효한 answerText 저장 후 다음 준비 질문. 질문 1~4 완료 뒤 WF-003 → WF-002</text>
+<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">직접 답변 쓰기</text>
+<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">입력창 초점. 예시 선택·자동 전송 없음 → WF-002</text>
 <text x="40" y="786.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">피드백 예: WF-002 / 요소 4 / 표시·문구·동작 중 수정할 점</text>
 </svg>

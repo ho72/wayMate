@@ -4,7 +4,7 @@
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.1  |  2026-11-11  |  피드백 번호 OV-02</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.2  |  2026-11-11  |  피드백 번호 OV-02</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">주차·제한·창 배치·내비 연동의 설계 결정</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
@@ -21,9 +21,9 @@
 <text x="1030" y="248" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">L1 · P3 · P4</text>
 <line x1="45" y1="323" x2="1145" y2="323" stroke="#B8B8B8" stroke-width="1"/>
 <text x="45" y="356.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">정차와 주행</text>
-<text x="200" y="353" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">신호 대기·속도 0만으로 조작을 열지 않는다. 실제 제한·foreground·fresh 상태를 확인하며 앱이 가려지면 우회하지 않는다. 주행 중 큰 캐릭터·움직임·</text>
-<text x="200" y="373" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">긴 목록은 기본안에서 제외한다.</text>
-<text x="1030" y="351" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">P3 · P4</text>
+<text x="200" y="353" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">parked / driving_voice / blocked를 구분한다. 검증된 주행 음성은 핵심으로 유지하고 큰 캐릭터·목록·긴 자막·새 승인은 잠근다. 미검증·가림은 차단하</text>
+<text x="200" y="373" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">며 속도 0만으로 주차를 열지 않는다.</text>
+<text x="1030" y="351" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">P3 · P4 · P5</text>
 <line x1="45" y1="426" x2="1145" y2="426" stroke="#B8B8B8" stroke-width="1"/>
 <text x="45" y="459.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">내비 실행</text>
 <text x="200" y="456" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">선택지의 탐색은 경로 변경이 아니다. &#x27;경유지로 추가/목적지로 설정&#x27;을 명확히 확인한 뒤 요청한다. 사용자가 내비에 주소를 다시 입력하지 않게 연결</text>
