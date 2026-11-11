@@ -55,9 +55,10 @@ export class DemoClient {
   }
   observeReset(state) {
     const known = state.completedRunIds || [];
-    const old = this.state?.runId || localStorage.getItem("waymate.lastRun.v4");
-    if (old && old !== state.runId && known.includes(old))
-      this.clearRunDrafts(old);
+    // Older v4 clients did not persist a last-run pointer. The server's
+    // completed runs are authoritative even on the first read after upgrade.
+    for (const runId of known)
+      if (runId !== state.runId) this.clearRunDrafts(runId);
     for (const outgoing of [this.pending, this.cancelRequest])
       if (
         outgoing &&

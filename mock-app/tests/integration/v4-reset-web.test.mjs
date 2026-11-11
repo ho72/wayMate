@@ -168,3 +168,28 @@ test("a stale browser returning after several completed resets clears old v4 sta
   assert.equal(b.memory.has(key), false);
   assert.equal(b.posts(), count);
 });
+
+test("an upgraded browser without a last-run pointer clears its completed drafts on first read", async (t) => {
+  const b = await browser(t);
+  await b.f.prepare();
+  await b.begin();
+  await b.client.read();
+  const old = b.client.state.runId;
+  const binding = b.client.state.actionBindings.RESET_ACK;
+  await b.client.command(binding.commandType, binding.payload, binding.target);
+  const current = b.client.state.runId;
+  const draft = `waymate.draft.v4.${b.f.id}.${old}`;
+  const profile = `waymate.profileDraft.v4.${b.f.id}.${old}`;
+  const keep = `waymate.draft.v4.${b.f.id}.${current}`;
+  const other = `waymate.draft.v4.another-client.${old}`;
+  for (const key of [draft, profile, keep, other]) b.memory.set(key, "draft");
+  b.memory.delete("waymate.lastRun.v4");
+  assert.equal(b.memory.has("waymate.pending.v4"), false);
+  const count = b.posts();
+  await new DemoClient().read();
+  assert.equal(b.memory.has(draft), false);
+  assert.equal(b.memory.has(profile), false);
+  assert.equal(b.memory.get(keep), "draft");
+  assert.equal(b.memory.get(other), "draft");
+  assert.equal(b.posts(), count);
+});

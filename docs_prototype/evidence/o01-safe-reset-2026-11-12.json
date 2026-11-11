@@ -704,7 +704,7 @@
     "reloadRemainsEmpty": true
   },
   "tests": {
-    "node": 146,
+    "node": 147,
     "kotlin": 21,
     "mockAndRealApk": "passed",
     "mockAndRealLint": {
@@ -722,5 +722,11 @@
     "difference": "Kotlin formatting only after actual SDK verification",
     "formattedFinalApkInstalled": true,
     "finalRestartJournalByteIdentical": true
+  },
+  "legacyBrowserReturn": {
+    "previousClientHadDraftWithoutLastRunPointer": true,
+    "completedRunId": "2bac8576-0030-4b6e-b13e-bded2b80dae0",
+    "afterFixDraftAndPendingKeys": [],
+    "regressionPreservesCurrentRunAndOtherClientDrafts": true
   }
 }
