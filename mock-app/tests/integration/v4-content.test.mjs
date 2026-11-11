@@ -247,3 +247,31 @@ test("meeting rejection closes pending messages without pretending a reply or co
     f.send("B_RESPONSE", { decision: "reply" }, "operator", target),
   );
 });
+
+test("cancelling an undelivered meeting proposal also closes an existing message wait", async (t) => {
+  const f = await setup(t);
+  await send(f);
+  const target = await current(f);
+  const binding = (await f.read("car")).actionBindings.MEETING_PROPOSE;
+  const proposal = await f.envelope(
+    binding.commandType,
+    binding.payload,
+    "car",
+    binding.target,
+  );
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    { originalCommandId: proposal.commandId, originalType: "MEETING_PROPOSE" },
+    "car",
+  );
+  assert.equal((await f.read("car")).social.meeting.status, "cancelled");
+  assert.equal((await f.read("car")).content, null);
+  assert.equal(
+    JSON.parse(await readFile(f.file)).content.threads[0].status,
+    "closed",
+  );
+  await assert.rejects(f.post(proposal), (e) => e.code === "CANCELLED");
+  await assert.rejects(
+    f.send("B_RESPONSE", { decision: "reply" }, "operator", target),
+  );
+});

@@ -528,6 +528,7 @@ export function cancelPending(s, c, id) {
 }
 
 function mStatusCancelled(s) {
+  closeContent(s);
   const m = s.social.meeting;
   m.status = "cancelled";
   m.aConsent = false;

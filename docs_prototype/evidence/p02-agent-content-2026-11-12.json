@@ -916,13 +916,14 @@
     "newPhysicalCalls": 0
   },
   "tests": {
-    "node": 167,
+    "node": 168,
     "kotlin": 29,
     "mockAndRealApk": "passed",
     "lint": {
       "errors": 0,
       "warningsPerVariant": 21
-    }
+    },
+    "undeliveredMeetingCancellationClosesMessages": true
   },
   "apkSha256": "5ba57043e862430acf52bff82427fab7d33cc6b1676b197691b3b9eec2ff4e16",
   "speech": {
