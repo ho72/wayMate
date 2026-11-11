@@ -4,7 +4,7 @@
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.2  |  2026-11-11  |  피드백 번호 WF-041</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 WF-041</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-041  재시연·전체 초기화 확인</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
@@ -28,7 +28,7 @@
 <text x="41.6" y="327.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">4</text>
 <rect x="60" y="371" width="650" height="57" rx="0" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
 <text x="72" y="391.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">처음부터 시작</text>
-<text x="72" y="410.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">웹·서버·차량 ACK와 남은 경유지·미확정 작업 확인</text>
+<text x="72" y="410.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">서버·필수 차량 ACK·경유지 확인. 탑승 후 닫힌 모바일 제외</text>
 <rect x="60" y="438" width="650" height="57" rx="0" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
 <text x="72" y="458.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">실제 외부 효과</text>
 <text x="72" y="477.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">초기화해도 실제 내비가 자동으로 정리된 것은 아님</text>
@@ -37,7 +37,7 @@
 <ellipse cx="45.0" cy="550.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="41.6" y="553.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">5</text>
 <rect x="280" y="528" width="210" height="48" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
-<text x="339.64" y="554.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">처음부터 시작 확인</text>
+<text x="332.71" y="554.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">차량에서 새 시연 시작</text>
 <rect x="500" y="528" width="210" height="48" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
 <text x="566.57" y="554.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">패널로 돌아가기</text>
 <text x="40" y="638.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">목적·진입</text>
@@ -59,8 +59,8 @@
 <text x="762" y="397.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">5  버튼 → 결과</text>
 <text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">최종 선택 재시연</text>
 <text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">checkpoint 유효·잠금 없음. 이전 B 응답 무효 → WF-028</text>
-<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">처음부터 시작 확인</text>
-<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">새 run은 필요한 정리·ACK 완료 후에만 → WF-001</text>
+<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">차량에서 새 시연 시작</text>
+<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">정리·필수 ACK 완료 후 새 run. 탑승 전 시연만 WF-001 → WF-053</text>
 <text x="762" y="513.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">패널로 돌아가기</text>
 <text x="762" y="532" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">상태 변경 없음 → WF-040</text>
 <text x="40" y="786.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">피드백 예: WF-041 / 요소 4 / 표시·문구·동작 중 수정할 점</text>

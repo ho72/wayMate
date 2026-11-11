@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
-<title id="title">설계의 중심: 내비를 유지하고 캐릭터가 행동을 연결</title>
+<title id="title">설계의 중심: 탑승 후 핵심 경험은 Pleos에서</title>
 <desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.2  |  2026-11-11  |  피드백 번호 OV-01</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 OV-01</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">설계의 중심: 내비를 유지하고 캐릭터가 행동을 연결</text>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">설계의 중심: 탑승 후 핵심 경험은 Pleos에서</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
 <text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">01</text>
-<text x="40" y="123.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">51개 화면 · 기본 B / 요청 확장 E / 추가 O · 고유 번호 + 요소 번호로 피드백</text>
+<text x="40" y="123.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">53개 화면 · 기본 B / 요청 확장 E / 추가 O · 고유 번호 + 요소 번호로 피드백</text>
 <rect x="60" y="155" width="690" height="338.09999999999997" rx="0" fill="#FAFAFA" stroke="#242424" stroke-width="1"/>
 <rect x="60" y="155" width="690" height="20" rx="0" fill="#EAEAEA" stroke="#B8B8B8" stroke-width="1"/>
 <text x="68" y="167.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">시스템 상태 영역</text>
@@ -55,15 +55,15 @@
 <text x="790" y="284" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">확인·결과를 제공한다.</text>
 <text x="790" y="322.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터의 역할</text>
 <line x1="790" y1="334" x2="1140" y2="334" stroke="#B8B8B8" stroke-width="1"/>
-<text x="790" y="355" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">큰 내 친구 → 조건을 읽는 작은 친구 → 목록·경로 확인 → 결과를 알려</text>
-<text x="790" y="373" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">주는 친구의 흐름.</text>
+<text x="790" y="355" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">모바일은 탑승 전 준비. Pleos의 큰 내 친구 홈에서 추천·매칭·대화·만남·</text>
+<text x="790" y="373" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">다음 여행까지 이어간다.</text>
 <text x="790" y="411.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">이번 설계의 결과물</text>
 <line x1="790" y1="423" x2="1140" y2="423" stroke="#B8B8B8" stroke-width="1"/>
-<text x="790" y="444" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">색·장식보다 화면 구조, 발화자, 동의, 내비 실행 경계, 실패와 제한 분기</text>
-<text x="790" y="462" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">를 우선한 저해상도 설계도.</text>
+<text x="790" y="444" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">차량 내 공개 확인·시작 대안까지 포함한다. 탑승 후 휴대폰 재조작 없이</text>
+<text x="790" y="462" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">완주하는 저해상도 설계도.</text>
 <text x="60" y="578.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">검토 기준</text>
 <line x1="60" y1="590" x2="750" y2="590" stroke="#B8B8B8" stroke-width="1"/>
-<text x="60" y="611" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">Git docs 01~05 v0.6 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 450c4fa. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완</text>
+<text x="60" y="611" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">Git docs 01~05 v0.7 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 a1f0b8c. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완</text>
 <text x="60" y="629" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">료 현황은 07이 기준.</text>
 <text x="60" y="734.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="16" fill="#242424">피드백: WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요.</text>
 </svg>

@@ -1,30 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
-<title id="title">WF-009  모바일에서 차량으로 이어주기</title>
+<title id="title">WF-009  탑승 전 준비 완료 · 이제 Pleos로</title>
 <desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
 <rect width="1191" height="842" fill="white"/>
 <rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
 <text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
-<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.2  |  2026-11-11  |  피드백 번호 WF-009</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.3  |  2026-11-11  |  피드백 번호 WF-009</text>
 <line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-009  모바일에서 차량으로 이어주기</text>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-009  탑승 전 준비 완료 · 이제 Pleos로</text>
 <line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
 <text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">14</text>
-<text x="40" y="115.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">모바일  |  기본 목업  |  M04.TRANSFER_READY / VEHICLE_CONFIRMED  |  S05 / DM05</text>
+<text x="40" y="115.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">모바일  |  기본 목업  |  M02.TRANSFER_READY / VEHICLE_CONFIRMED  |  S02→S05 / DM05</text>
 <text x="40" y="152.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">모바일 준비 / 차량과 동일 정보</text>
 <text x="40" y="185.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">화면 목적</text>
 <line x1="40" y1="197" x2="350" y2="197" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="218" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">데이터 연결과 사용자 관계의 연속성을 표현한다.</text>
+<text x="40" y="218" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">모바일의 역할을 탑승 전 준비에서 끝낸다.</text>
 <text x="40" y="256.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">진입 조건</text>
 <line x1="40" y1="268" x2="350" y2="268" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="289" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">connected 또는 유효한 my_trip 준비</text>
+<text x="40" y="289" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">본인 프로필·여행 준비 저장. 공개·연결은 선행 조건 아님</text>
 <text x="40" y="327.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터 배치</text>
 <line x1="40" y1="339" x2="350" y2="339" stroke="#B8B8B8" stroke-width="1"/>
 <text x="40" y="360" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">상단으로 축소. 목록·답변 영역을 우선.</text>
 <text x="40" y="398.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">시연·범위 메모</text>
 <line x1="40" y1="410" x2="350" y2="410" stroke="#B8B8B8" stroke-width="1"/>
-<text x="40" y="431" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">07의 현재 구현은 my_trip만 지원한다. connected는 목표 화면</text>
-<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">이다.</text>
+<text x="40" y="431" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">현재 실행은 07의 my_trip 전달까지만 구현. 목표 prepared_tri</text>
+<text x="40" y="449" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">p은 새 계약이다.</text>
 <text x="378" y="129.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">화면 확대 / 구성·버튼의 상대적 배치</text>
 <rect x="378" y="138" width="354" height="612" rx="4" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
 <text x="395" y="166.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">wayMate</text>
@@ -56,41 +56,42 @@
 <ellipse cx="712.0" cy="220.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="708.6" y="223.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">2</text>
 <rect x="395" y="258" width="320" height="52" rx="3" fill="#F1F1F1" stroke="none" stroke-width="1"/>
-<text x="407" y="280" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">차에서도 같은 친구와 여행 계획을 이어갈 수 있어.</text>
+<text x="407" y="280" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">준비됐어. 휴대폰을 닫고 차에서 나를 만나줘.</text>
 <ellipse cx="383.0" cy="278.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="379.6" y="281.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">3</text>
 <rect x="395" y="324" width="320" height="145.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
-<text x="405" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">전달할 정보</text>
-<text x="405" y="360.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">파도 · 선택한 외형·말투 · 현재 계획</text>
+<text x="405" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">본인 준비만 전달</text>
+<text x="405" y="360.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">파도 · 외형·표현 · 현재 여행 계획</text>
+<text x="405" y="375.3" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9.3" fill="#666666">상대 없음 · prepared_trip / peer=null</text>
 <ellipse cx="383.0" cy="342.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="379.6" y="345.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">4</text>
 <rect x="395" y="477.0" width="320" height="145.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
-<text x="405" y="496.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">진행 상태</text>
-<text x="405" y="513.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">전달 준비 → 차량 불러오기 → 차량 수신 확인</text>
-<text x="405" y="528.3" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9.3" fill="#666666">준비 완료와 차량 확인을 분리</text>
+<text x="405" y="496.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">수신 표시는 선택 사항</text>
+<text x="405" y="513.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">전달 준비 → 차량 불러오기 → ACK</text>
+<text x="405" y="528.3" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9.3" fill="#666666">휴대폰 확인 클릭 없이 차량 진행</text>
 <rect x="395" y="640" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
 <text x="507.16" y="663.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">차량에서 이어가기</text>
 <ellipse cx="383.0" cy="660.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
 <text x="379.6" y="663.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">5</text>
 <rect x="395" y="689" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
-<text x="522.57" y="712.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">내 여행 확인</text>
+<text x="509.23" y="712.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">탑승 전 계획 확인</text>
 <text x="762" y="153.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">요소 번호 / 동작 명세</text>
 <text x="762" y="181.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">1  역할·상태</text>
-<text x="762" y="201.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">내 친구 / 전달 기반 구현 / 본 배치 설계</text>
+<text x="762" y="201.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">내 친구 / 목표 v3 설계 / 현재 v2와 구분</text>
 <line x1="762" y1="216" x2="1151" y2="216" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="235.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">2  캐릭터</text>
 <text x="762" y="255.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">한 명의 발화자만 상단에 축소해 출처를 유지.</text>
 <line x1="762" y1="270" x2="1151" y2="270" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="289.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">3  대사·조건</text>
-<text x="762" y="309.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">웹 GET·애니메이션으로 ACK 성공을 대신하지 않음</text>
+<text x="762" y="309.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">GET·애니메이션을 ACK로 표시하지 않음</text>
 <line x1="762" y1="324" x2="1151" y2="324" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">4  정보·실패</text>
-<text x="762" y="363.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">실패·오래된 전달본은 재준비 안내</text>
+<text x="762" y="363.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">실패 시 원인 표시. 탑승 후 복구는 차량 WF-053에서도 가능</text>
 <line x1="762" y1="378" x2="1151" y2="378" stroke="#B8B8B8" stroke-width="1"/>
 <text x="762" y="397.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">5  버튼 → 결과</text>
 <text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">차량에서 이어가기</text>
-<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">HANDOFF_PREPARE. 차량 ACK 뒤에만 수신 확인 → WF-011</text>
-<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">내 여행 확인</text>
-<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">본인 일정 조회 → WF-010</text>
+<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">HANDOFF_PREPARE 저장 뒤 Pleos P01로 전환 → WF-011</text>
+<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">탑승 전 계획 확인</text>
+<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">본인 준비 편집. 매칭은 차량에서 → WF-005</text>
 <text x="40" y="786.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">피드백 예: WF-009 / 요소 4 / 표시·문구·동작 중 수정할 점</text>
 </svg>

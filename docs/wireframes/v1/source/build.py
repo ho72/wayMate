@@ -343,14 +343,14 @@ def screenpage(p,s):
     p.text(f"피드백 예: {s['id']} / 요소 4 / 표시·문구·동작 중 수정할 점",40,776,10,color=MUTED)
 
 def overview(pdf):
-    p=Page("OV-01","설계의 중심: 내비를 유지하고 캐릭터가 행동을 연결",1,pdf)
+    p=Page("OV-01","설계의 중심: 탑승 후 핵심 경험은 Pleos에서",1,pdf)
     p.text(f"{len(SCREENS)}개 화면 · 기본 B / 요청 확장 E / 추가 O · 고유 번호 + 요소 번호로 피드백",40,109,14)
     context(p,60,155,690,"D")
     p.text("wayMate",790,165,28)
     yy=section(p,"내비와의 관계",790,220,350,"순정 내비는 시스템 앱 창. wayMate는 별도 앱 창 안에서 캐릭터·제안·확인·결과를 제공한다.")
-    yy=section(p,"캐릭터의 역할",790,yy,350,"큰 내 친구 → 조건을 읽는 작은 친구 → 목록·경로 확인 → 결과를 알려주는 친구의 흐름.")
-    yy=section(p,"이번 설계의 결과물",790,yy,350,"색·장식보다 화면 구조, 발화자, 동의, 내비 실행 경계, 실패와 제한 분기를 우선한 저해상도 설계도.")
-    section(p,"검토 기준",60,565,690,f"Git docs 01~05 v0.6 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 {BASE_COMMIT}. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완료 현황은 07이 기준.")
+    yy=section(p,"캐릭터의 역할",790,yy,350,"모바일은 탑승 전 준비. Pleos의 큰 내 친구 홈에서 추천·매칭·대화·만남·다음 여행까지 이어간다.")
+    yy=section(p,"이번 설계의 결과물",790,yy,350,"차량 내 공개 확인·시작 대안까지 포함한다. 탑승 후 휴대폰 재조작 없이 완주하는 저해상도 설계도.")
+    section(p,"검토 기준",60,565,690,f"Git docs 01~05 v0.7 + 06 협업 가이드 + 07 현재 구현. 기준 커밋 {BASE_COMMIT}. 담당자·마감 미정. 화면은 설계 결과이며 현재 앱의 기능 완료 현황은 07이 기준.")
     p.text("피드백: WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요.",60,718,16)
     p.finish()
 
@@ -388,17 +388,18 @@ def overview(pdf):
 
     p=Page("OV-04","화면 흐름과 기본·확장·추가 범위",4,pdf)
     lanes=[
-        ("모바일 준비","WF-001~005 → WF-006~009 → 차량", "공개 보류·요청 거절은 WF-010 → 본인 여행"),
-        ("캐릭터와 알아가기","WF-011 → WF-012 ↔ WF-013~018", "콘텐츠를 모두 완료하지 않아도 WF-019 만남 제안"),
-        ("만남·내비·결말","WF-019~023 → WF-027 → WF-028~031", "실패 WF-024 / 미확인 WF-025 / 취소·제거 WF-026"),
-        ("차량 특화 E 확장","WF-012 → WF-034~039 / WF-044~045 → WF-046~050", "30분 휴식과 점심 요청을 분리. 개인 장소와 공유 만남의 승인·데이터도 분리"),
-        ("공통·시연·추가","검증된 주행 음성 WF-051 / 차단 WF-032 / 복귀 WF-033", "운영 WF-040~041 · MC WF-042 · 후기 WF-043"),
+        ("탑승 전 모바일","WF-001~005 → WF-009 전달 준비", "여기서 휴대폰을 닫음. 공개·매칭은 차량에서도 확인"),
+        ("Pleos 시작·큰 홈","WF-011 → WF-012 / 준비 없음·재시연 WF-053", "prepared_trip ACK 또는 별도 차량 시작. 아직 상대 연결 전"),
+        ("차량 추천·매칭","WF-012 → (공개 미확인 WF-052) → WF-006~008", "연결 후 WF-013. 보류·거절은 WF-010 → 차량 내 친구"),
+        ("대화·만남·결말","WF-013~018 → WF-019~027 → WF-028~031", "실패 WF-024 / 미확인 WF-025 / 취소·제거 WF-026"),
+        ("차량 특화 E 확장","WF-012 → WF-034~039 / WF-044~050", "개인 휴식·식사·일정과 공유 만남의 승인·데이터를 분리"),
+        ("제한·복원·시연","주행 음성 WF-051 / 차단 WF-032 / 복귀 WF-033", "O01 WF-040~041 · MC WF-042 · 후기 WF-043. 모바일 복귀 불필요"),
     ]
-    yy=145
+    yy=138
     for a,b,c in lanes:
-        p.text(a,48,yy,14);p.rect(250,yy-3,880,62,fill="#F4F4F4",stroke=None)
-        p.text(b,270,yy+5,14,width=840);p.text(c,270,yy+31,11,color=MUTED,width=840)
-        yy+=112
+        p.text(a,48,yy,14);p.rect(250,yy-3,880,70,fill="#F4F4F4",stroke=None)
+        p.text(b,270,yy+5,14,width=840);p.text(c,270,yy+35,11,color=MUTED,width=840)
+        yy+=101
     p.finish()
 
     p=Page("OV-05","검토용 화면 목록 / 번호는 이후 수정에도 유지",5,pdf)
@@ -424,13 +425,13 @@ def sources_page(pdf,page_no):
 
 INTRO = """# wayMate 목업 화면 설계서와 와이어프레임
 
-작성일 2026년 11월 11일 · 버전 0.2 · 자유 입력·주행 음성 목표 반영
+작성일 2026년 11월 11일 · 버전 0.3 · Pleos 중심 여정·차량 추천/매칭 반영
 
-이 문서는 01~05 v0.6, 06 협업 가이드, 07 현재 구현 계약을 분석한 **목업 목표 화면의 시각 설계서**다. 기준 커밋은 `450c4fa`다. 실제 앱 구현 상태는 07을 따른다. 디자인 완성도보다 화면 구성·버튼 의미·상태 전환을 우선한다.
+이 문서는 01~05 v0.7, 06 협업 가이드, 07 현재 구현 계약을 분석한 **목업 목표 화면의 시각 설계서**다. 기준 커밋은 `a1f0b8c`다. 실제 앱 구현 상태는 07을 따른다. 디자인 완성도보다 화면 구성·버튼 의미·상태 전환을 우선한다.
 
-- [전체 화면 PDF](wireframes/v1/waymate-screen-spec-v0.2.pdf)
+- [전체 화면 PDF](wireframes/v1/waymate-screen-spec-v0.3.pdf)
 - [화면별 검토 뷰어](wireframes/v1/index.html): 저장소를 받은 뒤 브라우저에서 연다. GitHub 파일 화면에서는 HTML이 실행되지 않는다.
-- 이전 PDF v0.1은 이력으로 보존한다. 현재 기준은 이 문서·v0.2 PDF·갱신된 SVG다.
+- 이전 PDF v0.1·v0.2는 이력으로 보존한다. 현재 기준은 이 문서·v0.3 PDF·갱신된 SVG다.
 - 피드백 형식: **WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요.** 화면 번호는 고정하고 삭제·추가 시 재번호를 붙이지 않는다.
 - 담당자·마감은 미정이다. 이 설계는 기능·사용자·실제 주행·SDK 검증의 완료 기록이 아니다.
 
@@ -439,12 +440,27 @@ INTRO = """# wayMate 목업 화면 설계서와 와이어프레임
 | 기준 | 화면에 반영한 판단 |
 |---|---|
 | 01 서비스 범위 | 자유 입력 온보딩과 이동 중 음성 대화 핵심을 유지. 원문·소개 확인·연결·동의 분리 |
-| 02 시나리오 | A/B 대사 출처·사전 소개 조건·첫 만남 20분·두 결말 유지 |
-| 03 상호작용 | 기존 WF 번호 유지. WF-002 자유 입력·예시 초안, WF-032 차단, 신규 WF-051 주행 음성 목표로 구분 |
-| 04 연동 | 사용자 승인 → 요청 → 반영 확인. mock/real 출처와 처리 결과 분리. unknown에서 중복 요청 금지 |
-| 05 검수 | Q 기능 검수와 V01~V05 가치/주행 검증 분리. 미정 담당·마감 유지 |
+| 02 시나리오 | 모바일 S01/S02 → Pleos S05 → S03 추천/S04 연결. 이후 대화·만남·두 결말을 차량에서 완주 |
+| 03 상호작용 | WF 번호 유지. WF-006~008·010을 차량으로 이동. WF-052 차량 공개 확인·WF-053 차량 시작 추가 |
+| 04 연동 | prepared_trip과 live 관계 분리, car 연결/공개·CAR_START_TRIP 목표 계약. 내비 승인·결과 분리 유지 |
+| 05 검수 | Q28 모바일 종료 후 Pleos 완주 추가. Q 기능과 V01~V05 가치/주행 검증 분리. 미정 유지 |
 | 06 협업 | 앱 UI·차량 플랫폼·서버의 책임 경계 유지. 이 산출물은 문서·설계 자산만 추가 |
 | 07 현재 구현 | my_trip 저장·HTTP 전달·ACK 기반 구현과 목표 화면을 구분. 전체 대화·내비 완료로 표시하지 않음 |
+
+### 탑승 전후의 역할과 읽는 순서
+
+| 단계 | 주 화면 | 동작 |
+|---|---|---|
+| 탑승 전 | 모바일 M01/M02 | 자유 입력 온보딩·캐릭터/소개·본인 고정 일정·전달 준비 |
+| 탑승 후 출발 전 주차 | Pleos P01/P02/P06/P07 | 내 친구·일정 이어받기 → 추천·공개 확인 → 요청/수락·공통 시간 → 콘텐츠 |
+| 이동 중 | Pleos | 검증된 캐릭터 음성 문답. 새 매칭·목록·동의는 주차 후 |
+| 중간 주차·만남 전후 | Pleos P03/P04/P02 | 장소·양쪽 동의·내비 승인·두 결말·본인 여행 |
+
+기본 경로는 **WF-001~005 → WF-009 → WF-011 → WF-012 → WF-006~008 → WF-013 이후**다. 번호는 피드백 식별자여서 숫자순이 진행 순서는 아니다. 준비된 추천 알림을 Pleos 홈에 먼저 표시하며 버튼은 내용을 여는 동작이다. 모바일 M03/M04는 목표 화면에서 폐기하고 차량 P06/P07로 옮겼다.
+
+탑승 후에는 모바일을 다시 열어야 하는 필수 단계를 두지 않는다. 미확인 공개는 WF-052, 준비 없음·오래된 전달·새 차량 시연은 WF-053에서 처리한다. 서버 장애를 기본값 성공으로 바꾸지 않는다. 연결 거절/종료 뒤에는 차량 내 친구로 돌아가고 한 회차 한 연결 시도 규칙을 유지한다.
+
+전달 `handoff.mode=prepared_trip`·`peer=null`과 현재 이용 상태 `journeyMode=ready_to_match/my_trip/connected`는 다르다. 공개/매칭은 현재 서버 상태를 확인하므로 연결 후 모바일 재전달·재ACK를 요구하지 않는다. 저장 준비/기본 시연으로 차량에서 직접 시작한 경우에는 모바일 전달 ACK를 만들지 않는다. 실제 구현은 07의 v2이며 이 목표 v3는 아직 미구현이다.
 
 ## 2. 목업 범위와 이번 요청의 확장
 
@@ -525,8 +541,8 @@ def markdown():
         out.append("")
     out += [
         "## 7. 구현·검수와 피드백\n",
-        f"{len(SCREENS)}개 WF는 화면 설계 단위이며 모두 별도 Android Activity라는 뜻은 아니다. 기존 P01~P04 안의 상태를 재사용한다. 앱 코드·공통 API·실제 내비 구현을 이 산출물로 변경하지 않는다.\n",
-        "- 기본 B: 05의 Q와 연결·공개·선택형 콘텐츠·두 결말·취소/정리·모의 결과·finalRound 규칙 대조.",
+        f"{len(SCREENS)}개 WF는 화면 설계 단위이며 모두 별도 Android Activity라는 뜻은 아니다. P01~P04·P06/P07의 상태로 구현한다. 모바일은 M01/M02만 남긴다. 앱 코드·공통 API·실제 내비 구현을 이 산출물로 변경하지 않는다.\n",
+        "- 기본 B: Q28로 모바일 종료 후 공개·추천·매칭·콘텐츠·만남·두 결말·재진입/재시연을 Pleos에서 검수. Q03은 core ACK와 live 공개/연결을 분리. 나머지 Q 동의·정리·finalRound 유지.",
         "- E 확장: 개인 제안의 식별자·승인·설정/경유지 구분·중복·실패/unknown·취소·현재 경로 변경 감지를 별도 계약으로 확정.",
         "- V01~V05: 캐릭터 효과·동행감·상대 응답 시점·총 시간 부담·실제 주행 실현성 검증. 목업을 클릭했다는 이유로 통과 처리하지 않음.",
         "- Connect-S/W·좁은 창·가로·앱 가림·글자 확대에서 잘림, 초점, 읽기·실행 영역 확인.",
@@ -546,7 +562,7 @@ def viewer():
     data=json.dumps([{k:s[k] for k in ["id","title","channel","scope"]} for s in SCREENS],ensure_ascii=False)
     tpl="""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>wayMate 화면 설계 검토 v0.2</title><style>
+<title>wayMate 화면 설계 검토 v0.3</title><style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,'Apple SD Gothic Neo',sans-serif;color:#222;background:#eee}
 header{position:sticky;top:0;background:white;border-bottom:1px solid #bbb;padding:16px 24px;z-index:2}
 h1{font-size:19px;margin:0 0 10px}nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -561,7 +577,7 @@ aside{font-size:13px;color:#555;margin:12px 0 0}button:focus-visible,a:focus-vis
 <nav><label>구간 <select id="group"><option value="all">전체</option><option value="mobile">모바일</option><option value="car">차량</option><option value="operator">시연자</option><option value="E">확장 E</option></select></label>
 <label>번호·제목 <input id="query" type="search" placeholder="WF-019 또는 장소" aria-label="화면 번호 또는 제목 검색"></label>
 <label>화면 <select id="jump" aria-label="화면 선택"></select></label>
-<a href="waymate-screen-spec-v0.2.pdf">전체 PDF</a><a href="../../08_목업_화면_설계서_및_와이어프레임.md">상세 명세 MD</a></nav>
+<a href="waymate-screen-spec-v0.3.pdf">전체 PDF</a><a href="../../08_목업_화면_설계서_및_와이어프레임.md">상세 명세 MD</a></nav>
 <aside>피드백 예: WF-019 / 요소 4 / 대기시간을 더 먼저 보여주세요. B 기본 · E 요청 확장 · O 추가. 도식은 실제 앱·순정 내비 화면이 아닙니다.</aside>
 </header><main id="book"></main><script>
 const screens=__DATA__;
@@ -581,8 +597,8 @@ render();if(location.hash){const id=location.hash.slice(1);if(screens.some(s=>s.
 
 def main():
     ROOT.mkdir(parents=True,exist_ok=True);(ROOT/"pages").mkdir(exist_ok=True)
-    pdf=canvas.Canvas(str(ROOT/"waymate-screen-spec-v0.2.pdf"),pagesize=(W,H),pageCompression=1)
-    pdf.setTitle("wayMate 목업 화면 설계서 v0.2")
+    pdf=canvas.Canvas(str(ROOT/"waymate-screen-spec-v0.3.pdf"),pagesize=(W,H),pageCompression=1)
+    pdf.setTitle("wayMate 목업 화면 설계서 v0.3")
     pdf.setAuthor("wayMate")
     overview(pdf)
     for i,s in enumerate(SCREENS,6):
