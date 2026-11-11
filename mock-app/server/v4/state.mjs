@@ -1,5 +1,5 @@
 import { initialSocial, connectionVersions, linked } from "./social.mjs";
-import { validateNavigation } from "./navigation.mjs";
+import { validateNavigation, validEvidence, identity } from "./navigation.mjs";
 import { isDeepStrictEqual } from "node:util";
 import { questionOrder } from "../../shared/config/protocol-v4.mjs";
 import { randomUUID } from "node:crypto";
@@ -7,6 +7,10 @@ import { sources, owner, approval } from "./handoff.mjs";
 import { assertContract } from "./validation.mjs";
 export function initialState() {
   return {
+    reset: null,
+    resetHistory: [],
+    lateNavigationFacts: [],
+    recovery: null,
     social: initialSocial(),
     schemaVersion: 4,
     storeId: randomUUID(),
@@ -48,9 +52,119 @@ export function initialState() {
     receipts: {},
   };
 }
+const validatedReceipts = new WeakSet();
+const validatedArchives = new WeakSet();
+const archiveVersions = new WeakMap();
+function freezeReceipt(value) {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    for (const child of Object.values(value)) freezeReceipt(child);
+    Object.freeze(value);
+  }
+}
 export function validateStore(s) {
-  assertContract("store", s);
+  // Existing entries are deeply immutable. Revalidate new entries only, while
+  // keeping every receipt and still validating all business state and invariants.
+  assertContract("store", { ...s, receipts: {}, resetHistory: [] });
+  if (s.resetHistory !== undefined && !Array.isArray(s.resetHistory))
+    throw new Error("잘못된 초기화 기록 목록");
+  if (
+    !s.receipts ||
+    typeof s.receipts !== "object" ||
+    Array.isArray(s.receipts)
+  )
+    throw new Error("잘못된 영수증 저장소");
+  for (const value of Object.values(s.receipts))
+    if (!validatedReceipts.has(value)) {
+      assertContract("receiptEntry", value);
+      freezeReceipt(value);
+      validatedReceipts.add(value);
+    }
   validateNavigation(s);
+  const history = s.resetHistory || [],
+    ids = new Set();
+  for (const a of history) {
+    if (ids.has(a.runId) || a.runSeq >= s.runSeq)
+      throw new Error("초기화 회차 순서 불일치");
+    if (validatedArchives.has(a)) {
+      if (archiveVersions.get(a) > s.version)
+        throw new Error("과거 영수증 버전 불일치");
+      ids.add(a.runId);
+      continue;
+    }
+    assertContract("resetArchive", a);
+    if (
+      ids.has(a.runId) ||
+      a.runSeq >= s.runSeq ||
+      a.reset.runId !== a.runId ||
+      !a.reset.completedAt ||
+      a.reset.newRunId === a.runId ||
+      a.navigation?.owned ||
+      a.navigation?.attempts.some((x) =>
+        ["pending", "unknown"].includes(x.outcome),
+      )
+    )
+      throw new Error("잘못된 초기화 보존 기록");
+    ids.add(a.runId);
+    validateNavigation(a);
+    if (
+      a.reset.navigationRequired !== !!a.navigation?.attempts.length ||
+      a.reset.requiredDeviceId !== (a.vehicleActivation?.deviceId ?? null)
+    )
+      throw new Error("과거 초기화 정리 범위 불일치");
+    if (a.reset.navigationRequired) {
+      const e = a.reset.carAck?.payload.evidence;
+      if (
+        !e ||
+        !validEvidence(e) ||
+        !a.navigation.attempts
+          .filter((x) => x.operation === "add")
+          .every(
+            (x) =>
+              identity(e.second.destination, x.baseline) &&
+              e.second.waypoints.length === x.before.second.waypoints.length &&
+              e.second.waypoints.every((w, i) =>
+                identity(w, x.before.second.waypoints[i]),
+              ),
+          )
+      )
+        throw new Error("실제 경로 증빙 없는 완료 기록");
+    }
+    if (
+      (a.reset.requiredWebClientId && !a.reset.webAck) ||
+      (a.reset.requiredDeviceId && !a.reset.carAck)
+    )
+      throw new Error("필수 ACK 없는 완료 기록");
+    if (
+      a.reset.carAck &&
+      a.reset.carAck.payload.deviceId !== a.reset.requiredDeviceId
+    )
+      throw new Error("과거 차량 ACK 대상 불일치");
+    const maxVersion = Object.values(a.receipts).reduce(
+      (max, v) => Math.max(max, v.receipt.committedVersion),
+      0,
+    );
+    if (maxVersion > s.version) throw new Error("과거 영수증 버전 불일치");
+    freezeReceipt(a);
+    validatedArchives.add(a);
+    archiveVersions.set(a, maxVersion);
+  }
+  Object.freeze(history);
+  if (
+    s.reset &&
+    (s.reset.navigationRequired !== !!s.navigation?.attempts.length ||
+      s.reset.requiredDeviceId !== (s.vehicleActivation?.deviceId ?? null) ||
+      s.reset.requiredWebClientId !==
+        (!s.vehicleActivation ? s.clientId : null))
+  )
+    throw new Error("현재 초기화 대상 불일치");
+  if (
+    s.reset &&
+    (s.reset.runId !== s.runId ||
+      s.reset.runSeq !== s.runSeq ||
+      s.reset.completedAt ||
+      s.reset.newRunId)
+  )
+    throw new Error("현재 초기화 회차 불일치");
   const c = s.social.connection,
     m = s.social.meeting;
   if (!c.attempted && c.status !== "none") throw new Error("연결 시도 불일치");

@@ -98,5 +98,41 @@
   {
     "file": "state-car-meeting-confirmed.json",
     "definition": "state"
+  },
+  {
+    "file": "command-reset-begin-car.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-reset-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-reset-ack-car.json",
+    "definition": "command"
+  },
+  {
+    "file": "success-reset-ack.json",
+    "definition": "success"
+  },
+  {
+    "file": "state-new-run.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-reset-web-seed.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-reset-begin-web.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-web-reset-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-reset-ack-web.json",
+    "definition": "command"
   }
 ]

@@ -8,6 +8,7 @@ import {
 } from "/protocol.mjs";
 const api = new DemoClient(),
   $ = (id) => document.getElementById(id);
+let renderedRun = null;
 let busy = false,
   polling = false,
   online = false,
@@ -71,6 +72,21 @@ function showQuestion(id) {
 function render() {
   const s = api.state;
   if (!s) return;
+  const resetting = !!s.reset || !!s.recovery;
+  $("reset-panel").hidden = !resetting;
+  document.querySelector(".conversation").hidden = resetting;
+  document.querySelector(".composer-area").hidden = resetting;
+  document.querySelector(".journey-menu").hidden = resetting;
+  if (resetting) {
+    clearPreparationUi();
+    $("reset-detail").textContent =
+      s.recovery?.message ||
+      s.reset.blockedReasons.join(" · ") ||
+      "필요한 기기의 정리 확인을 기다리고 있어요.";
+    return;
+  }
+  if (renderedRun && renderedRun !== s.runId) clearPreparationUi();
+  renderedRun = s.runId;
   renderProfilePreview();
   const owns = !s.clientId || s.clientId === api.id,
     active = !!s.vehicleActivation,
@@ -330,12 +346,54 @@ $("retry").onclick = () =>
     if (!(await api.recover())) await api.sendPending();
     status("같은 요청의 저장 결과를 확인했어요.");
   });
+function clearPreparationUi() {
+  $("answer").value = "";
+  $("alias").value = "파도";
+  document.querySelector('input[name=avatar][value="a-01"]').checked = true;
+  for (const id of [
+    "sea",
+    "cafe",
+    "activity",
+    "pace",
+    "conversation",
+    "expression",
+  ])
+    $(id).checked = false;
+  $("style").value = "";
+  $("history").replaceChildren();
+  $("profile-preview").textContent = "";
+  $("social-content").replaceChildren();
+  editing = null;
+  currentQuestion = null;
+  historyKey = null;
+  profileStep = "character";
+  scrollKey = null;
+  flowKey = null;
+  manualStage = null;
+  candidateDetail = false;
+  reviewBinding = null;
+  publicSelection = new Set(["alias", "avatarId"]);
+  if ($("review-dialog").open) $("review-dialog").close();
+}
+async function synchronizeReset() {
+  if (!api.state?.reset) return;
+  api.prepareResetCleanup();
+  render();
+  if (api.pending?.type === "RESET_ACK") {
+    if (!(await api.recover())) await api.sendPending();
+    return;
+  }
+  const b = api.state.actionBindings.RESET_ACK;
+  if (b && !api.state.reset.webAcknowledged)
+    await api.command(b.commandType, b.payload, b.target);
+}
 async function poll() {
   if (polling || busy || document.hidden) return;
   polling = true;
   try {
     const was = online;
     await api.read();
+    await synchronizeReset();
     online = true;
     if (!was) status("서버에 연결됐어요.");
     render();
@@ -926,6 +984,7 @@ try {
     $("expression").checked = !!s.expressionPresetIds.length;
   }
   restoreProfileDraft();
+  await synchronizeReset();
   if (api.pending) await api.recover();
   status(
     localStorage.getItem("waymate.pending.v3") ||

@@ -38,13 +38,48 @@ export class DemoClient {
         "이 서버 버전은 지원하지 않아요. 입력 초안과 미확인 요청을 보존했어요. v4 서버를 실행해 주세요.",
       );
     }
-    if (result.state) this.state = result.state;
+    if (state) {
+      this.observeReset(state);
+      this.state = state;
+    }
     if (!response.ok) {
       const e = new Error(result.error?.message || "서버 오류");
       e.definitive = response.status < 500 || response.status === 500;
       throw e;
     }
     return result;
+  }
+  clearRunDrafts(runId) {
+    for (const prefix of ["waymate.draft.v4", "waymate.profileDraft.v4"])
+      localStorage.removeItem(`${prefix}.${this.id}.${runId}`);
+  }
+  observeReset(state) {
+    const known = state.completedRunIds || [];
+    const old = this.state?.runId || localStorage.getItem("waymate.lastRun.v4");
+    if (old && old !== state.runId && known.includes(old))
+      this.clearRunDrafts(old);
+    for (const outgoing of [this.pending, this.cancelRequest])
+      if (
+        outgoing &&
+        outgoing.runId !== state.runId &&
+        known.includes(outgoing.runId)
+      ) {
+        this.clearRunDrafts(outgoing.runId);
+        this.clear();
+        break;
+      }
+    if (state.reset) this.clearRunDrafts(state.runId);
+    localStorage.setItem("waymate.lastRun.v4", state.runId);
+  }
+  prepareResetCleanup() {
+    const s = this.state;
+    if (!s?.reset) return;
+    this.clearRunDrafts(s.runId);
+    if (
+      this.pending?.type !== "RESET_ACK" &&
+      (!this.pending || this.pending.runId === s.runId)
+    )
+      this.clear();
   }
   async read() {
     return (this.state = await this.request("/api/state?view=web"));
@@ -90,6 +125,10 @@ export class DemoClient {
       throw new Error("취소할 연결 요청이 없어요.");
     if (!this.cancelRequest) {
       await this.read();
+      if (!this.pending || this.state.reset || this.state.recovery)
+        throw new Error(
+          "초기화로 요청이 종료됐어요. 현재 회차를 확인해 주세요.",
+        );
       this.cancelRequest = {
         schemaVersion: 4,
         runSeq: this.state.runSeq,
@@ -114,6 +153,8 @@ export class DemoClient {
   async command(type, payload, target = {}) {
     if (this.pending) throw new Error("이전 저장 결과를 먼저 확인해 주세요.");
     await this.read();
+    if ((this.state.reset || this.state.recovery) && type !== "RESET_ACK")
+      throw new Error("초기화 정리를 먼저 확인해 주세요.");
     this.pending = {
       schemaVersion: 4,
       runSeq: this.state.runSeq,

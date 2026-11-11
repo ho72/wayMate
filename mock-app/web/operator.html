@@ -13,13 +13,36 @@
         <strong class="brand">wayMate</strong
         ><span class="badge">O01 · 시연자 전용</span>
       </header>
-      <h1>현재 요청에 응답</h1>
+      <section class="card" aria-labelledby="reset-title">
+        <h1 id="reset-title">회차와 초기화</h1>
+        <p id="run-meta"></p>
+        <p id="reset-summary" aria-live="polite"></p>
+        <button id="begin-reset" disabled>처음부터 시작</button
+        ><button id="retry-reset" class="secondary" hidden>
+          초기화 요청 결과 확인·재전송
+        </button>
+        <p>
+          현재 회차를 잠그고 내비 정리·필수 기기 ACK를 확인해요. 완료 전에는 새
+          회차가 열리지 않아요.
+        </p>
+      </section>
+      <h2>현재 요청에 응답</h2>
       <p>
         가상의 B 응답을 지정하는 시연 패널입니다. 사용자 화면의 동의와
         구분합니다.
       </p>
       <div id="requests"></div>
       <p id="status" role="status"></p>
+      <dialog id="reset-dialog" aria-labelledby="reset-confirm-title">
+        <h2 id="reset-confirm-title">처음부터 시작할까요?</h2>
+        <p>
+          온보딩·공개·여행·연결과 대기 요청을 정리해요. 이미 실행된 내비는
+          자동으로 제거하지 않아요. 차량에서 별도 제거 승인과 경로 확인을 마쳐야
+          새 회차를 시작할 수 있어요.
+        </p>
+        <button id="confirm-reset">초기화 시작</button
+        ><button id="cancel-reset" class="secondary">돌아가기</button>
+      </dialog>
     </main>
   </body>
 </html>

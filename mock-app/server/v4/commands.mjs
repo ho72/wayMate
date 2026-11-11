@@ -1,3 +1,11 @@
+import { initialState } from "./state.mjs";
+import {
+  applyReset,
+  finishReset,
+  guardDuringReset,
+  findReceipt,
+  applyArchivedReport,
+} from "./reset.mjs";
 import { cancelPending } from "./social.mjs";
 import { isDeepStrictEqual } from "node:util";
 import { atomicSave } from "../store.mjs";
@@ -15,6 +23,11 @@ export function coordinator(
     queue = Promise.resolve(),
     unavailable = false,
     booting = true;
+  const cloneState = () => ({
+    ...structuredClone({ ...state, receipts: {}, resetHistory: [] }),
+    receipts: { ...state.receipts },
+    resetHistory: state.resetHistory || [],
+  });
   // A monotonic timestamp from a previous process cannot grant vehicle permission.
 
   const serial = (fn) => {
@@ -44,7 +57,7 @@ export function coordinator(
         state.vehicle.restrictionKnown ||
         state.vehicle.foreground
       ) {
-        const next = structuredClone(state);
+        const next = cloneState();
         if (next.navigation) next.navigation.observation = null;
         next.vehicle.seenAt = null;
         next.vehicle.restrictionKnown = false;
@@ -55,7 +68,7 @@ export function coordinator(
       booting = false;
     }
     if (state.vehicle.seenAt !== null && !fresh(state, now())) {
-      const next = structuredClone(state);
+      const next = cloneState();
       next.vehicle.seenAt = null;
       next.vehicle.restrictionKnown = false;
       next.version++;
@@ -80,7 +93,7 @@ export function coordinator(
     receipt: (actor, id, runId, commandId) =>
       serial(async () => {
         await expire();
-        const hit = state.receipts[`${runId}:${actor}:${commandId}`];
+        const hit = findReceipt(state, `${runId}:${actor}:${commandId}`);
         if (hit && actor === "web" && hit.clientId !== id)
           fail(403, "ACTOR_FORBIDDEN", "다른 클라이언트의 영수증입니다.");
         return hit
@@ -102,7 +115,7 @@ export function coordinator(
         if (c.actor !== actor)
           fail(403, "ACTOR_FORBIDDEN", "역할 헤더와 명령 역할이 다릅니다.");
         const key = `${c.runId}:${c.actor}:${c.commandId}`,
-          hit = state.receipts[key];
+          hit = findReceipt(state, key);
         if (hit) {
           if (hit.clientId !== id || !isDeepStrictEqual(hit.command, c))
             fail(
@@ -116,7 +129,13 @@ export function coordinator(
             state: projection(actor, id),
           };
         }
-        if (c.runId !== state.runId || c.runSeq !== state.runSeq)
+        const archivedReport =
+          c.type === "NAV_REPORT" &&
+          (c.runId !== state.runId || c.runSeq !== state.runSeq);
+        if (
+          !archivedReport &&
+          (c.runId !== state.runId || c.runSeq !== state.runSeq)
+        )
           fail(409, "RUN_CHANGED", "회차가 바뀌었습니다.");
         if (
           state.social.cancelledCommands.some(
@@ -124,8 +143,15 @@ export function coordinator(
           )
         )
           fail(409, "CANCELLED", "이 요청은 취소됐어요.");
+        if (!archivedReport) guardDuringReset(state, c);
         if (
-          !["CAR_STATUS", "NAV_OBSERVE", "NAV_REPORT"].includes(c.type) &&
+          ![
+            "CAR_STATUS",
+            "NAV_OBSERVE",
+            "NAV_REPORT",
+            "RESET_BEGIN",
+            "RESET_ACK",
+          ].includes(c.type) &&
           c.type !== "CANCEL_PENDING_COMMAND" &&
           !["CONNECT_END", "CONNECT_CANCEL", "MEETING_CANCEL"].includes(
             c.type,
@@ -133,13 +159,16 @@ export function coordinator(
           c.expectedVersion !== state.version
         )
           fail(409, "STALE_STATE", "최신 상태를 읽고 다시 확인하세요.");
-        const next = structuredClone(state);
-        const execution =
-          c.type === "CANCEL_PENDING_COMMAND"
-            ? (cancelPending(next, c, id), undefined)
-            : c.type.startsWith("NAV_")
-              ? applyNavigation(next, c, now())
-              : (apply(next, c, id, now()), undefined);
+        let next = cloneState();
+        const execution = archivedReport
+          ? (applyArchivedReport(next, c), undefined)
+          : ["RESET_BEGIN", "RESET_ACK"].includes(c.type)
+            ? (applyReset(next, c, id, now()), undefined)
+            : c.type === "CANCEL_PENDING_COMMAND"
+              ? (cancelPending(next, c, id), undefined)
+              : c.type.startsWith("NAV_")
+                ? applyNavigation(next, c, now())
+                : (apply(next, c, id, now()), undefined);
         // Heartbeat receipt persists, but identical restriction facts do not advance business version.
         const heartbeat =
           c.type === "CAR_STATUS" &&
@@ -154,7 +183,12 @@ export function coordinator(
           replayed: false,
           committedVersion: next.version,
         };
-        next.receipts[key] = { command: c, clientId: id, receipt };
+        next.receipts[key] = {
+          command: structuredClone(c),
+          clientId: id,
+          receipt,
+        };
+        next = finishReset(next, initialState);
         next.publicApproval = approval(next);
         validateStore(next);
         await save(next);

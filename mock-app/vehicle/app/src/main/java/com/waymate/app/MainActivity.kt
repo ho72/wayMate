@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
                         it.preparation,
                         it.social,
                         it.navigation,
+                        it.reset,
                     )
             }
         restrictions = VehicleRestrictions(this, repository::restriction)

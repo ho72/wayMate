@@ -3,6 +3,9 @@ let state = null,
   pending = JSON.parse(
     localStorage.getItem("waymate.operator.pending.v4") || "null",
   ),
+  resetPending = JSON.parse(
+    localStorage.getItem("waymate.operator.reset.v4") || "null",
+  ),
   last = "",
   offline = false;
 const status = (t) => (document.getElementById("status").textContent = t);
@@ -19,8 +22,8 @@ async function request(path, body) {
   const j = await r.json();
   if (!r.ok) {
     if (body && r.status <= 500) {
-      pending = null;
-      localStorage.removeItem("waymate.operator.pending.v4");
+      if (body.commandId === pending?.commandId) clear();
+      if (body.commandId === resetPending?.commandId) clearReset();
     }
     throw new Error(j.error?.message || "서버 오류");
   }
@@ -30,10 +33,20 @@ function clear() {
   pending = null;
   localStorage.removeItem("waymate.operator.pending.v4");
 }
+function clearReset() {
+  resetPending = null;
+  localStorage.removeItem("waymate.operator.reset.v4");
+}
 async function poll() {
   if (busy || document.hidden) return;
   busy = true;
   try {
+    if (resetPending) {
+      const r = await request(
+        `/api/commands/${resetPending.commandId}?runId=${resetPending.runId}`,
+      );
+      if (r.status === "applied") clearReset();
+    }
     if (pending) {
       const r = await request(
         `/api/commands/${pending.commandId}?runId=${pending.runId}`,
@@ -46,6 +59,19 @@ async function poll() {
       }
     }
     state = await request("/api/state?view=operator");
+    if (
+      pending &&
+      (state.reset?.runId === pending.runId ||
+        (pending.runId !== state.runId &&
+          state.completedRunIds?.includes(pending.runId)))
+    )
+      clear();
+    if (
+      resetPending &&
+      resetPending.runId !== state.runId &&
+      state.completedRunIds?.includes(resetPending.runId)
+    )
+      clearReset();
     if (state.schemaVersion !== 4) throw new Error("v4 서버가 필요해요.");
     if (offline && !pending) status("서버에 다시 연결됐어요.");
     offline = false;
@@ -63,7 +89,31 @@ function el(t, v) {
   return e;
 }
 function render() {
-  const key = JSON.stringify([state.social, pending]);
+  const resetButton = document.getElementById("begin-reset");
+  if (resetButton) {
+    document.getElementById("run-meta").textContent =
+      `회차 ${state.runSeq} · ${state.runId}`;
+    document.getElementById("reset-summary").textContent =
+      state.recovery?.message ||
+      (state.reset
+        ? state.reset.blockedReasons.join(" · ") ||
+          "초기화 완료를 확인하고 있어요."
+        : state.lastCompletedReset
+          ? "이전 회차 정리 완료 · 새 회차를 준비할 수 있어요."
+          : "현재 회차 진행 중");
+    resetButton.disabled =
+      !!resetPending || !!state.reset || !state.actionBindings?.RESET_BEGIN;
+  }
+  const retryReset = document.getElementById("retry-reset");
+  if (retryReset) retryReset.hidden = !resetPending;
+  const key = JSON.stringify([
+    state.social,
+    pending,
+    resetPending,
+    state.reset,
+    state.recovery,
+    state.runId,
+  ]);
   if (key === last) return;
   last = key;
   const root = document.getElementById("requests");
@@ -93,7 +143,8 @@ function render() {
         "button",
         { accept: "B 수락", reject: "B 거절", cancel: "B 만남 취소" }[decision],
       );
-      b.disabled = !!pending;
+      b.disabled =
+        !!pending || !!resetPending || !!state.reset || !!state.recovery;
       b.onclick = () => send(t, decision);
       card.append(b);
     }
@@ -121,34 +172,92 @@ function render() {
   }
 }
 async function send(target, decision) {
-  if (busy || pending) return;
+  return sendCommand("B_RESPONSE", { decision }, target);
+}
+async function sendCommand(type, payload, target, reviewedRun = null) {
+  const resetting = type === "RESET_BEGIN";
+  if (busy || (resetting ? resetPending : pending || resetPending)) return;
   busy = true;
   try {
     const s = await request("/api/state?view=operator");
-    pending = {
+    if (reviewedRun && reviewedRun !== s.runId)
+      throw new Error("회차가 바뀌었어요. 초기화 범위를 다시 확인해 주세요.");
+    const command = {
       schemaVersion: 4,
       runId: s.runId,
       runSeq: s.runSeq,
       expectedVersion: s.version,
       commandId: crypto.randomUUID(),
       actor: "operator",
-      type: "B_RESPONSE",
+      type,
       target,
-      payload: { decision },
+      payload,
     };
+    if (resetting) resetPending = command;
+    else pending = command;
     localStorage.setItem(
-      "waymate.operator.pending.v4",
-      JSON.stringify(pending),
+      resetting ? "waymate.operator.reset.v4" : "waymate.operator.pending.v4",
+      JSON.stringify(command),
     );
-    await request("/api/commands", pending);
-    clear();
-    status("B 응답을 저장했어요.");
+    await request("/api/commands", command);
+    if (resetting) clearReset();
+    else clear();
+    status(
+      type === "RESET_BEGIN"
+        ? "초기화를 시작했어요. 내비 정리와 ACK를 기다려 주세요."
+        : "B 응답을 저장했어요.",
+    );
   } catch (e) {
     status(e.message);
   } finally {
     busy = false;
     poll();
   }
+}
+let resetReview = null;
+const resetButton = document.getElementById("begin-reset");
+if (resetButton) {
+  resetButton.onclick = () => {
+    if (busy || resetPending || !state?.actionBindings?.RESET_BEGIN) return;
+    resetReview = {
+      runId: state.runId,
+      binding: structuredClone(state.actionBindings.RESET_BEGIN),
+    };
+    document.getElementById("reset-dialog").showModal();
+  };
+  document.getElementById("retry-reset").onclick = async () => {
+    if (busy || !resetPending) return;
+    busy = true;
+    try {
+      await request("/api/commands", resetPending);
+      clearReset();
+    } catch (e) {
+      status(e.message);
+    } finally {
+      busy = false;
+      poll();
+    }
+  };
+  document.getElementById("cancel-reset").onclick = () => {
+    resetReview = null;
+    document.getElementById("reset-dialog").close();
+  };
+  document.getElementById("confirm-reset").onclick = () => {
+    if (busy) {
+      status("서버 상태를 확인 중이에요. 잠시 뒤 다시 확인해 주세요.");
+      return;
+    }
+    const r = resetReview;
+    resetReview = null;
+    document.getElementById("reset-dialog").close();
+    if (r)
+      sendCommand(
+        r.binding.commandType,
+        r.binding.payload,
+        r.binding.target,
+        r.runId,
+      );
+  };
 }
 await poll();
 setInterval(poll, 500);

@@ -16,7 +16,7 @@ export const emptyNavigation = () => ({
 const near = (a, b) =>
   Math.abs(a.latitude - b.latitude) <= 0.00001 &&
   Math.abs(a.longitude - b.longitude) <= 0.00001;
-const identity = (a, b) =>
+export const identity = (a, b) =>
   near(a, b) && a.name === b.name && a.poiId === b.poiId;
 const distance = (a, b) => {
   const rad = Math.PI / 180,
@@ -352,7 +352,21 @@ export function applyNavigation(s, c, now) {
       (c.type !== "NAV_APPROVE" || Object.keys(c.target).length)
     )
       fail(409, "NOT_READY", "본인 여행의 경유지 승인을 확인해 주세요.");
-    if (p.operation === "remove") {
+    if (p.operation === "remove" && c.target.reason === "reset_cleanup") {
+      if (
+        !s.reset ||
+        c.type !== "NAV_REMOVE_APPROVE" ||
+        c.target.resetId !== s.reset.id ||
+        s.reset.requiredDeviceId !== s.vehicle.deviceId ||
+        !n?.owned ||
+        p.ownedAttemptId !== n.owned.attemptId
+      )
+        fail(
+          409,
+          "NOT_READY",
+          "현재 초기화의 자기 경유지 정리 승인이 필요해요.",
+        );
+    } else if (p.operation === "remove") {
       const owned = n?.attempts.find((a) => a.attemptId === n.owned?.attemptId);
       if (
         owned?.context === "meeting" &&
@@ -379,6 +393,7 @@ export function applyNavigation(s, c, now) {
       owned = s.navigation.attempts.find(
         (a) => a.attemptId === p.ownedAttemptId,
       );
+    if (c.target.reason === "reset_cleanup") a.resetId = c.target.resetId;
     a.approvalCommandId = c.commandId;
     a.context =
       p.operation === "add"

@@ -66,7 +66,7 @@ class HandoffRepository(
             },
             submit = { command -> api.request("/api/commands", command).getJSONObject("state") },
             applied = { command, current ->
-                state = current
+                updateState(current)
                 if (
                     command.getString("type") == "CANCEL_PENDING_COMMAND" &&
                         command.getJSONObject("payload").getString("originalCommandId") ==
@@ -91,8 +91,11 @@ class HandoffRepository(
         val reviewed: JSONObject,
         val at: Long,
         val generation: Long,
+        val resetId: String?,
     )
 
+    private var resetLocalId: String? = null
+    private var resetObservedAt = 0L
     private var observedSeq = 0L
     private val polling = AtomicBoolean(false)
     private val tick =
@@ -160,8 +163,164 @@ class HandoffRepository(
     private fun read(): JSONObject =
         api.request("/api/state?view=car").also {
             require(it.getInt("schemaVersion") == 4 && it.getString("scope") == "mobile-meeting-v4")
-            state = it
+            updateState(it)
         }
+
+    private fun updateState(current: JSONObject) {
+        val old = state?.optString("runId") ?: preferences.getString("lastRunId", null)
+        val runs = current.optJSONArray("completedRunIds")
+        val completed =
+            old != null && runs != null && (0 until runs.length()).any { runs.getString(it) == old }
+        if (old != null && old != current.getString("runId") && completed) {
+            lifecycleGeneration++
+            navIntent = null
+            navigation.abandonGrant()
+            clearPending()
+            check(preferences.edit().remove("stopPending").commit())
+            stopPending = null
+            candidate = null
+            loaded = null
+            meetingVisible = false
+            navigationVisible = false
+            navigationNotice = null
+            socialNotice = null
+            resetLocalId = null
+            sessionId = UUID.randomUUID().toString()
+            seq = 0
+            observedSeq = 0
+        }
+        if (preferences.getString("lastRunId", null) != current.getString("runId"))
+            check(preferences.edit().putString("lastRunId", current.getString("runId")).commit())
+        state = current
+    }
+
+    private fun recordedScopeAllowed(rec: JSONObject): Boolean {
+        val report = rec.optJSONObject("report")
+        val current = state
+        val currentScope = current?.let {
+            it.getString("storeId") + ":" + it.getString("runId") + ":" + deviceId
+        }
+        val completed = current?.optJSONArray("completedNavigation")
+        val proven =
+            completed != null &&
+                (0 until completed.length()).any { i ->
+                    val item = completed.getJSONObject(i)
+                    val ids = item.getJSONArray("settledAttemptIds")
+                    item.getString("deviceId") == deviceId &&
+                        rec.optString("scope") ==
+                            state!!.getString("storeId") +
+                                ":" +
+                                item.getString("runId") +
+                                ":" +
+                                deviceId &&
+                        (0 until ids.length()).any {
+                            ids.getString(it) == rec.optString("attemptId")
+                        }
+                }
+        return ResetNavigationPolicy.mayLeaveRecordedScope(
+            currentScope,
+            rec.optString("scope"),
+            rec.optBoolean("acknowledged"),
+            report?.optString("outcome"),
+            proven,
+        )
+    }
+
+    private fun syncReset() {
+        val r =
+            state?.optJSONObject("reset")
+                ?: run {
+                    show()
+                    return
+                }
+        if (resetLocalId != r.getString("id")) {
+            resetLocalId = r.getString("id")
+            resetObservedAt = SystemClock.elapsedRealtime()
+            lifecycleGeneration++
+            navIntent = null
+            navigation.abandonGrant()
+            meetingVisible = false
+            navigationVisible = r.optBoolean("navigationRequired")
+            loaded = null
+            candidate = null
+            socialNotice = null
+            navigationNotice = null
+            if (pending?.optString("type")?.startsWith("NAV_") != true) clearPending()
+        }
+        if (r.optString("requiredDeviceId") != deviceId) {
+            show()
+            return
+        }
+        if (pending != null && !recover()) {
+            val c = pending!!
+            if (
+                c.getString("type") in listOf("NAV_REPORT", "NAV_CANCEL") ||
+                    c.getString("type") == "NAV_REMOVE_APPROVE" &&
+                        c.getJSONObject("target").optString("resetId") == r.getString("id")
+            )
+                sendPending()
+            else clearPending() // Reset gates prevent a late ordinary command or old add grant.
+        }
+        if (state!!.getJSONObject("vehicle").optString("vehicleSessionId") != sessionId) {
+            persist(
+                envelope(
+                    "CAR_SESSION_OPEN",
+                    JSONObject()
+                        .put("deviceId", deviceId)
+                        .put("vehicleSessionId", sessionId)
+                        .put("pendingAttempts", JSONArray())
+                        .put("navigationSource", navigation.source),
+                )
+            )
+            sendPending()
+        }
+        report()
+        networkReady = true
+        navigationSync(true)
+        val current = state ?: return
+        val binding = current.optJSONObject("actionBindings")?.optJSONObject("RESET_ACK")
+        val e = navigation.evidence()
+        val rec = navigation.record()
+        val n = current.optJSONObject("navigation")
+        val unresolved = attempts().any { it.getString("outcome") in listOf("pending", "unknown") }
+        val real = r.optBoolean("navigationRequired")
+        val freshRoute =
+            !real || e != null && e.getJSONObject("first").getLong("startedAt") > resetObservedAt
+        val localSettled =
+            rec == null ||
+                recordedScopeAllowed(rec) &&
+                    (rec.optString("scope") != navScope() || rec.optBoolean("acknowledged"))
+        if (
+            binding != null &&
+                ResetNavigationPolicy.mayAcknowledge(
+                    foreground,
+                    pending != null || navIntent != null,
+                    navigation.hasWork(),
+                    unresolved,
+                    n?.optJSONObject("owned") != null,
+                    localSettled,
+                    freshRoute,
+                )
+        ) {
+            val payload = JSONObject(binding.getJSONObject("payload").toString())
+            if (real && rec != null && rec.optString("scope") == navScope()) {
+                val report = rec.optJSONObject("report") ?: return
+                if (report.getString("outcome") !in listOf("removed", "not_dispatched")) return
+                payload.put(
+                    "journal",
+                    JSONObject()
+                        .put("scope", rec.getString("scope"))
+                        .put("attemptId", rec.getString("attemptId"))
+                        .put("reportId", report.getString("reportId"))
+                        .put("outcome", report.getString("outcome"))
+                        .put("acknowledged", rec.optBoolean("acknowledged"))
+                        .put("sdkCalls", rec.getInt("sdkCalls")),
+                )
+            }
+            stopCommands.send { envelope("RESET_ACK", payload, binding.getJSONObject("target")) }
+        }
+        show()
+    }
 
     private fun envelope(
         type: String,
@@ -199,7 +358,7 @@ class HandoffRepository(
     }
 
     private fun accept(command: JSONObject, current: JSONObject) {
-        state = current
+        updateState(current)
         if (command.getString("type") == "CAR_SESSION_OPEN") {
             sessionId = command.getJSONObject("payload").getString("vehicleSessionId")
             seq = 0
@@ -235,7 +394,7 @@ class HandoffRepository(
             api.request(
                 "/api/commands/${command.getString("commandId")}?runId=${command.getString("runId")}"
             )
-        state = result.getJSONObject("state")
+        updateState(result.getJSONObject("state"))
         if (result.getString("status") == "applied") {
             accept(command, state!!)
             return true
@@ -261,7 +420,9 @@ class HandoffRepository(
                 )
         // Status is a fresh fact with a new sequence, never a replay of an old restriction
         // observation.
-        state = api.request("/api/commands", command.put("payload", payload)).getJSONObject("state")
+        updateState(
+            api.request("/api/commands", command.put("payload", payload)).getJSONObject("state")
+        )
     }
 
     private fun recoverStop() {
@@ -270,6 +431,11 @@ class HandoffRepository(
 
     private fun sync() {
         recoverStop()
+        val observed = read()
+        if (observed.optJSONObject("reset") != null || observed.optJSONObject("recovery") != null) {
+            syncReset()
+            return
+        }
         if (!foreground) {
             if (pending != null && !recover()) {
                 if (pending?.getString("type")?.startsWith("NAV_") == true) sendPending()
@@ -410,16 +576,22 @@ class HandoffRepository(
             !foreground ||
                 restricted != false ||
                 !networkReady ||
-                pending != null ||
+                !ResetNavigationPolicy.mayQueueBehindObservation(pending?.optString("type")) ||
                 navIntent != null
         )
             return
+        val route = JSONObject(reviewed)
+        val reviewedReset = route.optString("_resetId").takeIf { it.isNotEmpty() }
+        val activeReset = state?.optJSONObject("reset")?.getString("id")
+        if (!ResetNavigationPolicy.reviewMatches(activeReset, reviewedReset, operation)) return
+        route.remove("_resetId")
         navIntent =
             NavIntent(
                 operation,
-                JSONObject(reviewed),
+                route,
                 SystemClock.elapsedRealtime(),
                 lifecycleGeneration,
+                reviewedReset,
             )
         navigationNotice = "승인한 경로를 내비에서 다시 확인하고 있어요."
         show()
@@ -483,12 +655,7 @@ class HandoffRepository(
     private fun navigationSync(canAct: Boolean) {
         if (state?.getJSONObject("vehicle")?.optString("vehicleSessionId") != sessionId) return
         val rec = navigation.record()
-        if (
-            rec != null &&
-                rec.getString("scope") != navScope() &&
-                !(rec.optBoolean("acknowledged") &&
-                    rec.optJSONObject("report")?.optString("outcome") == "removed")
-        ) {
+        if (rec != null && !recordedScopeAllowed(rec)) {
             navigationNotice = "다른 회차의 실행 기록이 남아 있어요. 기록 복구가 필요해요."
             return
         }
@@ -530,6 +697,7 @@ class HandoffRepository(
                 restricted != false ||
                 !navigationVisible ||
                 intent.generation != lifecycleGeneration ||
+                intent.resetId != state?.optJSONObject("reset")?.getString("id") ||
                 SystemClock.elapsedRealtime() - intent.at > 20000
         ) {
             navIntent = null
@@ -554,13 +722,16 @@ class HandoffRepository(
             val target = JSONObject()
             if (intent.operation == "add" && linkedTrip)
                 target.put("proposalId", meeting!!.getString("proposalId"))
-            if (meetingRemove)
+            if (intent.resetId != null)
+                target.put("resetId", intent.resetId).put("reason", "reset_cleanup")
+            else if (meetingRemove)
                 target
                     .put("proposalId", ownAdd!!.getString("proposalId"))
                     .put("reason", "meeting_cancel")
             val result =
                 navCommand(
-                    if (meetingRemove) "NAV_REMOVE_APPROVE" else "NAV_APPROVE",
+                    if (meetingRemove || intent.resetId != null) "NAV_REMOVE_APPROVE"
+                    else "NAV_APPROVE",
                     navPayload()
                         .put("operation", intent.operation)
                         .put("reviewed", evidence)
@@ -618,13 +789,12 @@ class HandoffRepository(
             else
                 rec == null ||
                     rec.optString("scope") == state?.let { navScope() } ||
-                    (rec.optBoolean("acknowledged") &&
-                        rec.optJSONObject("report")?.optString("outcome") == "removed")
+                    recordedScopeAllowed(rec)
         val enabled =
             foreground &&
                 restricted == false &&
                 networkReady &&
-                loaded != null &&
+                (loaded != null || state?.optJSONObject("reset") != null) &&
                 navigation.source == "real" &&
                 e != null &&
                 pending == null &&
@@ -642,7 +812,9 @@ class HandoffRepository(
                     social?.optJSONObject("peer") != null)
         val ownAdd = attempts().find { it.optString("attemptId") == owned?.optString("attemptId") }
         val canRemoveForMeeting =
-            ownAdd?.optString("context") != "meeting" || meeting?.optString("status") == "cancelled"
+            state?.optJSONObject("reset") != null ||
+                ownAdd?.optString("context") != "meeting" ||
+                meeting?.optString("status") == "cancelled"
         val points = e?.getJSONObject("second")?.getJSONArray("waypoints")
         val latest = list.lastOrNull()
         val outcome = latest?.getString("outcome")
@@ -677,7 +849,13 @@ class HandoffRepository(
                 e?.getJSONObject("second")?.getJSONObject("destination")?.optString("name")
                     ?: "미확인",
             canAdd =
-                enabled && canAddForMeeting && guiding && owned == null && points?.length() == 0,
+                enabled &&
+                    state?.optJSONObject("reset") == null &&
+                    state?.optJSONObject("recovery") == null &&
+                    canAddForMeeting &&
+                    guiding &&
+                    owned == null &&
+                    points?.length() == 0,
             canRemove = enabled && canRemoveForMeeting && guiding && ownRoute,
             canCancel =
                 foreground &&
@@ -701,7 +879,20 @@ class HandoffRepository(
     }
 
     fun retryCurrent() {
-        load()
+        if (state?.optJSONObject("reset") != null || state?.optJSONObject("recovery") != null) {
+            if (loading || !foreground) return
+            loading = true
+            worker.execute {
+                try {
+                    sync()
+                } catch (e: Exception) {
+                    show(errorText(e))
+                } finally {
+                    loading = false
+                    show()
+                }
+            }
+        } else load()
     }
 
     fun socialAction(type: String, reviewed: String) {
@@ -709,7 +900,14 @@ class HandoffRepository(
         val stop =
             type in
                 listOf("MEETING_CANCEL", "CONNECT_END", "PROFILE_PRIVATE", "CANCEL_PENDING_COMMAND")
-        if (!stop && (restricted != false || !networkReady || loading || pending != null)) return
+        if (
+            !stop &&
+                (restricted != false ||
+                    !networkReady ||
+                    loading ||
+                    !ResetNavigationPolicy.mayQueueBehindObservation(pending?.optString("type")))
+        )
+            return
         if (stop) {
             lifecycleGeneration++
             navIntent = null
@@ -811,6 +1009,33 @@ class HandoffRepository(
         )
     }
 
+    private fun resetUi(): com.waymate.app.model.ResetUiState {
+        val r = state?.optJSONObject("reset")
+        val recovery = state?.optJSONObject("recovery")
+        val n = navigationUi()
+        val reasons = r?.optJSONArray("blockedReasons")
+        val message =
+            recovery?.optString("message")
+                ?: reasons?.let {
+                    (0 until it.length()).joinToString(" · ") { i -> it.getString(i) }
+                }
+                ?: "초기화 완료를 확인하고 있어요."
+        val reviewed =
+            n.reviewed?.let {
+                if (r != null) JSONObject(it).put("_resetId", r.getString("id")).toString()
+                else null
+            }
+        return com.waymate.app.model.ResetUiState(
+            visible = r != null || recovery != null,
+            status = message + (navigationNotice?.let { "\n" + it } ?: ""),
+            destination = n.destination,
+            canRemove = r != null && n.canRemove,
+            canCancel = r != null && n.canCancel,
+            canRetry = foreground && !loading,
+            reviewed = reviewed,
+        )
+    }
+
     @Volatile private var notice = "서버와 차량 상태를 확인하고 있어요."
 
     private fun errorText(e: Exception): String =
@@ -844,6 +1069,7 @@ class HandoffRepository(
                         },
                 social = socialUi(),
                 navigation = navigationUi(),
+                reset = resetUi(),
                 preparation =
                     current?.optJSONObject("preparationPreview")?.let {
                         JourneyParser.preparation(it)

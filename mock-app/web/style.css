@@ -851,3 +851,8 @@ dialog p {
     scroll-behavior: auto;
   }
 }
+
+.conversation-page #reset-panel {
+  margin: 24px;
+  align-self: start;
+}
