@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
+<title id="title">주차·제한·창 배치·내비 연동의 설계 결정</title>
+<desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
+<rect width="1191" height="842" fill="white"/>
+<rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.1  |  2026-11-11  |  피드백 번호 OV-02</text>
+<line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">주차·제한·창 배치·내비 연동의 설계 결정</text>
+<line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
+<text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">02</text>
+<text x="45" y="150.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">창 배치</text>
+<text x="200" y="147" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">대표 검토안은 순정 내비 + 우측 wayMate. S는 1:1, W는 2:1/1:2에 대응한다. 앱이 우측 고정·비율·내비 상시 표시를 강제할 수 있다고 가정하지 않</text>
+<text x="200" y="167" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">는다.</text>
+<text x="1030" y="145" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">P1 · P2</text>
+<line x1="45" y1="220" x2="1145" y2="220" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="253.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">법령과 플랫폼</text>
+<text x="200" y="250" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">내비 표시 예외를 대화·캐릭터·장소 선택의 포괄 허용으로 확대하지 않는다. 상세 조작은 안전한 주차 상태로 제한한다. 이 문서는 법적 적합성 인증이</text>
+<text x="200" y="270" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">나 출시 심사 결과가 아니다.</text>
+<text x="1030" y="248" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">L1 · P3 · P4</text>
+<line x1="45" y1="323" x2="1145" y2="323" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="356.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">정차와 주행</text>
+<text x="200" y="353" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">신호 대기·속도 0만으로 조작을 열지 않는다. 실제 제한·foreground·fresh 상태를 확인하며 앱이 가려지면 우회하지 않는다. 주행 중 큰 캐릭터·움직임·</text>
+<text x="200" y="373" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">긴 목록은 기본안에서 제외한다.</text>
+<text x="1030" y="351" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">P3 · P4</text>
+<line x1="45" y1="426" x2="1145" y2="426" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="459.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">내비 실행</text>
+<text x="200" y="456" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">선택지의 탐색은 경로 변경이 아니다. &#x27;경유지로 추가/목적지로 설정&#x27;을 명확히 확인한 뒤 요청한다. 사용자가 내비에 주소를 다시 입력하지 않게 연결</text>
+<text x="200" y="476" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">하되 결과 콜백 전에는 성공시키지 않는다.</text>
+<text x="1030" y="454" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">N1 · N2 · N3</text>
+<line x1="45" y1="529" x2="1145" y2="529" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="562.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="15" fill="#242424">범위</text>
+<text x="200" y="559" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">기본 B는 01~05 흐름. E는 이번 요청의 개인 장소/일정 연동 시연으로 고정 질문·가상 장소를 사용한다. 기존 MEETING 전용 명령을 개인 추천에 우</text>
+<text x="200" y="579" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">회 재사용하지 않는다.</text>
+<text x="1030" y="557" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">docs 01~07</text>
+<line x1="45" y1="632" x2="1145" y2="632" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="722.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">공식 문서 확인: 2026-11-11. 실제 SDK·에뮬레이터·차종에서 창 배치와 지원 범위를 추가 검증한다.</text>
+</svg>

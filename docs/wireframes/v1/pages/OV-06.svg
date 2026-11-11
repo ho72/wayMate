@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
+<title id="title">근거·구현 의존사항·피드백 방법</title>
+<desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
+<rect width="1191" height="842" fill="white"/>
+<rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.1  |  2026-11-11  |  피드백 번호 OV-06</text>
+<line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">근거·구현 의존사항·피드백 방법</text>
+<line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
+<text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">56</text>
+<text x="45" y="146.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">L1</text>
+<text x="95" y="147.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">도로교통법 제49조</text>
+<text x="520" y="145.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">확인한 현행 조문은 2026-10-13 시행본. 지리안내 표시 예외와 표시장치 조작 제한은 별개다. 본 목업의 상세 조작은 안전한 주</text>
+<text x="520" y="161.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">차 상태로 한정한다.</text>
+<text x="45" y="209.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">P1</text>
+<text x="95" y="210.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">Pleos Display Layout</text>
+<text x="520" y="208.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">시스템 상태·드라이빙뷰·GNB와 앱 창은 별도 영역이다. 앱 창은 한 개 또는 두 개이며 가로·세로 대응이 필요하다.</text>
+<text x="45" y="272.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">P2</text>
+<text x="95" y="273.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">Pleos Window Policy</text>
+<text x="520" y="271.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">Connect-S 두 앱은 1:1, Connect-W는 2:1 또는 1:2 배치. 새 앱 실행·딥링크는 창을 재배치할 수 있어 우측 고정을 보장하지 않</text>
+<text x="520" y="287.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">는다.</text>
+<text x="45" y="335.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">P3</text>
+<text x="95" y="336.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">Pleos 주행 제한</text>
+<text x="520" y="334.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">DO 미선언 앱은 주행 중 사용할 수 없다. DO 선언 자체도 모든 기능의 허용을 뜻하지 않는다. 실제 제한·카테고리·지역·버전 확인</text>
+<text x="520" y="350.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">이 필요하다.</text>
+<text x="45" y="398.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">P4</text>
+<text x="95" y="399.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">Pleos 주행 안전 설계</text>
+<text x="520" y="397.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">CarUxRestrictions를 기준으로 기능을 제한하고 움직이는 장식을 줄이며 내비 오디오 안내를 우선한다. 이 설계는 주행 중 캐릭터</text>
+<text x="520" y="413.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">재생을 허용한다고 판정하지 않는다.</text>
+<text x="45" y="461.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">N1</text>
+<text x="95" y="462.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">NaviHelper 목적지</text>
+<text x="520" y="460.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">requestRoute는 목적지 설정 요청이다. 호출 반환만으로 완료를 표시하지 않고 이벤트·현재 목적지를 확인한다.</text>
+<text x="45" y="524.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">N2</text>
+<text x="95" y="525.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">NaviHelper 경유지</text>
+<text x="520" y="523.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">addWaypoint·removeWaypoint·getWaypointInfo의 역할을 구분한다. 기존 목적지 유지·자기 경유지 식별·결과 확인은 별도 검증한</text>
+<text x="520" y="539.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">다.</text>
+<text x="45" y="587.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">N3</text>
+<text x="95" y="588.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">NaviHelper 권한</text>
+<text x="520" y="586.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">조회·경로 변경·내비 화면 요청의 권한은 다르다. 실제 제공 SDK와 프로젝트 권한을 시험한 범위만 실제 연동으로 기록한다.</text>
+<text x="45" y="678.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">구현 의존사항</text>
+<line x1="45" y1="690" x2="1145" y2="690" stroke="#B8B8B8" stroke-width="1"/>
+<text x="45" y="711" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">E 확장은 개인 장소/일정 제안의 ID·승인·source/outcome·취소·중복 방지 계약이 필요하다. 04의 MEETING 전용 API를 그대로 실행하지 않는다. 07의 현재 지원 범위는 my_trip 전달까지이며 음성·순정 내비·분할 배치의 실제</text>
+<text x="45" y="729" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">동작 완료를 이 설계도로 대신하지 않는다.</text>
+</svg>
