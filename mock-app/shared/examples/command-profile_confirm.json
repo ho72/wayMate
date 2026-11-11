@@ -12,11 +12,15 @@
     "avatarId": "a-02",
     "speakingStyle": "light_humor",
     "summary": {
-      "interests": ["cafe"],
+      "interests": [
+        "cafe"
+      ],
       "activityPreference": "walk_first_photos_occasional",
       "pace": "relaxed",
       "conversationStyle": "quiet",
-      "expressionPresetIds": ["quiet-companion"]
+      "expressionPresetIds": [
+        "quiet-companion"
+      ]
     }
   }
 }
