@@ -15,6 +15,9 @@ export function project(s, actor, clientId, now) {
     s.vehicle.restrictionKnown &&
     s.vehicle.foreground;
   return {
+    ...(s.navigation
+      ? { navigation: actor === "car" ? s.navigation : null }
+      : {}),
     schemaVersion: 3,
     scope: "preparation-v3",
     storeId: s.storeId,

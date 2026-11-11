@@ -23,6 +23,7 @@ fun HandoffScreen(
     state: HandoffUiState,
     onLoadJourney: () -> Unit,
     onStartTrip: (com.waymate.app.model.Journey?) -> Unit,
+    onOpenNavigation: () -> Unit,
 ) {
     var confirmStart by remember { mutableStateOf(false) }
     var startPreview by remember { mutableStateOf<com.waymate.app.model.Journey?>(null) }
@@ -54,6 +55,7 @@ fun HandoffScreen(
                         color = Forest,
                     )
                 }
+                if (journey != null) Button(onClick = onOpenNavigation) { Text("내비 경유지") }
                 Spacer(Modifier.height(28.dp))
                 if (wide)
                     Row(

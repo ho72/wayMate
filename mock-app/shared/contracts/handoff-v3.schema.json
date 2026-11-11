@@ -373,6 +373,9 @@
                 "pendingAttempts": {
                   "type": "array",
                   "maxItems": 0
+                },
+                "navigationSource": {
+                  "enum": ["real", "unsupported"]
                 }
               },
               "required": ["deviceId", "vehicleSessionId", "pendingAttempts"],
@@ -447,7 +450,7 @@
                   "type": "boolean"
                 },
                 "uiContext": {
-                  "const": "handoff"
+                  "enum": ["handoff", "home", "navigation"]
                 }
               },
               "required": [
@@ -624,6 +627,417 @@
                   "additionalProperties": false
                 }
               ]
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 3
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_OBSERVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "source": {
+                  "const": "real"
+                },
+                "evidence": {
+                  "$ref": "#/$defs/navEvidence"
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "source",
+                "evidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 3
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "reviewed": {
+                  "$ref": "#/$defs/navEvidence"
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "operation",
+                "reviewed",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 3
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_DISPATCH_BEGIN"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "executionRecordId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "dispatchAt": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "attemptId",
+                "executionRecordId",
+                "dispatchAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 3
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_REPORT"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "executionRecordId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reportId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "outcome": {
+                  "enum": ["unknown", "applied", "removed", "not_dispatched"]
+                },
+                "evidence": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/navEvidence"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "attemptId",
+                "executionRecordId",
+                "reportId",
+                "outcome",
+                "evidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 3
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_CANCEL"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["vehicleSessionId", "vehicleEpoch", "attemptId"],
+              "additionalProperties": false
             }
           },
           "required": [
@@ -1116,6 +1530,16 @@
               "type": "null"
             }
           ]
+        },
+        "navigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/navigation"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -1166,6 +1590,22 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "view": {
+                "const": "web"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "navigation": {
+                "type": "null"
+              }
+            }
+          }
         }
       ]
     },
@@ -1200,6 +1640,32 @@
         },
         "state": {
           "$ref": "#/$defs/state"
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "granted": {
+              "const": true
+            },
+            "attemptId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "executionRecordId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "validForMs": {
+              "const": 1500
+            }
+          },
+          "required": [
+            "granted",
+            "attemptId",
+            "executionRecordId",
+            "validForMs"
+          ],
+          "additionalProperties": false
         }
       },
       "required": ["ok", "receipt", "state"],
@@ -1396,7 +1862,10 @@
               ]
             },
             "uiContext": {
-              "const": "handoff"
+              "enum": ["handoff", "home", "navigation"]
+            },
+            "navigationSource": {
+              "enum": ["real", "unsupported"]
             }
           },
           "required": [
@@ -1464,6 +1933,9 @@
         "onboardingRevision": {
           "type": "integer",
           "minimum": 0
+        },
+        "navigation": {
+          "$ref": "#/$defs/navigation"
         }
       },
       "required": [
@@ -1525,6 +1997,9 @@
             },
             "operator": {
               "const": false
+            },
+            "driverWaypoint": {
+              "const": true
             }
           },
           "required": ["myTrip", "connected", "navigation", "operator"],
@@ -1730,6 +2205,316 @@
         "approvedFields",
         "introTemplateId"
       ],
+      "additionalProperties": false
+    },
+    "navPoint": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "poiId": {
+          "type": "string",
+          "maxLength": 200
+        }
+      },
+      "required": ["latitude", "longitude", "name", "poiId"],
+      "additionalProperties": false
+    },
+    "navSnapshot": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "querySeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "startedAt": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completedAt": {
+          "type": "number",
+          "minimum": 0
+        },
+        "destination": {
+          "$ref": "#/$defs/navPoint"
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/navPoint"
+          },
+          "maxItems": 5
+        },
+        "naviMode": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "isRouting": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "sessionId",
+        "querySeq",
+        "startedAt",
+        "completedAt",
+        "destination",
+        "waypoints",
+        "naviMode",
+        "isRouting"
+      ],
+      "additionalProperties": false
+    },
+    "navLookup": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "receivedAt": {
+          "type": "number",
+          "minimum": 0
+        },
+        "poiId": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "point": {
+          "$ref": "#/$defs/navPoint"
+        }
+      },
+      "required": ["sessionId", "receivedAt", "poiId", "point"],
+      "additionalProperties": false
+    },
+    "navEvidence": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "$ref": "#/$defs/navSnapshot"
+        },
+        "second": {
+          "$ref": "#/$defs/navSnapshot"
+        },
+        "lookup": {
+          "$ref": "#/$defs/navLookup"
+        }
+      },
+      "required": ["first", "second", "lookup"],
+      "additionalProperties": false
+    },
+    "navObservation": {
+      "type": "object",
+      "properties": {
+        "vehicleSessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "vehicleEpoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source": {
+          "const": "real"
+        },
+        "evidence": {
+          "$ref": "#/$defs/navEvidence"
+        },
+        "receivedAt": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "vehicleSessionId",
+        "vehicleEpoch",
+        "source",
+        "evidence",
+        "receivedAt"
+      ],
+      "additionalProperties": false
+    },
+    "navAttempt": {
+      "type": "object",
+      "properties": {
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "operation": {
+          "enum": ["add", "remove"]
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "vehicleSessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "vehicleEpoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sdkSessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "baseline": {
+          "$ref": "#/$defs/navPoint"
+        },
+        "before": {
+          "$ref": "#/$defs/navEvidence"
+        },
+        "ownedAttemptId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dispatch": {
+          "enum": ["not_started", "may_have_executed"]
+        },
+        "executionRecordId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dispatchAt": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outcome": {
+          "enum": ["pending", "unknown", "applied", "removed", "not_dispatched"]
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "reportId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              "outcome": {
+                "enum": ["unknown", "applied", "removed", "not_dispatched"]
+              },
+              "evidence": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/navEvidence"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["reportId", "outcome", "evidence"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "attemptId",
+        "operation",
+        "deviceId",
+        "vehicleSessionId",
+        "vehicleEpoch",
+        "sdkSessionId",
+        "baseline",
+        "before",
+        "ownedAttemptId",
+        "dispatch",
+        "executionRecordId",
+        "dispatchAt",
+        "outcome",
+        "reports"
+      ],
+      "additionalProperties": false
+    },
+    "navOwned": {
+      "type": "object",
+      "properties": {
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "destination": {
+          "$ref": "#/$defs/navPoint"
+        },
+        "waypoint": {
+          "$ref": "#/$defs/navPoint"
+        }
+      },
+      "required": ["attemptId", "destination", "waypoint"],
+      "additionalProperties": false
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "observation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/navObservation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/navAttempt"
+          }
+        },
+        "owned": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/navOwned"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["observation", "attempts", "owned"],
       "additionalProperties": false
     }
   }

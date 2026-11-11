@@ -1,3 +1,4 @@
+import { validateNavigation } from "./domain/navigation.mjs";
 import { isDeepStrictEqual } from "node:util";
 import { questionOrder } from "../shared/config/protocol.mjs";
 import { randomUUID } from "node:crypto";
@@ -47,6 +48,7 @@ export function initialState() {
 }
 export function validateStore(s) {
   assertContract("store", s);
+  validateNavigation(s);
   if (!isDeepStrictEqual(s.publicApproval, approval(s)))
     throw new Error("공개 승인 버전 불일치");
   for (const a of Object.values(s.onboarding))

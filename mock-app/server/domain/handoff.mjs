@@ -201,6 +201,7 @@ export function apply(s, c, clientId, now) {
       }
       break;
     case "CAR_SESSION_OPEN":
+      if (s.navigation) s.navigation.observation = null;
       if (s.vehicleActivation && s.vehicleActivation.deviceId !== p.deviceId)
         fail(409, "INVALID_TRANSITION", "이미 시작한 차량에서 이어가 주세요.");
       if (
@@ -210,6 +211,7 @@ export function apply(s, c, clientId, now) {
       )
         fail(409, "INVALID_TRANSITION", "다른 차량이 연결되어 있습니다.");
       s.vehicle = {
+        navigationSource: p.navigationSource ?? "unsupported",
         deviceId: p.deviceId,
         vehicleSessionId: p.vehicleSessionId,
         vehicleEpoch: s.vehicle.vehicleEpoch + 1,

@@ -44,22 +44,24 @@ adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.mock/com.waymat
 | `main/res/values/strings_home.xml` | 시작·홈 문구 |
 | `main/.../platform/navigation` | 순수 내비 검증 정책·POI/원문 좌표 분리·Kotlin 테스트 |
 | `main/.../platform/restrictions` | 실제 차량 제한 현재값·리스너 |
-| `realDebug/.../platform/navigation` | 제품과 분리한 실제 NaviHelper 시험 |
+| `real/.../platform/navigation` | 실제 SDK·AtomicFile 실행 기록·이중 관측 |
+| `mock/.../platform/navigation` | SDK 없이 변경 차단 |
+| `realDebug/.../platform/navigation` | 이전 시험 코드 보존·Activity 비활성 |
 
 Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/reference.png`를 빌드 중 drawable-nodpi로 복사합니다. a-01=승인한 정적 드래곤, a-02=햇살 Canvas입니다. 실제 3D/동작/립싱크·음성은 없습니다.
 
-## 실제 내비 시험
+## 실제 내비 승인
 
-`real` flavor는 공식 Maven의 NaviHelper 3.0.5를 사용하고 의존성 lockfile을 유지합니다. 시험 Activity/권한은 `realDebug`에만 둡니다. 제품의 운전자 승인·서버 NAV_REPORT는 아직 연결하지 않았습니다.
+`real` flavor는 공식 NaviHelper 3.0.5로 본인 여행의 시연 경유지 추가·제거를 지원합니다. [12 차량 앱 내비 승인 연동](../../docs/12_차량_앱_내비_승인_연동.md)에 서버 계약·실행권·기록·복구 제한을 정리했습니다.
 
 ```sh
 adb -s emulator-5554 install -r app/build/outputs/apk/real/debug/app-real-debug.apk
-adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.real/com.waymate.app.platform.navigation.NaviProbeActivity
-adb -s emulator-5554 shell run-as com.waymate.app.real --user 10 cat files/navi-probe.json
+adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.real/com.waymate.app.MainActivity
+adb -s emulator-5554 shell run-as com.waymate.app.real --user 10 cat files/navigation-journal-v1.json
 ```
 
-정차·제한 확인·새 관측·시험 경로 일치·기록 저장을 요구합니다. 물리 호출은 사용자가 누를 때만 한 번 수행하며 unknown/기존 경로/다른 M이면 잠급니다. 앱 재시작·영수증 복원으로 SDK를 재호출하지 않습니다. 앱 데이터 삭제로 시험 journal을 지우면 안 됩니다.
+순정 내비에서 목적지를 설정한 뒤 차량 홈 → 내비 경유지 → 추가/제거 승인으로 진행합니다. 소프트웨어드림센터 고정 장소만 지원하며 원래 목적지는 유지합니다. SDK 원문 0,0은 보존하고 독립 POI 조회·현재 ID·연속 관측을 대조합니다. 기존 시험 Activity는 병렬 변경을 막기 위해 비활성화했으며 당시 코드·journal·[11 검증 기록](../../docs/11_실제_내비_좌표_및_경유지_검증.md)은 보존합니다. 앱 데이터나 실행 기록을 삭제해서 잠금을 우회하지 마세요.
 
-D는 좌표로 요청하고 M은 독립 조회로 위치를 먼저 확인한 POI ID를 사용해, 실제 추가·제거·D 유지·앱 재시작 무재호출을 확인했습니다. M 좌표 0,0 원문은 보존하고 현재 M ID와 SDK 위치 조회 근거를 대조합니다. **M POI 위치 확인 → 시험 D 설정(이미 D만 있으면 생략) → M 추가 → 필요 시 재시작/POI 재조회 → 내 M만 제거** 순서입니다. 정책·제약·실제 증거는 [11](../../docs/11_실제_내비_좌표_및_경유지_검증.md)을 참고하세요.
+mock/real 앱은 서로 다른 기기 ID입니다. `mock-app`에서 `WAYMATE_STATE_FILE=runtime/state-driver-navigation.json npm start`로 별도 상태를 사용하면 기존 mock 여행을 그대로 보존하고 real 앱의 여행을 시작할 수 있습니다.
 
-CI는 mock/real debug APK와 Lint를 검사합니다. 빌드 성공은 에뮬레이터·실제 SDK 추가/제거·실차·스토어 통과를 뜻하지 않습니다.
+CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬레이터 증거는 12 문서에 링크합니다. 실차·스토어·주행 중 전환 검증은 별도입니다.

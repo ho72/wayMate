@@ -1,0 +1,557 @@
+{
+  "recordedAt": "2026-11-11T04:51:57.370216+00:00",
+  "context": "driver_waypoint",
+  "source": "real",
+  "device": "Pleos Connect 2.1 API34 emulator-5554 user10",
+  "naviHelper": "3.0.5",
+  "appPackage": "com.waymate.app.real",
+  "server": {
+    "storeId": "a532cbca-f355-4d1b-85fd-5a78060e1428",
+    "runId": "b209d78a-a9f6-42d9-8542-215d6be5b1c6",
+    "vehicleActivation": {
+      "origin": "demo_preset",
+      "profileVersion": 1,
+      "tripVersion": 1,
+      "deviceId": "9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+      "vehicleSessionId": "7a99776b-780a-4f1f-a207-6037dd8c5192",
+      "confirmedAt": "2026-11-11T04:45:18.112Z"
+    },
+    "navigation": {
+      "observation": null,
+      "attempts": [
+        {
+          "attemptId": "c46b8887-6b18-45a3-a8ec-f1ec905b1362",
+          "operation": "add",
+          "deviceId": "9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+          "vehicleSessionId": "7a99776b-780a-4f1f-a207-6037dd8c5192",
+          "vehicleEpoch": 1,
+          "sdkSessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+          "baseline": {
+            "latitude": 37.48544722,
+            "longitude": 127.03636666,
+            "name": "42dot",
+            "poiId": ""
+          },
+          "before": {
+            "first": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "querySeq": 43,
+              "startedAt": 4614439,
+              "completedAt": 4615450,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "querySeq": 44,
+              "startedAt": 4616945,
+              "completedAt": 4617950,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "receivedAt": 4511967,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          },
+          "ownedAttemptId": null,
+          "dispatch": "may_have_executed",
+          "executionRecordId": "36bf778c-c4fb-4e11-ba77-9c480c63d3b2",
+          "dispatchAt": 4618075,
+          "outcome": "applied",
+          "reports": [
+            {
+              "reportId": "073d254a-5ec6-48cb-ab89-89de1813175c",
+              "outcome": "applied",
+              "evidence": {
+                "first": {
+                  "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+                  "querySeq": 49,
+                  "startedAt": 4624460,
+                  "completedAt": 4625468,
+                  "destination": {
+                    "latitude": 37.48544722,
+                    "longitude": 127.03636666,
+                    "name": "42dot",
+                    "poiId": ""
+                  },
+                  "waypoints": [
+                    {
+                      "latitude": 0,
+                      "longitude": 0,
+                      "name": "소프트웨어드림센터",
+                      "poiId": "36khp2hdj2cfcm5nqhe3"
+                    }
+                  ],
+                  "naviMode": "ROUTE_GUIDING",
+                  "isRouting": false
+                },
+                "second": {
+                  "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+                  "querySeq": 50,
+                  "startedAt": 4626964,
+                  "completedAt": 4627970,
+                  "destination": {
+                    "latitude": 37.48544722,
+                    "longitude": 127.03636666,
+                    "name": "42dot",
+                    "poiId": ""
+                  },
+                  "waypoints": [
+                    {
+                      "latitude": 0,
+                      "longitude": 0,
+                      "name": "소프트웨어드림센터",
+                      "poiId": "36khp2hdj2cfcm5nqhe3"
+                    }
+                  ],
+                  "naviMode": "ROUTE_GUIDING",
+                  "isRouting": false
+                },
+                "lookup": {
+                  "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+                  "receivedAt": 4511967,
+                  "poiId": "36khp2hdj2cfcm5nqhe3",
+                  "point": {
+                    "latitude": 37.4127749,
+                    "longitude": 127.0947566,
+                    "name": "소프트웨어드림센터",
+                    "poiId": "36khp2hdj2cfcm5nqhe3"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "attemptId": "0dc89288-5db5-480a-8e3f-72ea7006595d",
+          "operation": "remove",
+          "deviceId": "9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+          "vehicleSessionId": "989f18c0-7fdc-4357-aaa9-3c500bbc99f6",
+          "vehicleEpoch": 2,
+          "sdkSessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+          "baseline": {
+            "latitude": 37.48544722,
+            "longitude": 127.03636666,
+            "name": "42dot",
+            "poiId": ""
+          },
+          "before": {
+            "first": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "querySeq": 30,
+              "startedAt": 4759422,
+              "completedAt": 4760430,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "querySeq": 31,
+              "startedAt": 4761928,
+              "completedAt": 4762935,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "receivedAt": 4686616,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          },
+          "ownedAttemptId": "c46b8887-6b18-45a3-a8ec-f1ec905b1362",
+          "dispatch": "may_have_executed",
+          "executionRecordId": "324687f1-803f-494b-be9d-82090d8b78ec",
+          "dispatchAt": 4763320,
+          "outcome": "removed",
+          "reports": [
+            {
+              "reportId": "ed07a40a-d370-446c-979a-8c6276af083b",
+              "outcome": "removed",
+              "evidence": {
+                "first": {
+                  "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+                  "querySeq": 37,
+                  "startedAt": 4771948,
+                  "completedAt": 4772954,
+                  "destination": {
+                    "latitude": 37.48544722,
+                    "longitude": 127.03636666,
+                    "name": "42dot",
+                    "poiId": ""
+                  },
+                  "waypoints": [],
+                  "naviMode": "ROUTE_GUIDING",
+                  "isRouting": false
+                },
+                "second": {
+                  "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+                  "querySeq": 38,
+                  "startedAt": 4774452,
+                  "completedAt": 4775459,
+                  "destination": {
+                    "latitude": 37.48544722,
+                    "longitude": 127.03636666,
+                    "name": "42dot",
+                    "poiId": ""
+                  },
+                  "waypoints": [],
+                  "naviMode": "ROUTE_GUIDING",
+                  "isRouting": false
+                },
+                "lookup": {
+                  "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+                  "receivedAt": 4686616,
+                  "poiId": "36khp2hdj2cfcm5nqhe3",
+                  "point": {
+                    "latitude": 37.4127749,
+                    "longitude": 127.0947566,
+                    "name": "소프트웨어드림센터",
+                    "poiId": "36khp2hdj2cfcm5nqhe3"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "owned": null
+    }
+  },
+  "localJournal": {
+    "records": [
+      {
+        "scope": "a532cbca-f355-4d1b-85fd-5a78060e1428:b209d78a-a9f6-42d9-8542-215d6be5b1c6:9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+        "attemptId": "c46b8887-6b18-45a3-a8ec-f1ec905b1362",
+        "executionRecordId": "36bf778c-c4fb-4e11-ba77-9c480c63d3b2",
+        "sdkSessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+        "operation": "add",
+        "baseline": {
+          "latitude": 37.48544722,
+          "longitude": 127.03636666,
+          "name": "42dot",
+          "poiId": ""
+        },
+        "before": {
+          "first": {
+            "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+            "querySeq": 43,
+            "startedAt": 4614439,
+            "completedAt": 4615450,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "second": {
+            "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+            "querySeq": 44,
+            "startedAt": 4616945,
+            "completedAt": 4617950,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "lookup": {
+            "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+            "receivedAt": 4511967,
+            "poiId": "36khp2hdj2cfcm5nqhe3",
+            "point": {
+              "latitude": 37.4127749,
+              "longitude": 127.0947566,
+              "name": "소프트웨어드림센터",
+              "poiId": "36khp2hdj2cfcm5nqhe3"
+            }
+          }
+        },
+        "phase": "may_have_executed",
+        "sdkCalls": 1,
+        "dispatchAt": 4618114,
+        "report": {
+          "reportId": "073d254a-5ec6-48cb-ab89-89de1813175c",
+          "attemptId": "c46b8887-6b18-45a3-a8ec-f1ec905b1362",
+          "executionRecordId": "36bf778c-c4fb-4e11-ba77-9c480c63d3b2",
+          "outcome": "applied",
+          "evidence": {
+            "first": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "querySeq": 49,
+              "startedAt": 4624460,
+              "completedAt": 4625468,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "querySeq": 50,
+              "startedAt": 4626964,
+              "completedAt": 4627970,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "f359af3a-b8bb-4655-8234-ef7c7cc8a0c8",
+              "receivedAt": 4511967,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          }
+        },
+        "acknowledged": true
+      },
+      {
+        "scope": "a532cbca-f355-4d1b-85fd-5a78060e1428:b209d78a-a9f6-42d9-8542-215d6be5b1c6:9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+        "attemptId": "0dc89288-5db5-480a-8e3f-72ea7006595d",
+        "executionRecordId": "324687f1-803f-494b-be9d-82090d8b78ec",
+        "sdkSessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+        "operation": "remove",
+        "baseline": {
+          "latitude": 37.48544722,
+          "longitude": 127.03636666,
+          "name": "42dot",
+          "poiId": ""
+        },
+        "before": {
+          "first": {
+            "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+            "querySeq": 30,
+            "startedAt": 4759422,
+            "completedAt": 4760430,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [
+              {
+                "latitude": 0,
+                "longitude": 0,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            ],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "second": {
+            "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+            "querySeq": 31,
+            "startedAt": 4761928,
+            "completedAt": 4762935,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [
+              {
+                "latitude": 0,
+                "longitude": 0,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            ],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "lookup": {
+            "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+            "receivedAt": 4686616,
+            "poiId": "36khp2hdj2cfcm5nqhe3",
+            "point": {
+              "latitude": 37.4127749,
+              "longitude": 127.0947566,
+              "name": "소프트웨어드림센터",
+              "poiId": "36khp2hdj2cfcm5nqhe3"
+            }
+          }
+        },
+        "phase": "may_have_executed",
+        "sdkCalls": 1,
+        "dispatchAt": 4763364,
+        "report": {
+          "reportId": "ed07a40a-d370-446c-979a-8c6276af083b",
+          "attemptId": "0dc89288-5db5-480a-8e3f-72ea7006595d",
+          "executionRecordId": "324687f1-803f-494b-be9d-82090d8b78ec",
+          "outcome": "removed",
+          "evidence": {
+            "first": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "querySeq": 37,
+              "startedAt": 4771948,
+              "completedAt": 4772954,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "querySeq": 38,
+              "startedAt": 4774452,
+              "completedAt": 4775459,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "62e56c8b-3901-4651-ad37-2cda288d0b5c",
+              "receivedAt": 4686616,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          }
+        },
+        "acknowledged": true
+      }
+    ]
+  },
+  "checks": {
+    "driverApprovedThroughMainApp": true,
+    "addSdkCalls": 1,
+    "removeSdkCalls": 1,
+    "restartBetweenAddAndRemove": true,
+    "restartAddedCalls": 0,
+    "originalDestinationPreserved": true,
+    "finalWaypointListEmpty": true,
+    "realDrivingTransitionTested": false,
+    "realCarTested": false,
+    "meetingFlowImplemented": false
+  },
+  "screenshots": [
+    "driver-waypoint-added-restored-2026-11-11.png",
+    "driver-waypoint-removed-2026-11-11.png",
+    "driver-waypoint-native-added-2026-11-11.png",
+    "driver-waypoint-native-removed-2026-11-11.png"
+  ],
+  "finalValidation": {
+    "nodeTests": 61,
+    "kotlinTests": 9,
+    "apkVariants": [
+      "mockDebug",
+      "realDebug"
+    ],
+    "lint": {
+      "errors": 0,
+      "warningsPerVariant": 15
+    },
+    "realApkSha256": "42c002b001dc4c1abff302b5a01c7755bca8a98ae9bef6b6b5ce0fbec22e5887"
+  }
+}

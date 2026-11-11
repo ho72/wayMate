@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.waymate.app.app.WayMateApp
 import com.waymate.app.data.repository.HandoffRepository
+import com.waymate.app.platform.navigation.createNavigationDriver
 import com.waymate.app.platform.restrictions.VehicleRestrictions
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.theme.WayMateTheme
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         repository =
-            HandoffRepository(applicationContext) {
+            HandoffRepository(applicationContext, createNavigationDriver(applicationContext)) {
                 ui =
                     HandoffUiState(
                         it.loadEnabled,
@@ -30,10 +31,23 @@ class MainActivity : ComponentActivity() {
                         it.retryPending,
                         it.startEnabled,
                         it.preparation,
+                        it.navigation,
                     )
             }
         restrictions = VehicleRestrictions(this, repository::restriction)
-        setContent { WayMateTheme { WayMateApp(ui, repository::load, repository::startTrip) } }
+        setContent {
+            WayMateTheme {
+                WayMateApp(
+                    ui,
+                    repository::load,
+                    repository::startTrip,
+                    repository::openNavigation,
+                    repository::closeNavigation,
+                    repository::approveNavigation,
+                    repository::cancelNavigation,
+                )
+            }
+        }
     }
 
     override fun onResume() {

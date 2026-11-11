@@ -3,6 +3,7 @@ import { atomicSave } from "./store.mjs";
 import { assertContract } from "./validation.mjs";
 import { apply, fail, fresh, approval } from "./domain/handoff.mjs";
 import { validateStore } from "./state.mjs";
+import { applyNavigation } from "./domain/navigation.mjs";
 import { project } from "./projections/state.mjs";
 export function coordinator(
   file,
@@ -37,11 +38,13 @@ export function coordinator(
     if (unavailable) fail(503, "UNAVAILABLE", "서버 저장소 복구가 필요합니다.");
     if (booting) {
       if (
+        state.navigation?.observation ||
         state.vehicle.seenAt !== null ||
         state.vehicle.restrictionKnown ||
         state.vehicle.foreground
       ) {
         const next = structuredClone(state);
+        if (next.navigation) next.navigation.observation = null;
         next.vehicle.seenAt = null;
         next.vehicle.restrictionKnown = false;
         next.vehicle.foreground = false;
@@ -114,17 +117,22 @@ export function coordinator(
         }
         if (c.runId !== state.runId || c.runSeq !== state.runSeq)
           fail(409, "RUN_CHANGED", "회차가 바뀌었습니다.");
-        if (c.type !== "CAR_STATUS" && c.expectedVersion !== state.version)
+        if (
+          !["CAR_STATUS", "NAV_OBSERVE", "NAV_REPORT"].includes(c.type) &&
+          c.expectedVersion !== state.version
+        )
           fail(409, "STALE_STATE", "최신 상태를 읽고 다시 확인하세요.");
         const next = structuredClone(state);
-        apply(next, c, id, now());
+        const execution = c.type.startsWith("NAV_")
+          ? applyNavigation(next, c, now())
+          : (apply(next, c, id, now()), undefined);
         // Heartbeat receipt persists, but identical restriction facts do not advance business version.
         const heartbeat =
           c.type === "CAR_STATUS" &&
           ["restrictionKnown", "restricted", "foreground"].every(
             (k) => next.vehicle[k] === state.vehicle[k],
           );
-        if (!heartbeat) next.version++;
+        if (!heartbeat && c.type !== "NAV_OBSERVE") next.version++;
         const receipt = {
           runId: c.runId,
           commandId: c.commandId,
@@ -137,6 +145,7 @@ export function coordinator(
         validateStore(next);
         await save(next);
         return assertContract("success", {
+          ...(execution ? { execution } : {}),
           ok: true,
           receipt,
           state: projection(actor, id),

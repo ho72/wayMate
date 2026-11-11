@@ -88,7 +88,8 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
           capabilities: {
             myTrip: true,
             connected: false,
-            navigation: false,
+            navigation: false, // Full meeting navigation is still unsupported.
+            driverWaypoint: true,
             operator: false,
           },
         });
