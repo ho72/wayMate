@@ -1,3 +1,4 @@
+import { contentProjection, contentBindings } from "./content.mjs";
 import { resetView, lastCompletedReset, resetBindings } from "./reset.mjs";
 import { socialBindings, socialProjection, linked } from "./social.mjs";
 import { allowed, fresh, canLoad, preparation, approval } from "./handoff.mjs";
@@ -33,6 +34,7 @@ export function project(s, actor, clientId, now) {
         : [],
     recovery: s.recovery ?? null,
     social: social,
+    content: contentProjection(s, actor, now),
     schemaVersion: 4,
     scope: "mobile-meeting-v4",
     storeId: s.storeId,
@@ -113,7 +115,10 @@ export function project(s, actor, clientId, now) {
         ]),
       ),
       ...(!s.reset && !s.recovery && (own || actor === "operator")
-        ? socialBindings(s, actor, now)
+        ? {
+            ...socialBindings(s, actor, now),
+            ...contentBindings(s, actor, now),
+          }
         : {}),
       ...resetBindings(s, actor, clientId, now),
     },

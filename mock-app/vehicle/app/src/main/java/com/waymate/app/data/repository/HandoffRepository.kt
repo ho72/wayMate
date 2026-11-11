@@ -79,6 +79,7 @@ class HandoffRepository(
     private var candidate = preferences.getString("candidate", null)?.let(::JSONObject)
     @Volatile private var loaded: Journey? = null
     @Volatile private var networkReady = false
+    @Volatile private var contentVisible = false
     @Volatile private var meetingVisible = false
     @Volatile private var socialNotice: String? = null
     @Volatile private var navigationVisible = false
@@ -180,6 +181,7 @@ class HandoffRepository(
             stopPending = null
             candidate = null
             loaded = null
+            contentVisible = false
             meetingVisible = false
             navigationVisible = false
             navigationNotice = null
@@ -197,9 +199,8 @@ class HandoffRepository(
     private fun recordedScopeAllowed(rec: JSONObject): Boolean {
         val report = rec.optJSONObject("report")
         val current = state
-        val currentScope = current?.let {
-            it.getString("storeId") + ":" + it.getString("runId") + ":" + deviceId
-        }
+        val currentScope =
+            current?.let { it.getString("storeId") + ":" + it.getString("runId") + ":" + deviceId }
         val completed = current?.optJSONArray("completedNavigation")
         val proven =
             completed != null &&
@@ -239,6 +240,7 @@ class HandoffRepository(
             lifecycleGeneration++
             navIntent = null
             navigation.abandonGrant()
+            contentVisible = false
             meetingVisible = false
             navigationVisible = r.optBoolean("navigationRequired")
             loaded = null
@@ -559,7 +561,38 @@ class HandoffRepository(
         }
     }
 
+    fun openContent() {
+        contentVisible = loaded != null
+        show()
+    }
+
+    fun closeContent() {
+        contentVisible = false
+        show()
+    }
+
+    fun markMessageRead(threadId: String) {
+        if (!foreground || !contentVisible || restricted != false) return
+        val current = state ?: return
+        val threads = current.optJSONObject("content")?.optJSONArray("threads") ?: return
+        if (
+            (0 until threads.length()).any {
+                threads.getJSONObject(it).getString("id") == threadId &&
+                    !threads.getJSONObject(it).isNull("response")
+            }
+        ) {
+            check(
+                preferences
+                    .edit()
+                    .putBoolean("content.read.${current.getString("runId")}.$threadId", true)
+                    .commit()
+            )
+            show()
+        }
+    }
+
     fun openNavigation() {
+        contentVisible = false
         navigationVisible = true
         navigationNotice = null
         show()
@@ -868,6 +901,7 @@ class HandoffRepository(
     }
 
     fun openMeeting() {
+        contentVisible = false
         meetingVisible = true
         socialNotice = null
         show()
@@ -967,7 +1001,9 @@ class HandoffRepository(
                 "PROFILE_PRIVATE",
             )) bindings?.optJSONObject(type)?.let { actions[type] = it.toString() }
         pending
-            ?.takeIf { it.getString("type") in listOf("MEETING_PROPOSE", "NAV_APPROVE") }
+            ?.takeIf {
+                it.getString("type") in listOf("MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND")
+            }
             ?.let { original ->
                 actions["CANCEL_PENDING_COMMAND"] =
                     JSONObject()
@@ -1006,6 +1042,86 @@ class HandoffRepository(
             cleanupRequired = s?.optBoolean("cleanupRequired") == true,
             retryPending = pending != null,
             canRetry = foreground && restricted == false && !loading,
+        )
+    }
+
+    private fun contentUi(): com.waymate.app.model.ContentUiState {
+        val current = state
+        val c = current?.optJSONObject("content")
+        fun list(key: String): List<JSONObject> =
+            c?.optJSONArray(key)?.let { a -> (0 until a.length()).map { a.getJSONObject(it) } }
+                ?: emptyList()
+        fun text(o: JSONObject, key: String): String? =
+            if (o.isNull(key)) null else o.optString(key).takeIf { it.isNotEmpty() }
+        val actions = mutableMapOf<String, String>()
+        current?.optJSONObject("actionBindings")?.let { bindings ->
+            bindings.keys().forEach { key ->
+                if (key.startsWith("MESSAGE_"))
+                    actions[key] = bindings.getJSONObject(key).toString()
+            }
+        }
+        socialUi().actions["CANCEL_PENDING_COMMAND"]?.let { actions["CANCEL_PENDING_COMMAND"] = it }
+        val run = current?.optString("runId") ?: ""
+        return com.waymate.app.model.ContentUiState(
+            visible = contentVisible,
+            blocked =
+                ContentAccessPolicy.blocked(
+                    foreground,
+                    restricted,
+                    current?.optJSONObject("vehicle")?.optBoolean("fresh") == true,
+                    current?.optJSONObject("vehicle")?.optBoolean("restrictionKnown") == true,
+                    current?.optJSONObject("vehicle")?.optBoolean("restricted") != false,
+                    current?.optJSONObject("vehicle")?.optBoolean("foreground") == true,
+                    current?.optJSONObject("social")?.optBoolean("testRestricted") == true,
+                ),
+            scope = run + ":" + (c?.optString("connectionId") ?: "my_trip"),
+            peerAlias = c?.optString("peerAlias"),
+            questions =
+                list("questions").map {
+                    com.waymate.app.model.ContentQuestion(
+                        it.getString("id"),
+                        it.getString("text"),
+                        it.getString("answer"),
+                        it.getBoolean("known"),
+                    )
+                },
+            messages =
+                list("messages").map {
+                    com.waymate.app.model.ContentPreset(it.getString("id"), it.getString("text"))
+                },
+            replies =
+                list("replies").map {
+                    com.waymate.app.model.ContentPreset(it.getString("id"), it.getString("text"))
+                },
+            threads =
+                list("threads").map { t ->
+                    val response = text(t, "response")
+                    com.waymate.app.model.ContentThread(
+                        t.getString("id"),
+                        t.getString("status"),
+                        t.getString("text"),
+                        response,
+                        text(t, "followup"),
+                        text(t, "reply"),
+                        response != null &&
+                            !preferences.getBoolean("content.read.$run.${t.getString("id")}", false),
+                    )
+                },
+            actions = actions,
+            canInteract =
+                foreground &&
+                    restricted == false &&
+                    networkReady &&
+                    !loading &&
+                    ResetNavigationPolicy.mayQueueBehindObservation(pending?.optString("type")) &&
+                    loaded != null &&
+                    (c?.optBoolean("canInteract") ?: true) &&
+                    state?.optJSONObject("reset") == null &&
+                    state?.optJSONObject("recovery") == null,
+            notice = socialNotice,
+            pendingType = pending?.optString("type"),
+            canRetry = foreground && restricted == false && !loading,
+            replyDone = c?.optString("replyDone") ?: "",
         )
     }
 
@@ -1067,6 +1183,7 @@ class HandoffRepository(
                         (0 until actions.length()).any {
                             actions.getString(it) == "CAR_START_TRIP"
                         },
+                content = contentUi(),
                 social = socialUi(),
                 navigation = navigationUi(),
                 reset = resetUi(),

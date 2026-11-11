@@ -26,6 +26,7 @@ fun HandoffScreen(
     onOpenNavigation: () -> Unit,
     onOpenMeeting: () -> Unit,
     onSocialAction: (String, String) -> Unit,
+    onOpenContent: () -> Unit,
 ) {
     var socialReview by remember { mutableStateOf<Pair<String, String>?>(null) }
     var confirmStart by remember { mutableStateOf(false) }
@@ -61,6 +62,14 @@ fun HandoffScreen(
                 }
                 if (journey != null) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Button(onClick = onOpenContent) {
+                            Text(
+                                if (state.content.peerAlias != null)
+                                    if (state.content.threads.any { it.unread }) "새 답장 · 대화 고르기"
+                                    else "대화 고르기"
+                                else "내 친구와 이야기하기"
+                            )
+                        }
                         if (state.social.peerAlias != null || state.social.meetingStatus != "none")
                             Button(onClick = onOpenMeeting) {
                                 Text(

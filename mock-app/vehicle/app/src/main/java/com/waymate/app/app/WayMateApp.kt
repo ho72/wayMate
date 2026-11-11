@@ -1,6 +1,8 @@
 package com.waymate.app.app
 
 import androidx.compose.runtime.Composable
+import com.waymate.app.platform.speech.SpeechState
+import com.waymate.app.ui.screens.handoff.ContentScreen
 import com.waymate.app.ui.screens.handoff.HandoffScreen
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.screens.handoff.MeetingScreen
@@ -20,9 +22,28 @@ fun WayMateApp(
     onCloseMeeting: () -> Unit,
     onSocialAction: (String, String) -> Unit,
     onRetry: () -> Unit,
+    onOpenContent: () -> Unit,
+    onCloseContent: () -> Unit,
+    onMessageRead: (String) -> Unit,
+    speech: SpeechState,
+    onSpeak: (String) -> Unit,
+    onStopSpeech: () -> Unit,
 ) {
     if (state.reset.visible)
         ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry)
+    else if (state.content.visible)
+        ContentScreen(
+            state.content,
+            state.journey,
+            speech,
+            onSpeak,
+            onStopSpeech,
+            onSocialAction,
+            onMessageRead,
+            onCloseContent,
+            onOpenMeeting,
+            onRetry,
+        )
     else if (state.navigation.visible)
         NavigationScreen(
             state.navigation,
@@ -43,5 +64,6 @@ fun WayMateApp(
             onOpenNavigation = onOpenNavigation,
             onOpenMeeting = onOpenMeeting,
             onSocialAction = onSocialAction,
+            onOpenContent = onOpenContent,
         )
 }

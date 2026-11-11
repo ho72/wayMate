@@ -1,3 +1,4 @@
+import { closeContent, messageResponses } from "./content.mjs";
 import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual as equal } from "node:util";
 import { fail, parked, sources } from "./handoff.mjs";
@@ -8,6 +9,20 @@ export const peer = Object.freeze({
   description: "바다를 먼저 보고, 조용한 카페에서 쉬는 여행을 좋아해요.",
   interests: ["sea_walk", "cafe"],
   speakingStyle: "calm",
+  approvedFields: [
+    "alias",
+    "avatarId",
+    "interests",
+    "pace",
+    "activityPreference",
+    "conversationStyle",
+    "expressionPresetIds",
+    "speakingStyle",
+  ],
+  pace: "relaxed",
+  activityPreference: "walk_first_photos_occasional",
+  conversationStyle: "quiet",
+  expressionPresetIds: ["slow_ok"],
 });
 export const initialSocial = () => ({
   connection: {
@@ -184,6 +199,7 @@ function targetConnection(s, t) {
     fail(409, "STALE_STATE", "현재 연결을 다시 확인해 주세요.");
 }
 function cancelMeeting(s) {
+  closeContent(s);
   const m = s.social.meeting;
   if (["proposed", "confirmed"].includes(m.status)) {
     m.status = "cancelled";
@@ -263,6 +279,7 @@ export function applySocial(s, c, id, now) {
       );
     m.bConsent = p.decision === "accept";
     m.status = p.decision === "accept" ? "confirmed" : "declined";
+    if (m.status === "declined") closeContent(s);
     return;
   }
   const actions = socialBindings(s, a, now);
@@ -380,13 +397,14 @@ export function applySocial(s, c, id, now) {
       m.status = "declined";
       con.status = "ended";
       con.version++;
+      closeContent(s);
       break;
   }
 }
 export function socialProjection(s, actor, now) {
   const c = s.social.connection,
     m = s.social.meeting;
-  const pending = [];
+  const pending = messageResponses(s, actor, now);
   if (actor === "operator" && c.status === "requested")
     pending.push({
       kind: "connection",
@@ -436,6 +454,7 @@ export function socialProjection(s, actor, now) {
     connection: structuredClone(c),
     meeting: structuredClone(m),
     peer: activePeer || (actor === "web" && publicReady(s)) ? peer : null,
+    testRestricted: s.social.testRestricted,
     tripShareApproved: s.social.tripShareApproved,
     approvedFields: s.social.approvedFields,
     candidates,
@@ -455,7 +474,7 @@ export function cancelPending(s, c, id) {
   const permitted =
     c.actor === "web"
       ? ["CONNECT_REQUEST"]
-      : ["MEETING_PROPOSE", "NAV_APPROVE"];
+      : ["MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND"];
   if (!permitted.includes(originalType))
     fail(403, "ACTOR_FORBIDDEN", "취소할 수 있는 생성 요청이 아니에요.");
   const hit = s.receipts[`${s.runId}:${c.actor}:${originalCommandId}`];

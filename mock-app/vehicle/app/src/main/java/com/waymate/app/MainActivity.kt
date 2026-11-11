@@ -10,20 +10,26 @@ import com.waymate.app.app.WayMateApp
 import com.waymate.app.data.repository.HandoffRepository
 import com.waymate.app.platform.navigation.createNavigationDriver
 import com.waymate.app.platform.restrictions.VehicleRestrictions
+import com.waymate.app.platform.speech.AgentSpeech
+import com.waymate.app.platform.speech.SpeechState
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.theme.WayMateTheme
 
 class MainActivity : ComponentActivity() {
     private var ui by mutableStateOf(HandoffUiState())
+    private lateinit var speech: AgentSpeech
+    private var speechState by mutableStateOf(SpeechState())
     private lateinit var repository: HandoffRepository
     private lateinit var restrictions: VehicleRestrictions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        speech = AgentSpeech(applicationContext) { speechState = it }
         repository =
             HandoffRepository(applicationContext, createNavigationDriver(applicationContext)) {
                 ui =
                     HandoffUiState(
+                        it.content,
                         it.loadEnabled,
                         it.isLoading,
                         it.notice,
@@ -36,7 +42,11 @@ class MainActivity : ComponentActivity() {
                         it.reset,
                     )
             }
-        restrictions = VehicleRestrictions(this, repository::restriction)
+        restrictions =
+            VehicleRestrictions(this) { value ->
+                if (value != false) speech.interrupt()
+                repository.restriction(value)
+            }
         setContent {
             WayMateTheme {
                 WayMateApp(
@@ -51,6 +61,12 @@ class MainActivity : ComponentActivity() {
                     repository::closeMeeting,
                     repository::socialAction,
                     repository::retryCurrent,
+                    repository::openContent,
+                    repository::closeContent,
+                    repository::markMessageRead,
+                    speechState,
+                    speech::speak,
+                    speech::interrupt,
                 )
             }
         }
@@ -63,12 +79,14 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onPause() {
+        speech.interrupt()
         repository.pause()
         restrictions.stop()
         super.onPause()
     }
 
     override fun onDestroy() {
+        speech.close()
         repository.close()
         super.onDestroy()
     }

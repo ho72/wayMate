@@ -1,3 +1,4 @@
+import { applyContent } from "./content.mjs";
 import { resetBindings } from "./reset.mjs";
 import {
   socialTypes,
@@ -132,6 +133,11 @@ function activate(s, origin) {
 }
 export function apply(s, c, clientId, now) {
   const p = c.payload;
+  if (
+    ["MESSAGE_SEND", "MESSAGE_REPLY"].includes(c.type) ||
+    (c.type === "B_RESPONSE" && c.target.kind === "message")
+  )
+    return applyContent(s, c, now);
   if (socialTypes.has(c.type)) return applySocial(s, c, clientId, now);
   if (c.actor === "web") {
     if (s.clientId && s.clientId !== clientId)

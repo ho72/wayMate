@@ -146,6 +146,49 @@ try {
     },
     { file: "health.json", definition: "health", value: await api.health() },
   );
+  let contentBinding = (await api.read("car", null)).actionBindings
+    .MESSAGE_SEND_M1;
+  await command(
+    contentBinding.commandType,
+    contentBinding.payload,
+    "car",
+    "message-send",
+    contentBinding.target,
+  );
+  fixtures.push({
+    file: "state-car-message-waiting.json",
+    definition: "state",
+    value: await api.read("car", null),
+  });
+  const messageTarget = (
+    await api.read("operator", null)
+  ).social.pendingResponses.find((t) => t.kind === "message");
+  await command(
+    "B_RESPONSE",
+    { decision: "reply" },
+    "operator",
+    "message-b-reply",
+    messageTarget,
+  );
+  fixtures.push({
+    file: "state-car-message-received.json",
+    definition: "state",
+    value: await api.read("car", null),
+  });
+  contentBinding = (await api.read("car", null)).actionBindings
+    .MESSAGE_REPLY_R1;
+  await command(
+    contentBinding.commandType,
+    contentBinding.payload,
+    "car",
+    "message-followup",
+    contentBinding.target,
+  );
+  fixtures.push({
+    file: "state-car-message-replied.json",
+    definition: "state",
+    value: await api.read("car", null),
+  });
   await act("MEETING_PROPOSE", "car");
   fixtures.push({
     file: "state-car-meeting-waiting.json",
@@ -165,18 +208,58 @@ try {
     definition: "state",
     value: await api.read("car", null),
   });
-  let resetState=await api.read("operator",null);
-  await command("RESET_BEGIN",{},"operator","reset-begin-car",{runId:resetState.runId});
-  fixtures.push({file:"state-car-reset-waiting.json",definition:"state",value:await api.read("car",null)});
-  let resetBinding=(await api.read("car",null)).actionBindings.RESET_ACK;
-  const resetAck=await command(resetBinding.commandType,resetBinding.payload,"car","reset-ack-car",resetBinding.target);
-  fixtures.push({file:"success-reset-ack.json",definition:"success",value:resetAck},{file:"state-new-run.json",definition:"state",value:await api.read("web",client)});
-  await command("ONBOARDING_ANSWER",{questionId:"interests",answerText:"직접 입력한 새 회차",inputSource:"typed"},"web","reset-web-seed");
-  resetState=await api.read("operator",null);
-  await command("RESET_BEGIN",{},"operator","reset-begin-web",{runId:resetState.runId});
-  fixtures.push({file:"state-web-reset-waiting.json",definition:"state",value:await api.read("web",client)});
-  resetBinding=(await api.read("web",client)).actionBindings.RESET_ACK;
-  await command(resetBinding.commandType,resetBinding.payload,"web","reset-ack-web",resetBinding.target);
+  let resetState = await api.read("operator", null);
+  await command("RESET_BEGIN", {}, "operator", "reset-begin-car", {
+    runId: resetState.runId,
+  });
+  fixtures.push({
+    file: "state-car-reset-waiting.json",
+    definition: "state",
+    value: await api.read("car", null),
+  });
+  let resetBinding = (await api.read("car", null)).actionBindings.RESET_ACK;
+  const resetAck = await command(
+    resetBinding.commandType,
+    resetBinding.payload,
+    "car",
+    "reset-ack-car",
+    resetBinding.target,
+  );
+  fixtures.push(
+    { file: "success-reset-ack.json", definition: "success", value: resetAck },
+    {
+      file: "state-new-run.json",
+      definition: "state",
+      value: await api.read("web", client),
+    },
+  );
+  await command(
+    "ONBOARDING_ANSWER",
+    {
+      questionId: "interests",
+      answerText: "직접 입력한 새 회차",
+      inputSource: "typed",
+    },
+    "web",
+    "reset-web-seed",
+  );
+  resetState = await api.read("operator", null);
+  await command("RESET_BEGIN", {}, "operator", "reset-begin-web", {
+    runId: resetState.runId,
+  });
+  fixtures.push({
+    file: "state-web-reset-waiting.json",
+    definition: "state",
+    value: await api.read("web", client),
+  });
+  resetBinding = (await api.read("web", client)).actionBindings.RESET_ACK;
+  await command(
+    resetBinding.commandType,
+    resetBinding.payload,
+    "web",
+    "reset-ack-web",
+    resetBinding.target,
+  );
   // Stable UUIDs keep example diffs reviewable without changing relationships between files.
   const uuids = new Map();
   function stable(v) {
