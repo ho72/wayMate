@@ -271,3 +271,71 @@ input[type="checkbox"] {
   margin: 16px auto;
   border-radius: 20px;
 }
+.mobile-shell {
+  max-width: 620px;
+}
+.mobile-shell form {
+  display: block;
+}
+.mobile-shell .intro {
+  padding: 28px 0 12px;
+}
+.mobile-shell h1 {
+  font-size: 36px;
+}
+#steps {
+  display: flex;
+  gap: 6px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+#steps span {
+  font-size: 12px;
+  padding: 7px 10px;
+  background: #e9ede5;
+  border-radius: 20px;
+}
+#steps .current {
+  background: #315f45;
+  color: white;
+}
+.candidate {
+  padding: 18px;
+  border: 1px solid #dae5db;
+  border-radius: 18px;
+  margin-top: 14px;
+}
+.candidate h3 {
+  margin: 0;
+}
+dialog {
+  border: 1px solid #d4ddd3;
+  border-radius: 24px;
+  max-width: 480px;
+  width: calc(100% - 32px);
+  padding: 26px;
+  color: #203c34;
+}
+dialog::backdrop {
+  background: #172d2499;
+}
+dialog p {
+  white-space: pre-line;
+}
+#social-content .check {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#steps button {
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: 20px;
+  margin: 0;
+  background: #e9ede5;
+  color: #203c34;
+}
+#steps button.current {
+  background: #315f45;
+  color: #fff;
+}

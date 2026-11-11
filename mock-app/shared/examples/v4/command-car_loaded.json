@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000023",
+  "expectedVersion": 14,
+  "actor": "car",
+  "type": "CAR_LOADED",
+  "target": {},
+  "payload": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "handoffId": "00000000-0000-4000-8000-000000000018",
+    "handoffVersion": 1,
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1,
+      "publication": 6,
+      "tripShare": 1,
+      "connection": 3
+    },
+    "mode": "connected"
+  }
+}

@@ -32,3 +32,5 @@ key.properties
 /mock-app/.playwright-cli/
 /mock-app/output/
 /.playwright-cli/
+
+/output/playwright/

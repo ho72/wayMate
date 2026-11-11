@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000014",
+  "expectedVersion": 10,
+  "actor": "web",
+  "type": "CONFIRM_WINDOW",
+  "target": {
+    "connectionId": "00000000-0000-4000-8000-000000000013",
+    "requestId": "00000000-0000-4000-8000-000000000012"
+  },
+  "payload": {
+    "sharedWindow": [
+      "14:00",
+      "15:00"
+    ]
+  }
+}

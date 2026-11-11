@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000006",
+  "expectedVersion": 4,
+  "actor": "web",
+  "type": "PROFILE_CONFIRM",
+  "target": {},
+  "payload": {
+    "alias": "구름여행",
+    "avatarId": "a-02",
+    "confirmedSummary": {
+      "interests": [
+        "cafe"
+      ],
+      "activityPreference": null,
+      "pace": null,
+      "conversationStyle": null,
+      "speakingStyle": "light_humor",
+      "expressionPresetIds": [],
+      "summarySource": "user_confirmed_demo"
+    }
+  }
+}

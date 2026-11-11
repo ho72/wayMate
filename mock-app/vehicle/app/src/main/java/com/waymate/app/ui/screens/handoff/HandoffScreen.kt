@@ -24,7 +24,10 @@ fun HandoffScreen(
     onLoadJourney: () -> Unit,
     onStartTrip: (com.waymate.app.model.Journey?) -> Unit,
     onOpenNavigation: () -> Unit,
+    onOpenMeeting: () -> Unit,
+    onSocialAction: (String, String) -> Unit,
 ) {
+    var socialReview by remember { mutableStateOf<Pair<String, String>?>(null) }
     var confirmStart by remember { mutableStateOf(false) }
     var startPreview by remember { mutableStateOf<com.waymate.app.model.Journey?>(null) }
     val journey = state.journey
@@ -50,12 +53,37 @@ fun HandoffScreen(
                     )
                     Text(
                         if (journey == null) stringResource(R.string.home_start_badge)
+                        else if (state.social.peerAlias != null) "${state.social.peerAlias} · 연결됨"
                         else stringResource(R.string.home_private_badge),
                         Modifier.background(Mint, RoundedCornerShape(30.dp)).padding(14.dp),
                         color = Forest,
                     )
                 }
-                if (journey != null) Button(onClick = onOpenNavigation) { Text("내비 경유지") }
+                if (journey != null) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if (state.social.peerAlias != null || state.social.meetingStatus != "none")
+                            Button(onClick = onOpenMeeting) {
+                                Text(
+                                    if (state.social.cleanupRequired) "만남 취소 · 경유지 확인 필요"
+                                    else if (state.social.meetingStatus == "none") "만남 제안 받기"
+                                    else "만남 상태 확인"
+                                )
+                            }
+                        else Button(onClick = onOpenNavigation) { Text("내 여행 경유지") }
+                        state.social.actions["CONNECT_END"]?.let { binding ->
+                            OutlinedButton(onClick = { socialReview = "CONNECT_END" to binding }) {
+                                Text("연결 종료")
+                            }
+                        }
+                        state.social.actions["PROFILE_PRIVATE"]?.let { binding ->
+                            OutlinedButton(
+                                onClick = { socialReview = "PROFILE_PRIVATE" to binding }
+                            ) {
+                                Text("소개 공개 철회")
+                            }
+                        }
+                    }
+                }
                 Spacer(Modifier.height(28.dp))
                 if (wide)
                     Row(
@@ -88,6 +116,24 @@ fun HandoffScreen(
                 }
             }
         }
+    }
+    socialReview?.let { (type, binding) ->
+        AlertDialog(
+            onDismissRequest = { socialReview = null },
+            title = { Text(if (type == "CONNECT_END") "연결을 종료할까요?" else "소개 공개를 철회할까요?") },
+            text = { Text("상대 기능을 닫고 내 친구와 본인 여행을 유지해요. 추가한 경유지가 있으면 따로 확인해요.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        socialReview = null
+                        onSocialAction(type, binding)
+                    }
+                ) {
+                    Text("확인")
+                }
+            },
+            dismissButton = { TextButton(onClick = { socialReview = null }) { Text("돌아가기") } },
+        )
     }
     if (confirmStart)
         AlertDialog(
@@ -259,13 +305,12 @@ private fun JourneyPanel(
                     },
                     color = Muted,
                 )
-                OutlinedButton(
-                    onClick = {},
-                    enabled = false,
-                    modifier = Modifier.fillMaxWidth().height(54.dp),
-                ) {
-                    Text(stringResource(R.string.home_recommendations_pending))
-                }
+                Text(
+                    if (state.social.peerAlias != null)
+                        "${state.social.peerAlias}의 캐릭터와 이어갈 준비가 됐어요. 만남은 별도 동의로 진행해요."
+                    else "내 친구와 오늘의 여행을 이어가요.",
+                    color = Muted,
+                )
             }
             Text(
                 state.notice ?: stringResource(R.string.home_checking),

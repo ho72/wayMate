@@ -1,12 +1,12 @@
 import { fileURLToPath } from "node:url";
-import { startServer } from "./http/server.mjs";
+import { startServer } from "./v4/http.mjs";
 const file =
   process.env.WAYMATE_STATE_FILE ||
-  fileURLToPath(new URL("../runtime/state-v3.json", import.meta.url));
+  fileURLToPath(new URL("../runtime/state-v4.json", import.meta.url));
 try {
   const app = await startServer({ file });
   console.log(
-    `wayMate 준비 완료: http://127.0.0.1:${app.port} (본인 여행 전달)`,
+    `wayMate 준비 완료: http://127.0.0.1:${app.port} (v4 모바일 연결·차량 만남)`,
   );
   for (const signal of ["SIGINT", "SIGTERM"])
     process.once(signal, async () => {

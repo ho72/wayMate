@@ -3,19 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>wayMate · 내 여행 준비</title>
+    <title>wayMate · 여행과 연결 준비</title>
     <link rel="stylesheet" href="/style.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body>
-    <main>
+    <main class="mobile-shell">
       <header>
         <a href="/" class="brand">w <span>wayMate</span></a
-        ><span class="badge">탑승 전 여행 준비</span>
+        ><span class="badge">탑승 전 · 모바일에서 연결</span>
       </header>
+      <nav id="steps" aria-label="여행 준비 단계"></nav>
       <section class="intro">
         <p class="eyebrow">나를 알아가는 작은 대화</p>
-        <h1>내 여행을 함께할<br />친구를 만나요.</h1>
+        <h1>내 친구와 준비하고,<br />여행자를 알아가요.</h1>
         <p>
           편하게 답하고, 친구가 사용할 소개를 직접 확인해요.<br />차량에서
           시작한 뒤에는 플레오스 화면에서 여행을 이어가요.
@@ -49,15 +50,15 @@
         </form>
       </section>
       <form id="profile-form">
-        <section class="card">
-          <div class="step">02 · 내 소개 확인</div>
+        <section class="card" id="profile-card">
+          <div class="step">M01 · 내 소개 확인</div>
           <h2>나와 맞는 내용만 확인해요</h2>
           <p class="hint">
             아래 항목은 시연용 소개값이에요. 원문에서 자동 선택하지 않아요.
             선택하지 않은 값은 사용하지 않아요.
           </p>
           <label for="alias">내 별명 <span>1~10자</span></label
-          ><input id="alias" required placeholder="예: 파도" />
+          ><input id="alias" required value="파도" placeholder="예: 파도" />
           <fieldset>
             <legend>친구 모습</legend>
             <div class="choices">
@@ -110,17 +111,17 @@
             소개값 사용 안 함
           </button>
         </section>
-        <section class="card">
-          <div class="step">03 · 오늘의 여행</div>
+        <section class="card" id="trip-card">
+          <div class="step">M02 · 오늘의 여행</div>
           <h2>강릉 해안에서의 하루</h2>
           <p>시연용 고정 여행 · 2026년 11월 14일</p>
           <dl>
             <div>
-              <dt>여유 시간</dt>
+              <dt>만남 가능 시간</dt>
               <dd>13:00–15:00</dd>
             </div>
             <div>
-              <dt>다음 일정</dt>
+              <dt>기존 다음 일정 도착</dt>
               <dd>15:20 · 기존 개인 방문지</dd>
             </div>
             <div>
@@ -128,32 +129,54 @@
               <dd>내 숙소</dd>
             </div>
             <div>
-              <dt>도착 예상 / 마감</dt>
-              <dd>15:45 / 16:00</dd>
+              <dt>내 숙소 도착 예상</dt>
+              <dd>15:45</dd>
+            </div>
+            <div>
+              <dt>내 숙소 도착 마감</dt>
+              <dd>16:00</dd>
             </div>
           </dl>
           <p class="hint">
             소개를 확인한 뒤 이 계획을 별도로 저장해요. 본인 여행만 준비하며
-            다른 사람에게 공개하지 않아요.
+            공개할 여행 요약은 다음 단계에서 따로 확인해요.
           </p>
           <button id="save-trip" type="button" disabled>
             이 여행 계획 저장
           </button>
         </section>
       </form>
+      <section class="card" id="social-card" hidden>
+        <p class="step" id="social-step">M03 · 공개 소개 확인</p>
+        <h2 id="social-title">연결 준비</h2>
+        <div id="social-content"></div>
+      </section>
       <section class="card delivery">
         <div class="step">04 · 차량으로 이어가기</div>
         <h2 id="delivery-title">저장 후 차량으로 전달해요</h2>
         <p id="delivery-detail">내 소개와 여행을 저장해 주세요.</p>
-        <button id="prepare" disabled>차량에 전달 준비</button
+        <button id="prepare" disabled>이 준비를 차량에 전달</button
         ><button id="recover" class="secondary" hidden>저장 결과 확인</button
         ><button id="retry" class="secondary" hidden>
           같은 요청 다시 전송
+        </button>
+        <button id="cancel-pending" class="secondary" hidden>
+          미확인 연결 요청 취소
         </button>
         <p id="status" role="status" aria-live="polite">
           서버에 연결 중이에요.
         </p>
       </section>
+      <dialog id="review-dialog" aria-labelledby="review-title">
+        <h2 id="review-title"></h2>
+        <p id="review-detail"></p>
+        <div class="choices">
+          <button type="button" id="review-confirm">확인하고 진행</button
+          ><button type="button" id="review-cancel" class="secondary">
+            취소
+          </button>
+        </div>
+      </dialog>
       <footer>여행 준비 · 탑승 후에는 플레오스에서 이어가요</footer>
     </main>
   </body>
