@@ -6,9 +6,13 @@ import org.json.JSONObject
 object JourneyParser {
     fun parse(json: JSONObject): Journey {
         require(
-            json.getInt("schemaVersion") == 3 &&
-                json.getString("mode") == "prepared_trip" &&
-                json.isNull("peer")
+            json.getInt("schemaVersion") == 4 &&
+                json.getString("mode") in listOf("connected", "my_trip") &&
+                (if (json.getString("mode") == "my_trip")
+                    json.isNull("peer") && json.isNull("connection")
+                else
+                    json.getJSONObject("peer").getString("alias").isNotBlank() &&
+                        json.getJSONObject("connection").getString("status") == "linked")
         )
         return preparation(json)
             .copy(

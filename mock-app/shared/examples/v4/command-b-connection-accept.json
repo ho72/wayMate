@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000011",
+  "expectedVersion": 9,
+  "actor": "operator",
+  "type": "B_RESPONSE",
+  "target": {
+    "kind": "connection",
+    "requestId": "00000000-0000-4000-8000-000000000012",
+    "connectionId": "00000000-0000-4000-8000-000000000013",
+    "proposalId": null
+  },
+  "payload": {
+    "decision": "accept"
+  }
+}

@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
                         it.retryPending,
                         it.startEnabled,
                         it.preparation,
+                        it.social,
                         it.navigation,
                     )
             }
@@ -45,6 +46,10 @@ class MainActivity : ComponentActivity() {
                     repository::closeNavigation,
                     repository::approveNavigation,
                     repository::cancelNavigation,
+                    repository::openMeeting,
+                    repository::closeMeeting,
+                    repository::socialAction,
+                    repository::retryCurrent,
                 )
             }
         }

@@ -1,0 +1,102 @@
+[
+  {
+    "file": "command-answer-interests.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-activity.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-conversation.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-expression.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-profile_confirm.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-trip_save.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-profile_publish.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-trip_share_confirm.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-connect_request.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-b-connection-accept.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-confirm_window.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-handoff_prepare.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-web-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "handoff-connected.json",
+    "definition": "handoff"
+  },
+  {
+    "file": "command-car_session_open.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-car_status.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-ready.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-car_loaded.json",
+    "definition": "command"
+  },
+  {
+    "file": "success-car-loaded.json",
+    "definition": "success"
+  },
+  {
+    "file": "state-web-confirmed.json",
+    "definition": "state"
+  },
+  {
+    "file": "health.json",
+    "definition": "health"
+  },
+  {
+    "file": "command-meeting_propose.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-meeting-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-b-meeting-accept.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-meeting-confirmed.json",
+    "definition": "state"
+  }
+]

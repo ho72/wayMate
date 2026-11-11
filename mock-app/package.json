@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node server/main.mjs",
     "test": "node --test tests/**/*.test.mjs",
-    "examples": "node scripts/update-contract-examples.mjs"
+    "examples": "node scripts/update-contract-examples.mjs && node scripts/update-v4-examples.mjs",
+    "start:v3": "node server/main-v3.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0"

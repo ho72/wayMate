@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000019",
+  "expectedVersion": 12,
+  "actor": "car",
+  "type": "CAR_SESSION_OPEN",
+  "target": {},
+  "payload": {
+    "deviceId": "00000000-0000-4000-8000-000000000020",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "pendingAttempts": []
+  }
+}

@@ -1,6 +1,6 @@
 # wayMate Pleos 차량 앱
 
-Kotlin/Compose 차량 앱입니다. 현재 **v3 준비 불러오기/직접 시작 → 드래곤 홈·복원**을 지원합니다. 목표 P06/P07·콘텐츠·만남·두 결말은 후속입니다. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
+Kotlin/Compose 차량 앱입니다. 현재 **v4 connected/my_trip 불러오기·드래곤 홈·복원·만남 동의·실제 내비 승인**을 지원합니다. [13 실행·변경 기록](../../docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. 목표 P06/P07·콘텐츠·만남·두 결말은 후속입니다. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
 
 ## Android Studio
 
@@ -52,7 +52,7 @@ Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/refere
 
 ## 실제 내비 승인
 
-`real` flavor는 공식 NaviHelper 3.0.5로 본인 여행의 시연 경유지 추가·제거를 지원합니다. [12 차량 앱 내비 승인 연동](../../docs_prototype/12_차량_앱_내비_승인_연동.md)에 서버 계약·실행권·기록·복구 제한을 정리했습니다.
+`real` flavor는 공식 NaviHelper 3.0.5로 본인 여행 또는 현재 만남의 양쪽 동의 이후 승인한 시연 경유지 추가·제거를 지원합니다. [12 차량 앱 내비 승인 연동](../../docs_prototype/12_차량_앱_내비_승인_연동.md)에 서버 계약·실행권·기록·복구 제한을 정리했습니다.
 
 ```sh
 adb -s emulator-5554 install -r app/build/outputs/apk/real/debug/app-real-debug.apk
@@ -65,3 +65,5 @@ adb -s emulator-5554 shell run-as com.waymate.app.real --user 10 cat files/navig
 mock/real 앱은 서로 다른 기기 ID입니다. `mock-app`에서 `WAYMATE_STATE_FILE=runtime/state-driver-navigation.json npm start`로 별도 상태를 사용하면 기존 mock 여행을 그대로 보존하고 real 앱의 여행을 시작할 수 있습니다.
 
 CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬레이터 증거는 12 문서에 링크합니다. 실차·스토어·주행 중 전환 검증은 별도입니다.
+
+모바일의 연결·공통 시간 확인 후 connected 전달을 준비하고 차량에서 불러오세요. 차량에는 신규 후보·매칭 버튼이 없습니다. 홈 → 만남 제안 받기 → 같은 제안의 B 수락(O01) → 내비 승인으로 진행합니다. 만남 취소 뒤 추가한 경유지는 별도로 제거 승인합니다.

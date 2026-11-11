@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000010",
+  "expectedVersion": 8,
+  "actor": "web",
+  "type": "CONNECT_REQUEST",
+  "target": {},
+  "payload": {
+    "candidateId": "B",
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1,
+      "publication": 6,
+      "tripShare": 1,
+      "connection": 0
+    }
+  }
+}

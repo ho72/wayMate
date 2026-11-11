@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000009",
+  "expectedVersion": 7,
+  "actor": "web",
+  "type": "TRIP_SHARE_CONFIRM",
+  "target": {},
+  "payload": {
+    "tripVersion": 1,
+    "approved": true
+  }
+}

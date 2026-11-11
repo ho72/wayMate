@@ -26,11 +26,14 @@ class HandoffRepository(
     private val display: (HandoffConnectionState) -> Unit,
 ) {
     private val api = DemoApi()
-    private val preferences = context.getSharedPreferences("handoff-v3", Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences("handoff-v4", Context.MODE_PRIVATE)
     private val worker = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
     private val deviceId =
-        preferences.getString("deviceId", null)
+        (preferences.getString("deviceId", null)
+            ?: context
+                .getSharedPreferences("handoff-v3", Context.MODE_PRIVATE)
+                .getString("deviceId", null))
             ?: UUID.randomUUID().toString().also {
                 preferences.edit().putString("deviceId", it).commit()
             }
@@ -42,9 +45,42 @@ class HandoffRepository(
     @Volatile private var loading = false
     @Volatile private var state: JSONObject? = null
     @Volatile private var pending = preferences.getString("pending", null)?.let(::JSONObject)
+    private var stopPending = preferences.getString("stopPending", null)?.let(::JSONObject)
+    private val stopCommands =
+        StopCommandOutbox<JSONObject, JSONObject>(
+            pending = { stopPending },
+            persist = { command ->
+                check(preferences.edit().putString("stopPending", command.toString()).commit())
+                stopPending = command
+            },
+            clear = {
+                check(preferences.edit().remove("stopPending").commit())
+                stopPending = null
+            },
+            receipt = { command ->
+                val result =
+                    api.request(
+                        "/api/commands/${command.getString("commandId")}?runId=${command.getString("runId")}"
+                    )
+                if (result.getString("status") == "applied") result.getJSONObject("state") else null
+            },
+            submit = { command -> api.request("/api/commands", command).getJSONObject("state") },
+            applied = { command, current ->
+                state = current
+                if (
+                    command.getString("type") == "CANCEL_PENDING_COMMAND" &&
+                        command.getJSONObject("payload").getString("originalCommandId") ==
+                            pending?.getString("commandId")
+                )
+                    clearPending()
+            },
+            httpStatus = { (it as? ApiException)?.status },
+        )
     private var candidate = preferences.getString("candidate", null)?.let(::JSONObject)
     @Volatile private var loaded: Journey? = null
     @Volatile private var networkReady = false
+    @Volatile private var meetingVisible = false
+    @Volatile private var socialNotice: String? = null
     @Volatile private var navigationVisible = false
     @Volatile private var navigationNotice: String? = null
     @Volatile private var lifecycleGeneration = 0L
@@ -123,21 +159,25 @@ class HandoffRepository(
 
     private fun read(): JSONObject =
         api.request("/api/state?view=car").also {
-            require(it.getInt("schemaVersion") == 3)
+            require(it.getInt("schemaVersion") == 4 && it.getString("scope") == "mobile-meeting-v4")
             state = it
         }
 
-    private fun envelope(type: String, payload: JSONObject): JSONObject {
+    private fun envelope(
+        type: String,
+        payload: JSONObject,
+        target: JSONObject = JSONObject(),
+    ): JSONObject {
         val current = read()
         return JSONObject()
-            .put("schemaVersion", 3)
+            .put("schemaVersion", 4)
             .put("runSeq", current.getInt("runSeq"))
             .put("runId", current.getString("runId"))
             .put("commandId", UUID.randomUUID().toString())
             .put("expectedVersion", current.getInt("version"))
             .put("actor", "car")
             .put("type", type)
-            .put("target", JSONObject())
+            .put("target", target)
             .put("payload", payload)
     }
 
@@ -216,6 +256,7 @@ class HandoffRepository(
                 .put(
                     "uiContext",
                     if (navigationVisible) "navigation"
+                    else if (meetingVisible) "meeting"
                     else if (loaded != null) "home" else "handoff",
                 )
         // Status is a fresh fact with a new sequence, never a replay of an old restriction
@@ -223,7 +264,12 @@ class HandoffRepository(
         state = api.request("/api/commands", command.put("payload", payload)).getJSONObject("state")
     }
 
+    private fun recoverStop() {
+        stopCommands.recover()
+    }
+
     private fun sync() {
+        recoverStop()
         if (!foreground) {
             if (pending != null && !recover()) {
                 if (pending?.getString("type")?.startsWith("NAV_") == true) sendPending()
@@ -413,8 +459,12 @@ class HandoffRepository(
             (0 until a.length()).map { a.getJSONObject(it) }
         } ?: emptyList()
 
-    private fun navCommand(type: String, payload: JSONObject): JSONObject {
-        val command = envelope(type, payload)
+    private fun navCommand(
+        type: String,
+        payload: JSONObject,
+        target: JSONObject = JSONObject(),
+    ): JSONObject {
+        val command = envelope(type, payload, target)
         persist(command)
         try {
             val result = api.request("/api/commands", command)
@@ -433,7 +483,12 @@ class HandoffRepository(
     private fun navigationSync(canAct: Boolean) {
         if (state?.getJSONObject("vehicle")?.optString("vehicleSessionId") != sessionId) return
         val rec = navigation.record()
-        if (rec != null && rec.getString("scope") != navScope()) {
+        if (
+            rec != null &&
+                rec.getString("scope") != navScope() &&
+                !(rec.optBoolean("acknowledged") &&
+                    rec.optJSONObject("report")?.optString("outcome") == "removed")
+        ) {
             navigationNotice = "다른 회차의 실행 기록이 남아 있어요. 기록 복구가 필요해요."
             return
         }
@@ -489,9 +544,23 @@ class HandoffRepository(
         }
         try {
             val owned = state?.optJSONObject("navigation")?.optJSONObject("owned")
+            val social = state?.optJSONObject("social")
+            val meeting = social?.optJSONObject("meeting")
+            val linkedTrip = state?.optString("journeyMode") == "connected"
+            val ownAdd =
+                attempts().find { it.optString("attemptId") == owned?.optString("attemptId") }
+            val meetingRemove =
+                intent.operation == "remove" && ownAdd?.optString("context") == "meeting"
+            val target = JSONObject()
+            if (intent.operation == "add" && linkedTrip)
+                target.put("proposalId", meeting!!.getString("proposalId"))
+            if (meetingRemove)
+                target
+                    .put("proposalId", ownAdd!!.getString("proposalId"))
+                    .put("reason", "meeting_cancel")
             val result =
                 navCommand(
-                    "NAV_APPROVE",
+                    if (meetingRemove) "NAV_REMOVE_APPROVE" else "NAV_APPROVE",
                     navPayload()
                         .put("operation", intent.operation)
                         .put("reviewed", evidence)
@@ -501,6 +570,7 @@ class HandoffRepository(
                                 owned?.getString("attemptId") ?: JSONObject.NULL
                             else JSONObject.NULL,
                         ),
+                    target,
                 )
             if (result.getJSONObject("receipt").getBoolean("replayed")) return
             val a = attempts().last()
@@ -545,7 +615,11 @@ class HandoffRepository(
         val localMatches =
             if (owned != null)
                 state != null && navigation.owns(navScope(), owned.getString("attemptId"))
-            else rec == null || rec.optString("scope") == state?.let { navScope() }
+            else
+                rec == null ||
+                    rec.optString("scope") == state?.let { navScope() } ||
+                    (rec.optBoolean("acknowledged") &&
+                        rec.optJSONObject("report")?.optString("outcome") == "removed")
         val enabled =
             foreground &&
                 restricted == false &&
@@ -559,6 +633,16 @@ class HandoffRepository(
                 !navigation.hasWork() &&
                 localMatches &&
                 navIntent == null
+        val social = state?.optJSONObject("social")
+        val meeting = social?.optJSONObject("meeting")
+        val meetingTrip = state?.optString("journeyMode") == "connected"
+        val canAddForMeeting =
+            !meetingTrip ||
+                (meeting?.optString("status") == "confirmed" &&
+                    social?.optJSONObject("peer") != null)
+        val ownAdd = attempts().find { it.optString("attemptId") == owned?.optString("attemptId") }
+        val canRemoveForMeeting =
+            ownAdd?.optString("context") != "meeting" || meeting?.optString("status") == "cancelled"
         val points = e?.getJSONObject("second")?.getJSONArray("waypoints")
         val latest = list.lastOrNull()
         val outcome = latest?.getString("outcome")
@@ -592,8 +676,9 @@ class HandoffRepository(
             destination =
                 e?.getJSONObject("second")?.getJSONObject("destination")?.optString("name")
                     ?: "미확인",
-            canAdd = enabled && guiding && owned == null && points?.length() == 0,
-            canRemove = enabled && guiding && ownRoute,
+            canAdd =
+                enabled && canAddForMeeting && guiding && owned == null && points?.length() == 0,
+            canRemove = enabled && canRemoveForMeeting && guiding && ownRoute,
             canCancel =
                 foreground &&
                     restricted == false &&
@@ -601,6 +686,128 @@ class HandoffRepository(
                     outcome == "pending",
             reviewed = e?.toString(),
             busy = navIntent != null || navigation.hasWork(),
+        )
+    }
+
+    fun openMeeting() {
+        meetingVisible = true
+        socialNotice = null
+        show()
+    }
+
+    fun closeMeeting() {
+        meetingVisible = false
+        show()
+    }
+
+    fun retryCurrent() {
+        load()
+    }
+
+    fun socialAction(type: String, reviewed: String) {
+        if (closed || !foreground) return
+        val stop =
+            type in
+                listOf("MEETING_CANCEL", "CONNECT_END", "PROFILE_PRIVATE", "CANCEL_PENDING_COMMAND")
+        if (!stop && (restricted != false || !networkReady || loading || pending != null)) return
+        if (stop) {
+            lifecycleGeneration++
+            navIntent = null
+            navigation.abandonGrant()
+        }
+        if (!stop) {
+            loading = true
+            show()
+        }
+        worker.execute {
+            try {
+                if (stop) {
+                    val b = JSONObject(reviewed)
+                    require(b.getString("commandType") == type)
+                    stopCommands.send {
+                        envelope(type, b.getJSONObject("payload"), b.getJSONObject("target"))
+                    }
+                    sync()
+                    return@execute
+                }
+                if (pending != null && !recover()) {
+                    socialNotice = "이전 요청 결과를 먼저 확인해 주세요."
+                    show()
+                    return@execute
+                }
+                if (!stop) {
+                    report()
+                    check(foreground && restricted == false)
+                }
+                val b = JSONObject(reviewed)
+                require(b.getString("commandType") == type)
+                navCommand(type, b.getJSONObject("payload"), b.getJSONObject("target"))
+                socialNotice = null
+                sync()
+            } catch (e: Exception) {
+                socialNotice = errorText(e)
+                show()
+            } finally {
+                if (!stop) loading = false
+                show()
+            }
+        }
+    }
+
+    private fun socialUi(): com.waymate.app.model.SocialUiState {
+        val s = state?.optJSONObject("social")
+        val status = s?.optJSONObject("meeting")?.optString("status") ?: "none"
+        val peer = s?.optJSONObject("peer")?.optString("alias")
+        val bindings = state?.optJSONObject("actionBindings")
+        val actions = mutableMapOf<String, String>()
+        for (type in
+            listOf(
+                "MEETING_PROPOSE",
+                "MEETING_CANCEL",
+                "MEETING_DECLINE",
+                "CONNECT_END",
+                "PROFILE_PRIVATE",
+            )) bindings?.optJSONObject(type)?.let { actions[type] = it.toString() }
+        pending
+            ?.takeIf { it.getString("type") in listOf("MEETING_PROPOSE", "NAV_APPROVE") }
+            ?.let { original ->
+                actions["CANCEL_PENDING_COMMAND"] =
+                    JSONObject()
+                        .put("commandType", "CANCEL_PENDING_COMMAND")
+                        .put("target", JSONObject())
+                        .put(
+                            "payload",
+                            JSONObject()
+                                .put("originalCommandId", original.getString("commandId"))
+                                .put("originalType", original.getString("type")),
+                        )
+                        .toString()
+            }
+        return com.waymate.app.model.SocialUiState(
+            visible = meetingVisible,
+            peerAlias = peer,
+            connectionStatus = s?.optJSONObject("connection")?.optString("status") ?: "none",
+            meetingStatus = status,
+            notice =
+                socialNotice
+                    ?: when (status) {
+                        "proposed" -> "같은 장소·시간에 대한 상대 동의를 기다리고 있어요."
+                        "confirmed" -> "양쪽 만남 동의 확인 · 내비는 별도로 승인해 주세요."
+                        "cancelled" -> "만남을 취소했어요. 내비 경유지는 별도로 확인해요."
+                        "declined" -> "이번에는 만나지 않아요. 내 친구와 여행을 이어가요."
+                        else -> "이 장소와 시간으로 잠깐 만나볼까요?"
+                    },
+            actions = actions,
+            canInteract =
+                foreground &&
+                    restricted == false &&
+                    networkReady &&
+                    !loading &&
+                    pending == null &&
+                    loaded != null,
+            cleanupRequired = s?.optBoolean("cleanupRequired") == true,
+            retryPending = pending != null,
+            canRetry = foreground && restricted == false && !loading,
         )
     }
 
@@ -635,6 +842,7 @@ class HandoffRepository(
                         (0 until actions.length()).any {
                             actions.getString(it) == "CAR_START_TRIP"
                         },
+                social = socialUi(),
                 navigation = navigationUi(),
                 preparation =
                     current?.optJSONObject("preparationPreview")?.let {

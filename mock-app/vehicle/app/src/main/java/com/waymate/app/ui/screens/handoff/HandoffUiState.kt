@@ -10,6 +10,7 @@ data class HandoffUiState(
     val retryPending: Boolean = false,
     val startEnabled: Boolean = false,
     val preparation: Journey? = null,
+    val social: com.waymate.app.model.SocialUiState = com.waymate.app.model.SocialUiState(),
     val navigation: com.waymate.app.model.NavigationUiState =
         com.waymate.app.model.NavigationUiState(),
 )
