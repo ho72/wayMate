@@ -56,6 +56,7 @@ dependencyLocking {
 }
 
 dependencies {
+    testImplementation(libs.junit)
     "realImplementation"(libs.pleos.navihelper)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

@@ -8,3 +8,5 @@ Node 22.22.2로 `mock-app/`에서 `npm test`를 실행합니다. 테스트별 �
 - `integration/web-recovery.test.mjs`: 실제 웹 client의 응답 유실·동일 본문 복구·구버전 서버 거부·초안 보존.
 
 자동 검증 52개 통과. APK/Lint·실제 웹·Pleos 검수와 내비 미완료 증거는 [10](../../docs/10_v3_여행_준비_차량_홈_및_내비_시험.md)에 기록합니다. 전체 Q/V와 SDK 추가·제거 통과를 뜻하지 않습니다.
+
+내비 검증 정책은 vehicle의 `:app:testMockDebugUnitTest` 9개로 별도 검사합니다. 실제 SDK 추가/제거·재시작 검증과 원문 증거는 [11](../../docs/11_실제_내비_좌표_및_경유지_검증.md)에 있습니다. Node 52개와 구분하며 모의 테스트를 실제 SDK 성공으로 대신하지 않습니다.
