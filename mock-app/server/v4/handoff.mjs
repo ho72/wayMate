@@ -213,17 +213,6 @@ export function apply(s, c, clientId, now) {
       invalidate(s);
       break;
     }
-    case "PROFILE_PRIVATE":
-      if (
-        p.profileVersion !== s.profileVersion ||
-        p.publicationVersion !== s.publicationVersion
-      )
-        fail(409, "STALE_STATE", "프로필 버전이 바뀌었습니다.");
-      if (s.publication !== "private") {
-        s.publication = "private";
-        s.publicationVersion++;
-      }
-      break;
     case "TRIP_SAVE":
       if (!isDeepStrictEqual(s.trip, TRIP)) {
         s.trip = { ...TRIP };

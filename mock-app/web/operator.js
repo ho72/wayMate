@@ -18,7 +18,7 @@ async function request(path, body) {
   });
   const j = await r.json();
   if (!r.ok) {
-    if (r.status <= 500) {
+    if (body && r.status <= 500) {
       pending = null;
       localStorage.removeItem("waymate.operator.pending.v4");
     }

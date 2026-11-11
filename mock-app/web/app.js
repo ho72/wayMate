@@ -306,16 +306,16 @@ $("save-trip").onclick = () =>
     manualStage = null;
     status("여행 계획을 저장했어요.");
   });
-$("prepare").onclick = () =>
+function prepareHandoff() {
+  const binding = api.state.actionBindings.HANDOFF_PREPARE;
+  if (!binding) return;
+  const reviewed = structuredClone(binding);
   work(async () => {
-    await api.command("HANDOFF_PREPARE", {
-      mode:
-        api.state.social.connection.status === "linked"
-          ? "connected"
-          : "my_trip",
-    });
+    await api.command(reviewed.commandType, reviewed.payload, reviewed.target);
     status("전달 준비를 저장했어요. 차량에서 불러오기를 눌러 주세요.");
   });
+}
+$("prepare").onclick = prepareHandoff;
 $("cancel-pending").onclick = () => work(() => api.cancelPending());
 $("recover").onclick = () =>
   work(async () =>
@@ -905,8 +905,7 @@ function publicPreview(s, fields) {
 function myTripButton() {
   const b = node("button", "내 친구와 여행 전달 준비");
   b.disabled = busy || !!api.pending || !online;
-  b.onclick = () =>
-    work(() => api.command("HANDOFF_PREPARE", { mode: "my_trip" }));
+  b.onclick = prepareHandoff;
   return b;
 }
 

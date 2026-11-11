@@ -18,7 +18,7 @@ const staticFiles = new Map([
   ["/style.css", ["../../web/legacy-v3/style.css", "text/css; charset=utf-8"]],
   [
     "/shared/client.mjs",
-    ["../../web/shared/client.mjs", "text/javascript; charset=utf-8"],
+    ["../../web/legacy-v3/client.mjs", "text/javascript; charset=utf-8"],
   ],
   [
     "/protocol.mjs",

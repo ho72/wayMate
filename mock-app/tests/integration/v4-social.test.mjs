@@ -426,3 +426,176 @@ test("public approval records exactly selected fields and never infers an unconf
   ]);
   assert.equal(s.publicApproval.introTemplateId, "INTRO_NEUTRAL");
 });
+
+test("cancelling a received navigation approval preserves meeting consent and allows fresh approval", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  await f.meeting();
+  const approval = await f.navApprove();
+  const attempt = approval.state.navigation.attempts[0];
+  const before = approval.state.social.meeting;
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    {
+      originalCommandId: attempt.approvalCommandId,
+      originalType: "NAV_APPROVE",
+    },
+    "car",
+  );
+  const s = await f.read("car");
+  assert.deepEqual(s.social.meeting, before);
+  assert.equal(s.navigation.attempts[0].outcome, "not_dispatched");
+  assert.equal(s.navigation.owned, null);
+  await assert.rejects(f.dispatch(attempt), { code: "NAV_NOT_READY" });
+  const next = await f.navApprove();
+  assert.equal(next.state.navigation.attempts.at(-1).outcome, "pending");
+  assert.notEqual(
+    next.state.navigation.attempts.at(-1).attemptId,
+    attempt.attemptId,
+  );
+});
+
+test("cancelling an undelivered navigation approval blocks its late arrival without cancelling meeting", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  await f.meeting();
+  const e = f.evidence();
+  await f.send(
+    "NAV_OBSERVE",
+    { ...(await f.common()), source: "real", evidence: e },
+    "car",
+  );
+  const before = (await f.read("car")).social.meeting;
+  const c = await f.envelope(
+    "NAV_APPROVE",
+    {
+      ...(await f.common()),
+      operation: "add",
+      reviewed: e,
+      ownedAttemptId: null,
+    },
+    "car",
+    { proposalId: before.proposalId },
+  );
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    {
+      originalCommandId: c.commandId,
+      originalType: c.type,
+    },
+    "car",
+  );
+  await assert.rejects(f.post(c), { code: "CANCELLED" });
+  const s = await f.read("car");
+  assert.deepEqual(s.social.meeting, before);
+  assert.equal(s.navigation.attempts.length, 0);
+});
+
+test("approval cancellation after dispatch preserves physical facts and meeting consent", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  await f.meeting();
+  const r = await f.navApprove();
+  const dispatched = await f.dispatch(r.state.navigation.attempts[0]);
+  const a = dispatched.state.navigation.attempts[0];
+  const before = dispatched.state.social.meeting;
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    {
+      originalCommandId: a.approvalCommandId,
+      originalType: "NAV_APPROVE",
+    },
+    "car",
+  );
+  assert.equal((await f.read("car")).navigation.attempts[0].outcome, "pending");
+  await f.report(a, "applied", f.evidence([f.m], a.dispatchAt));
+  const s = await f.read("car");
+  assert.deepEqual(s.social.meeting, before);
+  assert.equal(s.navigation.owned.attemptId, a.attemptId);
+  assert.equal(s.navigation.attempts[0].outcome, "applied");
+  assert.equal(s.social.cleanupRequired, false);
+});
+
+for (const confirmed of [false, true])
+  test(`undelivered unrelated proposal cancellation preserves ${confirmed ? "confirmed" : "proposed"} meeting`, async (t) => {
+    const f = await fixture(t);
+    await f.connect();
+    await f.activate();
+    await f.act("MEETING_PROPOSE", "car");
+    if (confirmed) await f.respond("meeting", "accept");
+    const before = (await f.read("car")).social.meeting;
+    const unrelated = randomUUID();
+    await f.send(
+      "CANCEL_PENDING_COMMAND",
+      {
+        originalCommandId: unrelated,
+        originalType: "MEETING_PROPOSE",
+      },
+      "car",
+    );
+    assert.deepEqual((await f.read("car")).social.meeting, before);
+    await f.restart();
+    assert.deepEqual((await f.read("car")).social.meeting, before);
+    const c = await f.envelope(
+      "MEETING_PROPOSE",
+      { placeId: "fiction-cafe-01" },
+      "car",
+      { connectionId: before.connectionId },
+    );
+    c.commandId = unrelated;
+    await assert.rejects(f.post(c), { code: "CANCELLED" });
+  });
+
+test("undelivered first meeting proposal keeps a tombstone across restart and rejects late arrival", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  const b = (await f.read("car")).actionBindings.MEETING_PROPOSE;
+  const c = await f.envelope(b.commandType, b.payload, "car", b.target);
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    { originalCommandId: c.commandId, originalType: c.type },
+    "car",
+  );
+  await f.restart();
+  await assert.rejects(f.post(c), { code: "CANCELLED" });
+  const s = await f.read("car");
+  assert.equal(s.social.meeting.status, "cancelled");
+  assert.equal(s.social.meeting.proposalId, null);
+  assert.equal(s.actionBindings.MEETING_PROPOSE, undefined);
+});
+
+test("received proposal cancellation revokes only that proposal and late B response cannot revive it", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  const b = (await f.read("car")).actionBindings.MEETING_PROPOSE;
+  const c = await f.envelope(b.commandType, b.payload, "car", b.target);
+  await f.post(c);
+  const responseTarget = (
+    await f.read("operator")
+  ).social.pendingResponses.find((r) => r.kind === "meeting");
+  await f.send(
+    "CANCEL_PENDING_COMMAND",
+    { originalCommandId: c.commandId, originalType: c.type },
+    "car",
+  );
+  await assert.rejects(
+    f.send("B_RESPONSE", { decision: "accept" }, "operator", responseTarget),
+  );
+  assert.equal((await f.read("car")).social.meeting.status, "cancelled");
+});
+
+test("unknown connection cancellation cannot end a different linked connection", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  const before = (await f.read()).social.connection;
+  await f.send("CANCEL_PENDING_COMMAND", {
+    originalCommandId: randomUUID(),
+    originalType: "CONNECT_REQUEST",
+  });
+  assert.deepEqual((await f.read()).social.connection, before);
+});

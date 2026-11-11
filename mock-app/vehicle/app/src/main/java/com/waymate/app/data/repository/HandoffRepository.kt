@@ -46,6 +46,36 @@ class HandoffRepository(
     @Volatile private var state: JSONObject? = null
     @Volatile private var pending = preferences.getString("pending", null)?.let(::JSONObject)
     private var stopPending = preferences.getString("stopPending", null)?.let(::JSONObject)
+    private val stopCommands =
+        StopCommandOutbox<JSONObject, JSONObject>(
+            pending = { stopPending },
+            persist = { command ->
+                check(preferences.edit().putString("stopPending", command.toString()).commit())
+                stopPending = command
+            },
+            clear = {
+                check(preferences.edit().remove("stopPending").commit())
+                stopPending = null
+            },
+            receipt = { command ->
+                val result =
+                    api.request(
+                        "/api/commands/${command.getString("commandId")}?runId=${command.getString("runId")}"
+                    )
+                if (result.getString("status") == "applied") result.getJSONObject("state") else null
+            },
+            submit = { command -> api.request("/api/commands", command).getJSONObject("state") },
+            applied = { command, current ->
+                state = current
+                if (
+                    command.getString("type") == "CANCEL_PENDING_COMMAND" &&
+                        command.getJSONObject("payload").getString("originalCommandId") ==
+                            pending?.getString("commandId")
+                )
+                    clearPending()
+            },
+            httpStatus = { (it as? ApiException)?.status },
+        )
     private var candidate = preferences.getString("candidate", null)?.let(::JSONObject)
     @Volatile private var loaded: Journey? = null
     @Volatile private var networkReady = false
@@ -235,14 +265,7 @@ class HandoffRepository(
     }
 
     private fun recoverStop() {
-        val c = stopPending ?: return
-        val r =
-            api.request("/api/commands/${c.getString("commandId")}?runId=${c.getString("runId")}")
-        if (r.getString("status") == "applied") state = r.getJSONObject("state")
-        else state = api.request("/api/commands", c).getJSONObject("state")
-        clearPending()
-        check(preferences.edit().remove("stopPending").commit())
-        stopPending = null
+        stopCommands.recover()
     }
 
     private fun sync() {
@@ -698,12 +721,12 @@ class HandoffRepository(
         }
         worker.execute {
             try {
-                if (type == "CANCEL_PENDING_COMMAND") {
+                if (stop) {
                     val b = JSONObject(reviewed)
-                    val c = envelope(type, b.getJSONObject("payload"), b.getJSONObject("target"))
-                    check(preferences.edit().putString("stopPending", c.toString()).commit())
-                    stopPending = c
-                    recoverStop()
+                    require(b.getString("commandType") == type)
+                    stopCommands.send {
+                        envelope(type, b.getJSONObject("payload"), b.getJSONObject("target"))
+                    }
                     sync()
                     return@execute
                 }

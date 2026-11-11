@@ -473,8 +473,11 @@ export function cancelPending(s, c, id) {
     if (hit && s.social.connection.createdBy !== originalCommandId)
       fail(409, "STALE_STATE", "현재 연결과 다른 요청이에요.");
     if (
-      !hit ||
-      ["requested", "accepted", "linked"].includes(s.social.connection.status)
+      (!hit && !s.social.connection.attempted) ||
+      (hit &&
+        ["requested", "accepted", "linked"].includes(
+          s.social.connection.status,
+        ))
     ) {
       s.social.connection.attempted = true;
       s.social.connection.status = "cancelled";
@@ -485,21 +488,23 @@ export function cancelPending(s, c, id) {
         s.ack = null;
       }
     }
-  } else if (!hit && originalType === "MEETING_PROPOSE") {
-    mStatusCancelled(s);
-  } else if (hit) {
-    if (originalType === "NAV_APPROVE") {
-      const a = s.navigation?.attempts.find(
-        (a) => a.approvalCommandId === originalCommandId,
-      );
-      if (a?.dispatch === "not_started") a.outcome = "not_dispatched";
+  } else if (originalType === "MEETING_PROPOSE") {
+    if (hit) {
+      if (s.social.meeting.createdBy !== originalCommandId)
+        fail(409, "STALE_STATE", "현재 제안과 다른 요청이에요.");
+      cancelMeeting(s);
+    } else if (s.social.meeting.status === "none") {
+      // Reserve a cancelled first attempt, but never replace another proposal.
+      mStatusCancelled(s);
     }
-    if (
-      originalType === "MEETING_PROPOSE" &&
-      s.social.meeting.createdBy !== originalCommandId
-    )
-      fail(409, "STALE_STATE", "현재 제안과 다른 요청이에요.");
-    cancelMeeting(s);
+  } else if (hit && originalType === "NAV_APPROVE") {
+    const a = s.navigation?.attempts.find(
+      (a) => a.approvalCommandId === originalCommandId,
+    );
+    if (a?.dispatch === "not_started" && a.outcome === "pending")
+      a.outcome = "not_dispatched";
+    // Cancelling a navigation approval neither revokes meeting consent nor
+    // claims that an already dispatched physical operation has been undone.
   }
 }
 

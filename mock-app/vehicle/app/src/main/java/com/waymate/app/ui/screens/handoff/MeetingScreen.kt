@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.SocialUiState
+import org.json.JSONObject
 
 @Composable
 fun MeetingScreen(
@@ -80,15 +81,30 @@ fun MeetingScreen(
             onDismissRequest = { review = null },
             title = {
                 Text(
-                    if (type == "MEETING_PROPOSE") "이 장소와 시간을 제안할까요?"
-                    else if (type == "MEETING_CANCEL") "만남을 취소할까요?" else "이번에는 만나지 않을까요?"
+                    when (type) {
+                        "MEETING_PROPOSE" -> "이 장소와 시간을 제안할까요?"
+                        "MEETING_CANCEL" -> "만남을 취소할까요?"
+                        "CANCEL_PENDING_COMMAND" -> "미확인 요청을 취소할까요?"
+                        else -> "이번에는 만나지 않을까요?"
+                    }
                 )
             },
             text = {
                 Text(
-                    if (type == "MEETING_PROPOSE")
-                        "바다쉼표 카페 · 11월 14일 14:15~14:35\n상대도 같은 제안을 수락해야 만남이 확정돼요. 내비는 다음 단계에서 따로 승인해요."
-                    else "만남을 진행하지 않아요. 이미 추가한 경유지는 별도 제거 승인이 필요해요."
+                    when (type) {
+                        "MEETING_PROPOSE" ->
+                            "바다쉼표 카페 · 11월 14일 14:15~14:35\n상대도 같은 제안을 수락해야 만남이 확정돼요. 내비는 다음 단계에서 따로 승인해요."
+                        "CANCEL_PENDING_COMMAND" ->
+                            if (
+                                JSONObject(binding)
+                                    .getJSONObject("payload")
+                                    .getString("originalType") == "NAV_APPROVE"
+                            )
+                                "내비 승인 요청만 취소해요. 만남 동의는 유지해요. 이미 실행된 경유지는 자동으로 제거되지 않으며, 만남 취소 후 별도 제거 승인이 필요해요."
+                            else
+                                "이 만남 제안 요청을 취소해요. 아직 도착하지 않은 요청은 실행되지 않도록 막고, 이미 접수된 같은 제안은 취소해요. 경유지 제거는 별도 승인이 필요해요."
+                        else -> "만남을 진행하지 않아요. 이미 추가한 경유지는 별도 제거 승인이 필요해요."
+                    }
                 )
             },
             confirmButton = {
