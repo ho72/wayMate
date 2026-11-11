@@ -1,6 +1,6 @@
 # wayMate Pleos 차량 앱
 
-Kotlin/Compose 차량 앱입니다. 현재 **v3 준비 불러오기/직접 시작 → 드래곤 홈·복원**을 지원합니다. 목표 P06/P07·콘텐츠·만남·두 결말은 후속입니다. [현재 실행·검증](../../docs/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
+Kotlin/Compose 차량 앱입니다. 현재 **v3 준비 불러오기/직접 시작 → 드래곤 홈·복원**을 지원합니다. 목표 P06/P07·콘텐츠·만남·두 결말은 후속입니다. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
 
 ## Android Studio
 
@@ -52,7 +52,7 @@ Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/refere
 
 ## 실제 내비 승인
 
-`real` flavor는 공식 NaviHelper 3.0.5로 본인 여행의 시연 경유지 추가·제거를 지원합니다. [12 차량 앱 내비 승인 연동](../../docs/12_차량_앱_내비_승인_연동.md)에 서버 계약·실행권·기록·복구 제한을 정리했습니다.
+`real` flavor는 공식 NaviHelper 3.0.5로 본인 여행의 시연 경유지 추가·제거를 지원합니다. [12 차량 앱 내비 승인 연동](../../docs_prototype/12_차량_앱_내비_승인_연동.md)에 서버 계약·실행권·기록·복구 제한을 정리했습니다.
 
 ```sh
 adb -s emulator-5554 install -r app/build/outputs/apk/real/debug/app-real-debug.apk
@@ -60,7 +60,7 @@ adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.real/com.waymat
 adb -s emulator-5554 shell run-as com.waymate.app.real --user 10 cat files/navigation-journal-v1.json
 ```
 
-순정 내비에서 목적지를 설정한 뒤 차량 홈 → 내비 경유지 → 추가/제거 승인으로 진행합니다. 소프트웨어드림센터 고정 장소만 지원하며 원래 목적지는 유지합니다. SDK 원문 0,0은 보존하고 독립 POI 조회·현재 ID·연속 관측을 대조합니다. 기존 시험 Activity는 병렬 변경을 막기 위해 비활성화했으며 당시 코드·journal·[11 검증 기록](../../docs/11_실제_내비_좌표_및_경유지_검증.md)은 보존합니다. 앱 데이터나 실행 기록을 삭제해서 잠금을 우회하지 마세요.
+순정 내비에서 목적지를 설정한 뒤 차량 홈 → 내비 경유지 → 추가/제거 승인으로 진행합니다. 소프트웨어드림센터 고정 장소만 지원하며 원래 목적지는 유지합니다. SDK 원문 0,0은 보존하고 독립 POI 조회·현재 ID·연속 관측을 대조합니다. 기존 시험 Activity는 병렬 변경을 막기 위해 비활성화했으며 당시 코드·journal·[11 검증 기록](../../docs_prototype/11_실제_내비_좌표_및_경유지_검증.md)은 보존합니다. 앱 데이터나 실행 기록을 삭제해서 잠금을 우회하지 마세요.
 
 mock/real 앱은 서로 다른 기기 ID입니다. `mock-app`에서 `WAYMATE_STATE_FILE=runtime/state-driver-navigation.json npm start`로 별도 상태를 사용하면 기존 mock 여행을 그대로 보존하고 real 앱의 여행을 시작할 수 있습니다.
 

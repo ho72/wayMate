@@ -1,6 +1,6 @@
 # 차량 데이터 · CAR-PLATFORM 담당
 
-DemoApi·JourneyParser·HandoffRepository와 deviceId/pending 명령 SharedPreferences 저장을 구현했습니다. 본인 여행의 첫 연결이며 전체 연결·내비 복구는 후속입니다. [04 계약](../../../../../../../../../../docs/04_개발_및_연동_명세서.md)의 공통 봉투·세션·조회·영수증·전달 ACK를 구현합니다.
+DemoApi·JourneyParser·HandoffRepository와 deviceId/pending 명령 SharedPreferences 저장을 구현했습니다. 본인 여행의 첫 연결이며 전체 연결·내비 복구는 후속입니다. [04 계약](../../../../../../../../../../docs_prototype/04_개발_및_연동_명세서.md)의 공통 봉투·세션·조회·영수증·전달 ACK를 구현합니다.
 
 - `api/`: HTTP와 JSON DTO·직렬화. 서버 schema의 필드·enum을 독자적으로 바꾸지 않습니다.
 - `repository/`: HandoffRepository가 회차·조회 수명주기·사용자 명령·영수증 확인을 조정합니다. 응답 유실을 새 명령 ID의 자동 재시도로 처리하지 않습니다.

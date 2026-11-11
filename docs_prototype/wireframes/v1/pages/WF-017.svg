@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1191" height="842" viewBox="0 0 1191 842" role="img" aria-labelledby="title desc">
+<title id="title">WF-017  직접 통화 제안·동의 대기</title>
+<desc id="desc">wayMate 목업 검토용 화면 설계도. 번호는 화면 및 요소 피드백 식별자다.</desc>
+<rect width="1191" height="842" fill="white"/>
+<rect x="0" y="0" width="1191" height="842" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<text x="40" y="39.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">wayMate / 화면 설계서</text>
+<text x="780" y="38.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">v0.4  |  2026-11-11  |  피드백 번호 WF-017</text>
+<line x1="40" y1="48" x2="1151" y2="48" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="87.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="24" fill="#242424">WF-017  직접 통화 제안·동의 대기</text>
+<line x1="40" y1="804" x2="1151" y2="804" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="824.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">목업 설계 · 담당자 미정 · 마감 미정 · 실제 기능/주행/SDK 검증 완료를 뜻하지 않음</text>
+<text x="1121" y="825.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">22</text>
+<text x="40" y="115.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#666666">차량  |  기본 목업  |  P02.CALL_READY / WAITING  |  S08 / DM07</text>
+<text x="40" y="152.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">배치 문맥 / 내비 + 우측 앱</text>
+<rect x="40" y="168" width="310" height="151.9" rx="0" fill="#FAFAFA" stroke="#242424" stroke-width="1"/>
+<rect x="40" y="168" width="310" height="20" rx="0" fill="#EAEAEA" stroke="#B8B8B8" stroke-width="1"/>
+<text x="48" y="180.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">시스템 상태 영역</text>
+<rect x="40" y="188" width="34.1" height="111.9" rx="0" fill="#EAEAEA" stroke="#B8B8B8" stroke-width="1"/>
+<text x="47" y="216.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">드라</text>
+<text x="47" y="228.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">이빙</text>
+<text x="47" y="240.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">뷰</text>
+<rect x="74.1" y="188" width="183.93333333333334" height="111.9" rx="0" fill="#F8F8F8" stroke="#B8B8B8" stroke-width="1"/>
+<text x="84.1" y="205.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#242424">순정 내비 / 시스템 관리</text>
+<text x="84.1" y="230.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#242424">기존 목적지 D</text>
+<line x1="90.1" y1="277.368" x2="156.87" y2="243.95" stroke="#B8B8B8" stroke-width="2"/>
+<line x1="156.87" y1="243.95" x2="238.0333333333333" y2="263.697" stroke="#B8B8B8" stroke-width="2"/>
+<rect x="258.0333333333333" y="188" width="91.96666666666665" height="111.9" rx="0" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
+<text x="265.0333333333333" y="205.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#242424">wayMate</text>
+<ellipse cx="275.60949999999997" cy="223.57616666666667" rx="10.576166666666666" ry="10.576166666666666" fill="#EEEEEE" stroke="none"/>
+<ellipse cx="275.60949999999997" cy="224.84530666666666" rx="6.557223333333333" ry="6.134176666666666" fill="#FFFFFF" stroke="#242424"/>
+<ellipse cx="277.0901633333333" cy="217.0189433333333" rx="2.3267566666666664" ry="1.4806633333333332" fill="#777777" stroke="none"/>
+<line x1="275.60949999999997" y1="219.55722333333333" x2="276.4555933333333" y2="217.23046666666667" stroke="#242424" stroke-width="2"/>
+<ellipse cx="273.2827433333333" cy="223.99921333333333" rx="0.4653513333333333" ry="0.4653513333333333" fill="#242424" stroke="none"/>
+<ellipse cx="277.9362566666666" cy="223.99921333333333" rx="0.4653513333333333" ry="0.4653513333333333" fill="#242424" stroke="none"/>
+<ellipse cx="271.3790333333333" cy="225.90292333333332" rx="0.9307026666666666" ry="0.9307026666666666" fill="#DDDDDD" stroke="none"/>
+<ellipse cx="279.8399666666666" cy="225.90292333333332" rx="0.9307026666666666" ry="0.9307026666666666" fill="#DDDDDD" stroke="none"/>
+<line x1="274.12883666666664" y1="226.11444666666665" x2="274.37561388888884" y2="226.37297518518517" stroke="#242424" stroke-width="0.8"/>
+<line x1="274.37561388888884" y1="226.37297518518517" x2="274.6223911111111" y2="226.58449851851853" stroke="#242424" stroke-width="0.8"/>
+<line x1="274.6223911111111" y1="226.58449851851853" x2="274.8691683333333" y2="226.74901666666668" stroke="#242424" stroke-width="0.8"/>
+<line x1="274.8691683333333" y1="226.74901666666668" x2="275.1159455555555" y2="226.86652962962964" stroke="#242424" stroke-width="0.8"/>
+<line x1="275.1159455555555" y1="226.86652962962964" x2="275.3627227777777" y2="226.93703740740742" stroke="#242424" stroke-width="0.8"/>
+<line x1="275.3627227777777" y1="226.93703740740742" x2="275.60949999999997" y2="226.96054" stroke="#242424" stroke-width="0.8"/>
+<line x1="275.60949999999997" y1="226.96054" x2="275.8562772222222" y2="226.93703740740742" stroke="#242424" stroke-width="0.8"/>
+<line x1="275.8562772222222" y1="226.93703740740742" x2="276.1030544444444" y2="226.86652962962964" stroke="#242424" stroke-width="0.8"/>
+<line x1="276.1030544444444" y1="226.86652962962964" x2="276.34983166666666" y2="226.74901666666668" stroke="#242424" stroke-width="0.8"/>
+<line x1="276.34983166666666" y1="226.74901666666668" x2="276.59660888888885" y2="226.58449851851853" stroke="#242424" stroke-width="0.8"/>
+<line x1="276.59660888888885" y1="226.58449851851853" x2="276.8433861111111" y2="226.3729751851852" stroke="#242424" stroke-width="0.8"/>
+<line x1="276.8433861111111" y1="226.3729751851852" x2="277.0901633333333" y2="226.11444666666665" stroke="#242424" stroke-width="0.8"/>
+<rect x="266.0333333333333" y="246.75066666666666" width="75.96666666666665" height="9" rx="0" fill="#F4F4F4" stroke="#B8B8B8" stroke-width="1"/>
+<rect x="266.0333333333333" y="259.7506666666667" width="75.96666666666665" height="9" rx="0" fill="#F4F4F4" stroke="#B8B8B8" stroke-width="1"/>
+<rect x="266.0333333333333" y="272.7506666666667" width="75.96666666666665" height="9" rx="0" fill="#F4F4F4" stroke="#B8B8B8" stroke-width="1"/>
+<rect x="40" y="299.9" width="310" height="20" rx="0" fill="#EAEAEA" stroke="#B8B8B8" stroke-width="1"/>
+<text x="48" y="311.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8" fill="#242424">시스템 GNB / 공조</text>
+<text x="40" y="336.4" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="8.5" fill="#666666">배치 개념도 · 앱 창 비율 2:1 · 실차 해상도/순정 UI 재현 아님</text>
+<text x="40" y="380.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">화면 목적</text>
+<line x1="40" y1="392.9" x2="350" y2="392.9" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="413.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">통화 선택과 기존 연결·만남 동의를 분리한다.</text>
+<text x="40" y="451.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">진입 조건</text>
+<line x1="40" y1="463.9" x2="350" y2="463.9" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="484.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">linked·다른 통화 요청 없음</text>
+<text x="40" y="522.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="13" fill="#242424">캐릭터 배치</text>
+<line x1="40" y1="534.9" x2="350" y2="534.9" stroke="#B8B8B8" stroke-width="1"/>
+<text x="40" y="555.9" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">상단으로 축소. 목록·답변 영역을 우선.</text>
+<text x="378" y="129.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">화면 확대 / 구성·버튼의 상대적 배치</text>
+<rect x="378" y="138" width="354" height="612" rx="4" fill="#FFFFFF" stroke="#242424" stroke-width="1"/>
+<text x="395" y="166.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">wayMate</text>
+<text x="650.335" y="165.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9" fill="#666666">주차 · 모의 시연</text>
+<ellipse cx="383.0" cy="161.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="164.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">1</text>
+<line x1="395" y1="184" x2="715" y2="184" stroke="#B8B8B8" stroke-width="1"/>
+<ellipse cx="418.5" cy="219.5" rx="23.5" ry="23.5" fill="#EEEEEE" stroke="none"/>
+<ellipse cx="418.5" cy="222.32" rx="14.57" ry="13.629999999999999" fill="#FFFFFF" stroke="#242424"/>
+<ellipse cx="421.79" cy="204.92999999999998" rx="5.17" ry="3.2900000000000005" fill="#777777" stroke="none"/>
+<line x1="418.5" y1="210.57" x2="420.38" y2="205.4" stroke="#242424" stroke-width="2"/>
+<ellipse cx="413.33" cy="220.44" rx="1.034" ry="1.034" fill="#242424" stroke="none"/>
+<ellipse cx="423.67" cy="220.44" rx="1.034" ry="1.034" fill="#242424" stroke="none"/>
+<ellipse cx="409.09999999999997" cy="224.67000000000002" rx="2.068" ry="2.068" fill="#DDDDDD" stroke="none"/>
+<ellipse cx="427.9" cy="224.67000000000002" rx="2.068" ry="2.068" fill="#DDDDDD" stroke="none"/>
+<line x1="415.21" y1="225.14" x2="415.7583333333333" y2="225.71444444444444" stroke="#242424" stroke-width="0.8"/>
+<line x1="415.7583333333333" y1="225.71444444444444" x2="416.3066666666667" y2="226.18444444444444" stroke="#242424" stroke-width="0.8"/>
+<line x1="416.3066666666667" y1="226.18444444444444" x2="416.855" y2="226.55" stroke="#242424" stroke-width="0.8"/>
+<line x1="416.855" y1="226.55" x2="417.4033333333333" y2="226.8111111111111" stroke="#242424" stroke-width="0.8"/>
+<line x1="417.4033333333333" y1="226.8111111111111" x2="417.95166666666665" y2="226.96777777777777" stroke="#242424" stroke-width="0.8"/>
+<line x1="417.95166666666665" y1="226.96777777777777" x2="418.5" y2="227.02" stroke="#242424" stroke-width="0.8"/>
+<line x1="418.5" y1="227.02" x2="419.04833333333335" y2="226.96777777777777" stroke="#242424" stroke-width="0.8"/>
+<line x1="419.04833333333335" y1="226.96777777777777" x2="419.5966666666667" y2="226.8111111111111" stroke="#242424" stroke-width="0.8"/>
+<line x1="419.5966666666667" y1="226.8111111111111" x2="420.145" y2="226.55" stroke="#242424" stroke-width="0.8"/>
+<line x1="420.145" y1="226.55" x2="420.6933333333333" y2="226.18444444444444" stroke="#242424" stroke-width="0.8"/>
+<line x1="420.6933333333333" y1="226.18444444444444" x2="421.2416666666667" y2="225.71444444444444" stroke="#242424" stroke-width="0.8"/>
+<line x1="421.2416666666667" y1="225.71444444444444" x2="421.79" y2="225.14" stroke="#242424" stroke-width="0.8"/>
+<text x="455" y="219.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11" fill="#242424">내 친구</text>
+<ellipse cx="712.0" cy="220.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="708.6" y="223.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">2</text>
+<rect x="395" y="258" width="320" height="54" rx="3" fill="#F1F1F1" stroke="none" stroke-width="1"/>
+<text x="407" y="280" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">직접 목소리로 인사해볼까? 두 사람 모두 원할 때만 시</text>
+<text x="407" y="297" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="12" fill="#242424">작해.</text>
+<ellipse cx="383.0" cy="278.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="281.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">3</text>
+<rect x="395" y="326" width="320" height="144.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
+<text x="405" y="345.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">일반 통화</text>
+<text x="405" y="362.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">이번 목업은 시연 통화 샘플이에요.</text>
+<ellipse cx="383.0" cy="344.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="347.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">4</text>
+<rect x="395" y="478.0" width="320" height="144.0" rx="2" fill="#FFFFFF" stroke="#B8B8B8" stroke-width="1"/>
+<text x="405" y="497.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">동의 상태</text>
+<text x="405" y="514.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.5" fill="#242424">내 제안 → 솔바람 응답 대기</text>
+<text x="405" y="529.3" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="9.3" fill="#666666">MC 참여는 별도 동의</text>
+<rect x="395" y="640" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
+<text x="518.66" y="663.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">통화 제안하기</text>
+<ellipse cx="383.0" cy="660.0" rx="10.0" ry="10.0" fill="#242424" stroke="#242424"/>
+<text x="379.6" y="663.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#FFFFFF">5</text>
+<rect x="395" y="689" width="320" height="41" rx="3" fill="#E5E5E5" stroke="#242424" stroke-width="1"/>
+<text x="505.86625" y="712.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">제안 취소·건너뛰기</text>
+<text x="762" y="153.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="14" fill="#242424">요소 번호 / 동작 명세</text>
+<text x="762" y="181.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">1  역할·상태</text>
+<text x="762" y="201.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">내 친구 / 설계</text>
+<line x1="762" y1="216" x2="1151" y2="216" stroke="#B8B8B8" stroke-width="1"/>
+<text x="762" y="235.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">2  캐릭터</text>
+<text x="762" y="255.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">한 명의 발화자만 상단에 축소해 출처를 유지.</text>
+<line x1="762" y1="270" x2="1151" y2="270" stroke="#B8B8B8" stroke-width="1"/>
+<text x="762" y="289.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">3  대사·조건</text>
+<text x="762" y="309.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">정차 상태에서 양쪽 동의</text>
+<line x1="762" y1="324" x2="1151" y2="324" stroke="#B8B8B8" stroke-width="1"/>
+<text x="762" y="343.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">4  정보·실패</text>
+<text x="762" y="363.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">거절·취소·늦은 동의로 재생 자동 시작 금지</text>
+<line x1="762" y1="378" x2="1151" y2="378" stroke="#B8B8B8" stroke-width="1"/>
+<text x="762" y="397.5" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="11.5" fill="#242424">5  버튼 → 결과</text>
+<text x="762" y="421.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">통화 제안하기</text>
+<text x="762" y="440" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">CALL_PROPOSE. B 동의 전 재생 금지 → WF-018</text>
+<text x="762" y="467.7" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10.7" fill="#242424">제안 취소·건너뛰기</text>
+<text x="762" y="486" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#242424">통화만 생략하고 연결 유지 → WF-013</text>
+<text x="40" y="786.0" font-family="AppleGothic,Apple SD Gothic Neo,Malgun Gothic,sans-serif" font-size="10" fill="#666666">피드백 예: WF-017 / 요소 4 / 표시·문구·동작 중 수정할 점</text>
+</svg>

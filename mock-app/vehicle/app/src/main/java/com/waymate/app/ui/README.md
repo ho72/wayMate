@@ -1,6 +1,6 @@
 # 차량 UI · CAR-UI 담당
 
-[분담 가이드](../../../../../../../../../../docs/06_개발_아키텍처_및_분담_가이드.md)의 경계를 따릅니다. 현재 P01 준비·불러온 여행 표시를 구현했고 실제 HTTP 전달을 연결했습니다.
+[분담 가이드](../../../../../../../../../../docs_prototype/06_개발_아키텍처_및_분담_가이드.md)의 경계를 따릅니다. 현재 P01 준비·불러온 여행 표시를 구현했고 실제 HTTP 전달을 연결했습니다.
 
 - `screens/handoff/`: P01 HandoffScreen과 HandoffUiState. 화면은 state와 onLoadJourney를 받아 그립니다.
 - `screens/conversation/`, `meeting/`, `ending/`: P02~P04 예약 경로. 아직 화면 구현은 없습니다.

@@ -1,6 +1,6 @@
 # 공통 계약·소재
 
-현재 실행은 schemaVersion **3**, scope `preparation-v3`의 첫 범위입니다. [10 실행·검증](../../docs/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 확인합니다. 전체 명세 v3의 모든 기능을 구현했다는 뜻은 아닙니다.
+현재 실행은 schemaVersion **3**, scope `preparation-v3`의 첫 범위입니다. [10 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 확인합니다. 전체 명세 v3의 모든 기능을 구현했다는 뜻은 아닙니다.
 
 - `contracts/handoff-v3.schema.json`: 명령 9종·원문/소개 분리·prepared_trip·차량 활성·역할별 state·영수증·저장소. 런타임 Ajv가 읽습니다.
 - `examples/v3/`: 실제 coordinator로 생성한 wire JSON. UUID·시각을 고정합니다.
