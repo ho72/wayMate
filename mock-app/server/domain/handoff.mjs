@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
 import {
   STATUS_TTL_MS,
-  QUESTIONS,
-  summaryFromAnswers,
+  questionOrder,
+  emptySummary,
 } from "../../shared/config/protocol.mjs";
 import { TRIP } from "../fixtures/trip.mjs";
 export function fail(status, code, message) {
@@ -11,41 +11,85 @@ export function fail(status, code, message) {
 }
 export const sources = (s) => ({
   profile: s.profileVersion,
-  publication: s.publicationVersion,
   trip: s.tripVersion,
-  connection: 0,
 });
 export const fresh = (s, now) =>
   s.vehicle.seenAt !== null && now - s.vehicle.seenAt < STATUS_TTL_MS;
-export const canLoad = (s, now) =>
-  !!s.handoff &&
+export const parked = (s, now) =>
   fresh(s, now) &&
   s.vehicle.restrictionKnown &&
   !s.vehicle.restricted &&
   s.vehicle.foreground;
+export const canLoad = (s, now) =>
+  !s.vehicleActivation && !!s.handoff && parked(s, now);
+export const owner = (s) => ({
+  alias: s.profile.alias,
+  avatarId: s.profile.avatarId,
+  speakingStyle: s.profile.privateSummary.speakingStyle,
+  summary: structuredClone(s.profile.privateSummary),
+});
+export const preparation = (s) =>
+  s.profile && s.trip
+    ? {
+        sourceVersions: sources(s),
+        owner: owner(s),
+        ownerTrip: structuredClone(s.trip),
+      }
+    : null;
+export const approval = (s) => ({
+  status: s.publication,
+  profileVersion: s.profileVersion,
+  publicationVersion: s.publicationVersion,
+  approvedFields: [],
+  introTemplateId: null,
+});
 export function allowed(s, actor, clientId, now) {
-  if (actor === "car") return canLoad(s, now) ? ["CAR_LOADED"] : [];
-  if (s.clientId && clientId !== s.clientId) return [];
+  if (actor === "car")
+    return s.vehicleActivation || !parked(s, now)
+      ? []
+      : [
+          ...(canLoad(s, now) ? ["CAR_LOADED"] : []),
+          ...(preparation(s) ||
+          (!s.profile && !s.trip && !Object.keys(s.onboarding).length)
+            ? ["CAR_START_TRIP"]
+            : []),
+        ];
+  if (s.vehicleActivation || (s.clientId && clientId !== s.clientId)) return [];
   return [
     "ONBOARDING_ANSWER",
-    ...(Object.keys(QUESTIONS).every((k) => QUESTIONS[k].includes(s.answers[k]))
+    ...(questionOrder(s.onboarding).every((k) => s.onboarding[k]?.confirmed)
       ? ["PROFILE_CONFIRM"]
       : []),
     ...(s.profile ? ["PROFILE_PRIVATE", "TRIP_SAVE"] : []),
-    ...(s.profile && s.trip && s.publication === "private"
-      ? ["HANDOFF_PREPARE"]
-      : []),
+    ...(s.profile && s.trip ? ["HANDOFF_PREPARE"] : []),
   ];
 }
 function invalidate(s) {
   s.handoff = null;
   s.ack = null;
 }
+function activate(s, origin) {
+  s.vehicleActivation = {
+    origin,
+    profileVersion: s.profileVersion,
+    tripVersion: s.tripVersion,
+    deviceId: s.vehicle.deviceId,
+    vehicleSessionId: s.vehicle.vehicleSessionId,
+    confirmedAt: new Date().toISOString(),
+  };
+  s.journeyMode = "my_trip";
+}
 export function apply(s, c, clientId, now) {
   const p = c.payload;
   if (c.actor === "web") {
     if (s.clientId && s.clientId !== clientId)
       fail(403, "ACTOR_FORBIDDEN", "다른 웹 클라이언트의 여행입니다.");
+    if (s.vehicleActivation)
+      fail(
+        409,
+        "INVALID_TRANSITION",
+        "차량에서 여행을 시작했어요. 웹에서는 준비 상태만 확인할 수 있어요.",
+      );
     s.clientId ??= clientId;
   }
   if (
@@ -60,40 +104,63 @@ export function apply(s, c, clientId, now) {
   if (
     !["CAR_SESSION_OPEN", "CAR_STATUS"].includes(c.type) &&
     !allowed(s, c.actor, clientId, now).includes(c.type)
-  ) {
+  )
     fail(
       c.actor === "car" ? 423 : 409,
       c.actor === "car" ? "RESTRICTED" : "NOT_READY",
       "현재 상태에서는 실행할 수 없습니다.",
     );
-  }
   switch (c.type) {
-    case "ONBOARDING_ANSWER":
-      if (!QUESTIONS[p.questionId].includes(p.answerPresetId))
-        fail(400, "INVALID_PAYLOAD", "질문에 맞는 선택지가 아닙니다.");
-      if (s.answers[p.questionId] !== p.answerPresetId) {
-        s.answers[p.questionId] = p.answerPresetId;
-        s.profile = null;
-        s.publication = "pending";
-        invalidate(s);
-      }
-      break;
-    case "PROFILE_CONFIRM": {
-      const alias = p.alias.normalize("NFC").trim();
-      if (
-        !alias ||
-        [...alias].length > 10 ||
-        /[\r\n]/.test(alias) ||
-        !isDeepStrictEqual(p.summary, summaryFromAnswers(s.answers))
-      )
+    case "ONBOARDING_ANSWER": {
+      if (!p.answerText.trim() || [...p.answerText].length > 500)
         fail(
           400,
           "INVALID_PAYLOAD",
-          "별명 또는 확인한 요약이 올바르지 않습니다.",
+          "답변은 공백을 제외한 내용이 있는 1~500자여야 합니다.",
         );
-      s.profile = { ...p, alias };
+      const order = questionOrder(s.onboarding),
+        index = order.indexOf(p.questionId);
+      if (
+        index < 0 ||
+        !order.slice(0, index).every((k) => s.onboarding[k]?.confirmed)
+      )
+        fail(409, "NOT_READY", "현재 질문부터 답변해 주세요.");
+      const old = s.onboarding[p.questionId];
+      if (
+        old?.answerText !== p.answerText ||
+        old?.inputSource !== p.inputSource
+      ) {
+        s.onboardingRevision++;
+        s.onboarding[p.questionId] = {
+          answerText: p.answerText,
+          inputSource: p.inputSource,
+          confirmed: true,
+          revision: s.onboardingRevision,
+        };
+        // Earlier edits invalidate all later replies, including a previous demo branch.
+        for (const k of order.slice(index + 1)) delete s.onboarding[k];
+        if (p.questionId === "interests") delete s.onboarding.food_detail;
+        s.profile = null;
+        s.publication = "pending";
+        s.publicationVersion++;
+        invalidate(s);
+      }
+      break;
+    }
+    case "PROFILE_CONFIRM": {
+      const alias = p.alias.normalize("NFC").trim();
+      if (!alias || [...alias].length > 10 || /[\r\n]/.test(alias))
+        fail(400, "INVALID_PAYLOAD", "별명은 줄바꿈 없이 1~10자여야 합니다.");
       s.profileVersion++;
+      s.profile = {
+        version: s.profileVersion,
+        alias,
+        avatarId: p.avatarId,
+        privateSummary: structuredClone(p.confirmedSummary),
+        confirmed: true,
+      };
       s.publication = "pending";
+      s.publicationVersion++;
       invalidate(s);
       break;
     }
@@ -106,28 +173,27 @@ export function apply(s, c, clientId, now) {
       if (s.publication !== "private") {
         s.publication = "private";
         s.publicationVersion++;
-        invalidate(s);
       }
       break;
     case "TRIP_SAVE":
-      s.trip = { ...TRIP };
-      s.tripVersion++;
-      invalidate(s);
+      if (!isDeepStrictEqual(s.trip, TRIP)) {
+        s.trip = { ...TRIP };
+        s.tripVersion++;
+        invalidate(s);
+      }
       break;
     case "HANDOFF_PREPARE":
-      if (s.publication !== "private")
-        fail(409, "NOT_READY", "본인 여행용 비공개 선택을 먼저 확인하세요.");
       if (!s.handoff) {
         s.handoffCounter++;
         s.handoff = {
-          schemaVersion: 2,
+          schemaVersion: 3,
           runSeq: s.runSeq,
           runId: s.runId,
           handoffId: randomUUID(),
           handoffVersion: s.handoffCounter,
           sourceVersions: sources(s),
-          mode: "my_trip",
-          owner: structuredClone(s.profile),
+          mode: "prepared_trip",
+          owner: owner(s),
           ownerTrip: { ...s.trip },
           peer: null,
         };
@@ -135,6 +201,8 @@ export function apply(s, c, clientId, now) {
       }
       break;
     case "CAR_SESSION_OPEN":
+      if (s.vehicleActivation && s.vehicleActivation.deviceId !== p.deviceId)
+        fail(409, "INVALID_TRANSITION", "이미 시작한 차량에서 이어가 주세요.");
       if (
         s.vehicle.deviceId &&
         s.vehicle.deviceId !== p.deviceId &&
@@ -166,6 +234,33 @@ export function apply(s, c, clientId, now) {
       break;
     case "CAR_LOADED":
       s.ack = { handoffId: p.handoffId, vehicleSessionId: p.vehicleSessionId };
+      activate(s, "handoff");
+      break;
+    case "CAR_START_TRIP":
+      if (p.vehicleSessionId !== s.vehicle.vehicleSessionId)
+        fail(409, "STALE_STATE", "차량 세션이 바뀌었습니다.");
+      if (p.origin === "stored_preparation") {
+        if (!preparation(s) || !isDeepStrictEqual(p.sourceVersions, sources(s)))
+          fail(409, "STALE_STATE", "저장된 준비의 버전을 다시 확인해 주세요.");
+      } else {
+        if (s.profile || s.trip || Object.keys(s.onboarding).length)
+          fail(
+            409,
+            "INVALID_TRANSITION",
+            "기존 준비를 기본값으로 덮어쓸 수 없습니다.",
+          );
+        s.profileVersion++;
+        s.tripVersion++;
+        s.profile = {
+          version: s.profileVersion,
+          alias: "여행자",
+          avatarId: "a-01",
+          privateSummary: emptySummary(),
+          confirmed: true,
+        };
+        s.trip = { ...TRIP };
+      }
+      activate(s, p.origin);
       break;
   }
 }

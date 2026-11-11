@@ -1,9 +1,9 @@
 # JSON 계약
 
-현재 진입점은 [`handoff-v2.schema.json`](handoff-v2.schema.json)입니다. `$defs/command`는 ONBOARDING_ANSWER·PROFILE_CONFIRM·PROFILE_PRIVATE·TRIP_SAVE·HANDOFF_PREPARE·CAR_SESSION_OPEN·CAR_STATUS·CAR_LOADED를 지원하며 target은 `{}`입니다.
+현재 진입점은 [handoff-v3.schema.json](handoff-v3.schema.json)입니다. `$defs/command`는 ONBOARDING_ANSWER·PROFILE_CONFIRM·PROFILE_PRIVATE·TRIP_SAVE·HANDOFF_PREPARE·CAR_SESSION_OPEN·CAR_STATUS·CAR_LOADED·CAR_START_TRIP을 지원합니다. target은 `{}`이며 문서 전체의 나머지 명령은 아직 없습니다.
 
-프로필 요약은 확인한 질문 preset에서만 파생하고 `my_trip`은 `peer:null`을 강제합니다. 필수 필드·enum·추가 필드 금지는 JSON Schema, 역할 소유권·전이·참조 버전·현재 제한·별명 정규화는 서버 도메인에서 검증합니다.
+원문은 `onboarding[questionId]`에 보존하고 car projection에서는 빈 객체로 강제합니다. 프로필은 사용자가 확인한 `confirmedSummary`만 저장하며 미확인은 빈 배열/null입니다. `prepared_trip`은 profile/trip core 버전만 참조하고 `peer:null`입니다. publicationVersion·tripShareVersion·vehicleActivation은 별도 상태입니다.
 
-`actionBindings`는 고정 대상/값(전달 준비·비공개·차량 ACK)을 채워 반환합니다. 질문·프로필처럼 사용자 선택이 필요한 명령의 payload는 빈 입력 틀이며 schema와 scenario의 지원 preset으로 완성합니다. 세션 열기·상태 사실 보고는 사용자 행동 목록과 별개입니다.
+형식·필수값·enum·추가 필드는 JSON Schema, 소유권·순서·참조 버전·최신 제한·활성화 잠금·별명 정규화는 도메인에서 검증합니다. `actionBindings`의 직접 시작값을 사용할 때 사용자가 실제로 확인한 버전을 유지해야 합니다. 새로 읽은 준비로 확인 대상을 바꾸면 안 됩니다.
 
-전체 연결·메시지·내비 명령은 아직 이 schema에 추가하지 않았습니다. 새 명령은 04 명세·역할별 예제·소비 코드·검증을 함께 변경합니다.
+[handoff-v2.schema.json](handoff-v2.schema.json)은 과거 예제 검증에만 사용합니다. 현재 서버/차량에서 v2 명령·저장소를 거절합니다.

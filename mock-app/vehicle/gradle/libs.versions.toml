@@ -3,8 +3,10 @@ agp = "8.9.2"
 kotlin = "2.1.20"
 compose-bom = "2025.04.01"
 activity-compose = "1.10.1"
+navihelper = "3.0.5"
 
 [libraries]
+pleos-navihelper = { module = "ai.pleos.playground:NaviHelper", version.ref = "navihelper" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }

@@ -28,10 +28,12 @@ class MainActivity : ComponentActivity() {
                         it.notice,
                         it.journey,
                         it.retryPending,
+                        it.startEnabled,
+                        it.preparation,
                     )
             }
         restrictions = VehicleRestrictions(this, repository::restriction)
-        setContent { WayMateTheme { WayMateApp(ui, repository::load) } }
+        setContent { WayMateTheme { WayMateApp(ui, repository::load, repository::startTrip) } }
     }
 
     override fun onResume() {

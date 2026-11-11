@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 3,
+  "scope": "preparation-v3",
+  "storeId": "00000000-0000-4000-8000-000000000010",
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "version": 10,
+  "view": "car",
+  "clientId": "00000000-0000-4000-8000-000000000011",
+  "onboarding": {},
+  "profile": null,
+  "profileVersion": 1,
+  "publicationVersion": 6,
+  "publication": "private",
+  "publicApproval": {
+    "status": "private",
+    "profileVersion": 1,
+    "publicationVersion": 6,
+    "approvedFields": [],
+    "introTemplateId": null
+  },
+  "trip": {
+    "date": "2026-11-14",
+    "nextVisit": "15:20",
+    "nextVisitLabel": "기존 개인 방문지",
+    "returnPlaceId": "a-lodging-01",
+    "returnPlaceLabel": "내 숙소",
+    "returnEstimate": "15:45",
+    "returnDeadline": "16:00"
+  },
+  "tripVersion": 1,
+  "tripShareVersion": 0,
+  "vehicleActivation": null,
+  "journeyMode": null,
+  "preparationPreview": {
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "owner": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": null,
+        "pace": null,
+        "conversationStyle": null,
+        "speakingStyle": "light_humor",
+        "expressionPresetIds": [],
+        "summarySource": "user_confirmed_demo"
+      }
+    },
+    "ownerTrip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    }
+  },
+  "activeJourney": null,
+  "handoff": {
+    "handoffId": "00000000-0000-4000-8000-000000000012",
+    "handoffVersion": 1,
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "mode": "prepared_trip",
+    "acknowledged": false
+  },
+  "vehicle": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+    "vehicleEpoch": 1,
+    "restrictionKnown": true,
+    "restricted": false,
+    "foreground": true,
+    "fresh": true
+  },
+  "allowedActions": [
+    "CAR_LOADED",
+    "CAR_START_TRIP"
+  ],
+  "actionBindings": {
+    "CAR_LOADED": {
+      "commandType": "CAR_LOADED",
+      "target": {},
+      "payload": {
+        "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+        "handoffId": "00000000-0000-4000-8000-000000000012",
+        "handoffVersion": 1,
+        "sourceVersions": {
+          "profile": 1,
+          "trip": 1
+        },
+        "mode": "prepared_trip"
+      }
+    },
+    "CAR_START_TRIP": {
+      "commandType": "CAR_START_TRIP",
+      "target": {},
+      "payload": {
+        "origin": "stored_preparation",
+        "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+        "sourceVersions": {
+          "profile": 1,
+          "trip": 1
+        }
+      }
+    }
+  },
+  "blockedActions": {}
+}

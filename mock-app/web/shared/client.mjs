@@ -1,4 +1,4 @@
-const KEY = "waymate.pending.v2";
+const KEY = "waymate.pending.v3";
 export class DemoClient {
   constructor() {
     this.id = localStorage.getItem("waymate.clientId") || crypto.randomUUID();
@@ -25,6 +25,16 @@ export class DemoClient {
       signal: AbortSignal.timeout(5000),
     });
     const result = await response.json();
+    const state =
+      result.state || (path === "/api/state?view=web" ? result : null);
+    if (
+      state &&
+      (state.schemaVersion !== 3 || state.scope !== "preparation-v3")
+    ) {
+      throw new Error(
+        "이 서버 버전은 지원하지 않아요. 입력 초안과 미확인 요청을 보존했어요. v3 서버를 실행해 주세요.",
+      );
+    }
     if (result.state) this.state = result.state;
     if (!response.ok) {
       const e = new Error(result.error?.message || "서버 오류");
@@ -65,7 +75,7 @@ export class DemoClient {
     if (this.pending) throw new Error("이전 저장 결과를 먼저 확인해 주세요.");
     await this.read();
     this.pending = {
-      schemaVersion: 2,
+      schemaVersion: 3,
       runSeq: this.state.runSeq,
       runId: this.state.runId,
       commandId: crypto.randomUUID(),

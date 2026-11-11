@@ -5,13 +5,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import { startServer } from "../../server/http/server.mjs";
-import { summaryFromAnswers } from "../../shared/config/protocol.mjs";
+import { emptySummary } from "../../shared/config/protocol.mjs";
 import { assertContract } from "../../server/validation.mjs";
 const answers = {
   interests: "cafe",
   activity: "walk_first_photos_occasional",
-  pace: "relaxed",
   conversation: "quiet",
+  expression: "가벼운 농담도 조금 ㅎㅎ",
 };
 async function fixture(t, options = {}) {
   const dir = await mkdtemp(join(tmpdir(), "waymate-test-")),
@@ -40,7 +40,7 @@ async function fixture(t, options = {}) {
   const envelope = async (type, payload, actor = "web") => {
     const s = await state(actor);
     return {
-      schemaVersion: 2,
+      schemaVersion: 3,
       runSeq: s.runSeq,
       runId: s.runId,
       commandId: randomUUID(),
@@ -54,10 +54,15 @@ async function fixture(t, options = {}) {
   const send = async (type, payload, actor = "web") =>
     req("/api/commands", actor, await envelope(type, payload, actor));
   const ready = async () => {
-    for (const [questionId, answerPresetId] of Object.entries(answers))
+    for (const [questionId, answerText] of Object.entries(answers))
       assert.equal(
-        (await send("ONBOARDING_ANSWER", { questionId, answerPresetId }))
-          .status,
+        (
+          await send("ONBOARDING_ANSWER", {
+            questionId,
+            answerText,
+            inputSource: "typed",
+          })
+        ).status,
         200,
       );
     assert.equal(
@@ -65,8 +70,11 @@ async function fixture(t, options = {}) {
         await send("PROFILE_CONFIRM", {
           alias: "구름여행",
           avatarId: "a-02",
-          speakingStyle: "light_humor",
-          summary: summaryFromAnswers(answers),
+          confirmedSummary: {
+            ...emptySummary(),
+            interests: ["cafe"],
+            speakingStyle: "light_humor",
+          },
         })
       ).status,
       200,
@@ -81,7 +89,7 @@ async function fixture(t, options = {}) {
       shareSummaryApproved: false,
     });
     assert.equal(
-      (await send("HANDOFF_PREPARE", { mode: "my_trip" })).status,
+      (await send("HANDOFF_PREPARE", { mode: "prepared_trip" })).status,
       200,
     );
   };
@@ -166,13 +174,15 @@ test("duplicate before version check; changed envelope rejected; stale new write
   const f = await fixture(t);
   const c = await f.envelope("ONBOARDING_ANSWER", {
     questionId: "interests",
-    answerPresetId: "cafe",
+    inputSource: "typed",
+    answerText: "cafe",
   });
   const first = await f.req("/api/commands", "web", c);
   assert.equal(first.status, 200);
   await f.send("ONBOARDING_ANSWER", {
-    questionId: "pace",
-    answerPresetId: "relaxed",
+    questionId: "interests",
+    inputSource: "typed",
+    answerText: "relaxed",
   });
   const replay = await f.req("/api/commands", "web", c);
   assert.equal(replay.body.receipt.replayed, true);
@@ -208,7 +218,7 @@ test("restriction unknown, active, background, expired, old session/sequence blo
     handoffId: h.handoffId,
     handoffVersion: h.handoffVersion,
     sourceVersions: h.sourceVersions,
-    mode: "my_trip",
+    mode: "prepared_trip",
   };
   assert.equal((await f.send("CAR_LOADED", payload, "car")).status, 423);
   await f.report(session, 1, { restricted: true });
@@ -230,14 +240,15 @@ test("profile change invalidates old handoff, source mismatch rejected, repeated
   const f = await fixture(t);
   await f.ready();
   const h = (await f.req("/api/handoff", "car")).body;
-  await f.send("HANDOFF_PREPARE", { mode: "my_trip" });
+  await f.send("HANDOFF_PREPARE", { mode: "prepared_trip" });
   assert.equal(
     (await f.req("/api/handoff", "car")).body.handoffId,
     h.handoffId,
   );
   await f.send("ONBOARDING_ANSWER", {
     questionId: "interests",
-    answerPresetId: "sea_walk",
+    inputSource: "typed",
+    answerText: "sea_walk",
   });
   assert.equal((await f.req("/api/handoff", "car")).status, 409);
   await f.ready();
@@ -252,7 +263,7 @@ test("profile change invalidates old handoff, source mismatch rejected, repeated
           handoffId: h.handoffId,
           handoffVersion: h.handoffVersion,
           sourceVersions: h.sourceVersions,
-          mode: "my_trip",
+          mode: "prepared_trip",
         },
         "car",
       )
@@ -264,8 +275,9 @@ test("role, view, schema, consent, cross-origin and static boundaries enforced",
   const f = await fixture(t);
   assert.equal((await f.req("/api/state?view=car")).status, 403);
   const c = await f.envelope("ONBOARDING_ANSWER", {
-    questionId: "pace",
-    answerPresetId: "cafe",
+    questionId: "interests",
+    inputSource: "typed",
+    answerText: "   ",
   });
   assert.equal((await f.req("/api/commands", "web", c)).status, 400);
   assert.equal((await f.req("/api/commands", "car", c)).status, 403);
@@ -279,8 +291,9 @@ test("role, view, schema, consent, cross-origin and static boundaries enforced",
     400,
   );
   const originCommand = await f.envelope("ONBOARDING_ANSWER", {
-    questionId: "pace",
-    answerPresetId: "relaxed",
+    questionId: "interests",
+    inputSource: "typed",
+    answerText: "relaxed",
   });
   assert.equal(
     (
@@ -301,7 +314,7 @@ test("role, view, schema, consent, cross-origin and static boundaries enforced",
       await f.req(
         "/api/commands",
         "web",
-        await f.envelope("HANDOFF_PREPARE", { mode: "my_trip" }),
+        await f.envelope("HANDOFF_PREPARE", { mode: "prepared_trip" }),
         { "X-Demo-Client-Id": randomUUID() },
       )
     ).status,
@@ -333,8 +346,9 @@ test("before-rename failure preserves old state; after-rename uncertainty stops 
     },
   });
   const c = await f.envelope("ONBOARDING_ANSWER", {
-    questionId: "pace",
-    answerPresetId: "relaxed",
+    questionId: "interests",
+    inputSource: "typed",
+    answerText: "relaxed",
   });
   stage = "beforeRename";
   assert.equal((await f.req("/api/commands", "web", c)).status, 500);
@@ -364,11 +378,13 @@ test("concurrent writes are serialized: only one stale-version mutation commits;
   const f = await fixture(t);
   const a = await f.envelope("ONBOARDING_ANSWER", {
       questionId: "interests",
-      answerPresetId: "cafe",
+      inputSource: "typed",
+      answerText: "cafe",
     }),
     b = await f.envelope("ONBOARDING_ANSWER", {
-      questionId: "pace",
-      answerPresetId: "relaxed",
+      questionId: "interests",
+      inputSource: "typed",
+      answerText: "relaxed",
     });
   const results = await Promise.all([
     f.req("/api/commands", "web", a),
@@ -376,8 +392,9 @@ test("concurrent writes are serialized: only one stale-version mutation commits;
   ]);
   assert.deepEqual(results.map((r) => r.status).sort(), [200, 409]);
   const c = await f.envelope("ONBOARDING_ANSWER", {
-    questionId: "conversation",
-    answerPresetId: "quiet",
+    questionId: "interests",
+    inputSource: "typed",
+    answerText: "quiet",
   });
   const duplicates = await Promise.all([
     f.req("/api/commands", "web", c),
@@ -392,4 +409,323 @@ test("concurrent writes are serialized: only one stale-version mutation commits;
     duplicates[1].body.receipt.committedVersion,
   );
   assert.equal(duplicates.filter((r) => r.body.receipt.replayed).length, 1);
+});
+
+test("v3 preserves exact free text and Unicode limits; raw answers never reach car, handoff or foreign web", async (t) => {
+  const f = await fixture(t);
+  const raw = "  바다🌊\n카페  ㅋㅋ <script>hi</script>  ";
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "interests",
+        answerText: raw,
+        inputSource: "typed",
+      })
+    ).status,
+    200,
+  );
+  assert.equal((await f.state()).onboarding.interests.answerText, raw);
+  assert.deepEqual((await f.state("car")).onboarding, {});
+  assert.equal(JSON.stringify(await f.state("car")).includes(raw), false);
+  const other = await f.req("/api/state?view=web", "web", undefined, {
+    "X-Demo-Client-Id": randomUUID(),
+  });
+  assert.deepEqual(other.body.onboarding, {});
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "interests",
+        answerText: "🌊".repeat(500),
+        inputSource: "typed",
+      })
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "interests",
+        answerText: "🌊".repeat(501),
+        inputSource: "typed",
+      })
+    ).status,
+    400,
+  );
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "interests",
+        answerText: " \n ",
+        inputSource: "typed",
+      })
+    ).status,
+    400,
+  );
+  await f.ready();
+  const h = (await f.req("/api/handoff", "car")).body;
+  assert.equal("onboarding" in h, false);
+  assert.equal("answerText" in h.owner.summary, false);
+});
+
+test("prepared follow-up uses exact demo cue; earlier edits invalidate later branch, profile and handoff", async (t) => {
+  const f = await fixture(t);
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "interests",
+    answerText: "맛집 탐방을 좋아해",
+    inputSource: "example",
+  });
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "activity",
+        answerText: "아직 순서 아님",
+        inputSource: "typed",
+      })
+    ).status,
+    409,
+  );
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "food_detail",
+    answerText: "따뜻한 국물 ㅎㅎ",
+    inputSource: "typed",
+  });
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "activity",
+    answerText: "천천히",
+    inputSource: "typed",
+  });
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "interests",
+    answerText: "바다가 좋아",
+    inputSource: "typed",
+  });
+  const s = await f.state();
+  assert.deepEqual(Object.keys(s.onboarding), ["interests"]);
+  assert.ok(s.onboarding.interests.revision > 1);
+  assert.equal(
+    (
+      await f.send("ONBOARDING_ANSWER", {
+        questionId: "food_detail",
+        answerText: "이전 분기",
+        inputSource: "typed",
+      })
+    ).status,
+    409,
+  );
+  await f.ready();
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "expression",
+    answerText: "새로운 말투",
+    inputSource: "typed",
+  });
+  assert.equal((await f.state()).profile, null);
+  assert.equal((await f.req("/api/handoff", "car")).status, 409);
+});
+
+test("unconfirmed summary remains empty/null; normalized alias and explicit enums only", async (t) => {
+  const f = await fixture(t);
+  await f.ready();
+  const confirm = await f.send("PROFILE_CONFIRM", {
+    alias: "  파도  ",
+    avatarId: "a-01",
+    confirmedSummary: emptySummary(),
+  });
+  assert.equal(confirm.status, 200);
+  assert.equal(confirm.body.state.profile.alias, "파도");
+  await f.send("HANDOFF_PREPARE", { mode: "prepared_trip" });
+  const h = (await f.req("/api/handoff", "car")).body;
+  assert.deepEqual(h.owner.summary, emptySummary());
+  assert.equal(h.owner.speakingStyle, null);
+  assert.equal(
+    (
+      await f.send("PROFILE_CONFIRM", {
+        alias: "파도",
+        avatarId: "a-01",
+        confirmedSummary: { ...emptySummary(), interests: ["맛집"] },
+      })
+    ).status,
+    400,
+  );
+});
+
+test("publication changes do not invalidate core snapshot or alter trip share version; private is not a handoff prerequisite", async (t) => {
+  const f = await fixture(t);
+  await f.ready();
+  let s = await f.state();
+  const old = s.handoff;
+  await f.send("PROFILE_CONFIRM", {
+    alias: "파도",
+    avatarId: "a-01",
+    confirmedSummary: emptySummary(),
+  });
+  assert.equal(
+    (await f.send("HANDOFF_PREPARE", { mode: "prepared_trip" })).status,
+    200,
+  );
+  s = await f.state();
+  assert.equal(s.publication, "pending");
+  const before = s.handoff,
+    tripShare = s.tripShareVersion;
+  await f.send("PROFILE_PRIVATE", {
+    profileVersion: s.profileVersion,
+    publicationVersion: s.publicationVersion,
+  });
+  s = await f.state();
+  assert.deepEqual(s.handoff, before);
+  assert.deepEqual(Object.keys(s.handoff.sourceVersions), ["profile", "trip"]);
+  assert.equal(s.tripShareVersion, tripShare);
+  assert.notEqual(s.handoff.handoffId, old.handoffId);
+});
+
+test("stored preparation starts independently of handoff ACK, then web mutations are server blocked", async (t) => {
+  const f = await fixture(t);
+  await f.ready();
+  const session = await f.car();
+  await f.report(session, 1);
+  const s = await f.state("car"),
+    payload = {
+      origin: "stored_preparation",
+      vehicleSessionId: session,
+      sourceVersions: s.preparationPreview.sourceVersions,
+    };
+  assert.equal(
+    (
+      await f.send(
+        "CAR_START_TRIP",
+        { ...payload, sourceVersions: { profile: 999, trip: 1 } },
+        "car",
+      )
+    ).status,
+    409,
+  );
+  const started = await f.send("CAR_START_TRIP", payload, "car");
+  assert.equal(started.status, 200);
+  assert.equal(
+    started.body.state.vehicleActivation.origin,
+    "stored_preparation",
+  );
+  assert.equal(started.body.state.handoff.acknowledged, false);
+  assert.ok(started.body.state.activeJourney);
+  const web = await f.state();
+  assert.deepEqual(web.allowedActions, []);
+  for (const [type, payload] of [
+    [
+      "ONBOARDING_ANSWER",
+      { questionId: "interests", answerText: "덮어쓰기", inputSource: "typed" },
+    ],
+    [
+      "PROFILE_CONFIRM",
+      { alias: "새별명", avatarId: "a-01", confirmedSummary: emptySummary() },
+    ],
+    [
+      "PROFILE_PRIVATE",
+      {
+        profileVersion: web.profileVersion,
+        publicationVersion: web.publicationVersion,
+      },
+    ],
+    ["TRIP_SAVE", { presetId: "gangneung-01", shareSummaryApproved: false }],
+    ["HANDOFF_PREPARE", { mode: "prepared_trip" }],
+  ])
+    assert.equal((await f.send(type, payload)).status, 409);
+});
+
+test("default start requires no preparation, does not fabricate handoff, and only same device restores after fresh restrictions", async (t) => {
+  const f = await fixture(t);
+  const device = randomUUID(),
+    session = randomUUID();
+  await f.send(
+    "CAR_SESSION_OPEN",
+    { deviceId: device, vehicleSessionId: session, pendingAttempts: [] },
+    "car",
+  );
+  await f.report(session, 1);
+  const payload = {
+    origin: "demo_preset",
+    vehicleSessionId: session,
+    presetId: "gangneung-01",
+  };
+  const c = await f.envelope("CAR_START_TRIP", payload, "car");
+  assert.equal((await f.req("/api/commands", "car", c)).status, 200);
+  assert.equal(
+    (await f.req("/api/commands", "car", c)).body.receipt.replayed,
+    true,
+  );
+  let s = await f.state("car");
+  assert.equal(s.handoff, null);
+  assert.equal(s.activeJourney.owner.alias, "여행자");
+  assert.deepEqual(s.activeJourney.owner.summary, emptySummary());
+  await f.restart();
+  s = await f.state("car");
+  assert.equal(s.activeJourney, null);
+  assert.equal(s.vehicleActivation.origin, "demo_preset");
+  const next = randomUUID();
+  assert.equal(
+    (
+      await f.send(
+        "CAR_SESSION_OPEN",
+        { deviceId: randomUUID(), vehicleSessionId: next, pendingAttempts: [] },
+        "car",
+      )
+    ).status,
+    409,
+  );
+  assert.equal(
+    (
+      await f.send(
+        "CAR_SESSION_OPEN",
+        { deviceId: device, vehicleSessionId: next, pendingAttempts: [] },
+        "car",
+      )
+    ).status,
+    200,
+  );
+  assert.equal((await f.state("car")).activeJourney, null);
+  await f.report(next, 1, { restrictionKnown: false });
+  assert.equal((await f.state("car")).activeJourney, null);
+  await f.report(next, 2);
+  s = await f.state("car");
+  assert.equal(s.activeJourney.owner.alias, "여행자");
+  assert.deepEqual(s.allowedActions, []);
+  assert.equal(s.handoff, null);
+});
+
+test("default start cannot overwrite even a partial web preparation; v2 requests and files are rejected without rewriting", async (t) => {
+  const f = await fixture(t);
+  await f.send("ONBOARDING_ANSWER", {
+    questionId: "interests",
+    answerText: "내 준비",
+    inputSource: "typed",
+  });
+  const session = await f.car();
+  await f.report(session, 1);
+  assert.equal(
+    (
+      await f.send(
+        "CAR_START_TRIP",
+        {
+          origin: "demo_preset",
+          vehicleSessionId: session,
+          presetId: "gangneung-01",
+        },
+        "car",
+      )
+    ).status,
+    423,
+  );
+  assert.equal((await f.state()).onboarding.interests.answerText, "내 준비");
+  const c = await f.envelope("ONBOARDING_ANSWER", {
+    questionId: "interests",
+    answerText: "v2 금지",
+    inputSource: "typed",
+  });
+  c.schemaVersion = 2;
+  assert.equal((await f.req("/api/commands", "web", c)).status, 400);
+  const dir = await mkdtemp(join(tmpdir(), "waymate-v2-preserve-")),
+    file = join(dir, "state.json");
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const v2 = '{"schemaVersion":2,"answers":{"interests":"cafe"}}';
+  await writeFile(file, v2);
+  await assert.rejects(startServer({ file, port: 0 }));
+  assert.equal(await readFile(file, "utf8"), v2);
 });

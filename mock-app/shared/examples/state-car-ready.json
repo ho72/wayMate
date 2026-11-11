@@ -18,15 +18,11 @@
     "avatarId": "a-02",
     "speakingStyle": "light_humor",
     "summary": {
-      "interests": [
-        "cafe"
-      ],
+      "interests": ["cafe"],
       "activityPreference": "walk_first_photos_occasional",
       "pace": "relaxed",
       "conversationStyle": "quiet",
-      "expressionPresetIds": [
-        "quiet-companion"
-      ]
+      "expressionPresetIds": ["quiet-companion"]
     }
   },
   "profileVersion": 1,
@@ -62,9 +58,7 @@
     "foreground": true,
     "fresh": true
   },
-  "allowedActions": [
-    "CAR_LOADED"
-  ],
+  "allowedActions": ["CAR_LOADED"],
   "actionBindings": {
     "CAR_LOADED": {
       "commandType": "CAR_LOADED",

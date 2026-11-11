@@ -5,12 +5,14 @@ on:
     paths:
       - "mock-app/vehicle/**"
       - "mock-app/shared/**"
+      - "mock-app/assets/images/characters/**"
       - ".github/workflows/vehicle-checks.yml"
   push:
     branches: [main]
     paths:
       - "mock-app/vehicle/**"
       - "mock-app/shared/**"
+      - "mock-app/assets/images/characters/**"
       - ".github/workflows/vehicle-checks.yml"
   workflow_dispatch:
 
@@ -44,5 +46,5 @@ jobs:
         run: |
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
           printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
-      - name: Build mock APK and run Android Lint
-        run: ./gradlew :app:assembleMockDebug :app:lintMockDebug --no-daemon --console=plain
+      - name: Build mock and real APKs and run Android Lint
+        run: ./gradlew :app:assembleMockDebug :app:assembleRealDebug :app:lintMockDebug :app:lintRealDebug --no-daemon --console=plain

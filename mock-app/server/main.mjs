@@ -1,6 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { startServer } from "./http/server.mjs";
-const file = fileURLToPath(new URL("../runtime/state.json", import.meta.url));
+const file = fileURLToPath(
+  new URL("../runtime/state-v3.json", import.meta.url),
+);
 try {
   const app = await startServer({ file });
   console.log(

@@ -19,7 +19,7 @@ import org.json.JSONObject
  */
 class HandoffRepository(context: Context, private val display: (HandoffConnectionState) -> Unit) {
     private val api = DemoApi()
-    private val preferences = context.getSharedPreferences("handoff-v2", Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences("handoff-v3", Context.MODE_PRIVATE)
     private val worker = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
     private val deviceId =
@@ -93,14 +93,14 @@ class HandoffRepository(context: Context, private val display: (HandoffConnectio
 
     private fun read(): JSONObject =
         api.request("/api/state?view=car").also {
-            require(it.getInt("schemaVersion") == 2)
+            require(it.getInt("schemaVersion") == 3)
             state = it
         }
 
     private fun envelope(type: String, payload: JSONObject): JSONObject {
         val current = read()
         return JSONObject()
-            .put("schemaVersion", 2)
+            .put("schemaVersion", 3)
             .put("runSeq", current.getInt("runSeq"))
             .put("runId", current.getString("runId"))
             .put("commandId", UUID.randomUUID().toString())
@@ -211,21 +211,50 @@ class HandoffRepository(context: Context, private val display: (HandoffConnectio
         report()
         networkReady = true
         val meta = state?.optJSONObject("handoff")
-        if (
-            loaded != null &&
-                (meta?.optString("handoffId") != loaded?.handoffId ||
-                    meta?.optBoolean("acknowledged") != true)
-        )
-            loaded = null
+        loaded = state?.optJSONObject("activeJourney")?.let { JourneyParser.preparation(it) }
         show(
             when {
                 restricted == null -> "차량의 제한 상태를 확인하고 있어요."
                 restricted == true -> "정차 후 여행을 불러올 수 있어요."
-                loaded != null -> "웹에서 저장한 여행을 불러왔고, 서버에 수신 확인을 저장했어요."
+                loaded != null -> "차량에서 시작한 내 여행을 이어가요."
                 meta == null -> "웹에서 프로필·여행을 저장하고 차량 전달을 준비해 주세요."
                 else -> "여행이 준비됐어요. 내 여행 불러오기를 눌러 주세요."
             }
         )
+    }
+
+    fun startTrip(reviewed: Journey?) = executeStart(reviewed)
+
+    private fun executeStart(reviewed: Journey?) {
+        if (loading || !foreground || restricted != false || pending != null) return
+        loading = true
+        worker.execute {
+            try {
+                report()
+                val payload = JSONObject().put("vehicleSessionId", sessionId)
+                if (reviewed != null)
+                    payload
+                        .put("origin", "stored_preparation")
+                        .put(
+                            "sourceVersions",
+                            JSONObject()
+                                .put("profile", reviewed.profileVersion)
+                                .put("trip", reviewed.tripVersion),
+                        )
+                else payload.put("origin", "demo_preset").put("presetId", "gangneung-01")
+                val command = envelope("CAR_START_TRIP", payload)
+                check(foreground && restricted == false)
+                persist(command)
+                sendPending()
+                sync()
+            } catch (e: Exception) {
+                networkReady = false
+                show(errorText(e))
+            } finally {
+                loading = false
+                show()
+            }
+        }
     }
 
     fun load() {
@@ -236,7 +265,8 @@ class HandoffRepository(context: Context, private val display: (HandoffConnectio
             try {
                 if (pending != null) {
                     if (!recover()) {
-                        if (pending?.getString("type") == "CAR_LOADED") report()
+                        if (pending?.getString("type") in listOf("CAR_LOADED", "CAR_START_TRIP"))
+                            report()
                         check(foreground && restricted == false)
                         sendPending()
                     }
@@ -292,10 +322,28 @@ class HandoffRepository(context: Context, private val display: (HandoffConnectio
                 notice = notice,
                 journey = loaded,
                 retryPending = pending != null,
+                startEnabled =
+                    foreground &&
+                        restricted == false &&
+                        networkReady &&
+                        pending == null &&
+                        actions != null &&
+                        (0 until actions.length()).any {
+                            actions.getString(it) == "CAR_START_TRIP"
+                        },
+                preparation =
+                    current?.optJSONObject("preparationPreview")?.let {
+                        JourneyParser.preparation(it)
+                    },
             )
         main.post {
             if (!closed)
-                display(ui.copy(loadEnabled = ui.loadEnabled && foreground && restricted == false))
+                display(
+                    ui.copy(
+                        loadEnabled = ui.loadEnabled && foreground && restricted == false,
+                        startEnabled = ui.startEnabled && foreground && restricted == false,
+                    )
+                )
         }
     }
 }

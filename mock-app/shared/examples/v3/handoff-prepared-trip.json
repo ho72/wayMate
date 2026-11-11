@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 3,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "handoffId": "00000000-0000-4000-8000-000000000012",
+  "handoffVersion": 1,
+  "sourceVersions": {
+    "profile": 1,
+    "trip": 1
+  },
+  "mode": "prepared_trip",
+  "owner": {
+    "alias": "구름여행",
+    "avatarId": "a-02",
+    "speakingStyle": "light_humor",
+    "summary": {
+      "interests": [
+        "cafe"
+      ],
+      "activityPreference": null,
+      "pace": null,
+      "conversationStyle": null,
+      "speakingStyle": "light_humor",
+      "expressionPresetIds": [],
+      "summarySource": "user_confirmed_demo"
+    }
+  },
+  "ownerTrip": {
+    "date": "2026-11-14",
+    "nextVisit": "15:20",
+    "nextVisitLabel": "기존 개인 방문지",
+    "returnPlaceId": "a-lodging-01",
+    "returnPlaceLabel": "내 숙소",
+    "returnEstimate": "15:45",
+    "returnDeadline": "16:00"
+  },
+  "peer": null
+}

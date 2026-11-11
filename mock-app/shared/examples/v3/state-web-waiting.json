@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 3,
+  "scope": "preparation-v3",
+  "storeId": "00000000-0000-4000-8000-000000000010",
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "version": 8,
+  "view": "web",
+  "clientId": "00000000-0000-4000-8000-000000000011",
+  "onboarding": {
+    "interests": {
+      "answerText": "cafe",
+      "inputSource": "typed",
+      "confirmed": true,
+      "revision": 1
+    },
+    "activity": {
+      "answerText": "walk_first_photos_occasional",
+      "inputSource": "typed",
+      "confirmed": true,
+      "revision": 2
+    },
+    "conversation": {
+      "answerText": "quiet",
+      "inputSource": "typed",
+      "confirmed": true,
+      "revision": 3
+    },
+    "expression": {
+      "answerText": "편하게 말해줘 ㅎㅎ",
+      "inputSource": "typed",
+      "confirmed": true,
+      "revision": 4
+    }
+  },
+  "profile": {
+    "version": 1,
+    "alias": "구름여행",
+    "avatarId": "a-02",
+    "privateSummary": {
+      "interests": [
+        "cafe"
+      ],
+      "activityPreference": null,
+      "pace": null,
+      "conversationStyle": null,
+      "speakingStyle": "light_humor",
+      "expressionPresetIds": [],
+      "summarySource": "user_confirmed_demo"
+    },
+    "confirmed": true
+  },
+  "profileVersion": 1,
+  "publicationVersion": 6,
+  "publication": "private",
+  "publicApproval": {
+    "status": "private",
+    "profileVersion": 1,
+    "publicationVersion": 6,
+    "approvedFields": [],
+    "introTemplateId": null
+  },
+  "trip": {
+    "date": "2026-11-14",
+    "nextVisit": "15:20",
+    "nextVisitLabel": "기존 개인 방문지",
+    "returnPlaceId": "a-lodging-01",
+    "returnPlaceLabel": "내 숙소",
+    "returnEstimate": "15:45",
+    "returnDeadline": "16:00"
+  },
+  "tripVersion": 1,
+  "tripShareVersion": 0,
+  "vehicleActivation": null,
+  "journeyMode": null,
+  "preparationPreview": null,
+  "activeJourney": null,
+  "handoff": {
+    "handoffId": "00000000-0000-4000-8000-000000000012",
+    "handoffVersion": 1,
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "mode": "prepared_trip",
+    "acknowledged": false
+  },
+  "vehicle": {
+    "vehicleSessionId": null,
+    "vehicleEpoch": 0,
+    "restrictionKnown": false,
+    "restricted": true,
+    "foreground": false,
+    "fresh": false
+  },
+  "allowedActions": [
+    "ONBOARDING_ANSWER",
+    "PROFILE_CONFIRM",
+    "PROFILE_PRIVATE",
+    "TRIP_SAVE",
+    "HANDOFF_PREPARE"
+  ],
+  "actionBindings": {
+    "ONBOARDING_ANSWER": {
+      "commandType": "ONBOARDING_ANSWER",
+      "target": {},
+      "payload": {}
+    },
+    "PROFILE_CONFIRM": {
+      "commandType": "PROFILE_CONFIRM",
+      "target": {},
+      "payload": {}
+    },
+    "PROFILE_PRIVATE": {
+      "commandType": "PROFILE_PRIVATE",
+      "target": {},
+      "payload": {
+        "profileVersion": 1,
+        "publicationVersion": 6
+      }
+    },
+    "TRIP_SAVE": {
+      "commandType": "TRIP_SAVE",
+      "target": {},
+      "payload": {}
+    },
+    "HANDOFF_PREPARE": {
+      "commandType": "HANDOFF_PREPARE",
+      "target": {},
+      "payload": {
+        "mode": "prepared_trip"
+      }
+    }
+  },
+  "blockedActions": {}
+}

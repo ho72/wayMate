@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 3,
+  "characters": {
+    "a-01": {
+      "label": "블루 드래곤",
+      "assetId": "blue-dragon-v1",
+      "source": "assets/images/characters/blue-dragon-v1/reference.png",
+      "sha256": "5381e9dcffc64a159c4cdd07243c4d654a0f7010ea3010a6db08ef7b30f8300d",
+      "kind": "opaque_static_image",
+      "states": ["still"],
+      "webUrl": "/character.png",
+      "androidDrawable": "blue_dragon"
+    },
+    "a-02": {
+      "label": "햇살 친구",
+      "kind": "procedural_canvas",
+      "states": ["still"]
+    }
+  },
+  "audioCues": {},
+  "lipSync": false
+}

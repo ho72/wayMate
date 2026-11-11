@@ -1,0 +1,12 @@
+{
+  "approvedDate": "2026-11-11",
+  "status": "approved_visual_reference",
+  "file": "reference.png",
+  "sha256": "5381e9dcffc64a159c4cdd07243c4d654a0f7010ea3010a6db08ef7b30f8300d",
+  "generationTool": "image_gen (built-in)",
+  "sourceImage": "exec-1dad4316-981f-4984-b828-b3a330c81089",
+  "prompt": "Use case: stylized-concept. Asset type: preview-only character appearance concept for an in-vehicle travel companion. Create one original blue baby dragon similar in spirit to Veemon: energetic, friendly and expressive, with a convincingly sophisticated 3D-model render appearance. Full body, three-quarter front view, large head and compact sturdy body, vivid azure blue skin with subtle cyan variation, creamy white muzzle and belly, large warm amber eyes with realistic catchlights, carefully sculpted eyelids and smile, short rounded backward horns, small white claws, compact limbs, curved tail. One hand gently raised in greeting, small friendly smile with tiny fangs. Premium animated-feature character sculpt and physically based rendering, convincing depth and anatomy, subtle surface microtexture, subsurface scattering, soft key light and delicate rim light, natural ambient occlusion and contact shadow. Soft pale mint studio background, single centered subject with generous margins. Preserve a bold readable silhouette for future small UI use. No lettering, no logos, no forehead V marking, no collage, no multiple poses, no UI, no vehicle in the image. This is an appearance concept, not a rigged model or an animation.",
+  "scope": "Approved static image displayed as a-01 in the v3 web and vehicle home. No rig, lip sync or continuous animation.",
+  "runtimeCharacterId": "a-01",
+  "runtimeMappingVersion": 3
+}

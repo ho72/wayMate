@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-11",
+  "scope": "preparation-v3",
+  "automaticTests": {
+    "passed": 52,
+    "failed": 0
+  },
+  "build": {
+    "mockDebug": {
+      "apkSha256": "16e82afbadb59edb4542e30cf50021f4138863a767f6e621533291b1f4ab682b",
+      "lintErrors": 0,
+      "lintWarnings": 15
+    },
+    "realDebug": {
+      "apkSha256": "a8b1920130a187032866e2795ea5c70d3625701ce80ebcce2e1eb4d0b56bb80c",
+      "lintErrors": 0,
+      "lintWarnings": 15
+    }
+  },
+  "manual": {
+    "browser": "Playwright Chromium",
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "rawWhitespaceEmojiPreserved": true,
+    "unsentDraftReloadPreserved": true,
+    "explicitSummaryConfirmed": true,
+    "webToVehicleHome": true,
+    "webReadOnlyAfterActivation": true,
+    "appRestartRestored": true,
+    "serverRestartRestored": true,
+    "extraLoadOrStartAfterRestart": false,
+    "legacyStateSha256": "8b4f97fc7d3616893e2b074f9ad6c2c5aa73b8dfb8510566c30e1f23254cc603"
+  },
+  "navigation": {
+    "sdk": "3.0.5",
+    "source": "real",
+    "connected": true,
+    "queriesReceived": true,
+    "requestedD": {
+      "latitude": 37.48544722,
+      "longitude": 127.03636666,
+      "name": "42dot",
+      "poiId": "36khp37hh8gqcm5nqhe5"
+    },
+    "observedD": {
+      "latitude": 37.41289678,
+      "longitude": 127.09383464,
+      "name": "42dot"
+    },
+    "operation": "prepare",
+    "outcome": "unknown",
+    "routingCompletedCallbackReceived": false,
+    "addCalls": 0,
+    "removeCalls": 0,
+    "manualNativeGuidanceEnd": true,
+    "afterCleanup": {
+      "destinationName": "",
+      "latitude": 0,
+      "longitude": 0,
+      "waypoints": [],
+      "naviMode": "SAFE_GUIDING",
+      "isRouting": false
+    },
+    "unknownJournalPreserved": true,
+    "mapBackgroundFixed": false
+  }
+}

@@ -9,4 +9,6 @@ data class HandoffConnectionState(
     val notice: String? = null,
     val journey: Journey? = null,
     val retryPending: Boolean = false,
+    val startEnabled: Boolean = false,
+    val preparation: Journey? = null,
 )

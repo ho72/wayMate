@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_brand">w  wayMate</string>
+    <string name="home_start_badge">여행 시작</string>
+    <string name="home_private_badge">내 여행 · 비공개</string>
+    <string name="home_start_title">이 준비로 여행을 시작할까요?</string>
+    <string name="home_default_plan">저장된 준비가 없으면 시연용 기본 계획을 만들어요.\n여행자 · 블루 드래곤 · 소개값 없음\n2026-11-14 / 15:20 개인 방문지\n숙소 복귀 예상 15:45 · 마감 16:00\n\n기존 준비가 있으면 덮어쓰지 않아요.</string>
+    <string name="home_confirm_start">확인하고 차량에서 시작</string>
+    <string name="home_back">돌아가기</string>
+    <string name="home_welcome">내 여행을 이어갈 준비가 됐나요?</string>
+    <string name="home_companion">오늘의 여정도 내가 함께할게요.</string>
+    <string name="home_prepare_help">웹에서 준비했거나, 차량에서 바로 시작할 수 있어요.</string>
+    <string name="home_start_trip">여행을 시작해요</string>
+    <string name="home_today_trip">오늘의 내 여행</string>
+    <string name="home_web_help">웹에서 소개와 여행을 저장하면 여기서 불러올 수 있어요.</string>
+    <string name="home_retry">같은 요청 다시 확인</string>
+    <string name="home_load">웹에서 준비한 여행 불러오기</string>
+    <string name="home_start_stored">저장된 준비 확인하고 시작</string>
+    <string name="home_start_default">기본 시연 계획 확인하기</string>
+    <string name="home_cafe">카페</string>
+    <string name="home_sea">바다 산책</string>
+    <string name="home_no_interests">확인한 관심사 없음 · 중립 소개</string>
+    <string name="home_calm">차분한 소개</string>
+    <string name="home_humor">가벼운 농담을 담은 소개</string>
+    <string name="home_neutral">말투 미선택 · 중립 표현</string>
+    <string name="home_recommendations_pending">동행 추천 · 준비 중</string>
+    <string name="home_checking">차량 상태를 확인하고 있어요.</string>
+    <string name="home_review_plan">%1$s · %2$s\n%3$s %4$s\n복귀 %5$s / %6$s까지\n\n차량에서 시작하면 웹 준비는 잠겨요.</string>
+    <string name="home_greeting">%1$s님, 함께 출발해요</string>
+    <string name="home_stored_preview">저장된 준비: %1$s\n%2$s · %3$s</string>
+    <string name="home_next_visit">다음 일정  %1$s\n%2$s</string>
+    <string name="home_return_trip">복귀 장소  %1$s\n예상 %2$s · %3$s까지</string>
+    <string name="home_interests">내가 확인한 관심사  %1$s</string>
+    <string name="character_blue_dragon">블루 드래곤</string>
+    <string name="home_activity">산책 먼저 · 사진은 가끔</string>
+    <string name="home_pace">여유로운 속도</string>
+    <string name="home_conversation">조용한 대화</string>
+    <string name="home_expression">조용히 함께하는 친구 표현</string>
+</resources>

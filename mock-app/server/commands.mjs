@@ -1,7 +1,8 @@
 import { isDeepStrictEqual } from "node:util";
 import { atomicSave } from "./store.mjs";
 import { assertContract } from "./validation.mjs";
-import { apply, fail, fresh } from "./domain/handoff.mjs";
+import { apply, fail, fresh, approval } from "./domain/handoff.mjs";
+import { validateStore } from "./state.mjs";
 import { project } from "./projections/state.mjs";
 export function coordinator(
   file,
@@ -132,7 +133,8 @@ export function coordinator(
           committedVersion: next.version,
         };
         next.receipts[key] = { command: c, clientId: id, receipt };
-        assertContract("store", next);
+        next.publicApproval = approval(next);
+        validateStore(next);
         await save(next);
         return assertContract("success", {
           ok: true,
@@ -144,10 +146,10 @@ export function coordinator(
       serial(async () => {
         await expire();
         return assertContract("health", {
-          schemaVersion: 2,
+          schemaVersion: 3,
           storeId: state.storeId,
           status: "ready",
-          scope: "handoff-my-trip-v1",
+          scope: "preparation-v3",
         });
       }),
   };

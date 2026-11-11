@@ -1,297 +1,276 @@
 package com.waymate.app.ui.screens.handoff
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.waymate.app.R
-import com.waymate.app.ui.components.TravelFriend
-import com.waymate.app.ui.theme.Canvas
-import com.waymate.app.ui.theme.Forest
-import com.waymate.app.ui.theme.Ink
-import com.waymate.app.ui.theme.Mint
-import com.waymate.app.ui.theme.Muted
-import com.waymate.app.ui.theme.WayMateTheme
+import com.waymate.app.ui.components.AgentCharacter
+import com.waymate.app.ui.theme.*
 
 @Composable
 fun HandoffScreen(
     state: HandoffUiState,
     onLoadJourney: () -> Unit,
+    onStartTrip: (com.waymate.app.model.Journey?) -> Unit,
 ) {
-    Surface(modifier = Modifier.fillMaxSize(), color = Canvas) {
+    var confirmStart by remember { mutableStateOf(false) }
+    var startPreview by remember { mutableStateOf<com.waymate.app.model.Journey?>(null) }
+    val journey = state.journey
+    Surface(Modifier.fillMaxSize(), color = Canvas) {
         BoxWithConstraints {
             val wide = maxWidth >= 840.dp
-            val margin = if (wide) 56.dp else 28.dp
-
+            val bodyMinHeight = (maxHeight - 160.dp).coerceAtLeast(0.dp)
             Column(
-                modifier =
-                    Modifier.fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = margin, vertical = 28.dp)
+                Modifier.fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(if (wide) 40.dp else 24.dp)
             ) {
-                BrandHeader(wide)
-                Spacer(Modifier.height(if (wide) 52.dp else 32.dp))
-
-                if (wide) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        stringResource(R.string.home_brand),
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Forest,
+                    )
+                    Text(
+                        if (journey == null) stringResource(R.string.home_start_badge)
+                        else stringResource(R.string.home_private_badge),
+                        Modifier.background(Mint, RoundedCornerShape(30.dp)).padding(14.dp),
+                        color = Forest,
+                    )
+                }
+                Spacer(Modifier.height(28.dp))
+                if (wide)
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(48.dp),
+                        Modifier.fillMaxWidth().heightIn(min = bodyMinHeight),
+                        horizontalArrangement = Arrangement.spacedBy(32.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Welcome(Modifier.weight(1f), wide = true, state = state)
-                        JourneyCard(state, onLoadJourney, Modifier.weight(1f))
+                        CharacterPanel(state, Modifier.weight(1f), true)
+                        JourneyPanel(
+                            state,
+                            onLoadJourney,
+                            {
+                                startPreview = state.preparation
+                                confirmStart = true
+                            },
+                            Modifier.weight(1f),
+                        )
                     }
-                } else {
-                    Welcome(Modifier.fillMaxWidth(), wide = false, state = state)
-                    Spacer(Modifier.height(32.dp))
-                    JourneyCard(state, onLoadJourney, Modifier.fillMaxWidth())
-                }
-
-                Spacer(Modifier.height(36.dp))
-                Text(
-                    text = stringResource(R.string.travel_message),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Muted,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BrandHeader(wide: Boolean) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier.size(48.dp).background(Forest, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text("w", color = Mint, fontSize = 32.sp, fontWeight = FontWeight.Bold)
-            }
-            Spacer(Modifier.width(14.dp))
-            Column {
-                Text(
-                    stringResource(R.string.app_name),
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Ink,
-                )
-                if (wide) {
-                    Text(
-                        stringResource(R.string.brand_tagline),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Muted,
+                else {
+                    CharacterPanel(state, Modifier.fillMaxWidth())
+                    JourneyPanel(
+                        state,
+                        onLoadJourney,
+                        {
+                            startPreview = state.preparation
+                            confirmStart = true
+                        },
+                        Modifier.fillMaxWidth(),
                     )
                 }
             }
         }
-
-        Text(
-            text = stringResource(R.string.preview_label),
-            modifier =
-                Modifier.background(Mint, RoundedCornerShape(50))
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
-            color = Forest,
-            style = MaterialTheme.typography.labelLarge,
-        )
     }
+    if (confirmStart)
+        AlertDialog(
+            onDismissRequest = { confirmStart = false },
+            title = { Text(stringResource(R.string.home_start_title)) },
+            text = {
+                Text(
+                    startPreview?.let {
+                        stringResource(
+                            R.string.home_review_plan,
+                            it.alias,
+                            it.date,
+                            it.nextVisit,
+                            it.nextVisitLabel,
+                            it.returnPlaceLabel,
+                            it.returnDeadline,
+                        )
+                    } ?: stringResource(R.string.home_default_plan)
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmStart = false
+                        onStartTrip(startPreview)
+                    },
+                    enabled = state.startEnabled && !state.isLoading,
+                ) {
+                    Text(stringResource(R.string.home_confirm_start))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmStart = false }) {
+                    Text(stringResource(R.string.home_back))
+                }
+            },
+        )
 }
 
 @Composable
-private fun Welcome(modifier: Modifier, wide: Boolean, state: HandoffUiState) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
+private fun CharacterPanel(state: HandoffUiState, modifier: Modifier, wide: Boolean = false) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            state.journey?.let { stringResource(R.string.loaded_greeting, it.alias) }
-                ?: stringResource(R.string.welcome_eyebrow),
-            color = Forest,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-        )
-        Spacer(Modifier.height(18.dp))
-        Text(
-            stringResource(R.string.welcome_title),
-            fontSize = if (wide) 48.sp else 36.sp,
-            lineHeight = if (wide) 66.sp else 50.sp,
+            state.journey?.let { stringResource(R.string.home_greeting, it.alias) }
+                ?: stringResource(R.string.home_welcome),
+            fontSize = 28.sp,
+            lineHeight = 38.sp,
             fontWeight = FontWeight.Bold,
             color = Ink,
         )
-        Spacer(Modifier.height(20.dp))
-        Text(
-            stringResource(R.string.welcome_description),
-            color = Muted,
-            fontSize = 20.sp,
-            lineHeight = 32.sp,
+        AgentCharacter(
+            state.journey?.avatarId ?: state.preparation?.avatarId ?: "a-01",
+            Modifier.fillMaxWidth().height(if (wide) 440.dp else 300.dp),
         )
-        Spacer(Modifier.height(30.dp))
-        TravelFriend(
-            Modifier.size(if (wide) 176.dp else 124.dp),
-            sunny = state.journey?.avatarId == "a-02",
+        Text(
+            if (state.journey != null) stringResource(R.string.home_companion)
+            else stringResource(R.string.home_prepare_help),
+            color = Muted,
+            fontSize = 17.sp,
         )
     }
 }
 
 @Composable
-private fun JourneyCard(
+private fun JourneyPanel(
     state: HandoffUiState,
-    onLoadJourney: () -> Unit,
-    modifier: Modifier = Modifier,
+    onLoad: () -> Unit,
+    onStart: () -> Unit,
+    modifier: Modifier,
 ) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(32.dp),
-        color = Color.White,
-        tonalElevation = 0.dp,
-    ) {
-        Column(modifier = Modifier.padding(32.dp)) {
+    Surface(modifier, shape = RoundedCornerShape(28.dp), color = Color.White) {
+        Column(Modifier.padding(28.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            val j = state.journey
             Text(
-                if (state.journey != null) stringResource(R.string.loaded_title)
-                else stringResource(R.string.journey_title),
+                if (j == null) stringResource(R.string.home_start_trip)
+                else stringResource(R.string.home_today_trip),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Ink,
             )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                stringResource(R.string.journey_description),
-                fontSize = 18.sp,
-                lineHeight = 28.sp,
-                color = Muted,
-            )
-            Spacer(Modifier.height(30.dp))
-            val journey = state.journey
-            if (journey == null) {
-                JourneyStep("01", stringResource(R.string.journey_step_one))
-                Spacer(Modifier.height(20.dp))
-                JourneyStep("02", stringResource(R.string.journey_step_two))
+            if (j == null) {
+                Text(
+                    state.preparation?.let {
+                        stringResource(
+                            R.string.home_stored_preview,
+                            it.alias,
+                            it.date,
+                            it.nextVisitLabel,
+                        )
+                    } ?: stringResource(R.string.home_web_help),
+                    color = Muted,
+                    fontSize = 18.sp,
+                    lineHeight = 28.sp,
+                )
+                Button(
+                    onClick = onLoad,
+                    enabled = state.loadEnabled && !state.isLoading,
+                    modifier = Modifier.fillMaxWidth().height(58.dp),
+                ) {
+                    Text(
+                        if (state.retryPending) stringResource(R.string.home_retry)
+                        else stringResource(R.string.home_load),
+                        fontSize = 18.sp,
+                    )
+                }
+                OutlinedButton(
+                    onClick = onStart,
+                    enabled = state.startEnabled && !state.isLoading,
+                    modifier = Modifier.fillMaxWidth().height(58.dp),
+                ) {
+                    Text(
+                        if (state.preparation != null) stringResource(R.string.home_start_stored)
+                        else stringResource(R.string.home_start_default),
+                        fontSize = 18.sp,
+                    )
+                }
             } else {
+                Text(j.date, color = Forest, fontSize = 18.sp)
+                Text(
+                    stringResource(R.string.home_next_visit, j.nextVisit, j.nextVisitLabel),
+                    color = Ink,
+                    fontSize = 22.sp,
+                    lineHeight = 32.sp,
+                )
+                HorizontalDivider(color = Mint)
                 Text(
                     stringResource(
-                        R.string.loaded_profile,
-                        journey.alias,
-                        stringResource(
-                            if (journey.avatarId == "a-02") R.string.avatar_sun
-                            else R.string.avatar_sprout
-                        ),
-                        stringResource(
-                            if (journey.style == "calm") R.string.style_calm
-                            else R.string.style_humor
-                        ),
+                        R.string.home_return_trip,
+                        j.returnPlaceLabel,
+                        j.returnEstimate,
+                        j.returnDeadline,
                     ),
                     color = Ink,
                     fontSize = 20.sp,
                     lineHeight = 32.sp,
                 )
-                Spacer(Modifier.height(14.dp))
-                val cafe = stringResource(R.string.interest_cafe)
-                val sea = stringResource(R.string.interest_sea)
+                val cafeLabel = stringResource(R.string.home_cafe)
+                val seaLabel = stringResource(R.string.home_sea)
+                val interests =
+                    j.interests
+                        .map { if (it == "cafe") cafeLabel else seaLabel }
+                        .joinToString(" · ")
                 Text(
-                    journey.interests.joinToString(" · ") { if (it == "cafe") cafe else sea },
+                    if (interests.isEmpty()) stringResource(R.string.home_no_interests)
+                    else stringResource(R.string.home_interests, interests),
                     color = Forest,
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                 )
-                Spacer(Modifier.height(14.dp))
+                val preferences =
+                    listOfNotNull(
+                            if (j.activityPreference != null) stringResource(R.string.home_activity)
+                            else null,
+                            if (j.pace != null) stringResource(R.string.home_pace) else null,
+                            if (j.conversationStyle != null)
+                                stringResource(R.string.home_conversation)
+                            else null,
+                            if (j.expressionPresetIds.isNotEmpty())
+                                stringResource(R.string.home_expression)
+                            else null,
+                        )
+                        .joinToString(" · ")
+                if (preferences.isNotEmpty())
+                    Text(preferences, color = Muted, fontSize = 16.sp, lineHeight = 24.sp)
                 Text(
-                    stringResource(
-                        R.string.loaded_trip,
-                        journey.date,
-                        journey.nextVisit,
-                        journey.nextVisitLabel,
-                        journey.returnPlaceLabel,
-                        journey.returnEstimate,
-                        journey.returnDeadline,
-                    ),
+                    when (j.style) {
+                        "calm" -> stringResource(R.string.home_calm)
+                        "light_humor" -> stringResource(R.string.home_humor)
+                        else -> stringResource(R.string.home_neutral)
+                    },
                     color = Muted,
-                    fontSize = 18.sp,
-                    lineHeight = 30.sp,
                 )
+                OutlinedButton(
+                    onClick = {},
+                    enabled = false,
+                    modifier = Modifier.fillMaxWidth().height(54.dp),
+                ) {
+                    Text(stringResource(R.string.home_recommendations_pending))
+                }
             }
-            Spacer(Modifier.height(32.dp))
-
-            Button(
-                onClick = onLoadJourney,
-                enabled = state.loadEnabled && !state.isLoading,
-                modifier = Modifier.fillMaxWidth().height(64.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        disabledContainerColor = Mint,
-                        disabledContentColor = Forest,
-                    ),
-            ) {
-                Text(
-                    stringResource(
-                        when {
-                            state.isLoading -> R.string.loading_journey
-                            state.retryPending -> R.string.retry_pending
-                            else -> R.string.load_journey
-                        }
-                    ),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
             Text(
-                state.notice ?: stringResource(R.string.preview_notice),
-                fontSize = 15.sp,
-                lineHeight = 24.sp,
+                state.notice ?: stringResource(R.string.home_checking),
                 color = Muted,
+                fontSize = 15.sp,
+                lineHeight = 23.sp,
             )
         }
-    }
-}
-
-@Composable
-private fun JourneyStep(number: String, description: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier.size(36.dp).background(Canvas, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(number, color = Forest, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-        }
-        Spacer(Modifier.width(14.dp))
-        Text(description, fontSize = 18.sp, lineHeight = 28.sp, color = Ink)
-    }
-}
-
-@Preview(name = "Pleos wide", widthDp = 1280, heightDp = 800, showBackground = true)
-@Preview(name = "Pleos compact", widthDp = 480, heightDp = 800, showBackground = true)
-@Composable
-private fun HomePreview() {
-    WayMateTheme {
-        HandoffScreen(state = HandoffUiState(), onLoadJourney = {})
     }
 }

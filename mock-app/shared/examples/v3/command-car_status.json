@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 3,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000016",
+  "expectedVersion": 9,
+  "actor": "car",
+  "type": "CAR_STATUS",
+  "target": {},
+  "payload": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000015",
+    "statusSeq": 1,
+    "restrictionKnown": true,
+    "restricted": false,
+    "foreground": true,
+    "uiContext": "handoff"
+  }
+}

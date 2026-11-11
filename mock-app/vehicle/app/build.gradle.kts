@@ -20,12 +20,19 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
+        create("real") {
+            dimension = "environment"
+            applicationIdSuffix = ".real"
+            versionNameSuffix = "-real"
+        }
         create("mock") {
             dimension = "environment"
             applicationIdSuffix = ".mock"
             versionNameSuffix = "-mock"
         }
     }
+
+    sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/character-res"))
 
     buildFeatures {
         compose = true
@@ -49,6 +56,7 @@ dependencyLocking {
 }
 
 dependencies {
+    "realImplementation"(libs.pleos.navihelper)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)
@@ -57,3 +65,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
+
+val copyCharacter by tasks.registering(Copy::class) {
+    from("../../assets/images/characters/blue-dragon-v1/reference.png")
+    into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
+    rename { "blue_dragon.png" }
+}
+tasks.named("preBuild") { dependsOn(copyCharacter) }

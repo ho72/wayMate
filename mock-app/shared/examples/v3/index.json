@@ -1,0 +1,70 @@
+[
+  {
+    "file": "command-answer-interests.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-activity.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-conversation.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-answer-expression.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-profile_confirm.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-profile_private.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-trip_save.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-handoff_prepare.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-web-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "handoff-prepared-trip.json",
+    "definition": "handoff"
+  },
+  {
+    "file": "command-car_session_open.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-car_status.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-ready.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-car_loaded.json",
+    "definition": "command"
+  },
+  {
+    "file": "success-car-loaded.json",
+    "definition": "success"
+  },
+  {
+    "file": "state-web-confirmed.json",
+    "definition": "state"
+  },
+  {
+    "file": "health.json",
+    "definition": "health"
+  }
+]

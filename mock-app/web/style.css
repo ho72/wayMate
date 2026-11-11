@@ -222,3 +222,52 @@ footer {
     margin-right: 8px;
   }
 }
+#answer-form {
+  display: block;
+}
+textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #d4ddd3;
+  border-radius: 12px;
+  padding: 16px;
+  font: inherit;
+  color: inherit;
+  min-height: 110px;
+}
+textarea:focus {
+  outline: 3px solid #adca98;
+  outline-offset: 2px;
+}
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #315f45;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.card label.check {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 400;
+  margin: 14px 0;
+}
+.chat-answer {
+  border-bottom: 1px solid #e3e8df;
+  padding: 14px 0 20px;
+}
+.chat-answer .raw {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #edf2e7;
+  padding: 16px;
+  border-radius: 16px;
+  color: #203c34;
+}
+.character {
+  object-fit: contain;
+  display: block;
+  margin: 16px auto;
+  border-radius: 20px;
+}

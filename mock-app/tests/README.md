@@ -1,9 +1,10 @@
-# 검증 · 통합 책임
+# 검증
 
-`mock-app/`에서 Node 22.22.2로 `npm test`를 실행합니다. 테스트마다 임시 디렉터리·임의의 loopback 포트를 사용해 실행 중인 시연 상태와 분리합니다.
+Node 22.22.2로 `mock-app/`에서 `npm test`를 실행합니다. 테스트별 임시 파일·loopback 포트를 사용해 시연 상태와 분리합니다.
 
-- `contracts/examples.test.mjs`: 생성된 모든 공유 예제·지원하지 않는 캐릭터·본인 여행의 상대 정보 차단.
-- `integration/handoff.test.mjs`: 실제 HTTP 저장→전달→ACK, 재시작, 역할·view·클라이언트 분리·출처, 중복·버전 경합·단일 writer, 제한 미확인/활성/비활성/만료, 원본 변경, 저장 실패·교체 후 불확실·손상 파일.
-- `integration/web-recovery.test.mjs`: 실제 웹 API client에서 서버 적용 후 응답 유실·브라우저 재시작·영수증 복구와 미적용 요청의 동일 본문 재전송.
+- `contracts/examples.test.mjs`: 보존한 v2 golden과 상대/미지원 외형 차단.
+- `contracts/v3-examples.test.mjs`: 현재 v3 golden.
+- `integration/handoff.test.mjs`: 실제 HTTP 전달·ACK·직접 시작·복원·원문/Unicode·역할별 비노출·분기 무효화·공개/core 분리·웹 잠금·버전/중복/동시성·제한·원자 저장·구버전 보존.
+- `integration/web-recovery.test.mjs`: 실제 웹 client의 응답 유실·동일 본문 복구·구버전 서버 거부·초안 보존.
 
-2026-11-11 자동 검증 27개 통과. 차량은 Gradle 빌드·Lint와 Pleos 실제 화면으로 별도 확인했습니다. 첫 연결의 수동 확인 항목은 [07](../../docs/07_첫_전달_실행_및_계약.md)에 있습니다. 전체 Q/V·두 결말·내비 SDK 검증은 후속입니다.
+자동 검증 52개 통과. APK/Lint·실제 웹·Pleos 검수와 내비 미완료 증거는 [10](../../docs/10_v3_여행_준비_차량_홈_및_내비_시험.md)에 기록합니다. 전체 Q/V와 SDK 추가·제거 통과를 뜻하지 않습니다.

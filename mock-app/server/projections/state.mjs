@@ -1,30 +1,48 @@
-import { allowed, fresh, canLoad } from "../domain/handoff.mjs";
+import {
+  allowed,
+  fresh,
+  canLoad,
+  preparation,
+  approval,
+} from "../domain/handoff.mjs";
 export function project(s, actor, clientId, now) {
-  const own = actor === "car" || !s.clientId || clientId === s.clientId;
-  const actions = allowed(s, actor, clientId, now);
+  const own = actor === "car" || !s.clientId || clientId === s.clientId,
+    actions = allowed(s, actor, clientId, now);
+  const restored =
+    actor === "car" &&
+    s.vehicleActivation?.deviceId === s.vehicle.deviceId &&
+    fresh(s, now) &&
+    s.vehicle.restrictionKnown &&
+    s.vehicle.foreground;
   return {
-    schemaVersion: 2,
-    scope: "handoff-my-trip-v1",
+    schemaVersion: 3,
+    scope: "preparation-v3",
     storeId: s.storeId,
     runSeq: s.runSeq,
     runId: s.runId,
     version: s.version,
     view: actor,
     clientId: own ? s.clientId : null,
-    answers: own ? s.answers : {},
-    profile: own ? s.profile : null,
+    onboarding: actor === "web" && own ? s.onboarding : {},
+    profile: actor === "web" && own ? s.profile : null,
     profileVersion: s.profileVersion,
     publicationVersion: s.publicationVersion,
     publication: s.publication,
+    publicApproval: approval(s),
     trip: own ? s.trip : null,
     tripVersion: s.tripVersion,
+    tripShareVersion: s.tripShareVersion,
+    vehicleActivation: own ? s.vehicleActivation : null,
+    journeyMode: own ? s.journeyMode : null,
+    preparationPreview: actor === "car" && own ? preparation(s) : null,
+    activeJourney: restored ? preparation(s) : null,
     handoff:
       own && s.handoff
         ? {
             handoffId: s.handoff.handoffId,
             handoffVersion: s.handoff.handoffVersion,
             sourceVersions: s.handoff.sourceVersions,
-            mode: "my_trip",
+            mode: "prepared_trip",
             acknowledged: s.ack?.handoffId === s.handoff.handoffId,
           }
         : null,
@@ -45,7 +63,7 @@ export function project(s, actor, clientId, now) {
           target: {},
           payload:
             a === "HANDOFF_PREPARE"
-              ? { mode: "my_trip" }
+              ? { mode: "prepared_trip" }
               : a === "PROFILE_PRIVATE"
                 ? {
                     profileVersion: s.profileVersion,
@@ -57,9 +75,21 @@ export function project(s, actor, clientId, now) {
                       handoffId: s.handoff.handoffId,
                       handoffVersion: s.handoff.handoffVersion,
                       sourceVersions: s.handoff.sourceVersions,
-                      mode: "my_trip",
+                      mode: "prepared_trip",
                     }
-                  : {},
+                  : a === "CAR_START_TRIP"
+                    ? preparation(s)
+                      ? {
+                          origin: "stored_preparation",
+                          vehicleSessionId: s.vehicle.vehicleSessionId,
+                          sourceVersions: preparation(s).sourceVersions,
+                        }
+                      : {
+                          origin: "demo_preset",
+                          vehicleSessionId: s.vehicle.vehicleSessionId,
+                          presetId: "gangneung-01",
+                        }
+                    : {},
         },
       ]),
     ),
@@ -68,7 +98,7 @@ export function project(s, actor, clientId, now) {
         ? {
             CAR_LOADED: {
               code: "RESTRICTED",
-              message: "저장된 여행과 최신 정차·화면 활성 상태가 필요합니다.",
+              message: "저장된 전달본과 최신 정차·화면 활성 상태가 필요합니다.",
             },
           }
         : {},

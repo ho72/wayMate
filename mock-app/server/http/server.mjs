@@ -6,6 +6,13 @@ import { openStore } from "../store.mjs";
 import { QUESTIONS } from "../../shared/config/protocol.mjs";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const staticFiles = new Map([
+  [
+    "/character.png",
+    [
+      "../../assets/images/characters/blue-dragon-v1/reference.png",
+      "image/png",
+    ],
+  ],
   ["/", ["../../web/index.html", "text/html; charset=utf-8"]],
   ["/app.js", ["../../web/app.js", "text/javascript; charset=utf-8"]],
   ["/style.css", ["../../web/style.css", "text/css; charset=utf-8"]],
@@ -74,8 +81,8 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
         );
       if (req.method === "GET" && url.pathname === "/api/scenario")
         return send(200, {
-          schemaVersion: 2,
-          scope: "handoff-my-trip-v1",
+          schemaVersion: 3,
+          scope: "preparation-v3",
           questions: actor === "web" ? QUESTIONS : {},
           tripPresetIds: actor === "web" ? ["gangneung-01"] : [],
           capabilities: {
