@@ -4605,6 +4605,9 @@
         },
         "testRestricted": {
           "type": "boolean"
+        },
+        "messageResponseEnabled": {
+          "type": "boolean"
         }
       },
       "required": [

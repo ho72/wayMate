@@ -66,6 +66,7 @@
     "candidates": [],
     "cleanupRequired": false,
     "pendingResponses": [],
+    "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
       "sdkPlace": "소프트웨어드림센터",
@@ -136,7 +137,7 @@
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "version": 17,
+  "version": 19,
   "view": "car",
   "clientId": "00000000-0000-4000-8000-000000000017",
   "onboarding": {},

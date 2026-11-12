@@ -176,6 +176,15 @@ function render() {
             : "모바일 연결 요청 · 차량 접속 없이 응답 가능",
       ),
     );
+    const messageBlocked =
+      t.kind === "message" && state.social.messageResponseEnabled !== true;
+    if (messageBlocked)
+      card.append(
+        el(
+          "p",
+          "차량이 정차·활성 상태이고 내비 확인이 끝나면 보낼 수 있어요. 요청은 대기 중이에요.",
+        ),
+      );
     for (const decision of t.kind === "message"
       ? ["reply"]
       : t.kind === "meeting" && state.social.meeting.status === "confirmed"
@@ -191,7 +200,11 @@ function render() {
         }[decision],
       );
       b.disabled =
-        !!pending || !!resetPending || !!state.reset || !!state.recovery;
+        messageBlocked ||
+        !!pending ||
+        !!resetPending ||
+        !!state.reset ||
+        !!state.recovery;
       b.onclick = () => send(t, decision);
       card.append(b);
     }

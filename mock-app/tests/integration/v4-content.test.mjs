@@ -108,6 +108,69 @@ test("duplicate send receipt and restart preserve one message; cannot reply befo
   await reply(f);
   assert.equal((await f.read("car")).content.threads[0].status, "received");
 });
+
+test("a waiting message stays visible while vehicle is restricted, stale or in background", async (t) => {
+  const f = await setup(t);
+  await send(f);
+  const target = await current(f);
+  await f.send("SET_TEST_RESTRICTION", { enabled: true }, "operator");
+  assert.deepEqual(await current(f), target);
+  assert.equal((await f.read("operator")).social.messageResponseEnabled, false);
+  await assert.rejects(reply(f), { code: "RESTRICTED" });
+  await f.send("SET_TEST_RESTRICTION", { enabled: false }, "operator");
+  f.expire();
+  assert.deepEqual(await current(f), target);
+  assert.equal((await f.read("operator")).social.messageResponseEnabled, false);
+  await assert.rejects(reply(f), { code: "RESTRICTED" });
+  await f.send(
+    "CAR_STATUS",
+    {
+      vehicleSessionId: f.session,
+      statusSeq: 100,
+      restrictionKnown: true,
+      restricted: false,
+      foreground: false,
+      uiContext: "home",
+    },
+    "car",
+  );
+  assert.deepEqual(await current(f), target);
+  assert.equal((await f.read("operator")).social.messageResponseEnabled, false);
+  await assert.rejects(reply(f), { code: "RESTRICTED" });
+  await f.send(
+    "CAR_STATUS",
+    {
+      vehicleSessionId: f.session,
+      statusSeq: 101,
+      restrictionKnown: true,
+      restricted: false,
+      foreground: true,
+      uiContext: "home",
+    },
+    "car",
+  );
+  assert.equal((await f.read("operator")).social.messageResponseEnabled, true);
+  await reply(f);
+  assert.equal(await current(f), undefined);
+  assert.equal((await f.read("car")).content.threads[0].status, "received");
+});
+
+test("reusing a completed preset needs a fresh explicit command and never reuses its thread or reply", async (t) => {
+  const f = await setup(t);
+  const first = await send(f);
+  await reply(f);
+  await f.act("MESSAGE_REPLY_R1", "car");
+  const again = await send(f);
+  const ts = again.state.content.threads;
+  assert.equal(ts.length, 2);
+  assert.equal(ts[0].status, "replied");
+  assert.equal(ts[1].status, "waiting");
+  assert.equal(ts[1].response, null);
+  assert.notEqual(ts[0].id, ts[1].id);
+  assert.notEqual(ts[0].requestId, ts[1].requestId);
+  assert.equal(ts[0].id, first.state.content.threads[0].id);
+  assert.equal((await current(f)).threadId, ts[1].id);
+});
 for (const stop of ["CONNECT_END", "MEETING_CANCEL", "MEETING_DECLINE"])
   test(`${stop} closes waiting message and rejects late B reply`, async (t) => {
     const f = await setup(t);

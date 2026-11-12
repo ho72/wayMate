@@ -2,17 +2,17 @@
   "ok": true,
   "receipt": {
     "runId": "00000000-0000-4000-8000-000000000001",
-    "commandId": "00000000-0000-4000-8000-000000000035",
+    "commandId": "00000000-0000-4000-8000-000000000037",
     "applied": true,
     "replayed": false,
-    "committedVersion": 22
+    "committedVersion": 24
   },
   "state": {
     "reset": null,
     "lastCompletedReset": {
-      "id": "00000000-0000-4000-8000-000000000034",
+      "id": "00000000-0000-4000-8000-000000000036",
       "fromRunId": "00000000-0000-4000-8000-000000000001",
-      "newRunId": "00000000-0000-4000-8000-000000000036",
+      "newRunId": "00000000-0000-4000-8000-000000000038",
       "deviceId": "00000000-0000-4000-8000-000000000020",
       "settledAttemptIds": [],
       "completedAt": "2026-11-11T00:00:00.000Z",
@@ -61,6 +61,7 @@
       "candidates": [],
       "cleanupRequired": false,
       "pendingResponses": [],
+      "messageResponseEnabled": false,
       "navMapping": {
         "storyPlace": "바다쉼표 카페",
         "sdkPlace": "소프트웨어드림센터",
@@ -72,8 +73,8 @@
     "scope": "mobile-meeting-v4",
     "storeId": "00000000-0000-4000-8000-000000000016",
     "runSeq": 2,
-    "runId": "00000000-0000-4000-8000-000000000036",
-    "version": 22,
+    "runId": "00000000-0000-4000-8000-000000000038",
+    "version": 24,
     "view": "car",
     "clientId": null,
     "onboarding": {},

@@ -138,7 +138,7 @@ export function contentProjection(s, actor, now) {
   };
 }
 export function messageResponses(s, actor, now) {
-  return actor === "operator" && contentAvailable(s) && canSocial(s, now)
+  return actor === "operator" && contentAvailable(s)
     ? threads(s)
         .filter((t) => t.status === "waiting")
         .map((t) => ({

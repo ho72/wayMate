@@ -1,9 +1,9 @@
 {
   "schemaVersion": 4,
   "runSeq": 2,
-  "runId": "00000000-0000-4000-8000-000000000036",
-  "commandId": "00000000-0000-4000-8000-000000000037",
-  "expectedVersion": 22,
+  "runId": "00000000-0000-4000-8000-000000000038",
+  "commandId": "00000000-0000-4000-8000-000000000039",
+  "expectedVersion": 24,
   "actor": "web",
   "type": "ONBOARDING_ANSWER",
   "target": {},

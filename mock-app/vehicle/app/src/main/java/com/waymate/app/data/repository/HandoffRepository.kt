@@ -27,6 +27,15 @@ class HandoffRepository(
 ) {
     private val api = DemoApi()
     private val preferences = context.getSharedPreferences("handoff-v4", Context.MODE_PRIVATE)
+    private val contentReads =
+        ContentReadStore(
+            keys = { preferences.all.keys },
+            read = { preferences.getBoolean(it, false) },
+            write = { preferences.edit().putBoolean(it, true).apply() },
+            remove = { keys ->
+                preferences.edit().also { editor -> keys.forEach(editor::remove) }.apply()
+            },
+        )
     private val worker = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
     private val deviceId =
@@ -170,6 +179,11 @@ class HandoffRepository(
     private fun updateState(current: JSONObject) {
         val old = state?.optString("runId") ?: preferences.getString("lastRunId", null)
         val runs = current.optJSONArray("completedRunIds")
+        contentReads.clearCompleted(
+            current.getString("runId"),
+            if (runs == null) emptySet()
+            else (0 until runs.length()).map { runs.getString(it) }.toSet(),
+        )
         val completed =
             old != null && runs != null && (0 until runs.length()).any { runs.getString(it) == old }
         if (old != null && old != current.getString("runId") && completed) {
@@ -572,22 +586,23 @@ class HandoffRepository(
     }
 
     fun markMessageRead(threadId: String) {
-        if (!foreground || !contentVisible || restricted != false) return
-        val current = state ?: return
-        val threads = current.optJSONObject("content")?.optJSONArray("threads") ?: return
-        if (
-            (0 until threads.length()).any {
-                threads.getJSONObject(it).getString("id") == threadId &&
-                    !threads.getJSONObject(it).isNull("response")
+        if (closed || !foreground || !contentVisible || restricted != false) return
+        val run = state?.optString("runId") ?: return
+        worker.execute {
+            if (closed || !foreground || !contentVisible || restricted != false) return@execute
+            val current = state ?: return@execute
+            if (current.getString("runId") != run) return@execute
+            val threads =
+                current.optJSONObject("content")?.optJSONArray("threads") ?: return@execute
+            if (
+                (0 until threads.length()).any {
+                    threads.getJSONObject(it).getString("id") == threadId &&
+                        !threads.getJSONObject(it).isNull("response")
+                }
+            ) {
+                contentReads.markRead(run, threadId)
+                show()
             }
-        ) {
-            check(
-                preferences
-                    .edit()
-                    .putBoolean("content.read.${current.getString("runId")}.$threadId", true)
-                    .commit()
-            )
-            show()
         }
     }
 
@@ -1103,8 +1118,7 @@ class HandoffRepository(
                         response,
                         text(t, "followup"),
                         text(t, "reply"),
-                        response != null &&
-                            !preferences.getBoolean("content.read.$run.${t.getString("id")}", false),
+                        response != null && !contentReads.isRead(run, t.getString("id")),
                     )
                 },
             actions = actions,

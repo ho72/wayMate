@@ -75,6 +75,7 @@
       "candidates": [],
       "cleanupRequired": false,
       "pendingResponses": [],
+      "messageResponseEnabled": false,
       "navMapping": {
         "storyPlace": "바다쉼표 카페",
         "sdkPlace": "소프트웨어드림센터",
