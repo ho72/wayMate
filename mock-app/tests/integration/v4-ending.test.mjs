@@ -503,6 +503,31 @@ for (const hiddenActor of ["car", "operator"])
     }
     assert.deepEqual(views[0], views[1]);
   });
+test("blocked-request visibility never revives a message after meeting starts or final replay opens", async (t) => {
+  const f = await ready(t);
+  await f.act("MESSAGE_SEND_M1", "car");
+  const target = (await f.read("operator")).social.pendingResponses.find(
+    (x) => x.kind === "message",
+  );
+  assert.ok(target);
+  await f.act("MEETING_START", "operator");
+  for (const step of ["meeting", "pending", "together", "replay"]) {
+    if (step === "pending") await f.act("MEETING_END", "operator");
+    if (step === "together") {
+      await choose(f, "car", "together");
+      await choose(f, "operator", "together");
+    }
+    if (step === "replay") await f.act("REPLAY_FINAL", "operator");
+    const s = await f.read("operator");
+    assert.deepEqual(s.social.pendingResponses, []);
+    assert.equal(s.social.messageResponseEnabled, false);
+    await assert.rejects(
+      f.send("B_RESPONSE", { decision: "reply" }, "operator", target),
+    );
+    assert.equal((await disk(f)).content.threads[0].status, "closed");
+  }
+});
+
 test("historical choices and checkpoint cannot be corrupted to fabricate replay outcomes", async (t) => {
   const f = await ready(t);
   await end(f);
