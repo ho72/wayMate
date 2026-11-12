@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-12",
+  "baselineCommit": "be3a7f5fece8370e821e6a0f87c32670ebe7a28f",
+  "result": "native basemap unresolved; reproduced on a separate newly created AVD with no wayMate installed or user project credentials added",
+  "environment": {
+    "host": "Apple M3 Pro / 18GB",
+    "pleos": "2.1.0 API34 ARM64",
+    "emulator": "37.2.13",
+    "nativeNavigation": "3.3.2-rc5-hotfix.3",
+    "gpu": "host, Vulkan disabled",
+    "ramMiB": 4096,
+    "densityDpi": 160
+  },
+  "existingAvd": {
+    "serial": "emulator-5554",
+    "wayMateInstalled": true,
+    "mapViewDp": [
+      841,
+      1210
+    ],
+    "textureViewDp": [
+      841,
+      1210
+    ],
+    "networkValidated": true,
+    "nativeInternetAndFineLocationGranted": true,
+    "proxyAndPrivateDnsModes": null,
+    "utcMatchesHost": true,
+    "mapBlank": true
+  },
+  "isolatedAvd": {
+    "serial": "emulator-5556",
+    "name": "WayMate_Native_Map_Probe",
+    "createdFrom": "installed official image; avdmanager create avd with Pleos_Connect_v2_0 profile",
+    "wayMateInstalled": false,
+    "userProjectCredentialsAdded": false,
+    "userDataCopiedFromExistingAvd": false,
+    "coldBoot": true,
+    "firstRun": "vehicle info loading screen remained after reported ready; process restart required",
+    "afterRestart": {
+      "authMode": "CCG",
+      "engineAuthenticationSuccess": true,
+      "styleLoaded": true,
+      "readyStatus": [
+        "AuthComplete",
+        "NaviEngineComplete",
+        "MapComplete"
+      ],
+      "mapViewDp": [
+        1682,
+        1210
+      ],
+      "textureViewDp": [
+        1682,
+        1210
+      ],
+      "locationMarkerAndKoreanAreaLabelVisible": true,
+      "reverseGeocodingReturnedAreaAddress": true,
+      "mapRoadBackgroundVisible": false,
+      "gl0x501Logged": true
+    },
+    "utcMatchesHost": true,
+    "userRouteRequestsMade": false
+  },
+  "authenticationObservation": {
+    "source": "existing AVD native process log",
+    "tileHost": "a.tile.static.maps-stage.umos.ai",
+    "requestsWith401Logged": 9,
+    "refreshSucceededLogged": 9,
+    "retryResponseCodes": {
+      "304": 9
+    },
+    "meaning": "logged native token refresh/retry is not a persistent missing user project credential; HTTP304 alone does not prove usable tile content or rendering",
+    "separateEvOperator401": "historical EV charging operators endpoint error, not proof of failed background tile authentication"
+  },
+  "publicStyle": {
+    "coral": {
+      "httpStatus": 200,
+      "sha256": "e0add7f3652700980fa0b92b6702079473c80869d539fe13be106543f6fa898e",
+      "sources": [
+        "coastline"
+      ],
+      "layerTypes": [
+        "background",
+        "fill",
+        "slot",
+        "slot"
+      ]
+    },
+    "stage": {
+      "unauthenticatedHttpStatus": 401
+    },
+    "meaning": "an intentionally minimal public style does not prove the cause; native dynamic map composition remains unverified"
+  },
+  "gps": {
+    "coordinatesAreExistingPublicTestCoordinates": true,
+    "checksummedGgaRmcGsaStreamSeconds": 12,
+    "consoleAcceptedValidGga": true,
+    "consoleResponse": "OK",
+    "nativeInvalidNmeaObservedAfterInput": true,
+    "invalidNmeaSnapshotCount": 364,
+    "reportedChecksumAmongThese": "47",
+    "validSentenceConsumptionByNativeParserIndependentlyProven": false,
+    "backgroundRecovered": false,
+    "limitation": "GPS/NMEA dependency cannot be ruled out merely because the emulator console accepted input"
+  },
+  "safetyOfComparison": {
+    "existingAvdRestarted": false,
+    "existingRouteChangedByDiagnosticCommands": false,
+    "sdkJournalByteIdentical": true,
+    "sdkJournalSha256": "6e2c95eaf39cacbc5c6cf7fb490de78f75806ca9465613e88e711dbaea5c7f84",
+    "sdkJournalRecords": 11,
+    "nativeApkModified": false,
+    "appDataOrCacheCleared": false,
+    "credentialsExtractedOrReplayedInHttpProbes": false
+  },
+  "playgroundRequirements": {
+    "NaviHelper": "no separate application per official guide",
+    "VehicleState": "no separate application per official guide",
+    "CRN": "not required from Emulator 2.1.0",
+    "projectId": "app review submission",
+    "clientIdAndSecret": "server-connected SDK registration (e.g. server TTS/STT); not a documented fix for the stock navigation window",
+    "privateProjectPageDirectlyVerified": false
+  },
+  "nextProviderQuestions": [
+    "Is road basemap rendering supported by the public 2.1.0 ARM64 image on Apple Silicon?",
+    "Which image/native navigation/renderer fix or documented setting is required for the supplied minimal style plus dynamic road composition?",
+    "How should a valid NMEA stream reach the native parser given repeated checksum-47 errors?",
+    "Do the documented regional properties need additional emulator configuration?"
+  ],
+  "officialSources": [
+    "https://document.pleos.ai/docs/pleos-only/create-my-project",
+    "https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator",
+    "https://document.pleos.ai/docs/connect/guide/getting-started/application-development/configure-pleos-connect-emulator",
+    "https://document.pleos.ai/docs/pleos-only/connect-sdk-pleos/TextToSpeech/app-registration",
+    "https://developer.android.com/studio/run/emulator-console"
+  ],
+  "captures": [
+    {
+      "file": "native-map-fresh-avd-2026-11-12.png",
+      "sha256": "b3813ddc9c2e8429c53a001efddf2625272e09292d7ce90ed4fa1dab607c87b9",
+      "format": "unaltered adb screencap PNG, 2560x1440"
+    },
+    {
+      "file": "native-map-followup-three-pane-2026-11-12.png",
+      "sha256": "75fdb67e796b9bfdd9663b147ea2bf8dcc0264828cde2252eaab0a74faf414db",
+      "format": "unaltered adb screencap PNG, 2560x1440"
+    }
+  ]
+}
