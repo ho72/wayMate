@@ -10,9 +10,9 @@
     "replay": false,
     "storyTime": "14:35",
     "final": {
-      "id": "00000000-0000-4000-8000-000000000047",
+      "id": "00000000-0000-4000-8000-000000000049",
       "round": 1,
-      "requestId": "00000000-0000-4000-8000-000000000048",
+      "requestId": "00000000-0000-4000-8000-000000000050",
       "status": "pending",
       "myChoice": null
     },
@@ -40,8 +40,8 @@
       "createdBy": "00000000-0000-4000-8000-000000000010"
     },
     "meeting": {
-      "proposalId": "00000000-0000-4000-8000-000000000030",
-      "requestId": "00000000-0000-4000-8000-000000000031",
+      "proposalId": "00000000-0000-4000-8000-000000000032",
+      "requestId": "00000000-0000-4000-8000-000000000033",
       "connectionId": "00000000-0000-4000-8000-000000000013",
       "status": "ended",
       "placeId": "fiction-cafe-01",
@@ -51,7 +51,7 @@
       "end": "14:35",
       "aConsent": true,
       "bConsent": true,
-      "createdBy": "00000000-0000-4000-8000-000000000029",
+      "createdBy": "00000000-0000-4000-8000-000000000031",
       "reenactment": {
         "variant": "general",
         "startedAt": "2026-11-11T00:00:00.000Z"
@@ -94,6 +94,7 @@
     "candidates": [],
     "cleanupRequired": true,
     "pendingResponses": [],
+    "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
       "sdkPlace": "소프트웨어드림센터",
@@ -106,7 +107,7 @@
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "version": 28,
+  "version": 30,
   "view": "operator",
   "clientId": null,
   "onboarding": {},
@@ -133,7 +134,7 @@
   "activeJourney": null,
   "handoff": null,
   "vehicle": {
-    "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000036",
     "vehicleEpoch": 2,
     "restrictionKnown": true,
     "restricted": false,
@@ -155,9 +156,9 @@
       "commandType": "B_RESPONSE",
       "target": {
         "kind": "final",
-        "finalId": "00000000-0000-4000-8000-000000000047",
+        "finalId": "00000000-0000-4000-8000-000000000049",
         "finalRound": 1,
-        "requestId": "00000000-0000-4000-8000-000000000048"
+        "requestId": "00000000-0000-4000-8000-000000000050"
       },
       "payload": {
         "decision": "together"
@@ -167,9 +168,9 @@
       "commandType": "B_RESPONSE",
       "target": {
         "kind": "final",
-        "finalId": "00000000-0000-4000-8000-000000000047",
+        "finalId": "00000000-0000-4000-8000-000000000049",
         "finalRound": 1,
-        "requestId": "00000000-0000-4000-8000-000000000048"
+        "requestId": "00000000-0000-4000-8000-000000000050"
       },
       "payload": {
         "decision": "my_agent"

@@ -1,4 +1,8 @@
-import { closeContent, messageResponses } from "./content.mjs";
+import {
+  closeContent,
+  messageResponses,
+  contentAvailable,
+} from "./content.mjs";
 import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual as equal } from "node:util";
 import { fail, parked, sources } from "./handoff.mjs";
@@ -461,6 +465,12 @@ export function socialProjection(s, actor, now) {
     cleanupRequired:
       !!s.navigation?.owned && ["cancelled", "ended"].includes(m.status),
     pendingResponses: pending,
+    messageResponseEnabled:
+      actor === "operator" &&
+      contentAvailable(s) &&
+      canSocial(s, now) &&
+      !s.reset &&
+      !s.recovery,
     navMapping: {
       storyPlace: "바다쉼표 카페",
       sdkPlace: "소프트웨어드림센터",

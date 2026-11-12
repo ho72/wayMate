@@ -92,6 +92,22 @@
     "definition": "state"
   },
   {
+    "file": "state-operator-message-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-message-restriction-on.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-operator-message-blocked.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-message-restriction-off.json",
+    "definition": "command"
+  },
+  {
     "file": "command-message-b-reply.json",
     "definition": "command"
   },

@@ -164,6 +164,28 @@ try {
   const messageTarget = (
     await api.read("operator", null)
   ).social.pendingResponses.find((t) => t.kind === "message");
+  fixtures.push({
+    file: "state-operator-message-waiting.json",
+    definition: "state",
+    value: await api.read("operator", null),
+  });
+  await command(
+    "SET_TEST_RESTRICTION",
+    { enabled: true },
+    "operator",
+    "message-restriction-on",
+  );
+  fixtures.push({
+    file: "state-operator-message-blocked.json",
+    definition: "state",
+    value: await api.read("operator", null),
+  });
+  await command(
+    "SET_TEST_RESTRICTION",
+    { enabled: false },
+    "operator",
+    "message-restriction-off",
+  );
   await command(
     "B_RESPONSE",
     { decision: "reply" },

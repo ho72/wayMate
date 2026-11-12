@@ -1,12 +1,12 @@
 {
   "navigation": {
     "observation": {
-      "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+      "vehicleSessionId": "00000000-0000-4000-8000-000000000036",
       "vehicleEpoch": 2,
       "source": "real",
       "evidence": {
         "first": {
-          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "sessionId": "00000000-0000-4000-8000-000000000039",
           "querySeq": 3,
           "startedAt": 1303,
           "completedAt": 1403,
@@ -28,7 +28,7 @@
           "isRouting": false
         },
         "second": {
-          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "sessionId": "00000000-0000-4000-8000-000000000039",
           "querySeq": 4,
           "startedAt": 2503,
           "completedAt": 2603,
@@ -50,7 +50,7 @@
           "isRouting": false
         },
         "lookup": {
-          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "sessionId": "00000000-0000-4000-8000-000000000039",
           "receivedAt": 0,
           "poiId": "36khp2hdj2cfcm5nqhe3",
           "point": {
@@ -65,12 +65,12 @@
     },
     "attempts": [
       {
-        "attemptId": "00000000-0000-4000-8000-000000000040",
+        "attemptId": "00000000-0000-4000-8000-000000000042",
         "operation": "add",
         "deviceId": "00000000-0000-4000-8000-000000000020",
-        "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+        "vehicleSessionId": "00000000-0000-4000-8000-000000000036",
         "vehicleEpoch": 2,
-        "sdkSessionId": "00000000-0000-4000-8000-000000000037",
+        "sdkSessionId": "00000000-0000-4000-8000-000000000039",
         "baseline": {
           "latitude": 37.48544722,
           "longitude": 127.03636666,
@@ -79,7 +79,7 @@
         },
         "before": {
           "first": {
-            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "sessionId": "00000000-0000-4000-8000-000000000039",
             "querySeq": 1,
             "startedAt": 1,
             "completedAt": 101,
@@ -94,7 +94,7 @@
             "isRouting": false
           },
           "second": {
-            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "sessionId": "00000000-0000-4000-8000-000000000039",
             "querySeq": 2,
             "startedAt": 1201,
             "completedAt": 1301,
@@ -109,7 +109,7 @@
             "isRouting": false
           },
           "lookup": {
-            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "sessionId": "00000000-0000-4000-8000-000000000039",
             "receivedAt": 0,
             "poiId": "36khp2hdj2cfcm5nqhe3",
             "point": {
@@ -122,16 +122,16 @@
         },
         "ownedAttemptId": null,
         "dispatch": "may_have_executed",
-        "executionRecordId": "00000000-0000-4000-8000-000000000041",
+        "executionRecordId": "00000000-0000-4000-8000-000000000043",
         "dispatchAt": 1302,
         "outcome": "applied",
         "reports": [
           {
-            "reportId": "00000000-0000-4000-8000-000000000043",
+            "reportId": "00000000-0000-4000-8000-000000000045",
             "outcome": "applied",
             "evidence": {
               "first": {
-                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "sessionId": "00000000-0000-4000-8000-000000000039",
                 "querySeq": 3,
                 "startedAt": 1303,
                 "completedAt": 1403,
@@ -153,7 +153,7 @@
                 "isRouting": false
               },
               "second": {
-                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "sessionId": "00000000-0000-4000-8000-000000000039",
                 "querySeq": 4,
                 "startedAt": 2503,
                 "completedAt": 2603,
@@ -175,7 +175,7 @@
                 "isRouting": false
               },
               "lookup": {
-                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "sessionId": "00000000-0000-4000-8000-000000000039",
                 "receivedAt": 0,
                 "poiId": "36khp2hdj2cfcm5nqhe3",
                 "point": {
@@ -188,13 +188,13 @@
             }
           }
         ],
-        "approvalCommandId": "00000000-0000-4000-8000-000000000038",
+        "approvalCommandId": "00000000-0000-4000-8000-000000000040",
         "context": "meeting",
-        "proposalId": "00000000-0000-4000-8000-000000000030"
+        "proposalId": "00000000-0000-4000-8000-000000000032"
       }
     ],
     "owned": {
-      "attemptId": "00000000-0000-4000-8000-000000000040",
+      "attemptId": "00000000-0000-4000-8000-000000000042",
       "destination": {
         "latitude": 37.48544722,
         "longitude": 127.03636666,
@@ -219,7 +219,7 @@
     "replay": false,
     "storyTime": "14:35",
     "final": {
-      "id": "00000000-0000-4000-8000-000000000047",
+      "id": "00000000-0000-4000-8000-000000000049",
       "round": 1,
       "requestId": null,
       "status": "my_agent",
@@ -260,8 +260,8 @@
       "createdBy": "00000000-0000-4000-8000-000000000010"
     },
     "meeting": {
-      "proposalId": "00000000-0000-4000-8000-000000000030",
-      "requestId": "00000000-0000-4000-8000-000000000031",
+      "proposalId": "00000000-0000-4000-8000-000000000032",
+      "requestId": "00000000-0000-4000-8000-000000000033",
       "connectionId": "00000000-0000-4000-8000-000000000013",
       "status": "ended",
       "placeId": "fiction-cafe-01",
@@ -271,7 +271,7 @@
       "end": "14:35",
       "aConsent": true,
       "bConsent": true,
-      "createdBy": "00000000-0000-4000-8000-000000000029",
+      "createdBy": "00000000-0000-4000-8000-000000000031",
       "reenactment": {
         "variant": "general",
         "startedAt": "2026-11-11T00:00:00.000Z"
@@ -288,6 +288,7 @@
     "candidates": [],
     "cleanupRequired": true,
     "pendingResponses": [],
+    "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
       "sdkPlace": "소프트웨어드림센터",
@@ -300,7 +301,7 @@
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "version": 30,
+  "version": 32,
   "view": "car",
   "clientId": "00000000-0000-4000-8000-000000000017",
   "onboarding": {},
@@ -414,7 +415,7 @@
     "acknowledged": true
   },
   "vehicle": {
-    "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000036",
     "vehicleEpoch": 2,
     "restrictionKnown": true,
     "restricted": false,

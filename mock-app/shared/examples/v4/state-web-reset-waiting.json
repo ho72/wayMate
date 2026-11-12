@@ -1,7 +1,7 @@
 {
   "reset": {
-    "id": "00000000-0000-4000-8000-000000000062",
-    "runId": "00000000-0000-4000-8000-000000000059",
+    "id": "00000000-0000-4000-8000-000000000064",
+    "runId": "00000000-0000-4000-8000-000000000061",
     "requiredWebClientId": "00000000-0000-4000-8000-000000000017",
     "requiredDeviceId": null,
     "navigationRequired": false,
@@ -14,9 +14,9 @@
     "canAcknowledge": true
   },
   "lastCompletedReset": {
-    "id": "00000000-0000-4000-8000-000000000057",
+    "id": "00000000-0000-4000-8000-000000000059",
     "fromRunId": "00000000-0000-4000-8000-000000000001",
-    "newRunId": "00000000-0000-4000-8000-000000000059",
+    "newRunId": "00000000-0000-4000-8000-000000000061",
     "deviceId": "00000000-0000-4000-8000-000000000020",
     "settledAttemptIds": [],
     "completedAt": "2026-11-11T00:00:00.000Z",
@@ -74,6 +74,7 @@
     "candidates": [],
     "cleanupRequired": false,
     "pendingResponses": [],
+    "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
       "sdkPlace": "소프트웨어드림센터",
@@ -85,8 +86,8 @@
   "scope": "mobile-meeting-v4",
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 2,
-  "runId": "00000000-0000-4000-8000-000000000059",
-  "version": 24,
+  "runId": "00000000-0000-4000-8000-000000000061",
+  "version": 26,
   "view": "web",
   "clientId": "00000000-0000-4000-8000-000000000017",
   "onboarding": {
@@ -131,7 +132,7 @@
     "RESET_ACK": {
       "commandType": "RESET_ACK",
       "target": {
-        "resetId": "00000000-0000-4000-8000-000000000062"
+        "resetId": "00000000-0000-4000-8000-000000000064"
       },
       "payload": {
         "webClientId": "00000000-0000-4000-8000-000000000017",

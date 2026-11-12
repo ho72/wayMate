@@ -2,15 +2,15 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000049",
-  "expectedVersion": 28,
+  "commandId": "00000000-0000-4000-8000-000000000051",
+  "expectedVersion": 30,
   "actor": "operator",
   "type": "B_RESPONSE",
   "target": {
     "kind": "final",
-    "finalId": "00000000-0000-4000-8000-000000000047",
+    "finalId": "00000000-0000-4000-8000-000000000049",
     "finalRound": 1,
-    "requestId": "00000000-0000-4000-8000-000000000048"
+    "requestId": "00000000-0000-4000-8000-000000000050"
   },
   "payload": {
     "decision": "my_agent"

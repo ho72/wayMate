@@ -2,15 +2,15 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000055",
-  "expectedVersion": 32,
+  "commandId": "00000000-0000-4000-8000-000000000057",
+  "expectedVersion": 34,
   "actor": "operator",
   "type": "B_RESPONSE",
   "target": {
     "kind": "final",
-    "finalId": "00000000-0000-4000-8000-000000000052",
+    "finalId": "00000000-0000-4000-8000-000000000054",
     "finalRound": 2,
-    "requestId": "00000000-0000-4000-8000-000000000053"
+    "requestId": "00000000-0000-4000-8000-000000000055"
   },
   "payload": {
     "decision": "together"

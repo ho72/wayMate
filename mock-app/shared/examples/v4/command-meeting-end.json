@@ -2,12 +2,12 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000046",
-  "expectedVersion": 27,
+  "commandId": "00000000-0000-4000-8000-000000000048",
+  "expectedVersion": 29,
   "actor": "operator",
   "type": "MEETING_END",
   "target": {
-    "proposalId": "00000000-0000-4000-8000-000000000030"
+    "proposalId": "00000000-0000-4000-8000-000000000032"
   },
   "payload": {}
 }

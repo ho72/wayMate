@@ -1,0 +1,151 @@
+{
+  "reset": null,
+  "lastCompletedReset": null,
+  "completedRunIds": [],
+  "completedNavigation": [],
+  "recovery": null,
+  "journey": {
+    "phase": "none",
+    "replay": false,
+    "storyTime": null,
+    "final": null,
+    "scene": [],
+    "meetingVariant": null,
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [],
+    "ownClosing": "",
+    "canInteract": true,
+    "cleanupRequired": false,
+    "blockedReason": null
+  },
+  "social": {
+    "connection": {
+      "id": "00000000-0000-4000-8000-000000000013",
+      "requestId": "00000000-0000-4000-8000-000000000012",
+      "status": "linked",
+      "version": 3,
+      "attempted": true,
+      "sharedWindow": [
+        "14:00",
+        "15:00"
+      ],
+      "createdBy": "00000000-0000-4000-8000-000000000010"
+    },
+    "meeting": {
+      "proposalId": null,
+      "requestId": null,
+      "connectionId": null,
+      "status": "none",
+      "placeId": "fiction-cafe-01",
+      "name": "바다쉼표 카페",
+      "date": "2026-11-14",
+      "start": "14:15",
+      "end": "14:35",
+      "aConsent": false,
+      "bConsent": false
+    },
+    "peer": {
+      "alias": "솔바람",
+      "avatarId": "b-01",
+      "publicProfileVersion": 1,
+      "description": "바다를 먼저 보고, 조용한 카페에서 쉬는 여행을 좋아해요.",
+      "interests": [
+        "sea_walk",
+        "cafe"
+      ],
+      "speakingStyle": "calm",
+      "approvedFields": [
+        "alias",
+        "avatarId",
+        "interests",
+        "pace",
+        "activityPreference",
+        "conversationStyle",
+        "expressionPresetIds",
+        "speakingStyle"
+      ],
+      "pace": "relaxed",
+      "activityPreference": "walk_first_photos_occasional",
+      "conversationStyle": "quiet",
+      "expressionPresetIds": [
+        "slow_ok"
+      ]
+    },
+    "testRestricted": false,
+    "tripShareApproved": true,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "candidates": [],
+    "cleanupRequired": false,
+    "pendingResponses": [
+      {
+        "kind": "message",
+        "connectionId": "00000000-0000-4000-8000-000000000013",
+        "requestId": "00000000-0000-4000-8000-000000000026",
+        "threadId": "00000000-0000-4000-8000-000000000025"
+      }
+    ],
+    "messageResponseEnabled": true,
+    "navMapping": {
+      "storyPlace": "바다쉼표 카페",
+      "sdkPlace": "소프트웨어드림센터",
+      "source": "separate_sdk_fixture"
+    }
+  },
+  "content": null,
+  "schemaVersion": 4,
+  "scope": "mobile-meeting-v4",
+  "storeId": "00000000-0000-4000-8000-000000000016",
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "version": 16,
+  "view": "operator",
+  "clientId": null,
+  "onboarding": {},
+  "profile": null,
+  "profileVersion": 1,
+  "publicationVersion": 6,
+  "publication": "published",
+  "publicApproval": {
+    "status": "published",
+    "profileVersion": 1,
+    "publicationVersion": 6,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "introTemplateId": "INTRO_NEUTRAL"
+  },
+  "trip": null,
+  "tripVersion": 1,
+  "tripShareVersion": 1,
+  "vehicleActivation": null,
+  "journeyMode": null,
+  "preparationPreview": null,
+  "activeJourney": null,
+  "handoff": null,
+  "vehicle": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "vehicleEpoch": 1,
+    "restrictionKnown": true,
+    "restricted": false,
+    "foreground": true,
+    "fresh": true
+  },
+  "allowedActions": [
+    "RESET_BEGIN"
+  ],
+  "actionBindings": {
+    "RESET_BEGIN": {
+      "commandType": "RESET_BEGIN",
+      "target": {
+        "runId": "00000000-0000-4000-8000-000000000001"
+      },
+      "payload": {}
+    }
+  },
+  "blockedActions": {}
+}

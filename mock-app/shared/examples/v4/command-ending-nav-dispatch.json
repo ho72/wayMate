@@ -2,16 +2,16 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000039",
-  "expectedVersion": 24,
+  "commandId": "00000000-0000-4000-8000-000000000041",
+  "expectedVersion": 26,
   "actor": "car",
   "type": "NAV_DISPATCH_BEGIN",
   "target": {},
   "payload": {
-    "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000036",
     "vehicleEpoch": 2,
-    "attemptId": "00000000-0000-4000-8000-000000000040",
-    "executionRecordId": "00000000-0000-4000-8000-000000000041",
+    "attemptId": "00000000-0000-4000-8000-000000000042",
+    "executionRecordId": "00000000-0000-4000-8000-000000000043",
     "dispatchAt": 1302
   }
 }

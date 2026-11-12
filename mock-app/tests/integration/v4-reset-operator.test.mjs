@@ -74,3 +74,46 @@ test("observing reset closes old B pending and disables old response actions", a
   assert.equal(b.element("begin-reset").disabled, true);
   assert.match(b.element("reset-summary").textContent, /차량 ACK/);
 });
+
+test("operator identifies the waiting participant and explains recovery without bypassing ACK", async () => {
+  const b = await ready();
+  b.setState({
+    reset: {
+      runId: "run",
+      id: "reset",
+      blockedReasons: ["ACK 대기"],
+      requiredWebClientId: "original-browser",
+      webAcknowledged: false,
+      requiredDeviceId: null,
+      carAcknowledged: false,
+    },
+  });
+  await b.poll();
+  const text = () =>
+    b
+      .element("reset-participants")
+      .children.map((x) => x.textContent)
+      .join(" ");
+  assert.match(text(), /original-browser/);
+  assert.match(text(), /같은 브라우저/);
+  assert.match(text(), /강제 완료 기능이 없어요/);
+  assert.equal(b.element("begin-reset").disabled, true);
+  b.setState({
+    reset: {
+      runId: "run",
+      id: "reset",
+      blockedReasons: ["ACK 대기"],
+      requiredWebClientId: null,
+      webAcknowledged: false,
+      requiredDeviceId: "original-car",
+      carAcknowledged: false,
+    },
+  });
+  await b.poll();
+  assert.match(text(), /original-car/);
+  assert.match(text(), /같은 앱 데이터/);
+  assert.doesNotMatch(text(), /original-browser/);
+  b.setState({ reset: null });
+  await b.poll();
+  assert.equal(text(), "");
+});

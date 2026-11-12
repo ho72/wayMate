@@ -53,6 +53,7 @@ export async function browser() {
       "begin-reset",
       "run-meta",
       "reset-summary",
+      "reset-participants",
       "retry-reset",
       "reset-dialog",
       "confirm-reset",

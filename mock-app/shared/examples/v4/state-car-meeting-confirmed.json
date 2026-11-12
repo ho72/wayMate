@@ -44,8 +44,8 @@
       "createdBy": "00000000-0000-4000-8000-000000000010"
     },
     "meeting": {
-      "proposalId": "00000000-0000-4000-8000-000000000030",
-      "requestId": "00000000-0000-4000-8000-000000000031",
+      "proposalId": "00000000-0000-4000-8000-000000000032",
+      "requestId": "00000000-0000-4000-8000-000000000033",
       "connectionId": "00000000-0000-4000-8000-000000000013",
       "status": "confirmed",
       "placeId": "fiction-cafe-01",
@@ -55,7 +55,7 @@
       "end": "14:35",
       "aConsent": true,
       "bConsent": true,
-      "createdBy": "00000000-0000-4000-8000-000000000029"
+      "createdBy": "00000000-0000-4000-8000-000000000031"
     },
     "peer": {
       "alias": "솔바람",
@@ -93,6 +93,7 @@
     "candidates": [],
     "cleanupRequired": false,
     "pendingResponses": [],
+    "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
       "sdkPlace": "소프트웨어드림센터",
@@ -163,7 +164,7 @@
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "version": 20,
+  "version": 22,
   "view": "car",
   "clientId": "00000000-0000-4000-8000-000000000017",
   "onboarding": {},
@@ -300,7 +301,7 @@
       "commandType": "MEETING_CANCEL",
       "target": {
         "connectionId": "00000000-0000-4000-8000-000000000013",
-        "proposalId": "00000000-0000-4000-8000-000000000030"
+        "proposalId": "00000000-0000-4000-8000-000000000032"
       },
       "payload": {}
     },

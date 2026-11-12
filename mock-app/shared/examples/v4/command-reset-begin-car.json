@@ -2,8 +2,8 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000056",
-  "expectedVersion": 20,
+  "commandId": "00000000-0000-4000-8000-000000000058",
+  "expectedVersion": 22,
   "actor": "operator",
   "type": "RESET_BEGIN",
   "target": {

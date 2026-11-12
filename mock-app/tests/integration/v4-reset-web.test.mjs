@@ -11,10 +11,14 @@ async function browser(t) {
   let lose = false,
     failGet = false,
     posts = 0;
+  const removals = [];
   globalThis.localStorage = {
     getItem: (k) => memory.get(k) ?? null,
     setItem: (k, v) => memory.set(k, v),
-    removeItem: (k) => memory.delete(k),
+    removeItem: (k) => {
+      removals.push(k);
+      memory.delete(k);
+    },
   };
   globalThis.fetch = async (path, options) => {
     if (failGet && options.method === "GET") throw new TypeError("offline");
@@ -44,6 +48,7 @@ async function browser(t) {
   return {
     f,
     memory,
+    removals,
     client: new DemoClient(),
     lose: () => {
       lose = true;
@@ -192,4 +197,22 @@ test("an upgraded browser without a last-run pointer clears its completed drafts
   assert.equal(b.memory.get(keep), "draft");
   assert.equal(b.memory.get(other), "draft");
   assert.equal(b.posts(), count);
+});
+
+test("ordinary polls do not repeat completed-run or active-reset draft cleanup", async (t) => {
+  const b = await browser(t);
+  await b.f.prepare();
+  await b.begin();
+  await b.client.read();
+  const waitingCount = b.removals.length;
+  for (let i = 0; i < 4; i++) await b.client.read();
+  assert.equal(b.removals.length, waitingCount);
+  const binding = b.client.state.actionBindings.RESET_ACK;
+  await b.client.command(binding.commandType, binding.payload, binding.target);
+  const completedCount = b.removals.length;
+  for (let i = 0; i < 4; i++) await b.client.read();
+  assert.equal(b.removals.length, completedCount);
+  await b.begin();
+  await b.client.read();
+  assert.ok(b.removals.length > completedCount);
 });
