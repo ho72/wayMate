@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 2,
+  "runId": "00000000-0000-4000-8000-000000000031",
+  "commandId": "00000000-0000-4000-8000-000000000033",
+  "expectedVersion": 20,
+  "actor": "operator",
+  "type": "RESET_BEGIN",
+  "target": {
+    "runId": "00000000-0000-4000-8000-000000000031"
+  },
+  "payload": {}
+}

@@ -96,6 +96,7 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             navigation: true,
             driverWaypoint: true,
             operator: true,
+            safeReset: true,
           },
         });
       if (req.method === "GET" && url.pathname === "/api/state") {

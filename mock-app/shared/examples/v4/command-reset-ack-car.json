@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000030",
+  "expectedVersion": 18,
+  "actor": "car",
+  "type": "RESET_ACK",
+  "target": {
+    "resetId": "00000000-0000-4000-8000-000000000029"
+  },
+  "payload": {
+    "deviceId": "00000000-0000-4000-8000-000000000020",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "vehicleEpoch": 1,
+    "cleared": {
+      "ui": true,
+      "audio": true,
+      "pendingRequests": true
+    },
+    "pendingAttemptIds": [],
+    "evidence": null,
+    "journal": null
+  }
+}

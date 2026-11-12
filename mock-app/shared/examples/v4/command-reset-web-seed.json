@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 2,
+  "runId": "00000000-0000-4000-8000-000000000031",
+  "commandId": "00000000-0000-4000-8000-000000000032",
+  "expectedVersion": 19,
+  "actor": "web",
+  "type": "ONBOARDING_ANSWER",
+  "target": {},
+  "payload": {
+    "questionId": "interests",
+    "answerText": "직접 입력한 새 회차",
+    "inputSource": "typed"
+  }
+}

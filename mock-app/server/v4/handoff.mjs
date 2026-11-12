@@ -1,3 +1,4 @@
+import { resetBindings } from "./reset.mjs";
 import {
   socialTypes,
   applySocial,
@@ -69,6 +70,8 @@ export const approval = (s) => ({
         : "INTRO_NEUTRAL",
 });
 export function allowed(s, actor, clientId, now) {
+  const resetActions = Object.keys(resetBindings(s, actor, clientId, now));
+  if (s.reset || s.recovery || actor === "operator") return resetActions;
   const extra = Object.keys(socialBindings(s, actor, now));
   if (actor === "operator") return [];
   if (actor === "car")

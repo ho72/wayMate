@@ -1799,18 +1799,42 @@
               "const": "NAV_REMOVE_APPROVE"
             },
             "target": {
-              "type": "object",
-              "properties": {
-                "proposalId": {
-                  "type": "string",
-                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "proposalId": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    "reason": {
+                      "const": "meeting_cancel"
+                    }
+                  },
+                  "required": [
+                    "proposalId",
+                    "reason"
+                  ],
+                  "additionalProperties": false
                 },
-                "reason": {
-                  "const": "meeting_cancel"
+                {
+                  "type": "object",
+                  "properties": {
+                    "reason": {
+                      "const": "reset_cleanup"
+                    },
+                    "resetId": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    }
+                  },
+                  "required": [
+                    "reason",
+                    "resetId"
+                  ],
+                  "additionalProperties": false
                 }
-              },
-              "required": ["proposalId", "reason"],
-              "additionalProperties": false
+              ]
             },
             "payload": {
               "type": "object",
@@ -1910,6 +1934,323 @@
                 }
               },
               "required": ["originalCommandId", "originalType"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "RESET_BEGIN"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "runId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "runId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "web"
+            },
+            "type": {
+              "const": "RESET_ACK"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "resetId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "resetId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "webClientId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "cleared": {
+                  "type": "object",
+                  "properties": {
+                    "ui": {
+                      "const": true
+                    },
+                    "audio": {
+                      "const": true
+                    },
+                    "pendingRequests": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "ui",
+                    "audio",
+                    "pendingRequests"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "webClientId",
+                "cleared"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "RESET_ACK"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "resetId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "resetId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "deviceId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "cleared": {
+                  "type": "object",
+                  "properties": {
+                    "ui": {
+                      "const": true
+                    },
+                    "audio": {
+                      "const": true
+                    },
+                    "pendingRequests": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "ui",
+                    "audio",
+                    "pendingRequests"
+                  ],
+                  "additionalProperties": false
+                },
+                "pendingAttemptIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "uniqueItems": true
+                },
+                "evidence": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/navEvidence"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "journal": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "scope": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "attemptId": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                        },
+                        "reportId": {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                        },
+                        "outcome": {
+                          "enum": [
+                            "removed",
+                            "not_dispatched"
+                          ]
+                        },
+                        "acknowledged": {
+                          "const": true
+                        },
+                        "sdkCalls": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 1
+                        }
+                      },
+                      "required": [
+                        "scope",
+                        "attemptId",
+                        "reportId",
+                        "outcome",
+                        "acknowledged",
+                        "sdkCalls"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "deviceId",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "cleared",
+                "pendingAttemptIds",
+                "evidence",
+                "journal"
+              ],
               "additionalProperties": false
             }
           },
@@ -2450,6 +2791,91 @@
               "type": "null"
             }
           ]
+        },
+        "reset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/resetView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lastCompletedReset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/completedResetView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recovery": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "runId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "runId",
+                "attemptId",
+                "message"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completedRunIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        },
+        "completedNavigation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "runId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              "deviceId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              "settledAttemptIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              }
+            },
+            "required": [
+              "runId",
+              "deviceId",
+              "settledAttemptIds"
+            ],
+            "additionalProperties": false
+          }
         }
       },
       "required": [
@@ -2849,6 +3275,57 @@
         },
         "social": {
           "$ref": "#/$defs/socialStore"
+        },
+        "reset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/resetTask"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resetHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resetArchive"
+          }
+        },
+        "lateNavigationFacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lateNavigationFact"
+          }
+        },
+        "recovery": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "runId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "runId",
+                "attemptId",
+                "message"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -3379,6 +3856,10 @@
         "approvalCommandId": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "resetId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         }
       },
       "required": [
@@ -3825,6 +4306,604 @@
         "cleanupRequired",
         "pendingResponses",
         "navMapping"
+      ],
+      "additionalProperties": false
+    },
+    "resetTask": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runSeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requiredWebClientId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requiredDeviceId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "navigationRequired": {
+          "type": "boolean"
+        },
+        "webAck": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "commandId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "webClientId": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    "cleared": {
+                      "type": "object",
+                      "properties": {
+                        "ui": {
+                          "const": true
+                        },
+                        "audio": {
+                          "const": true
+                        },
+                        "pendingRequests": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "ui",
+                        "audio",
+                        "pendingRequests"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "webClientId",
+                    "cleared"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "commandId",
+                "payload"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "carAck": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "commandId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "payload": {
+                  "type": "object",
+                  "properties": {
+                    "deviceId": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    "vehicleSessionId": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    "vehicleEpoch": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "cleared": {
+                      "type": "object",
+                      "properties": {
+                        "ui": {
+                          "const": true
+                        },
+                        "audio": {
+                          "const": true
+                        },
+                        "pendingRequests": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "ui",
+                        "audio",
+                        "pendingRequests"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "pendingAttemptIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                      },
+                      "uniqueItems": true
+                    },
+                    "evidence": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/navEvidence"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "journal": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "scope": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "attemptId": {
+                              "type": "string",
+                              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                            },
+                            "reportId": {
+                              "type": "string",
+                              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                            },
+                            "outcome": {
+                              "enum": [
+                                "removed",
+                                "not_dispatched"
+                              ]
+                            },
+                            "acknowledged": {
+                              "const": true
+                            },
+                            "sdkCalls": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 1
+                            }
+                          },
+                          "required": [
+                            "scope",
+                            "attemptId",
+                            "reportId",
+                            "outcome",
+                            "acknowledged",
+                            "sdkCalls"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "deviceId",
+                    "vehicleSessionId",
+                    "vehicleEpoch",
+                    "cleared",
+                    "pendingAttemptIds",
+                    "evidence",
+                    "journal"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "commandId",
+                "payload"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "startedAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "newRunId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "runId",
+        "runSeq",
+        "requiredWebClientId",
+        "requiredDeviceId",
+        "navigationRequired",
+        "webAck",
+        "carAck",
+        "startedAt",
+        "completedAt",
+        "newRunId"
+      ],
+      "additionalProperties": false
+    },
+    "resetArchive": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runSeq": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reset": {
+          "$ref": "#/$defs/resetTask"
+        },
+        "navigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/navigation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vehicle": {
+          "type": "object",
+          "properties": {
+            "deviceId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "vehicleSessionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "vehicleEpoch": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "statusSeq": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "restrictionKnown": {
+              "type": "boolean"
+            },
+            "restricted": {
+              "type": "boolean"
+            },
+            "foreground": {
+              "type": "boolean"
+            },
+            "seenAt": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "uiContext": {
+              "enum": [
+                "handoff",
+                "home",
+                "meeting",
+                "navigation"
+              ]
+            },
+            "navigationSource": {
+              "enum": [
+                "real",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "deviceId",
+            "vehicleSessionId",
+            "vehicleEpoch",
+            "statusSeq",
+            "restrictionKnown",
+            "restricted",
+            "foreground",
+            "seenAt"
+          ],
+          "additionalProperties": false
+        },
+        "vehicleActivation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/activation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "$ref": "#/$defs/command"
+              },
+              "clientId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "receipt": {
+                "$ref": "#/$defs/receipt"
+              }
+            },
+            "required": [
+              "command",
+              "clientId",
+              "receipt"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "runId",
+        "runSeq",
+        "reset",
+        "navigation",
+        "vehicle",
+        "vehicleActivation",
+        "receipts"
+      ],
+      "additionalProperties": false
+    },
+    "resetView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requiredWebClientId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requiredDeviceId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "navigationRequired": {
+          "type": "boolean"
+        },
+        "webAcknowledged": {
+          "type": "boolean"
+        },
+        "carAcknowledged": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "waiting",
+            "needs_recovery"
+          ]
+        },
+        "blockedReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "canAcknowledge": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "runId",
+        "requiredWebClientId",
+        "requiredDeviceId",
+        "navigationRequired",
+        "webAcknowledged",
+        "carAcknowledged",
+        "status",
+        "blockedReasons",
+        "canAcknowledge"
+      ],
+      "additionalProperties": false
+    },
+    "completedResetView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "fromRunId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "newRunId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "deviceId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "settledAttemptIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "webCleanup": {
+          "enum": [
+            "acknowledged",
+            "deferred",
+            "not_required"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "fromRunId",
+        "newRunId",
+        "deviceId",
+        "settledAttemptIds",
+        "completedAt",
+        "webCleanup"
+      ],
+      "additionalProperties": false
+    },
+    "lateNavigationFact": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "$ref": "#/$defs/command"
+        },
+        "requiresRecovery": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "command",
+        "requiresRecovery"
+      ],
+      "additionalProperties": false
+    },
+    "receiptEntry": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "$ref": "#/$defs/command"
+        },
+        "clientId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt": {
+          "$ref": "#/$defs/receipt"
+        }
+      },
+      "required": [
+        "command",
+        "clientId",
+        "receipt"
       ],
       "additionalProperties": false
     }

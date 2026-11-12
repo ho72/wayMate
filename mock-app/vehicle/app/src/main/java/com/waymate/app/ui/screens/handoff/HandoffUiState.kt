@@ -13,4 +13,5 @@ data class HandoffUiState(
     val social: com.waymate.app.model.SocialUiState = com.waymate.app.model.SocialUiState(),
     val navigation: com.waymate.app.model.NavigationUiState =
         com.waymate.app.model.NavigationUiState(),
+    val reset: com.waymate.app.model.ResetUiState = com.waymate.app.model.ResetUiState(),
 )

@@ -1,0 +1,101 @@
+{
+  "reset": null,
+  "lastCompletedReset": {
+    "id": "00000000-0000-4000-8000-000000000029",
+    "fromRunId": "00000000-0000-4000-8000-000000000001",
+    "newRunId": "00000000-0000-4000-8000-000000000031",
+    "deviceId": "00000000-0000-4000-8000-000000000020",
+    "settledAttemptIds": [],
+    "completedAt": "2026-11-11T00:00:00.000Z",
+    "webCleanup": "deferred"
+  },
+  "completedRunIds": [
+    "00000000-0000-4000-8000-000000000001"
+  ],
+  "completedNavigation": [],
+  "recovery": null,
+  "social": {
+    "connection": {
+      "id": null,
+      "requestId": null,
+      "status": "none",
+      "version": 0,
+      "attempted": false,
+      "sharedWindow": [
+        "14:00",
+        "15:00"
+      ]
+    },
+    "meeting": {
+      "proposalId": null,
+      "requestId": null,
+      "connectionId": null,
+      "status": "none",
+      "placeId": "fiction-cafe-01",
+      "name": "바다쉼표 카페",
+      "date": "2026-11-14",
+      "start": "14:15",
+      "end": "14:35",
+      "aConsent": false,
+      "bConsent": false
+    },
+    "peer": null,
+    "tripShareApproved": false,
+    "approvedFields": [],
+    "candidates": [],
+    "cleanupRequired": false,
+    "pendingResponses": [],
+    "navMapping": {
+      "storyPlace": "바다쉼표 카페",
+      "sdkPlace": "소프트웨어드림센터",
+      "source": "separate_sdk_fixture"
+    }
+  },
+  "schemaVersion": 4,
+  "scope": "mobile-meeting-v4",
+  "storeId": "00000000-0000-4000-8000-000000000016",
+  "runSeq": 2,
+  "runId": "00000000-0000-4000-8000-000000000031",
+  "version": 19,
+  "view": "web",
+  "clientId": null,
+  "onboarding": {},
+  "profile": null,
+  "profileVersion": 0,
+  "publicationVersion": 0,
+  "publication": "pending",
+  "publicApproval": {
+    "status": "pending",
+    "profileVersion": 0,
+    "publicationVersion": 0,
+    "approvedFields": [],
+    "introTemplateId": null
+  },
+  "trip": null,
+  "tripVersion": 0,
+  "tripShareVersion": 0,
+  "vehicleActivation": null,
+  "journeyMode": null,
+  "preparationPreview": null,
+  "activeJourney": null,
+  "handoff": null,
+  "vehicle": {
+    "vehicleSessionId": null,
+    "vehicleEpoch": 1,
+    "restrictionKnown": false,
+    "restricted": true,
+    "foreground": false,
+    "fresh": false
+  },
+  "allowedActions": [
+    "ONBOARDING_ANSWER"
+  ],
+  "actionBindings": {
+    "ONBOARDING_ANSWER": {
+      "commandType": "ONBOARDING_ANSWER",
+      "target": {},
+      "payload": {}
+    }
+  },
+  "blockedActions": {}
+}

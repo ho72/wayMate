@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 2,
+  "runId": "00000000-0000-4000-8000-000000000031",
+  "commandId": "00000000-0000-4000-8000-000000000035",
+  "expectedVersion": 21,
+  "actor": "web",
+  "type": "RESET_ACK",
+  "target": {
+    "resetId": "00000000-0000-4000-8000-000000000034"
+  },
+  "payload": {
+    "webClientId": "00000000-0000-4000-8000-000000000017",
+    "cleared": {
+      "ui": true,
+      "audio": true,
+      "pendingRequests": true
+    }
+  }
+}

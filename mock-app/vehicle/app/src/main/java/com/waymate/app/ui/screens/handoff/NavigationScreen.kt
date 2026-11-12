@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.NavigationUiState
+import org.json.JSONObject
 
 @Composable
 fun NavigationScreen(
@@ -78,6 +79,13 @@ fun NavigationScreen(
     }
     review?.let { r ->
         val add = r.first == "add"
+        val reviewedDestination =
+            if (r.first == "meeting_cancel") state.destination
+            else
+                JSONObject(r.second)
+                    .getJSONObject("second")
+                    .getJSONObject("destination")
+                    .getString("name")
         AlertDialog(
             onDismissRequest = { review = null },
             title = {
@@ -88,7 +96,7 @@ fun NavigationScreen(
             },
             text = {
                 Text(
-                    "소프트웨어드림센터\n${if(r.first=="meeting_cancel")"만남을 취소해요. 내비 경유지는 별도 제거 승인으로 정리해요." else if(add)"현재 목적지로 가는 길에 추가해요." else "wayMate가 추가한 첫 번째 경유지만 제거해요."}\n목적지: ${state.destination}\n${if(r.first=="meeting_cancel") "만남 취소와 내비 경유지 제거는 별도 동작이에요." else "정차 상태에서 승인 후 실제 내비에 요청해요."}"
+                    "소프트웨어드림센터\n${if(r.first=="meeting_cancel")"만남을 취소해요. 내비 경유지는 별도 제거 승인으로 정리해요." else if(add)"현재 목적지로 가는 길에 추가해요." else "wayMate가 추가한 첫 번째 경유지만 제거해요."}\n목적지: ${reviewedDestination}\n${if(r.first=="meeting_cancel") "만남 취소와 내비 경유지 제거는 별도 동작이에요." else "정차 상태에서 승인 후 실제 내비에 요청해요."}"
                 )
             },
             confirmButton = {

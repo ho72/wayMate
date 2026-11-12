@@ -5,6 +5,7 @@ import com.waymate.app.ui.screens.handoff.HandoffScreen
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.screens.handoff.MeetingScreen
 import com.waymate.app.ui.screens.handoff.NavigationScreen
+import com.waymate.app.ui.screens.handoff.ResetScreen
 
 @Composable
 fun WayMateApp(
@@ -20,7 +21,9 @@ fun WayMateApp(
     onSocialAction: (String, String) -> Unit,
     onRetry: () -> Unit,
 ) {
-    if (state.navigation.visible)
+    if (state.reset.visible)
+        ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry)
+    else if (state.navigation.visible)
         NavigationScreen(
             state.navigation,
             onCloseNavigation,

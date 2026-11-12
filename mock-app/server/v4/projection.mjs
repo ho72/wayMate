@@ -1,3 +1,4 @@
+import { resetView, lastCompletedReset, resetBindings } from "./reset.mjs";
 import { socialBindings, socialProjection, linked } from "./social.mjs";
 import { allowed, fresh, canLoad, preparation, approval } from "./handoff.mjs";
 export function project(s, actor, clientId, now) {
@@ -9,12 +10,29 @@ export function project(s, actor, clientId, now) {
     fresh(s, now) &&
     s.vehicle.restrictionKnown &&
     s.vehicle.foreground;
+  const social =
+    own || actor === "operator" ? socialProjection(s, actor, now) : null;
+  if (social && (s.reset || s.recovery)) social.pendingResponses = [];
   return {
     ...(s.navigation
       ? { navigation: actor === "car" ? s.navigation : null }
       : {}),
-    social:
-      own || actor === "operator" ? socialProjection(s, actor, now) : null,
+    reset: resetView(s, actor, clientId, now),
+    lastCompletedReset: lastCompletedReset(s),
+    completedRunIds: (s.resetHistory || []).map((a) => a.runId),
+    completedNavigation:
+      actor === "car"
+        ? (s.resetHistory || [])
+            .filter((a) => a.reset.requiredDeviceId)
+            .map((a) => ({
+              runId: a.runId,
+              deviceId: a.reset.requiredDeviceId,
+              settledAttemptIds:
+                a.navigation?.attempts.map((x) => x.attemptId) || [],
+            }))
+        : [],
+    recovery: s.recovery ?? null,
+    social: social,
     schemaVersion: 4,
     scope: "mobile-meeting-v4",
     storeId: s.storeId,
@@ -94,7 +112,10 @@ export function project(s, actor, clientId, now) {
           },
         ]),
       ),
-      ...(own || actor === "operator" ? socialBindings(s, actor, now) : {}),
+      ...(!s.reset && !s.recovery && (own || actor === "operator")
+        ? socialBindings(s, actor, now)
+        : {}),
+      ...resetBindings(s, actor, clientId, now),
     },
     blockedActions:
       actor === "car" && !canLoad(s, now)
