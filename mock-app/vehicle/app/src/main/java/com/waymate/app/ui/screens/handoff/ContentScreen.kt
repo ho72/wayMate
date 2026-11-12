@@ -22,6 +22,7 @@ fun ContentScreen(
     onStop: () -> Unit,
     onAction: (String, String) -> Unit,
     onRead: (String) -> Unit,
+    onProfileCue: (String) -> Unit,
     onBack: () -> Unit,
     onMeeting: () -> Unit,
     onRetry: () -> Unit,
@@ -59,6 +60,14 @@ fun ContentScreen(
     LaunchedEffect(page, thread?.id, thread?.response, state.canInteract) {
         if (page == "messages" && state.canInteract && thread?.response != null && thread.unread)
             onRead(thread.id)
+    }
+    LaunchedEffect(page, question, state.scope, state.canInteract) {
+        if (
+            page == "answer" &&
+                state.canInteract &&
+                state.questions.any { it.id == question && it.known }
+        )
+            onProfileCue(question)
     }
     val caption =
         when (page) {

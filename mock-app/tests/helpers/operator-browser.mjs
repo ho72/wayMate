@@ -49,6 +49,7 @@ export async function browser() {
     ["status", status],
     ["requests", requests],
     ...[
+      "journey-controls",
       "begin-reset",
       "run-meta",
       "reset-summary",

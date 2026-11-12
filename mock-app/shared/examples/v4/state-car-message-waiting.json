@@ -4,6 +4,32 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "journey": {
+    "phase": "none",
+    "replay": false,
+    "storyTime": null,
+    "final": null,
+    "scene": [],
+    "meetingVariant": null,
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [
+      {
+        "id": "rest",
+        "text": "바다 보면서 좀 쉬고 싶어",
+        "reply": "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야."
+      },
+      {
+        "id": "photo",
+        "text": "사진도 한 장 남기고 싶어",
+        "reply": "좋지. 네 속도로 사진도 한 장 남겨보자. 14:55쯤 다음 일정 준비를 하면 돼."
+      }
+    ],
+    "ownClosing": "네가 원하던 대로 천천히 쉬어가자. 14:55쯤 다음 일정을 준비하면 돼.",
+    "canInteract": true,
+    "cleanupRequired": false,
+    "blockedReason": null
+  },
   "social": {
     "connection": {
       "id": "00000000-0000-4000-8000-000000000013",

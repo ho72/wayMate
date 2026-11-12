@@ -98,6 +98,7 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             operator: true,
             safeReset: true,
             agentContent: true,
+            finalChoices: true,
           },
         });
       if (req.method === "GET" && url.pathname === "/api/state") {

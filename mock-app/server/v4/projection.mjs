@@ -1,3 +1,4 @@
+import { journeyProjection, journeyBindings } from "./ending.mjs";
 import { contentProjection, contentBindings } from "./content.mjs";
 import { resetView, lastCompletedReset, resetBindings } from "./reset.mjs";
 import { socialBindings, socialProjection, linked } from "./social.mjs";
@@ -33,6 +34,8 @@ export function project(s, actor, clientId, now) {
             }))
         : [],
     recovery: s.recovery ?? null,
+    journey:
+      own || actor === "operator" ? journeyProjection(s, actor, now) : null,
     social: social,
     content: contentProjection(s, actor, now),
     schemaVersion: 4,
@@ -118,6 +121,7 @@ export function project(s, actor, clientId, now) {
         ? {
             ...socialBindings(s, actor, now),
             ...contentBindings(s, actor, now),
+            ...journeyBindings(s, actor, now),
           }
         : {}),
       ...resetBindings(s, actor, clientId, now),

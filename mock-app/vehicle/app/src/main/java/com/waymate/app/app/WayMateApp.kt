@@ -3,6 +3,7 @@ package com.waymate.app.app
 import androidx.compose.runtime.Composable
 import com.waymate.app.platform.speech.SpeechState
 import com.waymate.app.ui.screens.handoff.ContentScreen
+import com.waymate.app.ui.screens.handoff.EndingScreen
 import com.waymate.app.ui.screens.handoff.HandoffScreen
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.screens.handoff.MeetingScreen
@@ -28,9 +29,24 @@ fun WayMateApp(
     speech: SpeechState,
     onSpeak: (String) -> Unit,
     onStopSpeech: () -> Unit,
+    onOpenEnding: () -> Unit,
+    onCloseEnding: () -> Unit,
+    onProfileCue: (String) -> Unit,
 ) {
     if (state.reset.visible)
         ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry)
+    else if (state.ending.visible)
+        EndingScreen(
+            state.ending,
+            state.journey,
+            speech,
+            onSpeak,
+            onStopSpeech,
+            onSocialAction,
+            onCloseEnding,
+            onOpenNavigation,
+            onRetry,
+        )
     else if (state.content.visible)
         ContentScreen(
             state.content,
@@ -40,6 +56,7 @@ fun WayMateApp(
             onStopSpeech,
             onSocialAction,
             onMessageRead,
+            onProfileCue,
             onCloseContent,
             onOpenMeeting,
             onRetry,
@@ -65,5 +82,6 @@ fun WayMateApp(
             onOpenMeeting = onOpenMeeting,
             onSocialAction = onSocialAction,
             onOpenContent = onOpenContent,
+            onOpenEnding = onOpenEnding,
         )
 }

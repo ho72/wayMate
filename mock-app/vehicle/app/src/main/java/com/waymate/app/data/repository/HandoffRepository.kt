@@ -79,6 +79,7 @@ class HandoffRepository(
     private var candidate = preferences.getString("candidate", null)?.let(::JSONObject)
     @Volatile private var loaded: Journey? = null
     @Volatile private var networkReady = false
+    @Volatile private var dismissedEndingScope: String? = null
     @Volatile private var contentVisible = false
     @Volatile private var meetingVisible = false
     @Volatile private var socialNotice: String? = null
@@ -181,6 +182,7 @@ class HandoffRepository(
             stopPending = null
             candidate = null
             loaded = null
+            dismissedEndingScope = null
             contentVisible = false
             meetingVisible = false
             navigationVisible = false
@@ -240,6 +242,7 @@ class HandoffRepository(
             lifecycleGeneration++
             navIntent = null
             navigation.abandonGrant()
+            dismissedEndingScope = null
             contentVisible = false
             meetingVisible = false
             navigationVisible = r.optBoolean("navigationRequired")
@@ -420,6 +423,13 @@ class HandoffRepository(
                     else if (meetingVisible) "meeting"
                     else if (loaded != null) "home" else "handoff",
                 )
+        state?.let { current ->
+            val connection =
+                current.optJSONObject("social")?.optJSONObject("connection")?.optString("id")
+            preferences
+                .getString("content.q1.${current.getString("runId")}.$connection", null)
+                ?.let { payload.put("displayedCue", JSONObject(it)) }
+        }
         // Status is a fresh fact with a new sequence, never a replay of an old restriction
         // observation.
         updateState(
@@ -561,7 +571,48 @@ class HandoffRepository(
         }
     }
 
+    fun openEnding() {
+        dismissedEndingScope = null
+        contentVisible = false
+        navigationVisible = false
+        meetingVisible = false
+        show()
+    }
+
+    fun closeEnding() {
+        dismissedEndingScope = endingUi().scope
+        contentVisible = false
+        navigationVisible = false
+        meetingVisible = false
+        navIntent = null
+        show()
+    }
+
+    fun markProfileCue(questionId: String) {
+        if (questionId != "Q1" || !foreground || restricted != false || !contentVisible) return
+        val current = state ?: return
+        val c = current.optJSONObject("content") ?: return
+        val qs = c.getJSONArray("questions")
+        if (
+            !(0 until qs.length()).any {
+                qs.getJSONObject(it).getString("id") == "Q1" &&
+                    qs.getJSONObject(it).getBoolean("known")
+            }
+        )
+            return
+        val cue =
+            JSONObject()
+                .put("cueId", "S06_Q1_ANSWER")
+                .put("runId", current.getString("runId"))
+                .put("connectionId", c.getString("connectionId"))
+                .put("peerPublicProfileVersion", c.getInt("profileVersion"))
+        val key = "content.q1.${current.getString("runId")}.${c.getString("connectionId")}"
+        if (preferences.getString(key, null) != cue.toString())
+            check(preferences.edit().putString(key, cue.toString()).commit())
+    }
+
     fun openContent() {
+        dismissedEndingScope = endingUi().scope
         contentVisible = loaded != null
         show()
     }
@@ -592,6 +643,7 @@ class HandoffRepository(
     }
 
     fun openNavigation() {
+        dismissedEndingScope = endingUi().scope
         contentVisible = false
         navigationVisible = true
         navigationNotice = null
@@ -901,6 +953,7 @@ class HandoffRepository(
     }
 
     fun openMeeting() {
+        dismissedEndingScope = endingUi().scope
         contentVisible = false
         meetingVisible = true
         socialNotice = null
@@ -973,6 +1026,29 @@ class HandoffRepository(
                 }
                 val b = JSONObject(reviewed)
                 require(b.getString("commandType") == type)
+                if (type == "FINAL_CHOOSE") {
+                    val f = read().optJSONObject("journey")?.optJSONObject("final")
+                    val target = b.getJSONObject("target")
+                    if (
+                        !FinalSubmissionPolicy.maySubmit(
+                            f?.optString("status"),
+                            f?.optString("myChoice")?.takeIf {
+                                it in listOf("together", "my_agent")
+                            },
+                            pending != null,
+                            f?.optString("id"),
+                            f?.optInt("round") ?: 0,
+                            f?.optString("requestId")?.takeUnless { it == "null" },
+                            target.getString("finalId"),
+                            target.getInt("finalRound"),
+                            target.getString("requestId"),
+                        )
+                    ) {
+                        socialNotice = "선택 회차가 바뀌었거나 이미 제출됐어요. 현재 화면에서 다시 확인해 주세요."
+                        show()
+                        return@execute
+                    }
+                }
                 navCommand(type, b.getJSONObject("payload"), b.getJSONObject("target"))
                 socialNotice = null
                 sync()
@@ -1027,6 +1103,8 @@ class HandoffRepository(
                     ?: when (status) {
                         "proposed" -> "같은 장소·시간에 대한 상대 동의를 기다리고 있어요."
                         "confirmed" -> "양쪽 만남 동의 확인 · 내비는 별도로 승인해 주세요."
+                        "started" -> "만남 재연 중이에요. 시간 전환은 O01에서 진행해요."
+                        "ended" -> "만남 재연을 마쳤어요. 여행 선택과 내비 정리는 별도로 확인해요."
                         "cancelled" -> "만남을 취소했어요. 내비 경유지는 별도로 확인해요."
                         "declined" -> "이번에는 만나지 않아요. 내 친구와 여행을 이어가요."
                         else -> "이 장소와 시간으로 잠깐 만나볼까요?"
@@ -1041,6 +1119,88 @@ class HandoffRepository(
                     loaded != null,
             cleanupRequired = s?.optBoolean("cleanupRequired") == true,
             retryPending = pending != null,
+            canRetry = foreground && restricted == false && !loading,
+        )
+    }
+
+    private fun endingUi(): com.waymate.app.model.EndingUiState {
+        val current = state
+        val j = current?.optJSONObject("journey")
+        val phase = j?.optString("phase") ?: "none"
+        val f = j?.optJSONObject("final")
+        val scope =
+            (current?.optString("runId") ?: "") +
+                ":" +
+                phase +
+                ":" +
+                (f?.optString("id")
+                    ?: current
+                        ?.optJSONObject("social")
+                        ?.optJSONObject("meeting")
+                        ?.optString("proposalId"))
+        val actions = mutableMapOf<String, String>()
+        current?.optJSONObject("actionBindings")?.let { bindings ->
+            bindings.keys().forEach { key ->
+                if (key.startsWith("FINAL_CHOOSE_") || key == "CONNECT_END")
+                    actions[key] = bindings.getJSONObject(key).toString()
+            }
+        }
+        fun objects(key: String): List<JSONObject> =
+            j?.optJSONArray(key)?.let { a -> (0 until a.length()).map { a.getJSONObject(it) } }
+                ?: emptyList()
+        return com.waymate.app.model.EndingUiState(
+            visible =
+                phase in
+                    listOf(
+                        "travel",
+                        "meeting",
+                        "pending",
+                        "together",
+                        "my_agent",
+                        "cancelled",
+                        "early_end",
+                    ) && loaded != null && dismissedEndingScope != scope,
+            scope = scope,
+            phase = phase,
+            replay = j?.optBoolean("replay") == true,
+            round = f?.optInt("round") ?: 0,
+            myChoice = f?.optString("myChoice")?.takeIf { it in listOf("together", "my_agent") },
+            lines =
+                objects("scene").map {
+                    com.waymate.app.model.EndingLine(it.getString("speaker"), it.getString("text"))
+                },
+            prompt = j?.optString("ownPrompt")?.takeUnless { it == "null" },
+            answers =
+                objects("ownQuestions").map {
+                    com.waymate.app.model.EndingAnswer(
+                        it.getString("id"),
+                        it.getString("text"),
+                        it.getString("reply"),
+                    )
+                },
+            closing = j?.optString("ownClosing") ?: "",
+            canInteract =
+                foreground &&
+                    restricted == false &&
+                    networkReady &&
+                    !loading &&
+                    loaded != null &&
+                    ResetNavigationPolicy.mayQueueBehindObservation(pending?.optString("type")) &&
+                    j?.optBoolean("canInteract") == true,
+            blocked =
+                ContentAccessPolicy.blocked(
+                    foreground,
+                    restricted,
+                    current?.optJSONObject("vehicle")?.optBoolean("fresh") == true,
+                    current?.optJSONObject("vehicle")?.optBoolean("restrictionKnown") == true,
+                    current?.optJSONObject("vehicle")?.optBoolean("restricted") != false,
+                    current?.optJSONObject("vehicle")?.optBoolean("foreground") == true,
+                    current?.optJSONObject("social")?.optBoolean("testRestricted") == true,
+                ),
+            cleanupRequired = j?.optBoolean("cleanupRequired") == true,
+            actions = actions,
+            notice = socialNotice ?: j?.optString("blockedReason")?.takeUnless { it == "null" },
+            pending = pending?.optString("type") == "FINAL_CHOOSE",
             canRetry = foreground && restricted == false && !loading,
         )
     }
@@ -1183,6 +1343,7 @@ class HandoffRepository(
                         (0 until actions.length()).any {
                             actions.getString(it) == "CAR_START_TRIP"
                         },
+                ending = endingUi(),
                 content = contentUi(),
                 social = socialUi(),
                 navigation = navigationUi(),

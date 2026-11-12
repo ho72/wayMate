@@ -4,6 +4,21 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "journey": {
+    "phase": "none",
+    "replay": false,
+    "storyTime": null,
+    "final": null,
+    "scene": [],
+    "meetingVariant": null,
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [],
+    "ownClosing": "",
+    "canInteract": false,
+    "cleanupRequired": false,
+    "blockedReason": "정차·활성 차량과 내비·복구 상태를 확인해 주세요."
+  },
   "social": {
     "connection": {
       "id": "00000000-0000-4000-8000-000000000013",

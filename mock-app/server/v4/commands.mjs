@@ -1,3 +1,4 @@
+import { guardFinalReplay, interruptFinal, recordStoryCue } from "./ending.mjs";
 import { initialState } from "./state.mjs";
 import {
   applyReset,
@@ -143,7 +144,10 @@ export function coordinator(
           )
         )
           fail(409, "CANCELLED", "이 요청은 취소됐어요.");
-        if (!archivedReport) guardDuringReset(state, c);
+        if (!archivedReport) {
+          guardDuringReset(state, c);
+          guardFinalReplay(state, c);
+        }
         if (
           ![
             "CAR_STATUS",
@@ -169,6 +173,8 @@ export function coordinator(
               : c.type.startsWith("NAV_")
                 ? applyNavigation(next, c, now())
                 : (apply(next, c, id, now()), undefined);
+        if (c.type === "CAR_STATUS") recordStoryCue(next, c, now());
+        interruptFinal(next);
         // Heartbeat receipt persists, but identical restriction facts do not advance business version.
         const heartbeat =
           c.type === "CAR_STATUS" &&

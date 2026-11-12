@@ -1,0 +1,490 @@
+{
+  "navigation": {
+    "observation": {
+      "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+      "vehicleEpoch": 2,
+      "source": "real",
+      "evidence": {
+        "first": {
+          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "querySeq": 3,
+          "startedAt": 1303,
+          "completedAt": 1403,
+          "destination": {
+            "latitude": 37.48544722,
+            "longitude": 127.03636666,
+            "name": "42dot",
+            "poiId": ""
+          },
+          "waypoints": [
+            {
+              "latitude": 0,
+              "longitude": 0,
+              "name": "소프트웨어드림센터",
+              "poiId": "36khp2hdj2cfcm5nqhe3"
+            }
+          ],
+          "naviMode": "ROUTE_GUIDING",
+          "isRouting": false
+        },
+        "second": {
+          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "querySeq": 4,
+          "startedAt": 2503,
+          "completedAt": 2603,
+          "destination": {
+            "latitude": 37.48544722,
+            "longitude": 127.03636666,
+            "name": "42dot",
+            "poiId": ""
+          },
+          "waypoints": [
+            {
+              "latitude": 0,
+              "longitude": 0,
+              "name": "소프트웨어드림센터",
+              "poiId": "36khp2hdj2cfcm5nqhe3"
+            }
+          ],
+          "naviMode": "ROUTE_GUIDING",
+          "isRouting": false
+        },
+        "lookup": {
+          "sessionId": "00000000-0000-4000-8000-000000000037",
+          "receivedAt": 0,
+          "poiId": "36khp2hdj2cfcm5nqhe3",
+          "point": {
+            "latitude": 37.4127749,
+            "longitude": 127.0947566,
+            "name": "소프트웨어드림센터",
+            "poiId": "36khp2hdj2cfcm5nqhe3"
+          }
+        }
+      },
+      "receivedAt": 10000
+    },
+    "attempts": [
+      {
+        "attemptId": "00000000-0000-4000-8000-000000000040",
+        "operation": "add",
+        "deviceId": "00000000-0000-4000-8000-000000000020",
+        "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+        "vehicleEpoch": 2,
+        "sdkSessionId": "00000000-0000-4000-8000-000000000037",
+        "baseline": {
+          "latitude": 37.48544722,
+          "longitude": 127.03636666,
+          "name": "42dot",
+          "poiId": ""
+        },
+        "before": {
+          "first": {
+            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "querySeq": 1,
+            "startedAt": 1,
+            "completedAt": 101,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "second": {
+            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "querySeq": 2,
+            "startedAt": 1201,
+            "completedAt": 1301,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          "lookup": {
+            "sessionId": "00000000-0000-4000-8000-000000000037",
+            "receivedAt": 0,
+            "poiId": "36khp2hdj2cfcm5nqhe3",
+            "point": {
+              "latitude": 37.4127749,
+              "longitude": 127.0947566,
+              "name": "소프트웨어드림센터",
+              "poiId": "36khp2hdj2cfcm5nqhe3"
+            }
+          }
+        },
+        "ownedAttemptId": null,
+        "dispatch": "may_have_executed",
+        "executionRecordId": "00000000-0000-4000-8000-000000000041",
+        "dispatchAt": 1302,
+        "outcome": "applied",
+        "reports": [
+          {
+            "reportId": "00000000-0000-4000-8000-000000000043",
+            "outcome": "applied",
+            "evidence": {
+              "first": {
+                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "querySeq": 3,
+                "startedAt": 1303,
+                "completedAt": 1403,
+                "destination": {
+                  "latitude": 37.48544722,
+                  "longitude": 127.03636666,
+                  "name": "42dot",
+                  "poiId": ""
+                },
+                "waypoints": [
+                  {
+                    "latitude": 0,
+                    "longitude": 0,
+                    "name": "소프트웨어드림센터",
+                    "poiId": "36khp2hdj2cfcm5nqhe3"
+                  }
+                ],
+                "naviMode": "ROUTE_GUIDING",
+                "isRouting": false
+              },
+              "second": {
+                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "querySeq": 4,
+                "startedAt": 2503,
+                "completedAt": 2603,
+                "destination": {
+                  "latitude": 37.48544722,
+                  "longitude": 127.03636666,
+                  "name": "42dot",
+                  "poiId": ""
+                },
+                "waypoints": [
+                  {
+                    "latitude": 0,
+                    "longitude": 0,
+                    "name": "소프트웨어드림센터",
+                    "poiId": "36khp2hdj2cfcm5nqhe3"
+                  }
+                ],
+                "naviMode": "ROUTE_GUIDING",
+                "isRouting": false
+              },
+              "lookup": {
+                "sessionId": "00000000-0000-4000-8000-000000000037",
+                "receivedAt": 0,
+                "poiId": "36khp2hdj2cfcm5nqhe3",
+                "point": {
+                  "latitude": 37.4127749,
+                  "longitude": 127.0947566,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              }
+            }
+          }
+        ],
+        "approvalCommandId": "00000000-0000-4000-8000-000000000038",
+        "context": "meeting",
+        "proposalId": "00000000-0000-4000-8000-000000000030"
+      }
+    ],
+    "owned": {
+      "attemptId": "00000000-0000-4000-8000-000000000040",
+      "destination": {
+        "latitude": 37.48544722,
+        "longitude": 127.03636666,
+        "name": "42dot",
+        "poiId": ""
+      },
+      "waypoint": {
+        "latitude": 0,
+        "longitude": 0,
+        "name": "소프트웨어드림센터",
+        "poiId": "36khp2hdj2cfcm5nqhe3"
+      }
+    }
+  },
+  "reset": null,
+  "lastCompletedReset": null,
+  "completedRunIds": [],
+  "completedNavigation": [],
+  "recovery": null,
+  "journey": {
+    "phase": "pending",
+    "replay": false,
+    "storyTime": "14:35",
+    "final": {
+      "id": "00000000-0000-4000-8000-000000000047",
+      "round": 1,
+      "requestId": "00000000-0000-4000-8000-000000000048",
+      "status": "pending",
+      "myChoice": null
+    },
+    "scene": [],
+    "meetingVariant": "general",
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [
+      {
+        "id": "rest",
+        "text": "바다 보면서 좀 쉬고 싶어",
+        "reply": "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야."
+      },
+      {
+        "id": "photo",
+        "text": "사진도 한 장 남기고 싶어",
+        "reply": "좋지. 네 속도로 사진도 한 장 남겨보자. 14:55쯤 다음 일정 준비를 하면 돼."
+      }
+    ],
+    "ownClosing": "네가 원하던 대로 천천히 쉬어가자. 14:55쯤 다음 일정을 준비하면 돼.",
+    "canInteract": true,
+    "cleanupRequired": true,
+    "blockedReason": null
+  },
+  "social": {
+    "connection": {
+      "id": "00000000-0000-4000-8000-000000000013",
+      "requestId": "00000000-0000-4000-8000-000000000012",
+      "status": "linked",
+      "version": 3,
+      "attempted": true,
+      "sharedWindow": [
+        "14:00",
+        "15:00"
+      ],
+      "createdBy": "00000000-0000-4000-8000-000000000010"
+    },
+    "meeting": {
+      "proposalId": "00000000-0000-4000-8000-000000000030",
+      "requestId": "00000000-0000-4000-8000-000000000031",
+      "connectionId": "00000000-0000-4000-8000-000000000013",
+      "status": "ended",
+      "placeId": "fiction-cafe-01",
+      "name": "바다쉼표 카페",
+      "date": "2026-11-14",
+      "start": "14:15",
+      "end": "14:35",
+      "aConsent": true,
+      "bConsent": true,
+      "createdBy": "00000000-0000-4000-8000-000000000029",
+      "reenactment": {
+        "variant": "general",
+        "startedAt": "2026-11-11T00:00:00.000Z"
+      },
+      "endedAt": "2026-11-11T00:00:00.000Z"
+    },
+    "peer": {
+      "alias": "솔바람",
+      "avatarId": "b-01",
+      "publicProfileVersion": 1,
+      "description": "바다를 먼저 보고, 조용한 카페에서 쉬는 여행을 좋아해요.",
+      "interests": [
+        "sea_walk",
+        "cafe"
+      ],
+      "speakingStyle": "calm",
+      "approvedFields": [
+        "alias",
+        "avatarId",
+        "interests",
+        "pace",
+        "activityPreference",
+        "conversationStyle",
+        "expressionPresetIds",
+        "speakingStyle"
+      ],
+      "pace": "relaxed",
+      "activityPreference": "walk_first_photos_occasional",
+      "conversationStyle": "quiet",
+      "expressionPresetIds": [
+        "slow_ok"
+      ]
+    },
+    "testRestricted": false,
+    "tripShareApproved": true,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "candidates": [],
+    "cleanupRequired": true,
+    "pendingResponses": [],
+    "navMapping": {
+      "storyPlace": "바다쉼표 카페",
+      "sdkPlace": "소프트웨어드림센터",
+      "source": "separate_sdk_fixture"
+    }
+  },
+  "content": null,
+  "schemaVersion": 4,
+  "scope": "mobile-meeting-v4",
+  "storeId": "00000000-0000-4000-8000-000000000016",
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "version": 28,
+  "view": "car",
+  "clientId": "00000000-0000-4000-8000-000000000017",
+  "onboarding": {},
+  "profile": null,
+  "profileVersion": 1,
+  "publicationVersion": 6,
+  "publication": "published",
+  "publicApproval": {
+    "status": "published",
+    "profileVersion": 1,
+    "publicationVersion": 6,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "introTemplateId": "INTRO_NEUTRAL"
+  },
+  "trip": {
+    "date": "2026-11-14",
+    "nextVisit": "15:20",
+    "nextVisitLabel": "기존 개인 방문지",
+    "returnPlaceId": "a-lodging-01",
+    "returnPlaceLabel": "내 숙소",
+    "returnEstimate": "15:45",
+    "returnDeadline": "16:00"
+  },
+  "tripVersion": 1,
+  "tripShareVersion": 1,
+  "vehicleActivation": {
+    "origin": "handoff",
+    "profileVersion": 1,
+    "tripVersion": 1,
+    "deviceId": "00000000-0000-4000-8000-000000000020",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "confirmedAt": "2026-11-11T00:00:00.000Z"
+  },
+  "journeyMode": "connected",
+  "preparationPreview": {
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "owner": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": null,
+        "pace": null,
+        "conversationStyle": null,
+        "speakingStyle": "light_humor",
+        "expressionPresetIds": [],
+        "summarySource": "user_confirmed_demo"
+      }
+    },
+    "ownerTrip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    }
+  },
+  "activeJourney": {
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "owner": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": null,
+        "pace": null,
+        "conversationStyle": null,
+        "speakingStyle": "light_humor",
+        "expressionPresetIds": [],
+        "summarySource": "user_confirmed_demo"
+      }
+    },
+    "ownerTrip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    }
+  },
+  "handoff": {
+    "handoffId": "00000000-0000-4000-8000-000000000018",
+    "handoffVersion": 1,
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1,
+      "publication": 6,
+      "tripShare": 1,
+      "connection": 3
+    },
+    "mode": "connected",
+    "acknowledged": true
+  },
+  "vehicle": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000034",
+    "vehicleEpoch": 2,
+    "restrictionKnown": true,
+    "restricted": false,
+    "foreground": true,
+    "fresh": true
+  },
+  "allowedActions": [
+    "CONNECT_END"
+  ],
+  "actionBindings": {
+    "CONNECT_END": {
+      "commandType": "CONNECT_END",
+      "target": {
+        "connectionId": "00000000-0000-4000-8000-000000000013"
+      },
+      "payload": {}
+    },
+    "FINAL_CHOOSE_TOGETHER": {
+      "commandType": "FINAL_CHOOSE",
+      "target": {
+        "finalId": "00000000-0000-4000-8000-000000000047",
+        "finalRound": 1,
+        "requestId": "00000000-0000-4000-8000-000000000048"
+      },
+      "payload": {
+        "choice": "together"
+      }
+    },
+    "FINAL_CHOOSE_MY_AGENT": {
+      "commandType": "FINAL_CHOOSE",
+      "target": {
+        "finalId": "00000000-0000-4000-8000-000000000047",
+        "finalRound": 1,
+        "requestId": "00000000-0000-4000-8000-000000000048"
+      },
+      "payload": {
+        "choice": "my_agent"
+      }
+    }
+  },
+  "blockedActions": {
+    "CAR_LOADED": {
+      "code": "RESTRICTED",
+      "message": "저장된 전달본과 최신 정차·화면 활성 상태가 필요합니다."
+    }
+  }
+}

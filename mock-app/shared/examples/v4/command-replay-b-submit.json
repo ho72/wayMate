@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000055",
+  "expectedVersion": 32,
+  "actor": "operator",
+  "type": "B_RESPONSE",
+  "target": {
+    "kind": "final",
+    "finalId": "00000000-0000-4000-8000-000000000052",
+    "finalRound": 2,
+    "requestId": "00000000-0000-4000-8000-000000000053"
+  },
+  "payload": {
+    "decision": "together"
+  }
+}

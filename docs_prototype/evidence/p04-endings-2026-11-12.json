@@ -1,0 +1,1382 @@
+{
+  "date": "2026-11-12",
+  "timezone": "Asia/Seoul",
+  "environment": {
+    "emulator": "Pleos Connect 2.1 / API34",
+    "androidUser": 10,
+    "applicationId": "com.waymate.app.real",
+    "roles": "A on native car UI; B via O01 simulated actor",
+    "preconditions": "Existing run3 mobile fixture and P02 records; no new full mobile E2E claim",
+    "meetingVariant": "general: A interests private even though scoped Q1 cue was displayed",
+    "finalApkUsedInRounds": [
+      3,
+      4
+    ],
+    "finalApkSha256": "e52cee74542358df4269cefcda1ba23a3e330d2b5beacac2c965e2b09fb8b2a9",
+    "probeFinalManifest": {
+      "enabled": false,
+      "exported": false,
+      "deviceOverride": "default"
+    }
+  },
+  "roundMatrix": [
+    {
+      "round": 1,
+      "first": "B",
+      "A": "together",
+      "B": "my_agent",
+      "outcome": "my_agent"
+    },
+    {
+      "round": 2,
+      "first": "A",
+      "A": "together",
+      "B": "together",
+      "outcome": "together"
+    },
+    {
+      "round": 3,
+      "first": "B",
+      "A": "my_agent",
+      "B": "together",
+      "outcome": "my_agent"
+    },
+    {
+      "round": 4,
+      "first": "A",
+      "A": "my_agent",
+      "B": "my_agent",
+      "outcome": "my_agent"
+    }
+  ],
+  "captures": [
+    {
+      "label": "round1-open",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "FINAL_CHOOSE_TOGETHER": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "choice": "together"
+              }
+            },
+            "FINAL_CHOOSE_MY_AGENT": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "choice": "my_agent"
+              }
+            }
+          }
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "B_FINAL_TOGETHER": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "decision": "together"
+              }
+            },
+            "B_FINAL_MY_AGENT": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "decision": "my_agent"
+              }
+            }
+          }
+        },
+        "web": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round1-b-first",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "FINAL_CHOOSE_TOGETHER": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "choice": "together"
+              }
+            },
+            "FINAL_CHOOSE_MY_AGENT": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1,
+                "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93"
+              },
+              "payload": {
+                "choice": "my_agent"
+              }
+            }
+          }
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "web": {
+          "phase": "pending",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": "7145343c-4fe9-403b-afb4-6c8165afbb93",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "linked",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round1-my-agent",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "my_agent",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "my_agent",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+                "finalRound": 1
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "my_agent",
+          "replay": false,
+          "final": {
+            "id": "685e0243-0d7d-4073-9c1c-4db5b6eea050",
+            "round": 1,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round2-replay-open",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "FINAL_CHOOSE_TOGETHER": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "choice": "together"
+              }
+            },
+            "FINAL_CHOOSE_MY_AGENT": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "choice": "my_agent"
+              }
+            }
+          }
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "B_FINAL_TOGETHER": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "decision": "together"
+              }
+            },
+            "B_FINAL_MY_AGENT": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "decision": "my_agent"
+              }
+            }
+          }
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round2-a-first",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "B_FINAL_TOGETHER": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "decision": "together"
+              }
+            },
+            "B_FINAL_MY_AGENT": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2,
+                "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f"
+              },
+              "payload": {
+                "decision": "my_agent"
+              }
+            }
+          }
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": "1020afdf-cf40-4cb5-a3b6-d55727d97f3f",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round2-together",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "before-restart",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "after-restart",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+                "finalRound": 2
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "together",
+          "replay": true,
+          "final": {
+            "id": "a6789dd0-cf41-48c0-abee-7c92257f01a2",
+            "round": 2,
+            "requestId": null,
+            "status": "together",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round3-replay-open",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "FINAL_CHOOSE_TOGETHER": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "choice": "together"
+              }
+            },
+            "FINAL_CHOOSE_MY_AGENT": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "choice": "my_agent"
+              }
+            }
+          }
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "B_FINAL_TOGETHER": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "decision": "together"
+              }
+            },
+            "B_FINAL_MY_AGENT": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "decision": "my_agent"
+              }
+            }
+          }
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round3-b-first",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "FINAL_CHOOSE_TOGETHER": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "choice": "together"
+              }
+            },
+            "FINAL_CHOOSE_MY_AGENT": {
+              "commandType": "FINAL_CHOOSE",
+              "target": {
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3,
+                "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1"
+              },
+              "payload": {
+                "choice": "my_agent"
+              }
+            }
+          }
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": "41993c0a-2fa7-4901-a0aa-9d1f510ae3e1",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round3-my-agent",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "together"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "402a7a85-94bc-4642-8fae-449161d5285e",
+                "finalRound": 3
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "402a7a85-94bc-4642-8fae-449161d5285e",
+            "round": 3,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round4-a-first",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "B_FINAL_TOGETHER": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+                "finalRound": 4,
+                "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5"
+              },
+              "payload": {
+                "decision": "together"
+              }
+            },
+            "B_FINAL_MY_AGENT": {
+              "commandType": "B_RESPONSE",
+              "target": {
+                "kind": "final",
+                "finalId": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+                "finalRound": 4,
+                "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5"
+              },
+              "payload": {
+                "decision": "my_agent"
+              }
+            }
+          }
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round4-restricted",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": false,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": false,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "web": {
+          "phase": "pending",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": "4d213774-1bcf-420b-8e97-665c2a383bf5",
+            "status": "pending",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": false,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    },
+    {
+      "label": "round4-my-agent",
+      "runId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "runSeq": 3,
+      "roles": {
+        "car": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        },
+        "operator": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": "my_agent"
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {
+            "REPLAY_FINAL": {
+              "commandType": "REPLAY_FINAL",
+              "target": {
+                "finalId": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+                "finalRound": 4
+              },
+              "payload": {}
+            }
+          }
+        },
+        "web": {
+          "phase": "my_agent",
+          "replay": true,
+          "final": {
+            "id": "4fc3d2ca-a5dd-4950-9018-fd242ad88188",
+            "round": 4,
+            "requestId": null,
+            "status": "my_agent",
+            "myChoice": null
+          },
+          "connectionStatus": "ended",
+          "meetingStatus": "ended",
+          "canInteract": true,
+          "cleanupRequired": true,
+          "finalActionBindings": {}
+        }
+      }
+    }
+  ],
+  "journal": {
+    "beforeEndingsSha256": "7f269a889c37054d0db665d54dfa8d427f3f592bfcd85ab7689f6cc8a210f08d",
+    "afterEndingsSha256": "7f269a889c37054d0db665d54dfa8d427f3f592bfcd85ab7689f6cc8a210f08d",
+    "byteEqualAcrossEndingsAndReplays": true,
+    "byteEqualAcrossServerRestartAndDataPreservingApkInstall": true,
+    "extraSdkCallsDuringEndingsAndReplays": 0,
+    "historicalRecordsPreserved": true,
+    "separateDiagnosticDPreparation": {
+      "priorAttempts": 6,
+      "afterAttempts": 7,
+      "addedAttempt": {
+        "attemptId": "b4d7021e-7485-4bab-a806-e613accabbfe",
+        "source": "real",
+        "fixtureId": "coordinate-no-poi-v2",
+        "operation": "prepare",
+        "requestMode": "coordinate_only",
+        "executorSession": "9df78dc4-5fb6-4077-a287-7440fbd31f41",
+        "bootCount": 5,
+        "recoveryBaselineBoot": 5,
+        "dispatchAt": 6084820,
+        "dispatch": "settled",
+        "outcome": "applied",
+        "before": {
+          "session": "9df78dc4-5fb6-4077-a287-7440fbd31f41",
+          "querySeq": 24,
+          "startedAt": 6084575,
+          "completedAt": 6084773,
+          "destination": {
+            "latitude": 0,
+            "longitude": 0,
+            "name": "",
+            "poiId": ""
+          },
+          "waypoints": [],
+          "naviMode": "SAFE_GUIDING",
+          "isRouting": false
+        },
+        "request": {
+          "latitude": 37.48544722,
+          "longitude": 127.03636666,
+          "name": "42dot",
+          "poiId": ""
+        },
+        "resolution": "reconciled",
+        "evidence": [
+          {
+            "session": "9df78dc4-5fb6-4077-a287-7440fbd31f41",
+            "querySeq": 29,
+            "startedAt": 6092292,
+            "completedAt": 6093465,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          },
+          {
+            "session": "9df78dc4-5fb6-4077-a287-7440fbd31f41",
+            "querySeq": 30,
+            "startedAt": 6095347,
+            "completedAt": 6096490,
+            "destination": {
+              "latitude": 37.48544722,
+              "longitude": 127.03636666,
+              "name": "42dot",
+              "poiId": ""
+            },
+            "waypoints": [],
+            "naviMode": "ROUTE_GUIDING",
+            "isRouting": false
+          }
+        ],
+        "verificationBasis": "route_snapshot_coordinates_and_slot_count"
+      }
+    },
+    "currentRunActualSdkRecords": [
+      {
+        "attemptId": "3e796dcb-e5d1-4dc5-a789-a036eefbcd47",
+        "operation": "add",
+        "sdkCalls": 1,
+        "acknowledged": true,
+        "report": {
+          "reportId": "56b6d5c7-0f19-46df-a9fa-bfa50767cef4",
+          "attemptId": "3e796dcb-e5d1-4dc5-a789-a036eefbcd47",
+          "executionRecordId": "ab8a2a06-e16c-4a33-9a60-af9a417e7987",
+          "outcome": "applied",
+          "evidence": {
+            "first": {
+              "sessionId": "59f644df-d749-44cc-a26e-05a526215cc3",
+              "querySeq": 68,
+              "startedAt": 6261138,
+              "completedAt": 6262141,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "59f644df-d749-44cc-a26e-05a526215cc3",
+              "querySeq": 69,
+              "startedAt": 6263638,
+              "completedAt": 6264643,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [
+                {
+                  "latitude": 0,
+                  "longitude": 0,
+                  "name": "소프트웨어드림센터",
+                  "poiId": "36khp2hdj2cfcm5nqhe3"
+                }
+              ],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "59f644df-d749-44cc-a26e-05a526215cc3",
+              "receivedAt": 6108520,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          }
+        }
+      },
+      {
+        "attemptId": "7e8b402b-5561-46aa-a7ab-d1c684b71537",
+        "operation": "remove",
+        "sdkCalls": 1,
+        "acknowledged": true,
+        "report": {
+          "reportId": "8c82ba4d-61b8-4502-ae23-cb4002cf6448",
+          "attemptId": "7e8b402b-5561-46aa-a7ab-d1c684b71537",
+          "executionRecordId": "07738ca0-ef74-4788-9d6d-2e5a89887a87",
+          "outcome": "removed",
+          "evidence": {
+            "first": {
+              "sessionId": "9c9c5214-d4ee-4710-973f-5b55997013f5",
+              "querySeq": 88,
+              "startedAt": 7341248,
+              "completedAt": 7342256,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "second": {
+              "sessionId": "9c9c5214-d4ee-4710-973f-5b55997013f5",
+              "querySeq": 89,
+              "startedAt": 7343751,
+              "completedAt": 7344821,
+              "destination": {
+                "latitude": 37.48544722,
+                "longitude": 127.03636666,
+                "name": "42dot",
+                "poiId": ""
+              },
+              "waypoints": [],
+              "naviMode": "ROUTE_GUIDING",
+              "isRouting": false
+            },
+            "lookup": {
+              "sessionId": "9c9c5214-d4ee-4710-973f-5b55997013f5",
+              "receivedAt": 7131377,
+              "poiId": "36khp2hdj2cfcm5nqhe3",
+              "point": {
+                "latitude": 37.4127749,
+                "longitude": 127.0947566,
+                "name": "소프트웨어드림센터",
+                "poiId": "36khp2hdj2cfcm5nqhe3"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "cleanup": {
+    "runSeq": 4,
+    "runId": "f369570a-3aa2-4cc4-ad08-0442fe4972d6",
+    "reset": null,
+    "owned": null,
+    "final": null,
+    "lastCompletedReset": {
+      "id": "720f270e-5b9e-4e6d-92fc-1a0d3e31a860",
+      "fromRunId": "4165247c-5d31-4d39-a2dd-a3438c67b384",
+      "newRunId": "f369570a-3aa2-4cc4-ad08-0442fe4972d6",
+      "deviceId": "9e3d9a3a-23b6-4529-ab71-5057f618ffaa",
+      "settledAttemptIds": [
+        "3e796dcb-e5d1-4dc5-a789-a036eefbcd47",
+        "7e8b402b-5561-46aa-a7ab-d1c684b71537"
+      ],
+      "completedAt": "2026-11-12T00:17:53.563Z",
+      "webCleanup": "deferred"
+    }
+  },
+  "automatedChecks": {
+    "node": {
+      "tests": 220,
+      "passed": 220
+    },
+    "kotlin": {
+      "tests": 33,
+      "passed": 33
+    },
+    "apks": [
+      "mockDebug",
+      "realDebug"
+    ],
+    "lint": {
+      "errorsEach": 0,
+      "warningsEach": 22
+    },
+    "exampleRegenerationStable": true
+  },
+  "limits": [
+    "Registered TTS service is not bound: captions verified, audible speech/lipsync unverified",
+    "Not actual B remote communication or GPS arrival",
+    "Extra test restriction, not a real driving test",
+    "Familiar variant positive conditions tested automatically",
+    "No full Q28 rehearsal claim"
+  ],
+  "screenshots": {
+    "p04-meeting-2026-11-12.png": "e196b98e540c9bf62535ad5a6c35d5418aa9c8f07ef5b560ec34e503db6ada0c",
+    "p04-b-first-2026-11-12.png": "5cb97b1fee08c6b3bd1b7498d37de1de29401d7b191535dd1c4ecebb2721e4df",
+    "p04-a-first-2026-11-12.png": "39a1e72f25897ab7f0b72bb7301450f34eef466592bc7d7f822a2c26985b4430",
+    "p04-together-2026-11-12.png": "d6396e8abcd935efaea33ae0d46a9206881f844a8bade4dc6b5871ac5c8b0c0b",
+    "p04-my-agent-2026-11-12.png": "c02b6e5af40c9358c4d62ed090be09abeb73ba2d0ec56c57bd758aa4d2624f04",
+    "p04-restricted-2026-11-12.png": "f6b09532574bd21814c671678e50677ddd5308b817888d10d09ead8d014f6b0f",
+    "p04-reset-complete-2026-11-12.png": "a255ce5c02ebd35354e882530e31c333637ecf1d29b453e6cf3a43dd19c6fd14"
+  },
+  "screenshotNotes": {
+    "p04-my-agent-2026-11-12.png": "Round1 friend dialogue before final server ownPrompt wording refinement; final wording is in round3/4 role captures.",
+    "p04-together-2026-11-12.png": "Round2 result before final APK reinstall; final APK used for rounds3/4 and cleanup."
+  }
+}
