@@ -105,7 +105,7 @@
   "officialInquiry": {
     "recipient": "partnership@pleos.ai",
     "preparedLocalBodySha256": "e7506ddbebad8273852c7fe54ddcb6d249a4b16fa3a1f8cf52f82dddf21bdd53",
-    "status": "explicit send approval requested; not sent",
+    "status": "cancelled by user; not sent; no Gmail draft created",
     "includesRawLogsCredentialsOrApk": false
   },
   "captures": [
