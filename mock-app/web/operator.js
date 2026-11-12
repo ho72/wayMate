@@ -142,6 +142,8 @@ function render() {
   const retryReset = document.getElementById("retry-reset");
   if (retryReset) retryReset.hidden = !resetPending;
   const key = JSON.stringify([
+    state.journey,
+    state.actionBindings,
     state.social,
     pending,
     resetPending,
@@ -151,6 +153,7 @@ function render() {
   ]);
   if (key === last) return;
   last = key;
+  renderJourney();
   const root = document.getElementById("requests");
   root.replaceChildren();
   for (const t of state.social.pendingResponses) {
@@ -265,7 +268,15 @@ async function sendCommand(type, payload, target, reviewedRun = null) {
     status(
       type === "RESET_BEGIN"
         ? "초기화를 시작했어요. 내비 정리와 ACK를 기다려 주세요."
-        : "B 응답을 저장했어요.",
+        : type === "B_RESPONSE"
+          ? "B 응답을 저장했어요."
+          : type === "MEETING_START"
+            ? "14:15 만남 재연을 시작했어요."
+            : type === "MEETING_END"
+              ? "만남을 마치고 양쪽 최종 선택을 함께 열었어요."
+              : type === "REPLAY_FINAL"
+                ? "새 최종 선택 회차를 열었어요. 양쪽이 독립적으로 선택해 주세요."
+                : "이야기 배경을 반영했어요.",
     );
   } catch (e) {
     status(e.message);
@@ -321,3 +332,62 @@ if (resetButton) {
 }
 await poll();
 setInterval(poll, 500);
+
+function renderJourney() {
+  const root = document.getElementById("journey-controls");
+  if (!root) return;
+  root.replaceChildren();
+  root.append(el("h2", "만남 재연·두 가지 여행"));
+  const j = state.journey;
+  root.append(
+    el(
+      "p",
+      j
+        ? `현재 단계 ${j.phase} · ${j.replay ? "최종 선택 재시연" : "일반 진행"}`
+        : "현재 회차 준비 중",
+    ),
+  );
+  if (j?.final) {
+    root.append(el("p", `선택 회차 ${j.final.round} · ${j.final.status}`));
+    root.append(
+      el(
+        "p",
+        j.final.myChoice
+          ? `B 본인 선택: ${j.final.myChoice === "together" ? "함께" : "내 캐릭터와"}`
+          : "B는 A 제출과 관계없이 독립적으로 선택할 수 있어요. 상대 선택은 공개하지 않아요.",
+      ),
+    );
+  }
+  if (j?.blockedReason) root.append(el("p", j.blockedReason));
+  const labels = {
+    MEETING_START: "만남 시작으로 이동",
+    MEETING_END: "만남 종료",
+    REPLAY_FINAL: "최종 선택 재시연",
+    B_FINAL_TOGETHER: "B 함께 여행 이어가기",
+    B_FINAL_MY_AGENT: "B 내 캐릭터와 여행 이어가기",
+    SET_STORY_CONTEXT: j?.peerIntroSeen
+      ? "B 사전 소개 배경 생략"
+      : "B 사전 소개 배경 적용",
+  };
+  for (const [key, label] of Object.entries(labels)) {
+    const binding = state.actionBindings?.[key];
+    if (!binding) continue;
+    const button = el("button", label);
+    button.disabled =
+      !!pending || !!resetPending || !!state.reset || !!state.recovery;
+    button.onclick = () =>
+      sendCommand(
+        binding.commandType,
+        binding.payload,
+        binding.target,
+        state.runId,
+      );
+    root.append(button);
+  }
+  root.append(
+    el(
+      "p",
+      "시간 전환은 가상 만남 재연이에요. GPS 도착·실제 B 접속·새 내비 변경을 만들지 않아요.",
+    ),
+  );
+}

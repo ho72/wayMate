@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
             HandoffRepository(applicationContext, createNavigationDriver(applicationContext)) {
                 ui =
                     HandoffUiState(
+                        it.ending,
                         it.content,
                         it.loadEnabled,
                         it.isLoading,
@@ -67,6 +68,9 @@ class MainActivity : ComponentActivity() {
                     speechState,
                     speech::speak,
                     speech::interrupt,
+                    repository::openEnding,
+                    repository::closeEnding,
+                    repository::markProfileCue,
                 )
             }
         }

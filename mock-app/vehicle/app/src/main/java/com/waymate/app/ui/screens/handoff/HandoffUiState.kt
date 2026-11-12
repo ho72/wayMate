@@ -3,6 +3,7 @@ package com.waymate.app.ui.screens.handoff
 import com.waymate.app.model.Journey
 
 data class HandoffUiState(
+    val ending: com.waymate.app.model.EndingUiState = com.waymate.app.model.EndingUiState(),
     val content: com.waymate.app.model.ContentUiState = com.waymate.app.model.ContentUiState(),
     val loadEnabled: Boolean = false,
     val isLoading: Boolean = false,

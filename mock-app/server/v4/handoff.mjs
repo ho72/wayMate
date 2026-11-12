@@ -1,3 +1,4 @@
+import { journeyTypes, applyJourney } from "./ending.mjs";
 import { applyContent } from "./content.mjs";
 import { resetBindings } from "./reset.mjs";
 import {
@@ -133,6 +134,11 @@ function activate(s, origin) {
 }
 export function apply(s, c, clientId, now) {
   const p = c.payload;
+  if (
+    journeyTypes.has(c.type) ||
+    (c.type === "B_RESPONSE" && c.target.kind === "final")
+  )
+    return applyJourney(s, c, now);
   if (
     ["MESSAGE_SEND", "MESSAGE_REPLY"].includes(c.type) ||
     (c.type === "B_RESPONSE" && c.target.kind === "message")
@@ -297,7 +303,8 @@ export function apply(s, c, clientId, now) {
           "STALE_STATE",
           "현재 세션의 증가하는 상태 번호가 필요합니다.",
         );
-      Object.assign(s.vehicle, { ...p, seenAt: now });
+      const { displayedCue: _displayedCue, ...status } = p;
+      Object.assign(s.vehicle, { ...status, seenAt: now });
       break;
     case "CAR_LOADED":
       if (

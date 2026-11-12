@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000052",
+  "expectedVersion": 31,
+  "actor": "car",
+  "type": "FINAL_CHOOSE",
+  "target": {
+    "finalId": "00000000-0000-4000-8000-000000000049",
+    "finalRound": 1,
+    "requestId": "00000000-0000-4000-8000-000000000050"
+  },
+  "payload": {
+    "choice": "together"
+  }
+}

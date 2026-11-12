@@ -1,7 +1,7 @@
 {
   "reset": {
-    "id": "00000000-0000-4000-8000-000000000041",
-    "runId": "00000000-0000-4000-8000-000000000038",
+    "id": "00000000-0000-4000-8000-000000000064",
+    "runId": "00000000-0000-4000-8000-000000000061",
     "requiredWebClientId": "00000000-0000-4000-8000-000000000017",
     "requiredDeviceId": null,
     "navigationRequired": false,
@@ -14,9 +14,9 @@
     "canAcknowledge": true
   },
   "lastCompletedReset": {
-    "id": "00000000-0000-4000-8000-000000000036",
+    "id": "00000000-0000-4000-8000-000000000059",
     "fromRunId": "00000000-0000-4000-8000-000000000001",
-    "newRunId": "00000000-0000-4000-8000-000000000038",
+    "newRunId": "00000000-0000-4000-8000-000000000061",
     "deviceId": "00000000-0000-4000-8000-000000000020",
     "settledAttemptIds": [],
     "completedAt": "2026-11-11T00:00:00.000Z",
@@ -27,6 +27,21 @@
   ],
   "completedNavigation": [],
   "recovery": null,
+  "journey": {
+    "phase": "none",
+    "replay": false,
+    "storyTime": null,
+    "final": null,
+    "scene": [],
+    "meetingVariant": null,
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [],
+    "ownClosing": "",
+    "canInteract": false,
+    "cleanupRequired": false,
+    "blockedReason": "정차·활성 차량과 내비·복구 상태를 확인해 주세요."
+  },
   "social": {
     "connection": {
       "id": null,
@@ -71,7 +86,7 @@
   "scope": "mobile-meeting-v4",
   "storeId": "00000000-0000-4000-8000-000000000016",
   "runSeq": 2,
-  "runId": "00000000-0000-4000-8000-000000000038",
+  "runId": "00000000-0000-4000-8000-000000000061",
   "version": 26,
   "view": "web",
   "clientId": "00000000-0000-4000-8000-000000000017",
@@ -117,7 +132,7 @@
     "RESET_ACK": {
       "commandType": "RESET_ACK",
       "target": {
-        "resetId": "00000000-0000-4000-8000-000000000041"
+        "resetId": "00000000-0000-4000-8000-000000000064"
       },
       "payload": {
         "webClientId": "00000000-0000-4000-8000-000000000017",

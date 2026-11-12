@@ -140,6 +140,90 @@
     "definition": "state"
   },
   {
+    "file": "command-ending-car-session.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-status.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-nav-before.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-nav-approve.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-nav-dispatch.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-nav-applied.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-ending-nav-observed.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-meeting-start.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-meeting-reenactment.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-meeting-end.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-final-open.json",
+    "definition": "state"
+  },
+  {
+    "file": "state-operator-final-open.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-final-b-first.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-final-b-first-hidden.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-final-a-submit.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-own-ending.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-replay-final.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-final-replay.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-replay-a-submit.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-replay-b-submit.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-together-ending.json",
+    "definition": "state"
+  },
+  {
     "file": "command-reset-begin-car.json",
     "definition": "command"
   },

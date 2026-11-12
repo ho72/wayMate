@@ -462,7 +462,8 @@ export function socialProjection(s, actor, now) {
     tripShareApproved: s.social.tripShareApproved,
     approvedFields: s.social.approvedFields,
     candidates,
-    cleanupRequired: !!s.navigation?.owned && m.status === "cancelled",
+    cleanupRequired:
+      !!s.navigation?.owned && ["cancelled", "ended"].includes(m.status),
     pendingResponses: pending,
     messageResponseEnabled:
       actor === "operator" &&

@@ -1,3 +1,4 @@
+import { endingExamples } from "./ending-examples.mjs";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -230,6 +231,7 @@ try {
     definition: "state",
     value: await api.read("car", null),
   });
+  await endingExamples(directory, fixtures);
   let resetState = await api.read("operator", null);
   await command("RESET_BEGIN", {}, "operator", "reset-begin-car", {
     runId: resetState.runId,

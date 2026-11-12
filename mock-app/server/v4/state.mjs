@@ -1,3 +1,4 @@
+import { initialStory, validateEnding } from "./ending.mjs";
 import { initialContent, validateContent } from "./content.mjs";
 import { initialSocial, connectionVersions, linked } from "./social.mjs";
 import { validateNavigation, validEvidence, identity } from "./navigation.mjs";
@@ -8,6 +9,12 @@ import { sources, owner, approval } from "./handoff.mjs";
 import { assertContract } from "./validation.mjs";
 export function initialState() {
   return {
+    storyContext: initialStory(),
+    finalCheckpoint: null,
+    finalRound: 0,
+    final: null,
+    finalHistory: [],
+    replayContext: { mode: "normal", checkpointId: null },
     content: initialContent(),
     reset: null,
     resetHistory: [],
@@ -83,6 +90,7 @@ export function validateStore(s) {
     }
   validateNavigation(s);
   validateContent(s);
+  validateEnding(s);
   const history = s.resetHistory || [],
     ids = new Set();
   for (const a of history) {
@@ -177,7 +185,7 @@ export function validateStore(s) {
   )
     throw new Error("연결 요청 ID 불일치");
   if (
-    (["proposed", "confirmed"].includes(m.status) ||
+    (["proposed", "confirmed", "started", "ended"].includes(m.status) ||
       (m.status === "cancelled" && m.proposalId !== null)) &&
     (!m.proposalId || !m.requestId || m.connectionId !== c.id)
   )

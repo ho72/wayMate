@@ -1,6 +1,6 @@
 package com.waymate.app.data.repository
 
-/** Read markers are disposable UI state. Only server-confirmed completed runs may be removed. */
+/** Read markers and display cues are UI state. Only confirmed completed runs may be removed. */
 class ContentReadStore(
     private val keys: () -> Set<String>,
     private val read: (String) -> Boolean,
@@ -16,7 +16,10 @@ class ContentReadStore(
     fun clearCompleted(currentRunId: String, completedRunIds: Set<String>) {
         val scope = currentRunId to completedRunIds.toSet()
         if (scope == reconciled) return
-        val prefixes = (completedRunIds - currentRunId).map { "content.read.$it." }
+        val prefixes =
+            (completedRunIds - currentRunId).flatMap {
+                listOf("content.read.$it.", "content.q1.$it.")
+            }
         val obsolete = keys().filter { key -> prefixes.any { key.startsWith(it) } }.toSet()
         if (obsolete.isNotEmpty()) remove(obsolete)
         reconciled = scope

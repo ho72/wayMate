@@ -27,6 +27,7 @@ fun HandoffScreen(
     onOpenMeeting: () -> Unit,
     onSocialAction: (String, String) -> Unit,
     onOpenContent: () -> Unit,
+    onOpenEnding: () -> Unit,
 ) {
     var socialReview by remember { mutableStateOf<Pair<String, String>?>(null) }
     var confirmStart by remember { mutableStateOf(false) }
@@ -62,6 +63,19 @@ fun HandoffScreen(
                 }
                 if (journey != null) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if (
+                            state.ending.phase in
+                                listOf(
+                                    "travel",
+                                    "meeting",
+                                    "pending",
+                                    "together",
+                                    "my_agent",
+                                    "cancelled",
+                                    "early_end",
+                                )
+                        )
+                            OutlinedButton(onClick = onOpenEnding) { Text("만남·여행 선택 다시 보기") }
                         Button(onClick = onOpenContent) {
                             Text(
                                 if (state.content.peerAlias != null)
@@ -73,7 +87,7 @@ fun HandoffScreen(
                         if (state.social.peerAlias != null || state.social.meetingStatus != "none")
                             Button(onClick = onOpenMeeting) {
                                 Text(
-                                    if (state.social.cleanupRequired) "만남 취소 · 경유지 확인 필요"
+                                    if (state.social.cleanupRequired) "내비 경유지 확인 필요"
                                     else if (state.social.meetingStatus == "none") "만남 제안 받기"
                                     else "만남 상태 확인"
                                 )

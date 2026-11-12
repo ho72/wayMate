@@ -451,6 +451,9 @@
                 },
                 "uiContext": {
                   "enum": ["handoff", "home", "meeting", "navigation"]
+                },
+                "displayedCue": {
+                  "$ref": "#/$defs/displayedCue"
                 }
               },
               "required": [
@@ -2496,6 +2499,425 @@
             "payload"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "MEETING_START"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "proposalId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "MEETING_END"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "proposalId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "SET_STORY_CONTEXT"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "proposalId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "peerIntroSeen": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "peerIntroSeen"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "REPLAY_FINAL"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "finalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "finalRound": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "finalId",
+                "finalRound"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "FINAL_CHOOSE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "finalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "finalRound": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "requestId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "finalId",
+                "finalRound",
+                "requestId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "choice": {
+                  "enum": [
+                    "together",
+                    "my_agent"
+                  ]
+                }
+              },
+              "required": [
+                "choice"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "B_RESPONSE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "final"
+                },
+                "finalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "finalRound": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "requestId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "kind",
+                "finalId",
+                "finalRound",
+                "requestId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision": {
+                  "enum": [
+                    "together",
+                    "my_agent"
+                  ]
+                }
+              },
+              "required": [
+                "decision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -3116,6 +3538,16 @@
               "type": "null"
             }
           ]
+        },
+        "journey": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/journeyView"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -3569,6 +4001,42 @@
         },
         "content": {
           "$ref": "#/$defs/contentStore"
+        },
+        "storyContext": {
+          "$ref": "#/$defs/storyContext"
+        },
+        "finalCheckpoint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/endingCheckpoint"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finalRound": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "final": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/finalStore"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finalHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/finalStore"
+          }
+        },
+        "replayContext": {
+          "$ref": "#/$defs/replayContext"
         }
       },
       "required": [
@@ -4341,6 +4809,8 @@
             "declined",
             "cancelled",
             "started",
+            "ended",
+            "started",
             "ended"
           ]
         },
@@ -4368,6 +4838,28 @@
         "createdBy": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "reenactment": {
+          "type": "object",
+          "properties": {
+            "variant": {
+              "enum": [
+                "general",
+                "familiar"
+              ]
+            },
+            "startedAt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "variant",
+            "startedAt"
+          ],
+          "additionalProperties": false
+        },
+        "endedAt": {
+          "type": "string"
         }
       },
       "required": [
@@ -5570,6 +6062,390 @@
         "threads",
         "replyDone",
         "canInteract"
+      ],
+      "additionalProperties": false
+    },
+    "displayedCue": {
+      "type": "object",
+      "properties": {
+        "cueId": {
+          "const": "S06_Q1_ANSWER"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "peerPublicProfileVersion": {
+          "const": 1
+        }
+      },
+      "required": [
+        "cueId",
+        "runId",
+        "connectionId",
+        "peerPublicProfileVersion"
+      ],
+      "additionalProperties": false
+    },
+    "storyContext": {
+      "type": "object",
+      "properties": {
+        "peerIntroSeen": {
+          "type": "boolean"
+        },
+        "cue": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/displayedCue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "peerIntroSeen",
+        "cue"
+      ],
+      "additionalProperties": false
+    },
+    "endingCheckpoint": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "proposalId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "storyConnectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "peerAlias": {
+          "type": "string"
+        },
+        "endedAt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "runId",
+        "proposalId",
+        "storyConnectionId",
+        "peerAlias",
+        "endedAt"
+      ],
+      "additionalProperties": false
+    },
+    "finalStore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "round": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issuedRequestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "aChoice": {
+          "anyOf": [
+            {
+              "enum": [
+                "together",
+                "my_agent"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bChoice": {
+          "anyOf": [
+            {
+              "enum": [
+                "together",
+                "my_agent"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "together",
+            "my_agent",
+            "cancelled"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "round",
+        "requestId",
+        "issuedRequestId",
+        "aChoice",
+        "bChoice",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "replayContext": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "normal",
+            "final_replay"
+          ]
+        },
+        "checkpointId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "checkpointId"
+      ],
+      "additionalProperties": false
+    },
+    "journeyView": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "enum": [
+            "none",
+            "confirmed",
+            "travel",
+            "meeting",
+            "pending",
+            "together",
+            "my_agent",
+            "cancelled",
+            "early_end"
+          ]
+        },
+        "replay": {
+          "type": "boolean"
+        },
+        "storyTime": {
+          "anyOf": [
+            {
+              "enum": [
+                "14:15",
+                "14:35"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "final": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "round": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "requestId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "pending",
+                    "together",
+                    "my_agent",
+                    "cancelled"
+                  ]
+                },
+                "myChoice": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "together",
+                        "my_agent"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "round",
+                "requestId",
+                "status",
+                "myChoice"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scene": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "speaker": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "speaker",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "meetingVariant": {
+          "anyOf": [
+            {
+              "enum": [
+                "general",
+                "familiar"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "peerIntroSeen": {
+          "type": "boolean"
+        },
+        "ownPrompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ownQuestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "rest",
+                  "photo"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "reply": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "text",
+              "reply"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "ownClosing": {
+          "type": "string"
+        },
+        "canInteract": {
+          "type": "boolean"
+        },
+        "cleanupRequired": {
+          "type": "boolean"
+        },
+        "blockedReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "phase",
+        "replay",
+        "storyTime",
+        "final",
+        "scene",
+        "meetingVariant",
+        "peerIntroSeen",
+        "ownPrompt",
+        "ownQuestions",
+        "ownClosing",
+        "canInteract",
+        "cleanupRequired",
+        "blockedReason"
       ],
       "additionalProperties": false
     }

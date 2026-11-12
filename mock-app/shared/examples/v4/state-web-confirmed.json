@@ -4,6 +4,21 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "journey": {
+    "phase": "none",
+    "replay": false,
+    "storyTime": null,
+    "final": null,
+    "scene": [],
+    "meetingVariant": null,
+    "peerIntroSeen": true,
+    "ownPrompt": null,
+    "ownQuestions": [],
+    "ownClosing": "",
+    "canInteract": true,
+    "cleanupRequired": false,
+    "blockedReason": null
+  },
   "social": {
     "connection": {
       "id": "00000000-0000-4000-8000-000000000013",
