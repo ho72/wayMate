@@ -401,7 +401,13 @@ export function applyArchivedReport(s, c) {
     finalEvidence &&
     p.evidence.second.sessionId === finalEvidence.second.sessionId &&
     p.evidence.second.completedAt <= finalEvidence.second.completedAt;
-  const requiresRecovery = !older;
+  // An archived approval that never received a grant cannot have changed the route.
+  // Keep the late fact, without treating missing route evidence as uncertainty.
+  const neverDispatched =
+    a.dispatch === "not_started" &&
+    a.executionRecordId === null &&
+    p.outcome === "not_dispatched";
+  const requiresRecovery = !older && !neverDispatched;
   (s.lateNavigationFacts ??= []).push({
     command: structuredClone(c),
     requiresRecovery,

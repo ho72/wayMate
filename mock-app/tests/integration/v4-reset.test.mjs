@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { fixture } from "../helpers/v4-fixture.mjs";
+import { coordinator } from "../../server/v4/commands.mjs";
 
 async function begin(f) {
   const s = await f.read("operator");
@@ -210,6 +211,89 @@ test("reset closes ungranted approvals but never grants their late dispatch", as
   const e = await observe(f, f.evidence([], 9000));
   await f.post(await ackCommand(f, e));
   assert.equal((await f.read("car")).runSeq, 2);
+});
+
+test("late never-granted not_dispatched report preserves audit without locking the next run", async (t) => {
+  const f = await fixture(t);
+  await f.connect();
+  await f.activate();
+  await f.meeting();
+  const a = (await f.navApprove()).state.navigation.attempts[0],
+    old = await f.read("car"),
+    common = await f.common();
+  await begin(f);
+  const e = await observe(f, f.evidence([], 9000));
+  await f.post(await ackCommand(f, e));
+  const next = await f.read("car");
+  const late = await f.envelope(
+    "NAV_REPORT",
+    {
+      ...common,
+      attemptId: a.attemptId,
+      executionRecordId: null,
+      reportId: randomUUID(),
+      outcome: "not_dispatched",
+      evidence: null,
+    },
+    "car",
+  );
+  late.runId = old.runId;
+  late.runSeq = old.runSeq;
+  for (const change of [
+    { executionRecordId: randomUUID() },
+    { vehicleSessionId: randomUUID() },
+    { outcome: "unknown" },
+  ]) {
+    const bad = structuredClone(late);
+    bad.commandId = randomUUID();
+    Object.assign(bad.payload, change);
+    await assert.rejects(f.post(bad));
+    assert.equal((await f.read("car")).recovery, null);
+  }
+  const result = await f.post(late);
+  assert.equal(result.state.recovery, null);
+  assert.equal(result.state.runId, next.runId);
+  assert.equal(result.state.navigation, undefined);
+  await f.post(late);
+  const disk = JSON.parse(await readFile(f.file));
+  assert.equal(disk.lateNavigationFacts.length, 1);
+  assert.equal(disk.lateNavigationFacts[0].requiresRecovery, false);
+  assert.equal(disk.resetHistory[0].navigation.attempts[0].reports.length, 0);
+  const restored = coordinator(f.file, JSON.parse(await readFile(f.file)));
+  assert.equal((await restored.read("car", null)).recovery, null);
+  const reset = await f.envelope("RESET_BEGIN", {}, "operator", {
+    runId: next.runId,
+  });
+  await restored.command(reset, "operator", null);
+  assert.equal((await restored.read("car", null)).runSeq, next.runSeq + 1);
+});
+
+test("lost web identity cannot bypass the required owner ACK", async (t) => {
+  const f = await fixture(t);
+  await f.prepare();
+  await begin(f);
+  const owner = await f.read(),
+    foreignId = randomUUID(),
+    foreign = await f.read("web", foreignId);
+  assert.equal(foreign.reset.requiredWebClientId, f.id);
+  assert.equal(foreign.actionBindings.RESET_ACK, undefined);
+  assert.equal(foreign.runId, owner.runId);
+  await assert.rejects(
+    f.send(
+      "RESET_ACK",
+      {
+        webClientId: foreignId,
+        cleared: { ui: true, audio: true, pendingRequests: true },
+      },
+      "web",
+      { resetId: owner.reset.id },
+    ),
+    { code: "ACTOR_FORBIDDEN" },
+  );
+  assert.equal((await f.read()).runId, owner.runId);
+  const b = owner.actionBindings.RESET_ACK;
+  await f.send(b.commandType, b.payload, "web", b.target);
+  assert.equal((await f.read()).runSeq, owner.runSeq + 1);
 });
 
 test("reset rejects wrong reset/device/session, claimed pending work, stale and changed baseline proof", async (t) => {

@@ -4,6 +4,8 @@ export class DemoClient {
     this.id = localStorage.getItem("waymate.clientId") || crypto.randomUUID();
     localStorage.setItem("waymate.clientId", this.id);
     this.state = null;
+    this.observedRun = null;
+    this.cleanedReset = null;
     this.requests = Promise.resolve();
     this.cancelRequest = JSON.parse(
       localStorage.getItem("waymate.cancel.v4") || "null",
@@ -57,8 +59,12 @@ export class DemoClient {
     const known = state.completedRunIds || [];
     // Older v4 clients did not persist a last-run pointer. The server's
     // completed runs are authoritative even on the first read after upgrade.
-    for (const runId of known)
-      if (runId !== state.runId) this.clearRunDrafts(runId);
+    if (this.observedRun !== state.runId) {
+      for (const runId of known)
+        if (runId !== state.runId) this.clearRunDrafts(runId);
+      this.observedRun = state.runId;
+      localStorage.setItem("waymate.lastRun.v4", state.runId);
+    }
     for (const outgoing of [this.pending, this.cancelRequest])
       if (
         outgoing &&
@@ -69,8 +75,10 @@ export class DemoClient {
         this.clear();
         break;
       }
-    if (state.reset) this.clearRunDrafts(state.runId);
-    localStorage.setItem("waymate.lastRun.v4", state.runId);
+    if (state.reset && this.cleanedReset !== state.reset.id) {
+      this.clearRunDrafts(state.runId);
+      this.cleanedReset = state.reset.id;
+    }
   }
   prepareResetCleanup() {
     const s = this.state;
