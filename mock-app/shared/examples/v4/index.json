@@ -84,6 +84,46 @@
     "definition": "health"
   },
   {
+    "file": "command-message-send.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-message-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "state-operator-message-waiting.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-message-restriction-on.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-operator-message-blocked.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-message-restriction-off.json",
+    "definition": "command"
+  },
+  {
+    "file": "command-message-b-reply.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-message-received.json",
+    "definition": "state"
+  },
+  {
+    "file": "command-message-followup.json",
+    "definition": "command"
+  },
+  {
+    "file": "state-car-message-replied.json",
+    "definition": "state"
+  },
+  {
     "file": "command-meeting_propose.json",
     "definition": "command"
   },

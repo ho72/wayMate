@@ -4,6 +4,7 @@ import com.waymate.app.model.Journey
 
 /** Connection result; app layer maps it to screen state. */
 data class HandoffConnectionState(
+    val content: com.waymate.app.model.ContentUiState = com.waymate.app.model.ContentUiState(),
     val loadEnabled: Boolean = false,
     val isLoading: Boolean = false,
     val notice: String? = null,

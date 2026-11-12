@@ -1,3 +1,4 @@
+import { initialContent, validateContent } from "./content.mjs";
 import { initialSocial, connectionVersions, linked } from "./social.mjs";
 import { validateNavigation, validEvidence, identity } from "./navigation.mjs";
 import { isDeepStrictEqual } from "node:util";
@@ -7,6 +8,7 @@ import { sources, owner, approval } from "./handoff.mjs";
 import { assertContract } from "./validation.mjs";
 export function initialState() {
   return {
+    content: initialContent(),
     reset: null,
     resetHistory: [],
     lateNavigationFacts: [],
@@ -80,6 +82,7 @@ export function validateStore(s) {
       validatedReceipts.add(value);
     }
   validateNavigation(s);
+  validateContent(s);
   const history = s.resetHistory || [],
     ids = new Set();
   for (const a of history) {

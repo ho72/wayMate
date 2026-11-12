@@ -46,7 +46,23 @@
       "sea_walk",
       "cafe"
     ],
-    "speakingStyle": "calm"
+    "speakingStyle": "calm",
+    "approvedFields": [
+      "alias",
+      "avatarId",
+      "interests",
+      "pace",
+      "activityPreference",
+      "conversationStyle",
+      "expressionPresetIds",
+      "speakingStyle"
+    ],
+    "pace": "relaxed",
+    "activityPreference": "walk_first_photos_occasional",
+    "conversationStyle": "quiet",
+    "expressionPresetIds": [
+      "slow_ok"
+    ]
   },
   "connection": {
     "id": "00000000-0000-4000-8000-000000000013",

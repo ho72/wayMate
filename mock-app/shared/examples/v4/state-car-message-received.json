@@ -1,0 +1,317 @@
+{
+  "reset": null,
+  "lastCompletedReset": null,
+  "completedRunIds": [],
+  "completedNavigation": [],
+  "recovery": null,
+  "social": {
+    "connection": {
+      "id": "00000000-0000-4000-8000-000000000013",
+      "requestId": "00000000-0000-4000-8000-000000000012",
+      "status": "linked",
+      "version": 3,
+      "attempted": true,
+      "sharedWindow": [
+        "14:00",
+        "15:00"
+      ],
+      "createdBy": "00000000-0000-4000-8000-000000000010"
+    },
+    "meeting": {
+      "proposalId": null,
+      "requestId": null,
+      "connectionId": null,
+      "status": "none",
+      "placeId": "fiction-cafe-01",
+      "name": "바다쉼표 카페",
+      "date": "2026-11-14",
+      "start": "14:15",
+      "end": "14:35",
+      "aConsent": false,
+      "bConsent": false
+    },
+    "peer": {
+      "alias": "솔바람",
+      "avatarId": "b-01",
+      "publicProfileVersion": 1,
+      "description": "바다를 먼저 보고, 조용한 카페에서 쉬는 여행을 좋아해요.",
+      "interests": [
+        "sea_walk",
+        "cafe"
+      ],
+      "speakingStyle": "calm",
+      "approvedFields": [
+        "alias",
+        "avatarId",
+        "interests",
+        "pace",
+        "activityPreference",
+        "conversationStyle",
+        "expressionPresetIds",
+        "speakingStyle"
+      ],
+      "pace": "relaxed",
+      "activityPreference": "walk_first_photos_occasional",
+      "conversationStyle": "quiet",
+      "expressionPresetIds": [
+        "slow_ok"
+      ]
+    },
+    "testRestricted": false,
+    "tripShareApproved": true,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "candidates": [],
+    "cleanupRequired": false,
+    "pendingResponses": [],
+    "messageResponseEnabled": false,
+    "navMapping": {
+      "storyPlace": "바다쉼표 카페",
+      "sdkPlace": "소프트웨어드림센터",
+      "source": "separate_sdk_fixture"
+    }
+  },
+  "content": {
+    "connectionId": "00000000-0000-4000-8000-000000000013",
+    "peerAlias": "솔바람",
+    "profileVersion": 1,
+    "questions": [
+      {
+        "id": "Q1",
+        "text": "솔바람은 여행할 때 뭘 제일 좋아해?",
+        "answer": "천천히 가도 괜찮죠. 솔바람은 바다를 먼저 보고, 조용한 카페에서 커피 한 잔 하는 걸 좋아해요. 사진도 좋지만 느긋하게 걷는 쪽이래요.",
+        "known": true
+      },
+      {
+        "id": "Q2",
+        "text": "처음 만나면 무슨 얘기를 하면 좋을까?",
+        "answer": "그건 제가 아는 소개에는 없어요. 직접 물어볼까요?",
+        "known": false
+      }
+    ],
+    "messages": [
+      {
+        "id": "M1",
+        "text": "카페에서 쉬었다가 잠깐 바다를 걷는 건 어떠세요?"
+      },
+      {
+        "id": "M2",
+        "text": "저는 조용한 카페가 편한데, 어떤 분위기를 좋아하세요?"
+      }
+    ],
+    "replies": [
+      {
+        "id": "R1",
+        "text": "저는 천천히 걷는 쪽이 좋아요. 사진은 가끔 한 장씩 찍고요."
+      },
+      {
+        "id": "R2",
+        "text": "사진도 좋아하지만, 오늘은 느긋하게 쉬고 싶어요. 다음 일정도 지키면서요."
+      }
+    ],
+    "threads": [
+      {
+        "id": "00000000-0000-4000-8000-000000000025",
+        "requestId": "00000000-0000-4000-8000-000000000026",
+        "connectionId": "00000000-0000-4000-8000-000000000013",
+        "messagePresetId": "M1",
+        "createdBy": "00000000-0000-4000-8000-000000000024",
+        "status": "received",
+        "sentAt": "2026-11-11T00:00:00.000Z",
+        "responsePresetId": "M1",
+        "followupQuestionId": "F1",
+        "replyPresetId": null,
+        "text": "카페에서 쉬었다가 잠깐 바다를 걷는 건 어떠세요?",
+        "response": "좋아요. 천천히 가도 괜찮죠? 저도 바다 보면서 쉬고 싶었어요.",
+        "followup": "사진 찍는 것과 천천히 걷는 것 중에는 뭘 더 좋아하세요?",
+        "reply": null
+      }
+    ],
+    "replyDone": "서로 어떤 여행을 좋아하는지 조금 알게 됐네. 이 답장만으로 만남이 정해진 건 아니야. 다음은 네가 고르면 돼.",
+    "canInteract": true
+  },
+  "schemaVersion": 4,
+  "scope": "mobile-meeting-v4",
+  "storeId": "00000000-0000-4000-8000-000000000016",
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "version": 19,
+  "view": "car",
+  "clientId": "00000000-0000-4000-8000-000000000017",
+  "onboarding": {},
+  "profile": null,
+  "profileVersion": 1,
+  "publicationVersion": 6,
+  "publication": "published",
+  "publicApproval": {
+    "status": "published",
+    "profileVersion": 1,
+    "publicationVersion": 6,
+    "approvedFields": [
+      "alias",
+      "avatarId"
+    ],
+    "introTemplateId": "INTRO_NEUTRAL"
+  },
+  "trip": {
+    "date": "2026-11-14",
+    "nextVisit": "15:20",
+    "nextVisitLabel": "기존 개인 방문지",
+    "returnPlaceId": "a-lodging-01",
+    "returnPlaceLabel": "내 숙소",
+    "returnEstimate": "15:45",
+    "returnDeadline": "16:00"
+  },
+  "tripVersion": 1,
+  "tripShareVersion": 1,
+  "vehicleActivation": {
+    "origin": "handoff",
+    "profileVersion": 1,
+    "tripVersion": 1,
+    "deviceId": "00000000-0000-4000-8000-000000000020",
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "confirmedAt": "2026-11-11T00:00:00.000Z"
+  },
+  "journeyMode": "connected",
+  "preparationPreview": {
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "owner": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": null,
+        "pace": null,
+        "conversationStyle": null,
+        "speakingStyle": "light_humor",
+        "expressionPresetIds": [],
+        "summarySource": "user_confirmed_demo"
+      }
+    },
+    "ownerTrip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    }
+  },
+  "activeJourney": {
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1
+    },
+    "owner": {
+      "alias": "구름여행",
+      "avatarId": "a-02",
+      "speakingStyle": "light_humor",
+      "summary": {
+        "interests": [
+          "cafe"
+        ],
+        "activityPreference": null,
+        "pace": null,
+        "conversationStyle": null,
+        "speakingStyle": "light_humor",
+        "expressionPresetIds": [],
+        "summarySource": "user_confirmed_demo"
+      }
+    },
+    "ownerTrip": {
+      "date": "2026-11-14",
+      "nextVisit": "15:20",
+      "nextVisitLabel": "기존 개인 방문지",
+      "returnPlaceId": "a-lodging-01",
+      "returnPlaceLabel": "내 숙소",
+      "returnEstimate": "15:45",
+      "returnDeadline": "16:00"
+    }
+  },
+  "handoff": {
+    "handoffId": "00000000-0000-4000-8000-000000000018",
+    "handoffVersion": 1,
+    "sourceVersions": {
+      "profile": 1,
+      "trip": 1,
+      "publication": 6,
+      "tripShare": 1,
+      "connection": 3
+    },
+    "mode": "connected",
+    "acknowledged": true
+  },
+  "vehicle": {
+    "vehicleSessionId": "00000000-0000-4000-8000-000000000021",
+    "vehicleEpoch": 1,
+    "restrictionKnown": true,
+    "restricted": false,
+    "foreground": true,
+    "fresh": true
+  },
+  "allowedActions": [
+    "CONNECT_END",
+    "MEETING_PROPOSE",
+    "MEETING_DECLINE"
+  ],
+  "actionBindings": {
+    "CONNECT_END": {
+      "commandType": "CONNECT_END",
+      "target": {
+        "connectionId": "00000000-0000-4000-8000-000000000013"
+      },
+      "payload": {}
+    },
+    "MEETING_PROPOSE": {
+      "commandType": "MEETING_PROPOSE",
+      "target": {
+        "connectionId": "00000000-0000-4000-8000-000000000013"
+      },
+      "payload": {
+        "placeId": "fiction-cafe-01"
+      }
+    },
+    "MEETING_DECLINE": {
+      "commandType": "MEETING_DECLINE",
+      "target": {
+        "connectionId": "00000000-0000-4000-8000-000000000013"
+      },
+      "payload": {}
+    },
+    "MESSAGE_REPLY_R1": {
+      "commandType": "MESSAGE_REPLY",
+      "target": {
+        "threadId": "00000000-0000-4000-8000-000000000025",
+        "followupQuestionId": "F1"
+      },
+      "payload": {
+        "replyPresetId": "R1"
+      }
+    },
+    "MESSAGE_REPLY_R2": {
+      "commandType": "MESSAGE_REPLY",
+      "target": {
+        "threadId": "00000000-0000-4000-8000-000000000025",
+        "followupQuestionId": "F1"
+      },
+      "payload": {
+        "replyPresetId": "R2"
+      }
+    }
+  },
+  "blockedActions": {
+    "CAR_LOADED": {
+      "code": "RESTRICTED",
+      "message": "저장된 전달본과 최신 정차·화면 활성 상태가 필요합니다."
+    }
+  }
+}

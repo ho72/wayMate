@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 4,
+  "runSeq": 1,
+  "runId": "00000000-0000-4000-8000-000000000001",
+  "commandId": "00000000-0000-4000-8000-000000000030",
+  "expectedVersion": 19,
+  "actor": "car",
+  "type": "MESSAGE_REPLY",
+  "target": {
+    "threadId": "00000000-0000-4000-8000-000000000025",
+    "followupQuestionId": "F1"
+  },
+  "payload": {
+    "replyPresetId": "R1"
+  }
+}

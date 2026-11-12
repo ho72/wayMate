@@ -1930,7 +1930,12 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 },
                 "originalType": {
-                  "enum": ["CONNECT_REQUEST", "MEETING_PROPOSE", "NAV_APPROVE"]
+                  "enum": [
+                    "CONNECT_REQUEST",
+                    "MEETING_PROPOSE",
+                    "NAV_APPROVE",
+                    "MESSAGE_SEND"
+                  ]
                 }
               },
               "required": ["originalCommandId", "originalType"],
@@ -2250,6 +2255,231 @@
                 "pendingAttemptIds",
                 "evidence",
                 "journal"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "MESSAGE_SEND"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "connectionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "connectionId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "messagePresetId": {
+                  "enum": [
+                    "M1",
+                    "M2"
+                  ]
+                }
+              },
+              "required": [
+                "messagePresetId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "MESSAGE_REPLY"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "threadId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "followupQuestionId": {
+                  "const": "F1"
+                }
+              },
+              "required": [
+                "threadId",
+                "followupQuestionId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "replyPresetId": {
+                  "enum": [
+                    "R1",
+                    "R2"
+                  ]
+                }
+              },
+              "required": [
+                "replyPresetId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "B_RESPONSE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "message"
+                },
+                "requestId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "connectionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "threadId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "kind",
+                "requestId",
+                "connectionId",
+                "threadId"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision": {
+                  "const": "reply"
+                }
+              },
+              "required": [
+                "decision"
               ],
               "additionalProperties": false
             }
@@ -2876,6 +3106,16 @@
             ],
             "additionalProperties": false
           }
+        },
+        "content": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/contentView"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -3326,6 +3566,9 @@
               "type": "null"
             }
           ]
+        },
+        "content": {
+          "$ref": "#/$defs/contentStore"
         }
       },
       "required": [
@@ -3955,6 +4198,27 @@
         },
         "speakingStyle": {
           "const": "calm"
+        },
+        "approvedFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pace": {
+          "const": "relaxed"
+        },
+        "activityPreference": {
+          "const": "walk_first_photos_occasional"
+        },
+        "conversationStyle": {
+          "const": "quiet"
+        },
+        "expressionPresetIds": {
+          "type": "array",
+          "items": {
+            "const": "slow_ok"
+          }
         }
       },
       "required": [
@@ -4162,7 +4426,12 @@
                 "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
               },
               "type": {
-                "enum": ["CONNECT_REQUEST", "MEETING_PROPOSE", "NAV_APPROVE"]
+                "enum": [
+                  "CONNECT_REQUEST",
+                  "MEETING_PROPOSE",
+                  "NAV_APPROVE",
+                  "MESSAGE_SEND"
+                ]
               },
               "actor": {
                 "enum": ["web", "car"]
@@ -4250,33 +4519,72 @@
         "pendingResponses": {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "kind": {
-                "enum": ["connection", "meeting"]
-              },
-              "requestId": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-              },
-              "connectionId": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-              },
-              "proposalId": {
-                "anyOf": [
-                  {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "connection",
+                      "meeting"
+                    ]
+                  },
+                  "requestId": {
                     "type": "string",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   },
-                  {
-                    "type": "null"
+                  "connectionId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "proposalId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
-                ]
+                },
+                "required": [
+                  "kind",
+                  "requestId",
+                  "connectionId",
+                  "proposalId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "message"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "connectionId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "threadId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "requestId",
+                  "connectionId",
+                  "threadId"
+                ],
+                "additionalProperties": false
               }
-            },
-            "required": ["kind", "requestId", "connectionId", "proposalId"],
-            "additionalProperties": false
+            ]
           }
         },
         "navMapping": {
@@ -4294,6 +4602,12 @@
           },
           "required": ["storyPlace", "sdkPlace", "source"],
           "additionalProperties": false
+        },
+        "testRestricted": {
+          "type": "boolean"
+        },
+        "messageResponseEnabled": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -4904,6 +5218,358 @@
         "command",
         "clientId",
         "receipt"
+      ],
+      "additionalProperties": false
+    },
+    "messageThread": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "messagePresetId": {
+          "enum": [
+            "M1",
+            "M2"
+          ]
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "enum": [
+            "waiting",
+            "received",
+            "replied",
+            "closed"
+          ]
+        },
+        "sentAt": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "responsePresetId": {
+          "anyOf": [
+            {
+              "enum": [
+                "M1",
+                "M2"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "followupQuestionId": {
+          "anyOf": [
+            {
+              "const": "F1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "replyPresetId": {
+          "anyOf": [
+            {
+              "enum": [
+                "R1",
+                "R2"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "connectionId",
+        "messagePresetId",
+        "createdBy",
+        "status",
+        "sentAt",
+        "responsePresetId",
+        "followupQuestionId",
+        "replyPresetId"
+      ],
+      "additionalProperties": false
+    },
+    "contentStore": {
+      "type": "object",
+      "properties": {
+        "threads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/messageThread"
+          }
+        }
+      },
+      "required": [
+        "threads"
+      ],
+      "additionalProperties": false
+    },
+    "messageView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "messagePresetId": {
+          "enum": [
+            "M1",
+            "M2"
+          ]
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "enum": [
+            "waiting",
+            "received",
+            "replied",
+            "closed"
+          ]
+        },
+        "sentAt": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "responsePresetId": {
+          "anyOf": [
+            {
+              "enum": [
+                "M1",
+                "M2"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "followupQuestionId": {
+          "anyOf": [
+            {
+              "const": "F1"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "replyPresetId": {
+          "anyOf": [
+            {
+              "enum": [
+                "R1",
+                "R2"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "followup": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reply": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "connectionId",
+        "messagePresetId",
+        "createdBy",
+        "status",
+        "sentAt",
+        "responsePresetId",
+        "followupQuestionId",
+        "replyPresetId",
+        "text",
+        "response",
+        "followup",
+        "reply"
+      ],
+      "additionalProperties": false
+    },
+    "contentView": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "peerAlias": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "profileVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "Q1",
+                  "Q2"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "answer": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "known": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "text",
+              "answer",
+              "known"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "M1",
+                  "M2"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "replies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "enum": [
+                  "R1",
+                  "R2"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "threads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/messageView"
+          }
+        },
+        "replyDone": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "canInteract": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "connectionId",
+        "peerAlias",
+        "profileVersion",
+        "questions",
+        "messages",
+        "replies",
+        "threads",
+        "replyDone",
+        "canInteract"
       ],
       "additionalProperties": false
     }

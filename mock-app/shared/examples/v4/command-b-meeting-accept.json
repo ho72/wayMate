@@ -2,15 +2,15 @@
   "schemaVersion": 4,
   "runSeq": 1,
   "runId": "00000000-0000-4000-8000-000000000001",
-  "commandId": "00000000-0000-4000-8000-000000000027",
-  "expectedVersion": 16,
+  "commandId": "00000000-0000-4000-8000-000000000034",
+  "expectedVersion": 21,
   "actor": "operator",
   "type": "B_RESPONSE",
   "target": {
     "kind": "meeting",
-    "requestId": "00000000-0000-4000-8000-000000000026",
+    "requestId": "00000000-0000-4000-8000-000000000033",
     "connectionId": "00000000-0000-4000-8000-000000000013",
-    "proposalId": "00000000-0000-4000-8000-000000000025"
+    "proposalId": "00000000-0000-4000-8000-000000000032"
   },
   "payload": {
     "decision": "accept"

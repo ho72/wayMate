@@ -159,27 +159,52 @@ function render() {
     card.append(
       el(
         "h2",
-        t.kind === "connection" ? "B 대화 연결 응답" : "B 만남 제안 응답",
+        t.kind === "message"
+          ? "B 메시지 답변"
+          : t.kind === "connection"
+            ? "B 대화 연결 응답"
+            : "B 만남 제안 응답",
       ),
     );
     card.append(
       el(
         "p",
-        t.kind === "meeting"
-          ? "바다쉼표 카페 · 14:15~14:35 · 현재 제안에만 응답"
-          : "모바일 연결 요청 · 차량 접속 없이 응답 가능",
+        t.kind === "message"
+          ? "현재 메시지에 대응하는 준비된 답장·후속 질문을 보냅니다. 만남 동의와 구분해요."
+          : t.kind === "meeting"
+            ? "바다쉼표 카페 · 14:15~14:35 · 현재 제안에만 응답"
+            : "모바일 연결 요청 · 차량 접속 없이 응답 가능",
       ),
     );
-    for (const decision of t.kind === "meeting" &&
-    state.social.meeting.status === "confirmed"
-      ? ["cancel"]
-      : ["accept", "reject"]) {
+    const messageBlocked =
+      t.kind === "message" && state.social.messageResponseEnabled !== true;
+    if (messageBlocked)
+      card.append(
+        el(
+          "p",
+          "차량이 정차·활성 상태이고 내비 확인이 끝나면 보낼 수 있어요. 요청은 대기 중이에요.",
+        ),
+      );
+    for (const decision of t.kind === "message"
+      ? ["reply"]
+      : t.kind === "meeting" && state.social.meeting.status === "confirmed"
+        ? ["cancel"]
+        : ["accept", "reject"]) {
       const b = el(
         "button",
-        { accept: "B 수락", reject: "B 거절", cancel: "B 만남 취소" }[decision],
+        {
+          reply: "B 메시지 답변",
+          accept: "B 수락",
+          reject: "B 거절",
+          cancel: "B 만남 취소",
+        }[decision],
       );
       b.disabled =
-        !!pending || !!resetPending || !!state.reset || !!state.recovery;
+        messageBlocked ||
+        !!pending ||
+        !!resetPending ||
+        !!state.reset ||
+        !!state.recovery;
       b.onclick = () => send(t, decision);
       card.append(b);
     }
