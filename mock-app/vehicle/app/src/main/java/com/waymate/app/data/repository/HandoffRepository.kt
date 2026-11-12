@@ -603,26 +603,41 @@ class HandoffRepository(
     }
 
     fun markProfileCue(questionId: String) {
-        if (questionId != "Q1" || !foreground || restricted != false || !contentVisible) return
-        val current = state ?: return
-        val c = current.optJSONObject("content") ?: return
-        val qs = c.getJSONArray("questions")
-        if (
-            !(0 until qs.length()).any {
-                qs.getJSONObject(it).getString("id") == "Q1" &&
-                    qs.getJSONObject(it).getBoolean("known")
-            }
-        )
+        if (closed || questionId != "Q1" || !foreground || restricted != false || !contentVisible)
             return
-        val cue =
-            JSONObject()
-                .put("cueId", "S06_Q1_ANSWER")
-                .put("runId", current.getString("runId"))
-                .put("connectionId", c.getString("connectionId"))
-                .put("peerPublicProfileVersion", c.getInt("profileVersion"))
-        val key = "content.q1.${current.getString("runId")}.${c.getString("connectionId")}"
-        if (preferences.getString(key, null) != cue.toString())
-            check(preferences.edit().putString(key, cue.toString()).commit())
+        val displayed = state ?: return
+        val content = displayed.optJSONObject("content") ?: return
+        val run = displayed.getString("runId")
+        val connection = content.getString("connectionId")
+        val version = content.getInt("profileVersion")
+        worker.execute {
+            if (closed || !foreground || restricted != false || !contentVisible) return@execute
+            val current = state ?: return@execute
+            val c = current.optJSONObject("content") ?: return@execute
+            if (
+                current.getString("runId") != run ||
+                    c.getString("connectionId") != connection ||
+                    c.getInt("profileVersion") != version
+            )
+                return@execute
+            val qs = c.getJSONArray("questions")
+            if (
+                !(0 until qs.length()).any {
+                    qs.getJSONObject(it).getString("id") == "Q1" &&
+                        qs.getJSONObject(it).getBoolean("known")
+                }
+            )
+                return@execute
+            val cue =
+                JSONObject()
+                    .put("cueId", "S06_Q1_ANSWER")
+                    .put("runId", run)
+                    .put("connectionId", connection)
+                    .put("peerPublicProfileVersion", version)
+            val key = "content.q1.$run.$connection"
+            if (preferences.getString(key, null) != cue.toString())
+                preferences.edit().putString(key, cue.toString()).apply()
+        }
     }
 
     fun openContent() {

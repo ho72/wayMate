@@ -574,3 +574,35 @@ test("several replays preserve one completed meeting and current navigation with
   assert.deepEqual(s.navigation, seed.navigation);
   assert.equal(s.social.meeting.status, "ended");
 });
+
+for (const first of ["car", "operator"])
+  test(`replay after a together ending preserves linked live state: ${first} first`, async (t) => {
+    const f = await ready(t);
+    await end(f);
+    await choose(f, "car", "together");
+    await choose(f, "operator", "together");
+    const seed = await disk(f);
+    assert.equal(seed.social.connection.status, "linked");
+    const second = first === "car" ? "operator" : "car";
+    for (const [a, b] of [
+      ["my_agent", "together"],
+      ["together", "my_agent"],
+      ["my_agent", "my_agent"],
+      ["together", "together"],
+    ]) {
+      await f.act("REPLAY_FINAL", "operator");
+      await choose(f, first, first === "car" ? a : b);
+      assert.equal((await f.read("car")).journey.phase, "pending");
+      await choose(f, second, second === "car" ? a : b);
+      const s = await disk(f);
+      assert.equal(
+        s.final.status,
+        a === "together" && b === "together" ? "together" : "my_agent",
+      );
+      assert.deepEqual(s.social, seed.social);
+      assert.equal(s.publication, seed.publication);
+      assert.deepEqual(s.content, seed.content);
+      assert.deepEqual(s.navigation, seed.navigation);
+      assert.deepEqual(s.finalCheckpoint, seed.finalCheckpoint);
+    }
+  });

@@ -63,4 +63,27 @@ class ContentReadStoreTest {
         assertFalse(reads.isRead("current", "t"))
         assertEquals(2, scans)
     }
+
+    @Test
+    fun completedDisplayCuesAreRemovedWithoutTouchingCurrentOrUnknownRunCues() {
+        val data =
+            mutableMapOf<String, Any>(
+                "content.q1.old.connection" to "old cue",
+                "content.q1.current.connection" to "current cue",
+                "content.q1.older.connection" to "unconfirmed cue",
+                "content.read.old.thread" to true,
+                "pending" to "pending command",
+                "deviceId" to "same device",
+            )
+        val reads = store(data)
+        reads.clearCompleted("current", emptySet())
+        assertEquals("old cue", data["content.q1.old.connection"])
+        reads.clearCompleted("current", setOf("old", "current"))
+        assertFalse(data.containsKey("content.q1.old.connection"))
+        assertFalse(reads.isRead("old", "thread"))
+        assertEquals("current cue", data["content.q1.current.connection"])
+        assertEquals("unconfirmed cue", data["content.q1.older.connection"])
+        assertEquals("pending command", data["pending"])
+        assertEquals("same device", data["deviceId"])
+    }
 }

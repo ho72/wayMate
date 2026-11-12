@@ -241,7 +241,11 @@ export function applyJourney(s, c, now) {
           ? "together"
           : "my_agent";
       f.requestId = null;
-      if (f.status === "my_agent" && s.social.connection.status === "linked") {
+      if (
+        !replay(s) &&
+        f.status === "my_agent" &&
+        s.social.connection.status === "linked"
+      ) {
         s.social.connection.status = "ended";
         s.social.connection.version++;
         closeContent(s);
