@@ -104,6 +104,41 @@ function render() {
     resetButton.disabled =
       !!resetPending || !!state.reset || !state.actionBindings?.RESET_BEGIN;
   }
+  const participants = document.getElementById("reset-participants");
+  if (participants) {
+    participants.replaceChildren();
+    const r = state.reset;
+    if (r?.requiredWebClientId && !r.webAcknowledged) {
+      participants.append(
+        el("p", `모바일 ACK 대상: ${r.requiredWebClientId}`),
+        el(
+          "p",
+          "여행을 준비했던 같은 브라우저·프로필로 모바일 화면을 다시 열어 주세요. 같은 주소만 열어도 다른 브라우저나 지워진 저장소는 대상이 달라요.",
+        ),
+      );
+    }
+    if (r?.requiredDeviceId && !r.carAcknowledged) {
+      participants.append(
+        el("p", `차량 ACK 대상: ${r.requiredDeviceId}`),
+        el(
+          "p",
+          "같은 앱 데이터를 유지한 실행 차량에서 앱을 다시 열고 내비 정리·확인을 마쳐 주세요. 앱 데이터 삭제나 새 기기의 ACK로 대신할 수 없어요.",
+        ),
+      );
+    }
+    if (
+      r &&
+      ((r.requiredWebClientId && !r.webAcknowledged) ||
+        (r.requiredDeviceId && !r.carAcknowledged))
+    ) {
+      participants.append(
+        el(
+          "p",
+          "대상 ID를 잃었다면 이번 버전에는 ACK 인수·강제 완료 기능이 없어요. 초기화 대기를 유지하고 담당자에게 대상 ID와 정리 상태를 전달해 주세요. 상태 파일·SDK 기록을 지워 완료로 처리하지 마세요.",
+        ),
+      );
+    }
+  }
   const retryReset = document.getElementById("retry-reset");
   if (retryReset) retryReset.hidden = !resetPending;
   const key = JSON.stringify([
