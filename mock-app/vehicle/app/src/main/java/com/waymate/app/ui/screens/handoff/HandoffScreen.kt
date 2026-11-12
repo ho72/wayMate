@@ -18,6 +18,7 @@ import com.waymate.app.R
 import com.waymate.app.ui.components.AgentCharacter
 import com.waymate.app.ui.theme.*
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HandoffScreen(
     state: HandoffUiState,
@@ -35,7 +36,7 @@ fun HandoffScreen(
     val journey = state.journey
     Surface(Modifier.fillMaxSize(), color = Canvas) {
         BoxWithConstraints {
-            val wide = maxWidth >= 840.dp
+            val wide = useSideBySideLayout(maxWidth.value, maxHeight.value)
             val bodyMinHeight = (maxHeight - 160.dp).coerceAtLeast(0.dp)
             Column(
                 Modifier.fillMaxSize()
@@ -62,7 +63,10 @@ fun HandoffScreen(
                     )
                 }
                 if (journey != null) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
                         if (
                             state.ending.phase in
                                 listOf(
