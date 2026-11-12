@@ -120,7 +120,14 @@
     "CRN": "not required from Emulator 2.1.0",
     "projectId": "app review submission",
     "clientIdAndSecret": "server-connected SDK registration (e.g. server TTS/STT); not a documented fix for the stock navigation window",
-    "privateProjectPageDirectlyVerified": false
+    "privateProjectPageDirectlyVerified": false,
+    "userReportedProjectStatus": {
+      "date": "2026-11-12",
+      "NaviHelper": "사용 가능",
+      "VehicleState": "사용 가능",
+      "source": "user reply to the SDK status question; not direct account inspection",
+      "additionalProjectInformationRequestedForCurrentMapDiagnostic": false
+    }
   },
   "nextProviderQuestions": [
     "Is road basemap rendering supported by the public 2.1.0 ARM64 image on Apple Silicon?",

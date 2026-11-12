@@ -34,13 +34,13 @@
 
 ## Playground에서 필요한 항목
 
-아래는 2026-11-12 [공식 프로젝트·SDK 사용 안내](https://document.pleos.ai/docs/pleos-only/create-my-project)를 기준으로 한다. 로그인한 개인 프로젝트 화면은 직접 확인하지 못했다. 사용자에게 NaviHelper와 Vehicle State의 **상태 문구만** 확인 요청했다.
+아래는 2026-11-12 [공식 프로젝트·SDK 사용 안내](https://document.pleos.ai/docs/pleos-only/create-my-project)를 기준으로 한다. 같은 날 사용자가 개인 프로젝트의 **NaviHelper와 Vehicle State 모두 ‘사용 가능’**이라고 확인했다. 사용자 보고에 따른 확인이며 로그인 화면을 도구로 직접 조회한 결과는 아니다. 현재 두 SDK의 추가 사용 신청이나 지도 복구용 사용자 키 전달을 요구할 근거는 없다.
 
 | 항목 | 현재 필요한 조치 | 지도 누락과의 관계 |
 |---|---|---|
 | 프로젝트 생성 | 사용자가 생성 완료한 프로젝트 사용 | 순정 지도 복구를 위한 새 프로젝트 생성 요구 없음 |
-| SDK → NaviHelper | 공식 기본 상태는 사용 가능·별도 신청 없음. 개인 화면의 실제 상태 확인 | 앱 경로/경유지 API 접근 범위 |
-| SDK → Vehicle State | 공식 기본 상태는 사용 가능·별도 신청 없음. 개인 화면의 실제 상태 확인 | 차량 상태 조회 범위 |
+| SDK → NaviHelper | 사용자 확인: 사용 가능. 추가 신청 불필요 | 앱 경로/경유지 API 접근 범위 |
+| SDK → Vehicle State | 사용자 확인: 사용 가능. 추가 신청 불필요 | 차량 상태 조회 범위 |
 | CRN | Emulator 2.1.0 이후 입력 불필요 | 현재 버전에서 추가 등록을 요청하지 않음 |
 | 프로젝트 ID(Key) | 앱 심사 제출 시 사용 | 현재 순정 내비 창의 지도 키로 대입하는 설정이 아님 |
 | Client ID / Secret | 서버 연결형 SDK의 앱 등록에 사용. 현재 지도 진단에는 요청하지 않음 | 순정 내비의 자체 인증과 구분 |
@@ -49,7 +49,7 @@
 
 현재 앱은 `com.waymate.app.real`에서 `NAVI_ROUTE`와 `NAVI_ROUTE_SEARCH`를 사용하고 별도 순정 내비 창을 함께 띄운다. [권한 안내](https://document.pleos.ai/en/api-reference/connect-sdk-pleos/NaviHelper/declaring-permissions)의 `NAVI_CUSTOM_MAP`은 `requestNavigationScreen()`용이다. 현재 순정 창의 배경 문제를 이유로 이 권한이나 별도 외부 지도 SDK 키를 추가하는 근거는 없다.
 
-서버 TTS를 선택할 때에는 [registerApp 안내](https://document.pleos.ai/docs/pleos-only/connect-sdk-pleos/TextToSpeech/app-registration)에 따라 Client ID/Secret을 사용한다. Secret은 채팅·커밋·진단 첨부에 넣지 않는다. 현재 필요한 사용자 정보는 개인 프로젝트에서 보이는 SDK 두 항목의 상태 문구다.
+서버 TTS를 선택할 때에는 [registerApp 안내](https://document.pleos.ai/docs/pleos-only/connect-sdk-pleos/TextToSpeech/app-registration)에 따라 Client ID/Secret을 사용한다. Secret은 채팅·커밋·진단 첨부에 넣지 않는다. 현재 지도 진단을 위해 사용자에게 추가로 요청할 프로젝트 정보는 없다. 사용 가능 상태만으로 순정 내비의 모든 타일·렌더링 기능이 정상임을 증명하거나 지도 원인을 확정하지는 않는다.
 
 ## 제공사 확인용 재현 내용
 
