@@ -5,6 +5,7 @@ compose-bom = "2025.04.01"
 activity-compose = "1.10.1"
 navihelper = "3.0.5"
 junit = "4.13.2"
+test-runner = "1.6.2"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -16,6 +17,8 @@ androidx-compose-foundation = { module = "androidx.compose.foundation:foundation
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
