@@ -10,7 +10,7 @@
 | 목적지·경유지·경로 상태 | getDestinationInfo/getWaypointInfo/getRouteStateInfo | 이번 조회: 42dot, 경유지 0개, ROUTE_GUIDING, isRouting=false |
 | 시험 POI 확인 | requestTrip | 기존 검증된 소프트웨어드림센터 POI와 좌표 응답 성공. 새 길 안내 시작이나 경로 변경 아님 |
 | 경유지 추가·제거 | 차량 승인→서버 실행권→SDK addWaypoint/removeWaypoint→이중 관측→보고 | 23번 실제 applied/removed·O01 ACK 근거 보존. 이번에는 변경 호출하지 않음 |
-| 주행 UX 제한 | AAOS android.car의 CarUxRestrictionsManager, production VehicleRestrictions | 실제 콜백 수신. 현재 known=true, restricted=false. 연결 중단 시 unknown 복귀 검증 |
+| 주행 UX 제한 | AAOS android.car의 CarUxRestrictionsManager, production VehicleRestrictions | 실제 콜백 수신. 현재 known=true, restricted=false. 명시적 `stop()` 시 unknown 복귀 검증 |
 | 준비 음원·오디오 포커스 | Android MediaPlayer/AudioManager | 23번 실제 재생·경쟁 포커스·창 전환 회귀. Pleos TextToSpeech SDK와 구분 |
 | Android 기기 TTS | 준비 음원 없는 문장의 선택적 대체 경로 | 이번 기기: 초기화 -1(ERROR), 엔진 목록 비어 있음. 현재 기기 TTS 성공이라고 표시하지 않음 |
 | Pleos Vehicle State | 미연결 | 프로젝트에서 사용 가능하다는 사용자 확인과 앱에서 구현된 API 호출은 구분. 배터리·문·기어·공조 등 일반 상태 조회 없음 |
@@ -20,6 +20,8 @@
 `pleos.car.permission.NAVI_ROUTE`와 `NAVI_ROUTE_SEARCH`는 설치된 real 앱에서 모두 granted다. 현재 사용하는 기능에 `NAVI_CUSTOM_MAP`을 추가할 근거는 없으며 순정 내비 도로 배경 표시와 권한 이름을 연결해 해석하지 않는다.
 
 이번 읽기 전용 기기 검사 **4개 통과**: SDK 정보/POI 응답·production 제한 수신/해제·설치된 MainActivity DO 미선언·Android TTS 상태 기록. 마지막 검사는 TTS 성공을 요구하는 검사가 아니라 실제 지원 상태를 기록하는 검사다. 실제 내비 journal 16개와 SHA-256 `91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231`은 전후 동일하다. [점검 요약](evidence/sdk-driving-audit-2026-11-13.json)을 참조한다.
+
+제한 수신 검사의 해제 단계는 앱이 `VehicleRestrictions.stop()`을 호출하면 즉시 unknown이 되는 계약을 검사한다. 차량 서비스 연결을 실제로 끊어 `createCar`의 `ready=false` 콜백을 발생시킨 검증은 아니다. PR #8 리뷰에 따라 이 두 검증 범위를 구분했다.
 
 ## 주행 중 사용에는 무엇이 필요한가
 

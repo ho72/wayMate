@@ -120,7 +120,7 @@ class SdkConnectionAuditTest {
             assertTrue("CarUxRestrictions callback timeout", received.await(15, TimeUnit.SECONDS))
             save("restrictions", JSONObject().put("known", true).put("restricted", current.get()))
         } finally { main { restrictions.stop() } }
-        assertNull("Disconnected restrictions must become unknown", current.get())
+        assertNull("Explicit stop() must publish unknown", current.get())
     }
 
     @Test
