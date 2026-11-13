@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-13",
+  "runtimeCodeBaseline": "9b18f711860d583243bf283d30b6525e52f4c2af",
+  "device": "Pleos Connect ARM 2.1.0 / API34 / user10",
+  "naviHelperDependency": "3.0.5",
+  "deviceChecks": {
+    "passed": 4,
+    "failed": 0,
+    "purpose": "Read-only SDK response and installed capability audit; TTS result recording does not assert TTS availability."
+  },
+  "navigation": {
+    "destinationName": "42dot",
+    "destinationLatitude": 37.48544722,
+    "destinationLongitude": 127.03636666,
+    "waypointCount": 0,
+    "naviMode": "ROUTE_GUIDING",
+    "isRouting": false,
+    "lookupPoiId": "36khp2hdj2cfcm5nqhe3",
+    "lookupLatitude": 37.4127749,
+    "lookupLongitude": 127.0947566,
+    "physicalMutationCalls": 0
+  },
+  "restrictions": {
+    "known": true,
+    "restricted": false
+  },
+  "manifest": {
+    "distractionOptimized": false
+  },
+  "androidTts": {
+    "initializationStatus": -1,
+    "pleosSpeechSdkIntegrated": false,
+    "androidEngines": [],
+    "koreanLanguageStatus": null
+  },
+  "journal": {
+    "records": 16,
+    "beforeSha256": "91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231",
+    "afterSha256": "91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231",
+    "unchanged": true
+  },
+  "deviceConfiguration": {
+    "currentRequiresDo": false,
+    "currentActiveRestrictions": 0,
+    "idlingAndMovingRequiresDo": true,
+    "idlingAndMovingActiveRestrictionsHex": "0x50",
+    "activityBlockingEnabled": true,
+    "wayMateTemporaryAllowlistEntry": false,
+    "drivingSafetyRegion": "android.car.drivingsafetyregion.all",
+    "hmgCarServiceShellAvailable": false,
+    "drivingTransitionTested": false,
+    "restrictionOverrideExecuted": false
+  },
+  "notIntegrated": [
+    "Pleos Vehicle State general properties",
+    "Vehicle Control",
+    "Pleos STT/TTS",
+    "Gleo",
+    "FusedLocation",
+    "microphone/live peer audio"
+  ],
+  "projectServiceCategory": "awaiting user confirmation",
+  "files": [
+    {
+      "path": "mock-app/vehicle/app/src/androidTestReal/java/com/waymate/app/platform/SdkConnectionAuditTest.kt",
+      "sha256": "b2ad6506f186418cf11c0247ddcb13505560a542a9bb011051e28218dade04aa"
+    },
+    {
+      "path": "app-real-debug-androidTest.apk",
+      "sha256": "edd119a6684fa4ac3c2cb573b276113926bec4673ac50c100592804f3cfe79f3"
+    },
+    {
+      "path": "local device log",
+      "sha256": "59f7f04046678b5ab17a9b9a7118a1bfa51b6e18188843b53aab0a82c5cd3def"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://source.android.com/docs/automotive/driver_distraction/guidelines",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/vehicle-app-developer-guide/driving-restriction-development-guide",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/vehicle-app-planning-guide/app-category",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/vehicle-app-planning-guide/driving-restiction-policy",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/create-my-project",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/vehicle-app-developer-guide/adb-command-reference-guide",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/app-test-guide/virtual-console-guide",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/vehicle-app-developer-guide/audio-focus-development-guide/audio-focus-development",
+      "checked": "2026-11-13"
+    },
+    {
+      "url": "https://document.pleos.ai/docs/pleos-only/distribute/app-submission-guide",
+      "checked": "2026-11-13"
+    }
+  ]
+}
