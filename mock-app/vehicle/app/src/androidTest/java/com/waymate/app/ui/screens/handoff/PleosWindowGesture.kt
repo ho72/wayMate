@@ -68,4 +68,3 @@ internal fun movePortraitWindowRight() {
     send(MotionEvent.ACTION_POINTER_UP or (1 shl MotionEvent.ACTION_POINTER_INDEX_SHIFT), 2, 2100f)
     send(MotionEvent.ACTION_UP, 1, 2100f)
 }
-
