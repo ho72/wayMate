@@ -12,6 +12,7 @@ import com.waymate.app.platform.navigation.createNavigationDriver
 import com.waymate.app.platform.restrictions.VehicleRestrictions
 import com.waymate.app.platform.speech.AgentSpeech
 import com.waymate.app.platform.speech.SpeechState
+import com.waymate.app.platform.speech.WindowPlaybackLifecycle
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.theme.WayMateTheme
 
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         speech = AgentSpeech(applicationContext) { speechState = it }
+        WindowPlaybackLifecycle(this, speech::allowPlayback)
         repository =
             HandoffRepository(applicationContext, createNavigationDriver(applicationContext)) {
                 ui =
@@ -78,25 +80,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        speech.allowPlayback(hasWindowFocus())
         repository.resume()
         restrictions.start()
     }
 
     override fun onPause() {
-        speech.allowPlayback(false)
         repository.pause()
         restrictions.stop()
         super.onPause()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (::speech.isInitialized)
-            speech.allowPlayback(
-                hasFocus &&
-                    lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)
-            )
     }
 
     override fun onDestroy() {

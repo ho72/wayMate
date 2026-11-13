@@ -71,6 +71,6 @@ CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬�
 모바일의 연결·공통 시간 확인 후 connected 전달을 준비하고 차량에서 불러오세요. 차량에는 신규 후보·매칭 버튼이 없습니다. 홈 → 만남 제안 받기 → 같은 제안의 B 수락(O01) → 내비 승인으로 진행합니다. 만남 취소 뒤 추가한 경유지는 별도로 제거 승인합니다.
 
 
-1차 서버·APK·JVM·Lint 검사: `./scripts/verify-first-pass.sh`. Pleos 준비 음성/포커스·통화/모의 승인 기기 회귀 5개까지 실행하려면 `./scripts/verify-first-pass.sh device`. 기기 APK 설치는 데이터를 보존하는 갱신이다. 검수용 모의 앱이 실행 중이면 검사가 앱을 종료하므로 현재 요청은 서버/앱 데이터에 보존하고 다시 들어가 확인한다.
+1차 서버·APK·JVM·Lint 검사: `./scripts/verify-first-pass.sh`. Pleos 준비 음성/포커스·통화/모의 승인·실제 창/수명주기 기기 회귀 7개까지 실행하려면 `./scripts/verify-first-pass.sh device`. 기기 APK 설치는 데이터를 보존하는 갱신이다. 검수용 모의 앱이 실행 중이면 검사가 앱을 종료하므로 현재 요청은 서버/앱 데이터에 보존하고 다시 들어가 확인한다.
 
 `-PwaymateApiPort=3001`로 별도 검수 서버를 지정할 수 있다. 시연본 인계는 기본 3000 빌드로 `mock-app`에서 `node scripts/package-first-pass.mjs`를 실행한다. APK·서버/웹·계약·소재와 SHA-256 목록이 `runtime/first-pass/handoff`에 생성된다. 개인 상태·journal·인증값은 포함하지 않는다.

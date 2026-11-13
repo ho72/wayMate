@@ -14,6 +14,6 @@ if [[ "${1:-}" == "device" ]]; then
   "$adb" -s "$serial" install --user "$user_id" -r -t app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk
   out_dir="$vehicle_dir/../runtime/first-pass"
   mkdir -p "$out_dir"
-  "$adb" -s "$serial" shell am instrument --user "$user_id" -w -e class com.waymate.app.ui.screens.handoff.PreparedSpeechDeviceTest,com.waymate.app.ui.screens.handoff.FirstPassWindowTest com.waymate.app.mock.test/androidx.test.runner.AndroidJUnitRunner | tr -d '\r' > "$out_dir/device-tests.log"
-  if ! grep -Fqx 'OK (5 tests)' "$out_dir/device-tests.log"; then cat "$out_dir/device-tests.log"; exit 1; fi
+  "$adb" -s "$serial" shell am instrument --user "$user_id" -w -e class com.waymate.app.ui.screens.handoff.PreparedSpeechDeviceTest,com.waymate.app.ui.screens.handoff.FirstPassWindowTest,com.waymate.app.ui.screens.handoff.WindowPlaybackLifecycleDeviceTest com.waymate.app.mock.test/androidx.test.runner.AndroidJUnitRunner | tr -d '\r' > "$out_dir/device-tests.log"
+  if ! grep -Fqx 'OK (7 tests)' "$out_dir/device-tests.log"; then cat "$out_dir/device-tests.log"; exit 1; fi
 fi

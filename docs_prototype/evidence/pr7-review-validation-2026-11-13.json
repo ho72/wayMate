@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-13",
+  "review": "https://github.com/ho72/wayMate/pull/7#discussion_r4559216681",
+  "decision": "Keep the documented stop-on-window-focus-loss policy, including visible RESUMED three-pane windows; never auto-resume. Audio focus and lifecycle pause stop playback independently.",
+  "nodeTests": {
+    "passed": 264,
+    "failed": 0
+  },
+  "jvmTests": {
+    "passed": 41,
+    "failed": 0
+  },
+  "deviceTests": {
+    "passed": 7,
+    "failed": 0,
+    "classes": {
+      "PreparedSpeechDeviceTest": 2,
+      "FirstPassWindowTest": 3,
+      "WindowPlaybackLifecycleDeviceTest": 2
+    }
+  },
+  "newDeviceCases": [
+    "Real native-pane touch interrupts a visible RESUMED right-pane player; refocus does not resume; explicit playback works.",
+    "Activity pause blocks playback; resume does not restart; explicit playback works."
+  ],
+  "isolation": "Debug host uses the production WindowPlaybackLifecycle binding and real AgentSpeech, without repository, server or navigation SDK.",
+  "builds": [
+    "mockDebug",
+    "realDebug",
+    "mockDebugAndroidTest"
+  ],
+  "lint": {
+    "mockErrors": 0,
+    "realErrors": 0,
+    "mockWarnings": 26,
+    "realWarnings": 26
+  },
+  "logs": [
+    {
+      "localFile": "mock-app/runtime/pr7-review/node-tests.log",
+      "sha256": "d91d72ed070d64e51c8d0e3d90ae5903a88fff1039eb949d571841ba6b21ac3c"
+    },
+    {
+      "localFile": "mock-app/runtime/pr7-review/gradle.log",
+      "sha256": "8c1d770fb0e97f0d6fb229d877b496256d3acb6d2b737daed572e8db520afd0e"
+    },
+    {
+      "localFile": "mock-app/runtime/pr7-review/window-playback-device.log",
+      "sha256": "d29e58710eb9379a256dfb01fa38bbf73ee88495eee9c63bebb35c8a3ed16334"
+    },
+    {
+      "localFile": "mock-app/runtime/pr7-review/device-regression.log",
+      "sha256": "328d85aabc8bfccd5615b38ddf8a77cd6beb3143031e6db04841b559ae0e598e"
+    }
+  ]
+}

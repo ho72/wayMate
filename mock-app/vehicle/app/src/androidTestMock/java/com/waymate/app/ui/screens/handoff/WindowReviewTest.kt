@@ -71,7 +71,7 @@ private fun evidence(name: String, data: JSONObject = JSONObject()) {
 }
 
 /** Pleos' documented horizontal three-finger gesture moves a portrait window to the other slot. */
-private fun movePortraitWindowRight() {
+internal fun movePortraitWindowRight() {
     val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
     val down = SystemClock.uptimeMillis()
     val properties =
