@@ -1,5 +1,6 @@
 import { guardFinalReplay, interruptFinal, recordStoryCue } from "./ending.mjs";
-import { initialState } from "./state.mjs";
+import { applyRecovery } from "./recovery.mjs";
+import { initialState, serializeStore } from "./state.mjs";
 import {
   applyReset,
   finishReset,
@@ -23,7 +24,8 @@ export function coordinator(
   let state = initial,
     queue = Promise.resolve(),
     unavailable = false,
-    booting = true;
+    booting = true,
+    accepting = true;
   const cloneState = () => ({
     ...structuredClone({ ...state, receipts: {}, resetHistory: [] }),
     receipts: { ...state.receipts },
@@ -32,13 +34,20 @@ export function coordinator(
   // A monotonic timestamp from a previous process cannot grant vehicle permission.
 
   const serial = (fn) => {
+    if (!accepting)
+      return Promise.reject(
+        Object.assign(new Error("서버가 종료 중입니다."), {
+          status: 503,
+          code: "UNAVAILABLE",
+        }),
+      );
     const result = queue.then(fn);
     queue = result.catch(() => {});
     return result;
   };
   async function save(next) {
     try {
-      await atomicSave(file, next, fault);
+      await atomicSave(file, next, fault, serializeStore);
       state = next;
     } catch (e) {
       if (e.uncertain) unavailable = true;
@@ -79,6 +88,10 @@ export function coordinator(
   const projection = (actor, id) =>
     assertContract("state", project(state, actor, id, now()));
   return {
+    close: async () => {
+      accepting = false;
+      await queue;
+    },
     read: (actor, id) =>
       serial(async () => {
         await expire();
@@ -157,9 +170,13 @@ export function coordinator(
             "RESET_ACK",
           ].includes(c.type) &&
           c.type !== "CANCEL_PENDING_COMMAND" &&
-          !["CONNECT_END", "CONNECT_CANCEL", "MEETING_CANCEL"].includes(
-            c.type,
-          ) &&
+          ![
+            "CONNECT_END",
+            "CONNECT_CANCEL",
+            "MEETING_CANCEL",
+            "CALL_CANCEL",
+            "CALL_END",
+          ].includes(c.type) &&
           c.expectedVersion !== state.version
         )
           fail(409, "STALE_STATE", "최신 상태를 읽고 다시 확인하세요.");
@@ -168,11 +185,13 @@ export function coordinator(
           ? (applyArchivedReport(next, c), undefined)
           : ["RESET_BEGIN", "RESET_ACK"].includes(c.type)
             ? (applyReset(next, c, id, now()), undefined)
-            : c.type === "CANCEL_PENDING_COMMAND"
-              ? (cancelPending(next, c, id), undefined)
-              : c.type.startsWith("NAV_")
-                ? applyNavigation(next, c, now())
-                : (apply(next, c, id, now()), undefined);
+            : c.type === "RECOVERY_CONFIRM"
+              ? applyRecovery(next, c, now())
+              : c.type === "CANCEL_PENDING_COMMAND"
+                ? (cancelPending(next, c, id), undefined)
+                : c.type.startsWith("NAV_")
+                  ? applyNavigation(next, c, now())
+                  : (apply(next, c, id, now()), undefined);
         if (c.type === "CAR_STATUS") recordStoryCue(next, c, now());
         interruptFinal(next);
         // Heartbeat receipt persists, but identical restriction facts do not advance business version.

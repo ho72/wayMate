@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "source": "prepared_synthetic_speech",
+  "language": "ko-KR",
+  "entries": [
+    {
+      "file": "speech_1e1e6d3af138643d41ca6125.m4a",
+      "sha256Text": "1e1e6d3af138643d41ca6125c666dbc7d63e1cfaaccc1485186f24a5ef47cd11",
+      "text": "안녕하세요. 먼저 목소리로 인사드려요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "call_sample"
+    },
+    {
+      "file": "speech_71e57741069359fe5c03ce1c.m4a",
+      "sha256Text": "71e57741069359fe5c03ce1c586223a5dbee206797279490392217c7c416ee21",
+      "text": "반가워요. 오늘은 느긋하게 쉬어가고 싶어요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "call_sample"
+    },
+    {
+      "file": "speech_9896cd3c9c5f02ed7eae6b91.m4a",
+      "sha256Text": "9896cd3c9c5f02ed7eae6b910aa2afa5323ccb0b60a66e6cd466d1a62bae7ab0",
+      "text": "안녕하세요. 캐릭터한테 바다 먼저 보고 커피 마시는 걸 좋아한다고 들었어요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "call_sample"
+    },
+    {
+      "file": "speech_d89bd2c8f6b7a67244864f2b.m4a",
+      "sha256Text": "d89bd2c8f6b7a67244864f2b0029d9abc46e0fafff92c3c6dd6b2a47a9a22ac9",
+      "text": "반가워요. 네, 천천히 가도 괜찮죠. 오늘은 저도 느긋하게 쉬고 싶어요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "call_sample"
+    },
+    {
+      "file": "speech_163ef445813e37c00ab32a84.m4a",
+      "sha256Text": "163ef445813e37c00ab32a8465b95873f18dc5e0db06e78f56501d4b44e44a11",
+      "text": "저도요. 그러면 편하게 이야기할 수 있겠네요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "call_sample"
+    },
+    {
+      "file": "speech_561f2993f4838c938819754b.m4a",
+      "sha256Text": "561f2993f4838c938819754b65e1d13955fee2ccda8a4c127a791ae7c4c83d16",
+      "text": "솔바람님 맞으시죠? 반가워요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_ce892b0a468e0dd8ad26df59.m4a",
+      "sha256Text": "ce892b0a468e0dd8ad26df59ab54d39f8e6c325fe3f1771d23c87dc05b64e156",
+      "text": "네, 반가워요. 편하게 인사 나눠요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_80da94820c387925f77b6b5a.m4a",
+      "sha256Text": "80da94820c387925f77b6b5aba1d40a1f49b37e6cbbd2fac6129ffe052985931",
+      "text": "좋아요. 오늘 여행 이야기를 해볼까요?",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_c0579955173446e265812e09.m4a",
+      "sha256Text": "c0579955173446e265812e09242942b10ebf04818806fff723b2f54baf32de86",
+      "text": "네, 반가워요. 바다부터 보고 커피 마시는 코스 좋아하신다고 들었어요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_0127b225224bc716a1ac8370.m4a",
+      "sha256Text": "0127b225224bc716a1ac83707b526c47d514b14f6d52ede971591741e62ccbda",
+      "text": "맞아요. 캐릭터랑 이야기하면서 취향이 비슷하다고 느꼈어요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_68f241c4655abbc85dd6ae94.m4a",
+      "sha256Text": "68f241c4655abbc85dd6ae944d7a10ac4e8f821fba1c201a01e409b51425c09c",
+      "text": "천천히 가도 괜찮죠. 오늘은 저도 그렇게 쉬려고요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_a77cdcd545d8abc10fc8a1b4.m4a",
+      "sha256Text": "a77cdcd545d8abc10fc8a1b4cd63411bd00e9916156758d924409a9830d09fb1",
+      "text": "그 말, 캐릭터도 하던데요. 뭔가 벌써 익숙하네요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_990ef18b7462dd91ba03475c.m4a",
+      "sha256Text": "990ef18b7462dd91ba03475c1b773cc997b23a20f36fb815dc83a3aed36cf154",
+      "text": "저랑 좀 닮았나요? 그럼 편하게 커피부터 마셔요.",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_f33dcb2d5afd85e7e42dacdb.m4a",
+      "sha256Text": "f33dcb2d5afd85e7e42dacdba4421163cca23c1ccd2e1a7051297d1fbfac0b49",
+      "text": "두 분 모두 함께를 선택했어요. 14:35~14:55, 바다 산책을 이어가세요.",
+      "speaker": "안내",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_e5483bbdf700ff92ee573c8e.m4a",
+      "sha256Text": "e5483bbdf700ff92ee573c8ec1dc1bad187ac832c1787302655351948fcedc6e",
+      "text": "사진은 한 장만 찍고 천천히 걸을까요?",
+      "speaker": "B",
+      "voice": "Eddy (한국어(한국))",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_97b539e45c0591e8558d7786.m4a",
+      "sha256Text": "97b539e45c0591e8558d778687820be826d834a8b4cbecec803891b178a97dd7",
+      "text": "좋아요. 오늘 여행 속도가 잘 맞네요.",
+      "speaker": "A",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_ccd5a1631597b2597f8c22b6.m4a",
+      "sha256Text": "ccd5a1631597b2597f8c22b6a70b766edaad7d0c60bfffbd4d5e1630c11bfab5",
+      "text": "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_96a58f85adec05322ae3e222.m4a",
+      "sha256Text": "96a58f85adec05322ae3e222557bd018461decb4118ead86cc95cc9d0a5b3189",
+      "text": "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야. 네가 원하던 대로 천천히 쉬어가자. 14:55쯤 다음 일정을 준비하면 돼.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_b98d936e19579b8012a1461f.m4a",
+      "sha256Text": "b98d936e19579b8012a1461f63837ef6bd5606c7f039f22525bf92aa41bb1500",
+      "text": "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야. 바다 한 장, 커피 한 잔. 네가 좋아하던 여행 그대로네 ㅎㅎ. 14:55쯤 다음 일정을 준비해보자.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_46ddab9e488832d4a34af025.m4a",
+      "sha256Text": "46ddab9e488832d4a34af025ae038c578f762b3685151c626abb53c3cec04db4",
+      "text": "좋지. 네 속도로 사진도 한 장 남겨보자. 14:55쯤 다음 일정 준비를 하면 돼.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_a073afaa88a966ee2557c17b.m4a",
+      "sha256Text": "a073afaa88a966ee2557c17b56d3ce01c0c1d9b571e11ab23c542bc000875090",
+      "text": "좋지. 네 속도로 사진도 한 장 남겨보자. 14:55쯤 다음 일정 준비를 하면 돼. 네가 원하던 대로 천천히 쉬어가자. 14:55쯤 다음 일정을 준비하면 돼.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_21d4ee172032116972ef4aac.m4a",
+      "sha256Text": "21d4ee172032116972ef4aacb2f6df1cf00b5f138989a4d1b46ada5d7d856dd8",
+      "text": "좋지. 네 속도로 사진도 한 장 남겨보자. 14:55쯤 다음 일정 준비를 하면 돼. 바다 한 장, 커피 한 잔. 네가 좋아하던 여행 그대로네 ㅎㅎ. 14:55쯤 다음 일정을 준비해보자.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_0a1086d8dcedd5281ea5ad38.m4a",
+      "sha256Text": "0a1086d8dcedd5281ea5ad38ad2afda3fa61ac6a29eabc3eafce4c452002db03",
+      "text": "좋아요. 천천히 가도 괜찮죠? 저도 바다 보면서 쉬고 싶었어요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_7e09c634de4f5f20b7530a80.m4a",
+      "sha256Text": "7e09c634de4f5f20b7530a8018cf9b56093edad6a449d4c43e99dbc197971072",
+      "text": "저도 조용한 곳이 좋아요. 바다가 보이면 더 좋고요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_c001cb8ecffa7bf111de4248.m4a",
+      "sha256Text": "c001cb8ecffa7bf111de4248753e2fe62f33c3674228f70e49580f0ed5b96719",
+      "text": "사진 찍는 것과 천천히 걷는 것 중에는 뭘 더 좋아하세요?",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_cef68a3fe708b88503457b71.m4a",
+      "sha256Text": "cef68a3fe708b88503457b71f39b34e92cf2dad6d76947ac682233a41de7ab61",
+      "text": "저는 천천히 걷는 쪽이 좋아요. 사진은 가끔 한 장씩 찍고요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_602e7ab62ef8aa4c55ae4dc2.m4a",
+      "sha256Text": "602e7ab62ef8aa4c55ae4dc2e5a5b53d889260ce9dc7583bdc9f7430270e9829",
+      "text": "사진도 좋아하지만, 오늘은 느긋하게 쉬고 싶어요. 다음 일정도 지키면서요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_3a648ea376f7c60e93f38ac8.m4a",
+      "sha256Text": "3a648ea376f7c60e93f38ac84cb9408d4874f611bd59f81b2e71f426894f1bc0",
+      "text": "그건 제가 아는 소개에는 없어요. 직접 물어볼까요?",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_338da9a72b01a927b8c9787f.m4a",
+      "sha256Text": "338da9a72b01a927b8c9787f675aacfb166566f89d5c29b644050ea9208588a2",
+      "text": "서로 어떤 여행을 좋아하는지 조금 알게 됐네. 이 답장만으로 만남이 정해진 건 아니야. 다음은 네가 고르면 돼.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_c2990e5b32ed9c0f0a441648.m4a",
+      "sha256Text": "c2990e5b32ed9c0f0a4416487b0e5d0e9df4bc3a8dbcf1169605c4c89ab70d61",
+      "text": "천천히 가도 괜찮죠. 솔바람은 바다를 먼저 보고, 조용한 카페에서 커피 한 잔 하는 걸 좋아해요. 사진도 좋지만 느긋하게 걷는 쪽이래요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_74ede32e7c4f29926402f794.m4a",
+      "sha256Text": "74ede32e7c4f29926402f794f92a63a155eaa633cfdce0ad03008efde93313f6",
+      "text": "둘 다 바다 산책이랑 카페를 좋아하니까, 오늘 본 바다 이야기로 시작해보면 어때요? 솔바람도 조용히 같이 있는 시간을 편하게 느낀대요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_a5f5b49a316262e9ea303783.m4a",
+      "sha256Text": "a5f5b49a316262e9ea30378300405dceac8c56f4cac401fd9e0787822e6dba75",
+      "text": "반가워요. 저는 솔바람의 캐릭터예요. 만나기 전에 어떤 여행을 좋아하는지 편하게 물어봐 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_099b91a563e496b7ca57955e.m4a",
+      "sha256Text": "099b91a563e496b7ca57955ea088c495bb7a9f6841006afe1dfe782a250c2bee",
+      "text": "말할 주제가 생겼네. 더 알아가도 좋고, 잠깐 쉬어도 좋아. 다음은 네가 고르면 돼.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_39281dedc694aa2565e964f1.m4a",
+      "sha256Text": "39281dedc694aa2565e964f1f50a95fd7927f110995a334bdb82aa6c7f73b3e3",
+      "text": "대화는 잠깐 쉬어가요. 다시 이어갈 때 직접 골라 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    }
+  ]
+}

@@ -2,13 +2,18 @@ import { open, readFile, rename, unlink, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { randomUUID } from "node:crypto";
 // State and receipts share one fsync + rename boundary. Inject faults only in tests.
-export async function atomicSave(file, data, fault = () => {}) {
+export async function atomicSave(
+  file,
+  data,
+  fault = () => {},
+  encode = JSON.stringify,
+) {
   const tmp = `${file}.${randomUUID()}.tmp`;
   let renamed = false;
   try {
     const h = await open(tmp, "wx", 0o600);
     try {
-      await h.writeFile(JSON.stringify(data));
+      await h.writeFile(encode(data));
       await h.sync();
     } finally {
       await h.close();

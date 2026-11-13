@@ -10,4 +10,7 @@ data class NavigationUiState(
     val canCancel: Boolean = false,
     val reviewed: String? = null,
     val busy: Boolean = false,
+    val source: String = "real",
+    val mockActions: Map<String, String> = emptyMap(),
+    val mockWaypointPresent: Boolean = false,
 )

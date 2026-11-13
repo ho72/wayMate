@@ -25,7 +25,9 @@ import com.waymate.app.ui.testing.WindowReviewActivity
 import com.waymate.app.ui.theme.WayMateTheme
 import java.io.File
 import org.json.JSONObject
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -136,6 +138,47 @@ private fun movePortraitWindowRight() {
 class ExpandedWindowReviewTest {
     @get:Rule val ui = createAndroidComposeRule<WindowReviewActivity>()
 
+    @Before
+    fun waitForSystemWindowPlacement() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        instrumentation.waitForIdleSync()
+        SystemClock.sleep(600)
+        var width = 0
+        var x = 0
+        fun read() {
+            ui.activityRule.scenario.onActivity {
+                width = it.window.decorView.width
+                val location = IntArray(2)
+                it.window.decorView.getLocationOnScreen(location)
+                x = location[0]
+            }
+        }
+        fun shell(command: String) {
+            instrumentation.uiAutomation.executeShellCommand(command).use {
+                android.os.ParcelFileDescriptor.AutoCloseInputStream(it).readBytes()
+            }
+        }
+        read()
+        if (width == 841) {
+            shell("input tap 1706 720")
+            shell("input swipe 1706 720 ${if (x > 1000) 860 else 2540} 720 600")
+        }
+        val deadline = SystemClock.uptimeMillis() + 10000
+        do {
+            SystemClock.sleep(100)
+            read()
+        } while (width != 1682 && SystemClock.uptimeMillis() < deadline)
+        assertEquals("Actual Pleos expanded window", 1682, width)
+        SystemClock.sleep(600)
+        shell("input tap 2250 110")
+    }
+
+    @After
+    fun settleBeforeClosing() {
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        SystemClock.sleep(400)
+    }
+
     @Test
     fun weightedColumnsUseTheirAllocationWithoutAnExtra190DpGap() {
         var character = Rect.Zero
@@ -242,6 +285,36 @@ class LargeFontWindowReviewTest {
         )
 
     private fun show(content: @Composable () -> Unit) {
+        // A new Activity can inherit Pleos' expanded slot. Resize before installing the
+        // test composition: resizing recreates the Activity and would discard setContent.
+        fun windowWidth(): Int {
+            var width = 0
+            ui.activityRule.scenario.onActivity { width = it.window.decorView.width }
+            return width
+        }
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        SystemClock.sleep(600)
+        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        var deadline = SystemClock.uptimeMillis() + 5000
+        while (windowWidth() == 0 && SystemClock.uptimeMillis() < deadline) SystemClock.sleep(50)
+        if (windowWidth() > 1000) {
+            automation.executeShellCommand("input tap 2546 720").use {
+                android.os.ParcelFileDescriptor.AutoCloseInputStream(it).readBytes()
+            }
+            automation.executeShellCommand("input swipe 2540 720 1700 720 600").use {
+                android.os.ParcelFileDescriptor.AutoCloseInputStream(it).readBytes()
+            }
+            deadline = SystemClock.uptimeMillis() + 10000
+            while (windowWidth() != 841 && SystemClock.uptimeMillis() < deadline) SystemClock.sleep(
+                100
+            )
+        }
+        assertEquals(
+            "Prepare the actual Pleos portrait window before composition",
+            841,
+            windowWidth(),
+        )
+        SystemClock.sleep(300)
         ui.setContent {
             observedFontScale = LocalDensity.current.fontScale
             WayMateTheme { content() }
@@ -270,11 +343,23 @@ class LargeFontWindowReviewTest {
                 throw failure
             }
         }
+        SystemClock.sleep(600)
+        InstrumentationRegistry.getInstrumentation()
+            .uiAutomation
+            .executeShellCommand("input tap 2480 110")
+            .use { android.os.ParcelFileDescriptor.AutoCloseInputStream(it).readBytes() }
+        ui.waitUntil(timeoutMillis = 5000) { ui.activity.hasWindowFocus() }
         ui.onRoot().assertWidthIsEqualTo(841.dp).assertHeightIsEqualTo(1210.dp)
         ui.runOnIdle {
             assertEquals(1.3f, observedFontScale, .001f)
             assertEquals(1.3f, ui.activity.resources.configuration.fontScale, .001f)
         }
+    }
+
+    @After
+    fun settleBeforeClosing() {
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        SystemClock.sleep(400)
     }
 
     private fun touch(label: String) {

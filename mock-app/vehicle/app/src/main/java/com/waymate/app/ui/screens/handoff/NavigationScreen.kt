@@ -19,6 +19,7 @@ fun NavigationScreen(
     social: com.waymate.app.model.SocialUiState,
     onSocialAction: (String, String) -> Unit,
     onRetry: () -> Unit,
+    journey: com.waymate.app.model.Journey? = null,
 ) {
     var review by remember { mutableStateOf<Pair<String, String>?>(null) }
     Surface(Modifier.fillMaxSize()) {
@@ -26,6 +27,17 @@ fun NavigationScreen(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
+            JourneySchedule(journey)
+            if (state.source == "mock") {
+                MockNavigationPanel(state, onSocialAction)
+                social.actions["MEETING_CANCEL"]?.let { b ->
+                    OutlinedButton(onClick = { onSocialAction("MEETING_CANCEL", b) }) {
+                        Text("만남 취소")
+                    }
+                }
+                OutlinedButton(onClick = onBack) { Text("차량 홈으로") }
+                return@Column
+            }
             Text("wayMate · 내비 경유지", style = MaterialTheme.typography.headlineMedium)
             Text("현재 목적지: ${state.destination}", style = MaterialTheme.typography.titleLarge)
             Text(

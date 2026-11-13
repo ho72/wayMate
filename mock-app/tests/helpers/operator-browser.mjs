@@ -50,6 +50,7 @@ export async function browser() {
     ["requests", requests],
     ...[
       "journey-controls",
+      "navigation-controls",
       "begin-reset",
       "run-meta",
       "reset-summary",

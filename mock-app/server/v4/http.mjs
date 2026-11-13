@@ -90,8 +90,14 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
           capabilities: {
             myTrip: true,
             meeting: true,
-            finalChoices: false,
-            messages: false,
+            messages: true,
+            callSample: true,
+            mockNavigation: true,
+            registeredRecovery: false,
+            drivingVoice: false,
+            mcSample: false,
+            reviewSample: false,
+            reasonInput: false,
             connected: true,
             navigation: true,
             driverWaypoint: true,
@@ -200,14 +206,21 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
     await store.release();
     throw e;
   }
+  let shutdown;
   return {
     server,
     port: server.address().port,
-    close: async () => {
-      await new Promise((resolve, reject) =>
-        server.close((e) => (e ? reject(e) : resolve())),
-      );
-      await store.release();
-    },
+    close: () =>
+      (shutdown ??= (async () => {
+        const stopped = new Promise((resolve, reject) =>
+          server.close((e) => (e ? reject(e) : resolve())),
+        );
+        // Stop accepting domain work and drain committed writes before dropping persistent
+        // browser/emulator sockets or releasing the single-writer lock.
+        await api.close();
+        server.closeAllConnections();
+        await stopped;
+        await store.release();
+      })()),
   };
 }

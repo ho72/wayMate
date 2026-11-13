@@ -78,15 +78,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        speech.allowPlayback(hasWindowFocus())
         repository.resume()
         restrictions.start()
     }
 
     override fun onPause() {
-        speech.interrupt()
+        speech.allowPlayback(false)
         repository.pause()
         restrictions.stop()
         super.onPause()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (::speech.isInitialized)
+            speech.allowPlayback(
+                hasFocus &&
+                    lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)
+            )
     }
 
     override fun onDestroy() {

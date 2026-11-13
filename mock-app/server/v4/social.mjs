@@ -1,3 +1,5 @@
+import { callBusy, callResponses, closeCall } from "./call.mjs";
+import { mockPending } from "./mock-navigation.mjs";
 import {
   closeContent,
   messageResponses,
@@ -71,9 +73,11 @@ export const connectionVersions = (s) => ({
   connection: s.social.connection.version,
 });
 export const unresolved = (s) =>
+  mockPending(s) ||
   s.navigation?.attempts.some((a) =>
     ["pending", "unknown"].includes(a.outcome),
-  ) || false;
+  ) ||
+  false;
 export const canSocial = (s, now) =>
   !!s.vehicleActivation &&
   s.vehicleActivation.deviceId === s.vehicle.deviceId &&
@@ -173,7 +177,12 @@ export function socialBindings(s, actor, now) {
         publicationVersion: s.publicationVersion,
       },
     );
-  if (actor === "car" && canSocial(s, now) && m.status === "none") {
+  if (
+    actor === "car" &&
+    canSocial(s, now) &&
+    m.status === "none" &&
+    !callBusy(s)
+  ) {
     b.MEETING_PROPOSE = binding(
       "MEETING_PROPOSE",
       { connectionId: c.id },
@@ -408,7 +417,10 @@ export function applySocial(s, c, id, now) {
 export function socialProjection(s, actor, now) {
   const c = s.social.connection,
     m = s.social.meeting;
-  const pending = messageResponses(s, actor, now);
+  const pending = [
+    ...messageResponses(s, actor, now),
+    ...callResponses(s, actor),
+  ];
   if (actor === "operator" && c.status === "requested")
     pending.push({
       kind: "connection",
@@ -463,8 +475,11 @@ export function socialProjection(s, actor, now) {
     approvedFields: s.social.approvedFields,
     candidates,
     cleanupRequired:
-      !!s.navigation?.owned && ["cancelled", "ended"].includes(m.status),
+      (!!s.navigation?.owned || !!s.mockNavigation?.owned) &&
+      ["cancelled", "ended"].includes(m.status),
     pendingResponses: pending,
+    callResponseEnabled:
+      actor === "operator" && canSocial(s, now) && !s.reset && !s.recovery,
     messageResponseEnabled:
       actor === "operator" &&
       contentAvailable(s) &&
@@ -485,7 +500,7 @@ export function cancelPending(s, c, id) {
   const permitted =
     c.actor === "web"
       ? ["CONNECT_REQUEST"]
-      : ["MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND"];
+      : ["MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND", "CALL_PROPOSE"];
   if (!permitted.includes(originalType))
     fail(403, "ACTOR_FORBIDDEN", "취소할 수 있는 생성 요청이 아니에요.");
   const hit = s.receipts[`${s.runId}:${c.actor}:${originalCommandId}`];
@@ -527,7 +542,18 @@ export function cancelPending(s, c, id) {
       // Reserve a cancelled first attempt, but never replace another proposal.
       mStatusCancelled(s);
     }
+  } else if (hit && originalType === "CALL_PROPOSE") {
+    if (s.call?.createdBy !== originalCommandId)
+      fail(409, "STALE_STATE", "현재 통화와 다른 요청이에요.");
+    closeCall(s);
   } else if (hit && originalType === "NAV_APPROVE") {
+    const mock = s.mockNavigation?.attempts.find(
+      (a) => a.approvalCommandId === originalCommandId,
+    );
+    if (mock?.outcome === "pending") {
+      mock.outcome = "not_dispatched";
+      mock.dispatch = "settled";
+    }
     const a = s.navigation?.attempts.find(
       (a) => a.approvalCommandId === originalCommandId,
     );

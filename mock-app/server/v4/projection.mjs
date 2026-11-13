@@ -1,3 +1,6 @@
+import { callProjection, callBindings } from "./call.mjs";
+import { mockProjection, mockBindings } from "./mock-navigation.mjs";
+import { recoveryStatus } from "./recovery.mjs";
 import { journeyProjection, journeyBindings } from "./ending.mjs";
 import { contentProjection, contentBindings } from "./content.mjs";
 import { resetView, lastCompletedReset, resetBindings } from "./reset.mjs";
@@ -34,10 +37,15 @@ export function project(s, actor, clientId, now) {
             }))
         : [],
     recovery: s.recovery ?? null,
+    recoveryStatus: recoveryStatus(actor),
+    navigationMode:
+      s.navigationMode ?? s.vehicle.navigationSource ?? "unsupported",
+    mockNavigation: mockProjection(s, actor),
     journey:
       own || actor === "operator" ? journeyProjection(s, actor, now) : null,
     social: social,
     content: contentProjection(s, actor, now),
+    call: callProjection(s, actor, now),
     schemaVersion: 4,
     scope: "mobile-meeting-v4",
     storeId: s.storeId,
@@ -121,10 +129,12 @@ export function project(s, actor, clientId, now) {
         ? {
             ...socialBindings(s, actor, now),
             ...contentBindings(s, actor, now),
+            ...callBindings(s, actor, now),
             ...journeyBindings(s, actor, now),
           }
         : {}),
       ...resetBindings(s, actor, clientId, now),
+      ...mockBindings(s, actor, now),
     },
     blockedActions:
       actor === "car" && !canLoad(s, now)

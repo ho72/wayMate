@@ -62,6 +62,8 @@ fun EndingScreen(
                     AgentCharacter(
                         journey?.avatarId ?: "a-01",
                         Modifier.fillMaxWidth().height(if (wide) 300.dp else 220.dp),
+                        speechPhase = speech.phase,
+                        motionEnabled = state.canInteract,
                     )
                     Text(if (state.replay) "최종 선택 재시연 · ${state.round}회" else "같은 여행, 다음 선택")
                     Text(
@@ -121,11 +123,15 @@ fun EndingScreen(
                         when (state.phase) {
                             "travel" -> {
                                 Text(
-                                    "만남 합의·운전자 승인과 실제 경유지 추가를 확인했어요.",
+                                    if (state.mockNavigation) "만남 합의·운전자 승인과 모의 경유지 추가를 확인했어요."
+                                    else "만남 합의·운전자 승인과 실제 경유지 추가를 확인했어요.",
                                     style = MaterialTheme.typography.titleLarge,
                                 )
                                 Text(
-                                    "가상 바다쉼표 카페 14:15~14:35 · 20분\n실제 SDK 시험 장소는 소프트웨어드림센터예요. 가상 강릉 경로·도착 감지와 구분해요."
+                                    if (state.mockNavigation)
+                                        "가상 바다쉼표 카페 14:15~14:35 · 20분\n모의 경로로 진행하는 재연이에요. 실제 내비·도착 감지와 구분해요."
+                                    else
+                                        "가상 바다쉼표 카페 14:15~14:35 · 20분\n실제 SDK 시험 장소는 소프트웨어드림센터예요. 가상 강릉 경로·도착 감지와 구분해요."
                                 )
                                 Text("시연자가 O01에서 ‘만남 시작으로 이동’을 실행하면 재연을 시작해요.")
                             }

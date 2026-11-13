@@ -54,6 +54,13 @@ fun ContentScreen(
         }
     }
     DisposableEffect(state.scope) { onDispose { onStop() } }
+    val callBusy = state.call?.status in listOf("requested", "active")
+    LaunchedEffect(state.call?.id, state.call?.status) {
+        if (state.call?.status in listOf("requested", "active")) {
+            onStop()
+            page = "call"
+        }
+    }
     val thread = state.threads.find { it.id == threadId } ?: state.threads.lastOrNull()
     LaunchedEffect(page, thread?.id, thread?.response, state.canInteract) {
         if (page == "messages" && state.canInteract && thread?.response != null && thread.unread)
@@ -83,6 +90,16 @@ fun ContentScreen(
                 Text("정차 상태에서 대화를 이어갈 수 있어요.", style = MaterialTheme.typography.headlineSmall)
                 Text("현재 차량·화면 상태를 확인하고 있어요.")
                 OutlinedButton(onClick = onStop) { Text("낭독 중단") }
+                for (type in listOf("CALL_CANCEL", "CALL_END")) state.actions[type]?.let { b ->
+                    OutlinedButton(
+                        onClick = {
+                            onStop()
+                            onAction(type, b)
+                        }
+                    ) {
+                        Text(if (type == "CALL_CANCEL") "통화 제안 취소" else "통화 종료")
+                    }
+                }
                 OutlinedButton(onClick = onBack) { Text("내 친구 홈으로") }
             }
         }
@@ -94,7 +111,8 @@ fun ContentScreen(
             character = { characterModifier, wide ->
                 Column(characterModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     Text(
-                        if (page in listOf("friend", "rest", "done")) "내 여행 친구"
+                        if (page == "call") "일반 통화 · 준비된 샘플"
+                        else if (page in listOf("friend", "rest", "done")) "내 여행 친구"
                         else "${state.peerAlias ?: "내 친구"}의 에이전트",
                         style = MaterialTheme.typography.headlineSmall,
                     )
@@ -102,10 +120,12 @@ fun ContentScreen(
                         if (page in listOf("friend", "rest", "done")) journey?.avatarId ?: "a-01"
                         else "b-01",
                         Modifier.fillMaxWidth().height(if (wide) 260.dp else 220.dp),
+                        speechPhase = if (page == "call") "resting" else speech.phase,
+                        motionEnabled = state.canInteract,
                     )
                     Text(
                         when (speech.phase) {
-                            "speaking" -> "말하는 중"
+                            "speaking" -> if (page == "call") "통화 샘플 재생 중" else "말하는 중"
                             "preparing" -> "읽을 준비 중"
                             "interrupted" -> "낭독 중단 · 자동으로 다시 시작하지 않아요"
                             "unavailable" -> "음성을 사용할 수 없어 자막으로 안내해요"
@@ -128,14 +148,15 @@ fun ContentScreen(
                         }
                     }
                     Text(
-                        "준비된 대본 · 기기 음성 낭독\n실제 상대 음성·실시간 대화와 구분해요.",
+                        "준비된 대본 · 합성 음성 샘플/기기 낭독\n실제 상대 음성·실시간 대화와 구분해요.",
                         style = MaterialTheme.typography.labelMedium,
                     )
                     OutlinedButton(
                         onClick = {
                             onStop()
                             onBack()
-                        }
+                        },
+                        enabled = !callBusy,
                     ) {
                         Text("내 친구 홈으로")
                     }
@@ -167,6 +188,13 @@ fun ContentScreen(
                                     else "에이전트로 말 전하기"
                                 )
                             }
+                            if (state.actions.containsKey("CALL_PROPOSE") || callBusy)
+                                Button(
+                                    onClick = { navigate("call") },
+                                    enabled = state.canInteract,
+                                ) {
+                                    Text("둘이 직접 통화하기")
+                                }
                             Button(onClick = { navigate("friend") }) { Text("내 에이전트와 이야기하기") }
                             Button(
                                 onClick = {
@@ -179,6 +207,8 @@ fun ContentScreen(
                             }
                             OutlinedButton(onClick = { navigate("rest") }) { Text("지금은 쉬기") }
                         }
+                        "call" ->
+                            CallPanel(state, speech, onSpeak, onStop, onAction) { navigate("list") }
                         "profile" -> {
                             Text("${state.peerAlias}의 에이전트 · 공개 프로필 기반")
                             state.questions.forEach { q ->
@@ -320,9 +350,11 @@ fun ContentScreen(
                             }
                         }
                     }
-                    if (state.peerAlias != null && page != "list")
+                    if (state.peerAlias != null && page != "list" && !callBusy && page != "call")
                         OutlinedButton(onClick = { navigate("list") }) { Text("콘텐츠 목록으로") }
-                    if (state.pendingType in listOf("MESSAGE_SEND", "MESSAGE_REPLY")) {
+                    if (
+                        state.pendingType in listOf("MESSAGE_SEND", "MESSAGE_REPLY", "CALL_PROPOSE")
+                    ) {
                         Text("전송 결과 확인 중 · 다른 메시지로 중복 전송하지 않아요.")
                         OutlinedButton(onClick = onRetry, enabled = state.canRetry) {
                             Text("이전 요청 결과 확인·재전송")
@@ -337,7 +369,7 @@ fun ContentScreen(
                     journey?.let { j ->
                         Text("내 여행 계획 · ${j.date}", style = MaterialTheme.typography.titleMedium)
                         Text(
-                            "기존 다음 일정 ${j.nextVisit} · ${j.nextVisitLabel}\n내 숙소 도착 예상 ${j.returnEstimate} · 마감 ${j.returnDeadline}"
+                            "기존 다음 일정 ${j.nextVisit} · ${j.nextVisitLabel}\n${j.returnPlaceLabel} 도착 예상 ${j.returnEstimate} · 마감 ${j.returnDeadline}"
                         )
                     }
                 }

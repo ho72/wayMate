@@ -1,3 +1,4 @@
+import { closeCall, callBusy } from "./call.mjs";
 import { randomUUID } from "node:crypto";
 import { fail } from "./handoff.mjs";
 import { canSocial, linked, peer } from "./social.mjs";
@@ -20,11 +21,18 @@ export const contentAvailable = (s) =>
     s.social.meeting.status,
   );
 export function closeContent(s) {
+  closeCall(s);
   for (const t of threads(s))
     if (["waiting", "received"].includes(t.status)) t.status = "closed";
 }
 export function contentBindings(s, actor, now) {
-  if (actor !== "car" || !contentAvailable(s) || !canSocial(s, now)) return {};
+  if (
+    actor !== "car" ||
+    !contentAvailable(s) ||
+    !canSocial(s, now) ||
+    callBusy(s)
+  )
+    return {};
   const active = threads(s).find((t) =>
     ["waiting", "received"].includes(t.status),
   );
@@ -56,6 +64,8 @@ export function applyContent(s, c, now) {
     fail(403, "ACTOR_FORBIDDEN", "차량에서 확인한 말만 전달할 수 있어요.");
   if (!contentAvailable(s))
     fail(409, "INVALID_TRANSITION", "현재 연결에서 이어갈 수 없는 대화예요.");
+  if (callBusy(s))
+    fail(409, "INVALID_TRANSITION", "통화를 마친 뒤 대화를 이어가 주세요.");
   if (!canSocial(s, now))
     fail(423, "RESTRICTED", "정차·활성 차량과 현재 내비 상태를 확인해 주세요.");
   if (c.type === "MESSAGE_SEND") {

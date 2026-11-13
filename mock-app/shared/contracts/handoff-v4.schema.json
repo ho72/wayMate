@@ -375,7 +375,7 @@
                   "maxItems": 0
                 },
                 "navigationSource": {
-                  "enum": ["real", "unsupported"]
+                  "enum": ["real", "unsupported", "mock"]
                 }
               },
               "required": ["deviceId", "vehicleSessionId", "pendingAttempts"],
@@ -1814,10 +1814,7 @@
                       "const": "meeting_cancel"
                     }
                   },
-                  "required": [
-                    "proposalId",
-                    "reason"
-                  ],
+                  "required": ["proposalId", "reason"],
                   "additionalProperties": false
                 },
                 {
@@ -1831,10 +1828,7 @@
                       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                     }
                   },
-                  "required": [
-                    "reason",
-                    "resetId"
-                  ],
+                  "required": ["reason", "resetId"],
                   "additionalProperties": false
                 }
               ]
@@ -1937,7 +1931,8 @@
                     "CONNECT_REQUEST",
                     "MEETING_PROPOSE",
                     "NAV_APPROVE",
-                    "MESSAGE_SEND"
+                    "MESSAGE_SEND",
+                    "CALL_PROPOSE"
                   ]
                 }
               },
@@ -1994,9 +1989,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "runId"
-              ],
+              "required": ["runId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2055,9 +2048,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "resetId"
-              ],
+              "required": ["resetId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2080,18 +2071,11 @@
                       "const": true
                     }
                   },
-                  "required": [
-                    "ui",
-                    "audio",
-                    "pendingRequests"
-                  ],
+                  "required": ["ui", "audio", "pendingRequests"],
                   "additionalProperties": false
                 }
               },
-              "required": [
-                "webClientId",
-                "cleared"
-              ],
+              "required": ["webClientId", "cleared"],
               "additionalProperties": false
             }
           },
@@ -2144,9 +2128,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "resetId"
-              ],
+              "required": ["resetId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2177,11 +2159,7 @@
                       "const": true
                     }
                   },
-                  "required": [
-                    "ui",
-                    "audio",
-                    "pendingRequests"
-                  ],
+                  "required": ["ui", "audio", "pendingRequests"],
                   "additionalProperties": false
                 },
                 "pendingAttemptIds": {
@@ -2220,10 +2198,7 @@
                           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                         },
                         "outcome": {
-                          "enum": [
-                            "removed",
-                            "not_dispatched"
-                          ]
+                          "enum": ["removed", "not_dispatched"]
                         },
                         "acknowledged": {
                           "const": true
@@ -2311,24 +2286,17 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "connectionId"
-              ],
+              "required": ["connectionId"],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "messagePresetId": {
-                  "enum": [
-                    "M1",
-                    "M2"
-                  ]
+                  "enum": ["M1", "M2"]
                 }
               },
-              "required": [
-                "messagePresetId"
-              ],
+              "required": ["messagePresetId"],
               "additionalProperties": false
             }
           },
@@ -2384,25 +2352,17 @@
                   "const": "F1"
                 }
               },
-              "required": [
-                "threadId",
-                "followupQuestionId"
-              ],
+              "required": ["threadId", "followupQuestionId"],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "replyPresetId": {
-                  "enum": [
-                    "R1",
-                    "R2"
-                  ]
+                  "enum": ["R1", "R2"]
                 }
               },
-              "required": [
-                "replyPresetId"
-              ],
+              "required": ["replyPresetId"],
               "additionalProperties": false
             }
           },
@@ -2466,12 +2426,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "kind",
-                "requestId",
-                "connectionId",
-                "threadId"
-              ],
+              "required": ["kind", "requestId", "connectionId", "threadId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2481,9 +2436,7 @@
                   "const": "reply"
                 }
               },
-              "required": [
-                "decision"
-              ],
+              "required": ["decision"],
               "additionalProperties": false
             }
           },
@@ -2536,9 +2489,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "proposalId"
-              ],
+              "required": ["proposalId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2597,9 +2548,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "proposalId"
-              ],
+              "required": ["proposalId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2658,9 +2607,7 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "proposalId"
-              ],
+              "required": ["proposalId"],
               "additionalProperties": false
             },
             "payload": {
@@ -2670,9 +2617,7 @@
                   "type": "boolean"
                 }
               },
-              "required": [
-                "peerIntroSeen"
-              ],
+              "required": ["peerIntroSeen"],
               "additionalProperties": false
             }
           },
@@ -2729,10 +2674,7 @@
                   "minimum": 1
                 }
               },
-              "required": [
-                "finalId",
-                "finalRound"
-              ],
+              "required": ["finalId", "finalRound"],
               "additionalProperties": false
             },
             "payload": {
@@ -2799,26 +2741,17 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "finalId",
-                "finalRound",
-                "requestId"
-              ],
+              "required": ["finalId", "finalRound", "requestId"],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "choice": {
-                  "enum": [
-                    "together",
-                    "my_agent"
-                  ]
+                  "enum": ["together", "my_agent"]
                 }
               },
-              "required": [
-                "choice"
-              ],
+              "required": ["choice"],
               "additionalProperties": false
             }
           },
@@ -2882,27 +2815,1121 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": [
-                "kind",
-                "finalId",
-                "finalRound",
-                "requestId"
-              ],
+              "required": ["kind", "finalId", "finalRound", "requestId"],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "decision": {
-                  "enum": [
-                    "together",
-                    "my_agent"
+                  "enum": ["together", "my_agent"]
+                }
+              },
+              "required": ["decision"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CALL_PROPOSE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "connectionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["connectionId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "requestedMode": {
+                  "const": "plain"
+                }
+              },
+              "required": ["requestedMode"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CALL_CANCEL"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "callId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "requestId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["callId", "requestId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "CALL_END"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "callId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["callId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "B_RESPONSE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "call"
+                },
+                "callId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "requestId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "connectionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["kind", "callId", "requestId", "connectionId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "decision": {
+                  "enum": ["accept", "reject"]
+                }
+              },
+              "required": ["decision"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 }
               },
               "required": [
-                "decision"
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
               ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["proposalId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_REMOVE_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "const": "reset_cleanup"
+                },
+                "resetId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["reason", "resetId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_REMOVE_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "const": "meeting_cancel"
+                },
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["reason", "proposalId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_REMOVE_APPROVE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "reason": {
+                  "const": "driver_waypoint"
+                }
+              },
+              "required": ["reason"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_RETRY"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["attemptId"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "reviewedRouteRevision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "ownedAttemptId": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source",
+                "operation",
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "reviewedRouteRevision",
+                "ownedAttemptId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "car"
+            },
+            "type": {
+              "const": "NAV_CANCEL"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "const": "mock"
+                },
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleSessionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "vehicleEpoch": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "source",
+                "attemptId",
+                "vehicleSessionId",
+                "vehicleEpoch"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "NAV_MOCK_RESULT"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "operation": {
+                  "enum": ["add", "remove"]
+                }
+              },
+              "required": ["attemptId", "operation"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "outcome": {
+                  "enum": ["applied", "removed", "failed", "unknown"]
+                }
+              },
+              "required": ["outcome"],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "NAV_MOCK_CONTINUE"
+            },
+            "target": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "runSeq",
+            "runId",
+            "commandId",
+            "expectedVersion",
+            "actor",
+            "type",
+            "target",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": 4
+            },
+            "runSeq": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "runId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "commandId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "expectedVersion": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "actor": {
+              "const": "operator"
+            },
+            "type": {
+              "const": "RECOVERY_CONFIRM"
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "attemptIds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  }
+                }
+              },
+              "required": ["attemptIds"],
+              "additionalProperties": false
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "recoveryProcedureId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "evidenceId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["recoveryProcedureId", "evidenceId"],
               "additionalProperties": false
             }
           },
@@ -3481,11 +4508,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "runId",
-                "attemptId",
-                "message"
-              ],
+              "required": ["runId", "attemptId", "message"],
               "additionalProperties": false
             },
             {
@@ -3521,11 +4544,7 @@
                 }
               }
             },
-            "required": [
-              "runId",
-              "deviceId",
-              "settledAttemptIds"
-            ],
+            "required": ["runId", "deviceId", "settledAttemptIds"],
             "additionalProperties": false
           }
         },
@@ -3543,6 +4562,39 @@
           "anyOf": [
             {
               "$ref": "#/$defs/journeyView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "call": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/callView"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mockNavigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/mockNavigation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "navigationMode": {
+          "enum": [null, "real", "mock", "unsupported"]
+        },
+        "recoveryStatus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/recoveryStatus"
             },
             {
               "type": "null"
@@ -3873,7 +4925,7 @@
               "enum": ["handoff", "home", "meeting", "navigation"]
             },
             "navigationSource": {
-              "enum": ["real", "unsupported"]
+              "enum": ["real", "unsupported", "mock"]
             }
           },
           "required": [
@@ -3987,11 +5039,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "runId",
-                "attemptId",
-                "message"
-              ],
+              "required": ["runId", "attemptId", "message"],
               "additionalProperties": false
             },
             {
@@ -4037,6 +5085,29 @@
         },
         "replayContext": {
           "$ref": "#/$defs/replayContext"
+        },
+        "call": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/callStore"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mockNavigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/mockNavigation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "navigationMode": {
+          "enum": [null, "real", "mock", "unsupported"]
         }
       },
       "required": [
@@ -4843,19 +5914,13 @@
           "type": "object",
           "properties": {
             "variant": {
-              "enum": [
-                "general",
-                "familiar"
-              ]
+              "enum": ["general", "familiar"]
             },
             "startedAt": {
               "type": "string"
             }
           },
-          "required": [
-            "variant",
-            "startedAt"
-          ],
+          "required": ["variant", "startedAt"],
           "additionalProperties": false
         },
         "endedAt": {
@@ -4922,7 +5987,8 @@
                   "CONNECT_REQUEST",
                   "MEETING_PROPOSE",
                   "NAV_APPROVE",
-                  "MESSAGE_SEND"
+                  "MESSAGE_SEND",
+                  "CALL_PROPOSE"
                 ]
               },
               "actor": {
@@ -5016,10 +6082,7 @@
                 "type": "object",
                 "properties": {
                   "kind": {
-                    "enum": [
-                      "connection",
-                      "meeting"
-                    ]
+                    "enum": ["connection", "meeting"]
                   },
                   "requestId": {
                     "type": "string",
@@ -5041,12 +6104,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "kind",
-                  "requestId",
-                  "connectionId",
-                  "proposalId"
-                ],
+                "required": ["kind", "requestId", "connectionId", "proposalId"],
                 "additionalProperties": false
               },
               {
@@ -5068,12 +6126,29 @@
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   }
                 },
-                "required": [
-                  "kind",
-                  "requestId",
-                  "connectionId",
-                  "threadId"
-                ],
+                "required": ["kind", "requestId", "connectionId", "threadId"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "call"
+                  },
+                  "callId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  },
+                  "connectionId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                  }
+                },
+                "required": ["kind", "callId", "requestId", "connectionId"],
                 "additionalProperties": false
               }
             ]
@@ -5099,6 +6174,9 @@
           "type": "boolean"
         },
         "messageResponseEnabled": {
+          "type": "boolean"
+        },
+        "callResponseEnabled": {
           "type": "boolean"
         }
       },
@@ -5184,25 +6262,15 @@
                           "const": true
                         }
                       },
-                      "required": [
-                        "ui",
-                        "audio",
-                        "pendingRequests"
-                      ],
+                      "required": ["ui", "audio", "pendingRequests"],
                       "additionalProperties": false
                     }
                   },
-                  "required": [
-                    "webClientId",
-                    "cleared"
-                  ],
+                  "required": ["webClientId", "cleared"],
                   "additionalProperties": false
                 }
               },
-              "required": [
-                "commandId",
-                "payload"
-              ],
+              "required": ["commandId", "payload"],
               "additionalProperties": false
             },
             {
@@ -5247,11 +6315,7 @@
                           "const": true
                         }
                       },
-                      "required": [
-                        "ui",
-                        "audio",
-                        "pendingRequests"
-                      ],
+                      "required": ["ui", "audio", "pendingRequests"],
                       "additionalProperties": false
                     },
                     "pendingAttemptIds": {
@@ -5290,10 +6354,7 @@
                               "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                             },
                             "outcome": {
-                              "enum": [
-                                "removed",
-                                "not_dispatched"
-                              ]
+                              "enum": ["removed", "not_dispatched"]
                             },
                             "acknowledged": {
                               "const": true
@@ -5332,10 +6393,7 @@
                   "additionalProperties": false
                 }
               },
-              "required": [
-                "commandId",
-                "payload"
-              ],
+              "required": ["commandId", "payload"],
               "additionalProperties": false
             },
             {
@@ -5463,18 +6521,10 @@
               ]
             },
             "uiContext": {
-              "enum": [
-                "handoff",
-                "home",
-                "meeting",
-                "navigation"
-              ]
+              "enum": ["handoff", "home", "meeting", "navigation"]
             },
             "navigationSource": {
-              "enum": [
-                "real",
-                "unsupported"
-              ]
+              "enum": ["real", "unsupported", "mock"]
             }
           },
           "required": [
@@ -5522,13 +6572,19 @@
                 "$ref": "#/$defs/receipt"
               }
             },
-            "required": [
-              "command",
-              "clientId",
-              "receipt"
-            ],
+            "required": ["command", "clientId", "receipt"],
             "additionalProperties": false
           }
+        },
+        "mockNavigation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/mockNavigation"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -5585,10 +6641,7 @@
           "type": "boolean"
         },
         "status": {
-          "enum": [
-            "waiting",
-            "needs_recovery"
-          ]
+          "enum": ["waiting", "needs_recovery"]
         },
         "blockedReasons": {
           "type": "array",
@@ -5651,11 +6704,7 @@
           "type": "string"
         },
         "webCleanup": {
-          "enum": [
-            "acknowledged",
-            "deferred",
-            "not_required"
-          ]
+          "enum": ["acknowledged", "deferred", "not_required"]
         }
       },
       "required": [
@@ -5679,10 +6728,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "command",
-        "requiresRecovery"
-      ],
+      "required": ["command", "requiresRecovery"],
       "additionalProperties": false
     },
     "receiptEntry": {
@@ -5706,11 +6752,7 @@
           "$ref": "#/$defs/receipt"
         }
       },
-      "required": [
-        "command",
-        "clientId",
-        "receipt"
-      ],
+      "required": ["command", "clientId", "receipt"],
       "additionalProperties": false
     },
     "messageThread": {
@@ -5729,22 +6771,14 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "messagePresetId": {
-          "enum": [
-            "M1",
-            "M2"
-          ]
+          "enum": ["M1", "M2"]
         },
         "createdBy": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": [
-            "waiting",
-            "received",
-            "replied",
-            "closed"
-          ]
+          "enum": ["waiting", "received", "replied", "closed"]
         },
         "sentAt": {
           "type": "string",
@@ -5753,10 +6787,7 @@
         "responsePresetId": {
           "anyOf": [
             {
-              "enum": [
-                "M1",
-                "M2"
-              ]
+              "enum": ["M1", "M2"]
             },
             {
               "type": "null"
@@ -5776,10 +6807,7 @@
         "replyPresetId": {
           "anyOf": [
             {
-              "enum": [
-                "R1",
-                "R2"
-              ]
+              "enum": ["R1", "R2"]
             },
             {
               "type": "null"
@@ -5811,9 +6839,7 @@
           }
         }
       },
-      "required": [
-        "threads"
-      ],
+      "required": ["threads"],
       "additionalProperties": false
     },
     "messageView": {
@@ -5832,22 +6858,14 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "messagePresetId": {
-          "enum": [
-            "M1",
-            "M2"
-          ]
+          "enum": ["M1", "M2"]
         },
         "createdBy": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": [
-            "waiting",
-            "received",
-            "replied",
-            "closed"
-          ]
+          "enum": ["waiting", "received", "replied", "closed"]
         },
         "sentAt": {
           "type": "string",
@@ -5856,10 +6874,7 @@
         "responsePresetId": {
           "anyOf": [
             {
-              "enum": [
-                "M1",
-                "M2"
-              ]
+              "enum": ["M1", "M2"]
             },
             {
               "type": "null"
@@ -5879,10 +6894,7 @@
         "replyPresetId": {
           "anyOf": [
             {
-              "enum": [
-                "R1",
-                "R2"
-              ]
+              "enum": ["R1", "R2"]
             },
             {
               "type": "null"
@@ -5966,10 +6978,7 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": [
-                  "Q1",
-                  "Q2"
-                ]
+                "enum": ["Q1", "Q2"]
               },
               "text": {
                 "type": "string",
@@ -5983,12 +6992,7 @@
                 "type": "boolean"
               }
             },
-            "required": [
-              "id",
-              "text",
-              "answer",
-              "known"
-            ],
+            "required": ["id", "text", "answer", "known"],
             "additionalProperties": false
           }
         },
@@ -5998,20 +7002,14 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": [
-                  "M1",
-                  "M2"
-                ]
+                "enum": ["M1", "M2"]
               },
               "text": {
                 "type": "string",
                 "maxLength": 1000
               }
             },
-            "required": [
-              "id",
-              "text"
-            ],
+            "required": ["id", "text"],
             "additionalProperties": false
           }
         },
@@ -6021,20 +7019,14 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": [
-                  "R1",
-                  "R2"
-                ]
+                "enum": ["R1", "R2"]
               },
               "text": {
                 "type": "string",
                 "maxLength": 1000
               }
             },
-            "required": [
-              "id",
-              "text"
-            ],
+            "required": ["id", "text"],
             "additionalProperties": false
           }
         },
@@ -6108,10 +7100,7 @@
           ]
         }
       },
-      "required": [
-        "peerIntroSeen",
-        "cue"
-      ],
+      "required": ["peerIntroSeen", "cue"],
       "additionalProperties": false
     },
     "endingCheckpoint": {
@@ -6179,10 +7168,7 @@
         "aChoice": {
           "anyOf": [
             {
-              "enum": [
-                "together",
-                "my_agent"
-              ]
+              "enum": ["together", "my_agent"]
             },
             {
               "type": "null"
@@ -6192,10 +7178,7 @@
         "bChoice": {
           "anyOf": [
             {
-              "enum": [
-                "together",
-                "my_agent"
-              ]
+              "enum": ["together", "my_agent"]
             },
             {
               "type": "null"
@@ -6203,12 +7186,7 @@
           ]
         },
         "status": {
-          "enum": [
-            "pending",
-            "together",
-            "my_agent",
-            "cancelled"
-          ]
+          "enum": ["pending", "together", "my_agent", "cancelled"]
         }
       },
       "required": [
@@ -6226,10 +7204,7 @@
       "type": "object",
       "properties": {
         "mode": {
-          "enum": [
-            "normal",
-            "final_replay"
-          ]
+          "enum": ["normal", "final_replay"]
         },
         "checkpointId": {
           "anyOf": [
@@ -6243,10 +7218,7 @@
           ]
         }
       },
-      "required": [
-        "mode",
-        "checkpointId"
-      ],
+      "required": ["mode", "checkpointId"],
       "additionalProperties": false
     },
     "journeyView": {
@@ -6271,10 +7243,7 @@
         "storyTime": {
           "anyOf": [
             {
-              "enum": [
-                "14:15",
-                "14:35"
-              ]
+              "enum": ["14:15", "14:35"]
             },
             {
               "type": "null"
@@ -6306,20 +7275,12 @@
                   ]
                 },
                 "status": {
-                  "enum": [
-                    "pending",
-                    "together",
-                    "my_agent",
-                    "cancelled"
-                  ]
+                  "enum": ["pending", "together", "my_agent", "cancelled"]
                 },
                 "myChoice": {
                   "anyOf": [
                     {
-                      "enum": [
-                        "together",
-                        "my_agent"
-                      ]
+                      "enum": ["together", "my_agent"]
                     },
                     {
                       "type": "null"
@@ -6327,13 +7288,7 @@
                   ]
                 }
               },
-              "required": [
-                "id",
-                "round",
-                "requestId",
-                "status",
-                "myChoice"
-              ],
+              "required": ["id", "round", "requestId", "status", "myChoice"],
               "additionalProperties": false
             },
             {
@@ -6353,20 +7308,14 @@
                 "type": "string"
               }
             },
-            "required": [
-              "speaker",
-              "text"
-            ],
+            "required": ["speaker", "text"],
             "additionalProperties": false
           }
         },
         "meetingVariant": {
           "anyOf": [
             {
-              "enum": [
-                "general",
-                "familiar"
-              ]
+              "enum": ["general", "familiar"]
             },
             {
               "type": "null"
@@ -6392,10 +7341,7 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": [
-                  "rest",
-                  "photo"
-                ]
+                "enum": ["rest", "photo"]
               },
               "text": {
                 "type": "string"
@@ -6404,11 +7350,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "id",
-              "text",
-              "reply"
-            ],
+            "required": ["id", "text", "reply"],
             "additionalProperties": false
           }
         },
@@ -6447,6 +7389,324 @@
         "cleanupRequired",
         "blockedReason"
       ],
+      "additionalProperties": false
+    },
+    "callStore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "enum": ["requested", "active", "declined", "ended", "cancelled"]
+        },
+        "aConsent": {
+          "type": "boolean"
+        },
+        "bConsent": {
+          "type": "boolean"
+        },
+        "sample": {
+          "enum": ["general", "familiar"]
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "connectionId",
+        "createdBy",
+        "status",
+        "aConsent",
+        "bConsent",
+        "sample"
+      ],
+      "additionalProperties": false
+    },
+    "callLine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "enum": [
+            "call_general_a",
+            "call_general_b",
+            "call_familiar_a",
+            "call_familiar_b",
+            "call_familiar_reply"
+          ]
+        },
+        "speaker": {
+          "enum": ["A", "B"]
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "speaker", "text"],
+      "additionalProperties": false
+    },
+    "callView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "connectionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "enum": ["requested", "active", "declined", "ended", "cancelled"]
+        },
+        "aConsent": {
+          "type": "boolean"
+        },
+        "bConsent": {
+          "type": "boolean"
+        },
+        "source": {
+          "const": "call_sample"
+        },
+        "canPlay": {
+          "type": "boolean"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/callLine"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "connectionId",
+        "status",
+        "aConsent",
+        "bConsent",
+        "source",
+        "canPlay",
+        "lines"
+      ],
+      "additionalProperties": false
+    },
+    "mockNavAttempt": {
+      "type": "object",
+      "properties": {
+        "attemptId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "source": {
+          "const": "mock"
+        },
+        "operation": {
+          "enum": ["add", "remove"]
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "vehicleSessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "vehicleEpoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approvalCommandId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "ownedAttemptId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "previousAttemptId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "context": {
+          "enum": ["meeting", "driver_waypoint"]
+        },
+        "proposalId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "enum": ["add", "meeting_cancel", "reset_cleanup", "driver_waypoint"]
+        },
+        "resetId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "pending",
+            "unknown",
+            "applied",
+            "removed",
+            "failed",
+            "not_dispatched"
+          ]
+        },
+        "dispatch": {
+          "enum": ["awaiting_result", "settled"]
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "commandId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              "outcome": {
+                "enum": ["applied", "removed", "failed", "unknown"]
+              }
+            },
+            "required": ["commandId", "outcome"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "attemptId",
+        "source",
+        "operation",
+        "deviceId",
+        "vehicleSessionId",
+        "vehicleEpoch",
+        "approvalCommandId",
+        "ownedAttemptId",
+        "previousAttemptId",
+        "context",
+        "proposalId",
+        "reason",
+        "resetId",
+        "outcome",
+        "dispatch",
+        "results"
+      ],
+      "additionalProperties": false
+    },
+    "mockNavigation": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "const": "mock"
+        },
+        "route": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "destination": {
+              "$ref": "#/$defs/navPoint"
+            },
+            "waypoints": {
+              "type": "array",
+              "maxItems": 1,
+              "items": {
+                "$ref": "#/$defs/navPoint"
+              }
+            }
+          },
+          "required": ["revision", "destination", "waypoints"],
+          "additionalProperties": false
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mockNavAttempt"
+          }
+        },
+        "owned": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "attemptId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                }
+              },
+              "required": ["attemptId"],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["source", "route", "attempts", "owned"],
+      "additionalProperties": false
+    },
+    "recoveryStatus": {
+      "type": "object",
+      "properties": {
+        "canConfirm": {
+          "const": false
+        },
+        "procedures": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["canConfirm", "procedures", "message"],
       "additionalProperties": false
     }
   }

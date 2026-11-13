@@ -8,4 +8,5 @@ data class ResetUiState(
     val canCancel: Boolean = false,
     val canRetry: Boolean = false,
     val reviewed: String? = null,
+    val mockNavigation: NavigationUiState? = null,
 )
