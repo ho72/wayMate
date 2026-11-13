@@ -17,6 +17,7 @@ fun MeetingScreen(
     onAction: (String, String) -> Unit,
     onNavigation: () -> Unit,
     onRetry: () -> Unit,
+    journey: com.waymate.app.model.Journey? = null,
 ) {
     var review by remember { mutableStateOf<Pair<String, String>?>(null) }
     Surface(Modifier.fillMaxSize()) {
@@ -28,6 +29,7 @@ fun MeetingScreen(
                 "${state.peerAlias ?: "내 친구"} · 만남",
                 style = MaterialTheme.typography.headlineMedium,
             )
+            JourneySchedule(journey)
             Text("바다쉼표 카페", style = MaterialTheme.typography.headlineSmall)
             Text("11월 14일 · 첫 만남 14:15~14:35 · 20분")
             Text("가상 공개 장소 · 준비된 시연 일정", style = MaterialTheme.typography.labelLarge)

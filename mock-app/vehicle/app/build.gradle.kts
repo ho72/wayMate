@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+val apiPort = providers.gradleProperty("waymateApiPort").orElse("3000").get().toInt().also { require(it in 1024..65535) }
+
 android {
     namespace = "com.waymate.app"
     compileSdk = 35
@@ -11,6 +13,7 @@ android {
     buildToolsVersion = "35.0.0"
 
     defaultConfig {
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:$apiPort\"")
         applicationId = "com.waymate.app"
         minSdk = 28
         targetSdk = 34
@@ -34,9 +37,12 @@ android {
     }
 
     sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/character-res"))
+    sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("generated/speech-assets"))
+    androidResources { noCompress += "m4a" }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
@@ -77,3 +83,9 @@ val copyCharacter by tasks.registering(Copy::class) {
     rename { "blue_dragon.png" }
 }
 tasks.named("preBuild") { dependsOn(copyCharacter) }
+
+val copyPreparedSpeech by tasks.registering(Copy::class) {
+    from("../../assets/audio/prepared-v1")
+    into(layout.buildDirectory.dir("generated/speech-assets/speech"))
+}
+tasks.named("preBuild") { dependsOn(copyPreparedSpeech) }

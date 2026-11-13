@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { mockMode, mockPending } from "./mock-navigation.mjs";
 import { fail, parked } from "./handoff.mjs";
 import { linked, unresolved, peer } from "./social.mjs";
 import { closeContent } from "./content.mjs";
@@ -9,6 +10,7 @@ import {
   FAMILIAR_MEETING,
   TOGETHER_SCENE,
   OWN_QUESTIONS,
+  OWN_CLOSINGS,
 } from "../../shared/config/ending-v4.mjs";
 export const initialStory = () => ({ peerIntroSeen: true, cue: null });
 export const journeyTypes = new Set([
@@ -33,6 +35,7 @@ const checkpointValid = (s) =>
   s.finalCheckpoint.storyConnectionId === s.social.meeting.connectionId &&
   s.social.meeting.status === "ended";
 function navApplied(s) {
+  if (mockMode(s)) return !!s.mockNavigation?.owned && !mockPending(s);
   const n = s.navigation,
     a = n?.attempts.find((a) => a.attemptId === n.owned?.attemptId);
   return !!(
@@ -45,6 +48,7 @@ function navApplied(s) {
   );
 }
 function navReady(s, now) {
+  if (mockMode(s)) return navApplied(s) && !s.recovery;
   const n = s.navigation,
     a = n?.attempts.find((a) => a.attemptId === n.owned?.attemptId),
     o = n?.observation;
@@ -170,10 +174,19 @@ export function guardFinalReplay(s, c) {
       "CONNECT_CANCEL",
       "PROFILE_PRIVATE",
       "MEETING_CANCEL",
+      "CALL_CANCEL",
+      "CALL_END",
+      "NAV_MOCK_RESULT",
       "CANCEL_PENDING_COMMAND",
       "SET_TEST_RESTRICTION",
     ].includes(c.type) ||
     (c.type === "B_RESPONSE" && c.target.kind === "final")
+  )
+    return;
+  if (
+    c.type === "NAV_RETRY" &&
+    c.payload.source === "mock" &&
+    c.payload.operation === "remove"
   )
     return;
   if (c.type === "NAV_REMOVE_APPROVE" && c.payload.operation === "remove")
@@ -391,10 +404,10 @@ export function journeyProjection(s, actor, now) {
         : s.profile?.privateSummary.speakingStyle === "light_humor" &&
             interests.includes("sea_walk") &&
             interests.includes("cafe")
-          ? "바다 한 장, 커피 한 잔. 네가 좋아하던 여행 그대로네 ㅎㅎ. 14:55쯤 다음 일정을 준비해보자."
-          : "네가 원하던 대로 천천히 쉬어가자. 14:55쯤 다음 일정을 준비하면 돼.",
+          ? OWN_CLOSINGS.humor
+          : OWN_CLOSINGS.relaxed,
     canInteract: core,
-    cleanupRequired: !!s.navigation?.owned,
+    cleanupRequired: !!s.navigation?.owned || !!s.mockNavigation?.owned,
     blockedReason: core
       ? null
       : "정차·활성 차량과 내비·복구 상태를 확인해 주세요.",
@@ -440,7 +453,7 @@ export function validateEnding(s) {
     throw Error("종료된 연결의 대기 선택");
   if (
     ["started", "ended"].includes(m.status) &&
-    !s.navigation?.attempts.some(
+    !(mockMode(s) ? s.mockNavigation : s.navigation)?.attempts.some(
       (a) =>
         a.context === "meeting" &&
         a.proposalId === m.proposalId &&

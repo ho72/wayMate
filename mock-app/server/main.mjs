@@ -4,7 +4,10 @@ const file =
   process.env.WAYMATE_STATE_FILE ||
   fileURLToPath(new URL("../runtime/state-v4.json", import.meta.url));
 try {
-  const app = await startServer({ file });
+  const port = Number(process.env.WAYMATE_PORT ?? "3000");
+  if (!Number.isInteger(port) || port < 1024 || port > 65535)
+    throw new Error("WAYMATE_PORT는 1024~65535 정수여야 합니다.");
+  const app = await startServer({ file, port });
   console.log(
     `wayMate 준비 완료: http://127.0.0.1:${app.port} (v4 모바일 연결·차량 만남)`,
   );

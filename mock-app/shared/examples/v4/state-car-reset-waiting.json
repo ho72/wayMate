@@ -17,6 +17,9 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "recoveryStatus": null,
+  "navigationMode": "unsupported",
+  "mockNavigation": null,
   "journey": {
     "phase": "confirmed",
     "replay": false,
@@ -106,6 +109,7 @@
     "candidates": [],
     "cleanupRequired": false,
     "pendingResponses": [],
+    "callResponseEnabled": false,
     "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
@@ -172,6 +176,7 @@
     "replyDone": "서로 어떤 여행을 좋아하는지 조금 알게 됐네. 이 답장만으로 만남이 정해진 건 아니야. 다음은 네가 고르면 돼.",
     "canInteract": true
   },
+  "call": null,
   "schemaVersion": 4,
   "scope": "mobile-meeting-v4",
   "storeId": "00000000-0000-4000-8000-000000000016",

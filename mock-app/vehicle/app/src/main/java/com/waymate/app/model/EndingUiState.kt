@@ -17,6 +17,7 @@ data class EndingUiState(
     val closing: String = "",
     val canInteract: Boolean = false,
     val blocked: Boolean = true,
+    val mockNavigation: Boolean = false,
     val cleanupRequired: Boolean = false,
     val actions: Map<String, String> = emptyMap(),
     val notice: String? = null,

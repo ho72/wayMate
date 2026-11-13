@@ -1,9 +1,12 @@
 import { randomUUID } from "node:crypto";
+import { closeCall } from "./call.mjs";
+import { mockPending } from "./mock-navigation.mjs";
 import { isDeepStrictEqual as equal } from "node:util";
 import { fail, parked, fresh } from "./handoff.mjs";
 import { validEvidence, place } from "./navigation.mjs";
 
 const pending = (s) =>
+  mockPending(s) ||
   s.navigation?.attempts.some((a) =>
     ["pending", "unknown"].includes(a.outcome),
   );
@@ -45,6 +48,9 @@ export function resetReasons(s) {
     ...(s.recovery ? [s.recovery.message] : []),
     ...(pending(s) ? ["미확정 내비 실행 기록 확인 필요"] : []),
     ...(s.navigation?.owned ? ["wayMate 경유지 제거 승인·실제 정리 필요"] : []),
+    ...(s.mockNavigation?.owned
+      ? ["모의 경유지 제거 승인·모의 결과 확인 필요"]
+      : []),
     ...(r.requiredWebClientId && !r.webAck
       ? ["모바일 화면·초안 정리 ACK 대기"]
       : []),
@@ -63,6 +69,10 @@ export function resetView(s, actor, id, now) {
         r.requiredDeviceId === s.vehicle.deviceId &&
         fresh(s, now) &&
         s.vehicle.foreground &&
+        !mockPending(s) &&
+        !s.mockNavigation?.owned &&
+        (!s.mockNavigation?.attempts.length ||
+          (parked(s, now) && !s.social.testRestricted)) &&
         (!r.navigationRequired ||
           (parked(s, now) &&
             !s.social.testRestricted &&
@@ -147,6 +157,9 @@ export function guardDuringReset(s, c) {
       "CONNECT_CANCEL",
       "CONNECT_END",
       "MEETING_CANCEL",
+      "CALL_CANCEL",
+      "CALL_END",
+      "NAV_MOCK_RESULT",
       "PROFILE_PRIVATE",
       "CANCEL_PENDING_COMMAND",
       "SET_TEST_RESTRICTION",
@@ -168,6 +181,13 @@ export function guardDuringReset(s, c) {
     if (a?.operation === "remove" && a.resetId === s.reset?.id && s.reset)
       return;
   }
+  if (
+    c.type === "NAV_RETRY" &&
+    c.payload.source === "mock" &&
+    c.payload.operation === "remove" &&
+    s.reset
+  )
+    return;
   fail(
     423,
     s.recovery ? "RECOVERY_REQUIRED" : "RESETTING",
@@ -181,6 +201,7 @@ export function applyReset(s, c, id, now) {
     if (c.target.runId !== s.runId)
       fail(409, "RUN_CHANGED", "현재 회차를 확인해 주세요.");
     if (s.reset) return;
+    closeCall(s);
     s.reset = {
       id: randomUUID(),
       runId: s.runId,
@@ -227,6 +248,7 @@ export function applyReset(s, c, id, now) {
     p.pendingAttemptIds.length ||
     pending(s) ||
     s.navigation?.owned ||
+    s.mockNavigation?.owned ||
     s.recovery
   )
     fail(
@@ -286,6 +308,7 @@ export function finishReset(s, createInitial) {
     s.recovery ||
     pending(s) ||
     s.navigation?.owned ||
+    s.mockNavigation?.owned ||
     (r.requiredWebClientId && !r.webAck) ||
     (r.requiredDeviceId && !r.carAck)
   )
@@ -312,6 +335,7 @@ export function finishReset(s, createInitial) {
       runSeq: s.runSeq,
       reset: structuredClone(r),
       navigation: structuredClone(s.navigation ?? null),
+      mockNavigation: structuredClone(s.mockNavigation ?? null),
       vehicle: structuredClone(s.vehicle),
       vehicleActivation: structuredClone(s.vehicleActivation),
       receipts,

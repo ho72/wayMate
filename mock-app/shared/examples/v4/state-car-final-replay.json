@@ -214,6 +214,9 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "recoveryStatus": null,
+  "navigationMode": "unsupported",
+  "mockNavigation": null,
   "journey": {
     "phase": "pending",
     "replay": true,
@@ -288,6 +291,7 @@
     "candidates": [],
     "cleanupRequired": true,
     "pendingResponses": [],
+    "callResponseEnabled": false,
     "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
@@ -296,6 +300,7 @@
     }
   },
   "content": null,
+  "call": null,
   "schemaVersion": 4,
   "scope": "mobile-meeting-v4",
   "storeId": "00000000-0000-4000-8000-000000000016",

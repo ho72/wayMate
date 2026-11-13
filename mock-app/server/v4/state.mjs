@@ -1,3 +1,5 @@
+import { validateCall } from "./call.mjs";
+import { validateMockNavigation } from "./mock-navigation.mjs";
 import { initialStory, validateEnding } from "./ending.mjs";
 import { initialContent, validateContent } from "./content.mjs";
 import { initialSocial, connectionVersions, linked } from "./social.mjs";
@@ -16,6 +18,9 @@ export function initialState() {
     finalHistory: [],
     replayContext: { mode: "normal", checkpointId: null },
     content: initialContent(),
+    call: null,
+    mockNavigation: null,
+    navigationMode: null,
     reset: null,
     resetHistory: [],
     lateNavigationFacts: [],
@@ -64,6 +69,54 @@ export function initialState() {
 const validatedReceipts = new WeakSet();
 const validatedArchives = new WeakSet();
 const archiveVersions = new WeakMap();
+// Validation deeply freezes receipts/archives. Reuse their exact JSON bytes while still
+// encoding every mutable business field on each fsync; no history or payload is discarded.
+const encodedAudit = new WeakMap();
+const OPEN = Buffer.from("{"),
+  CLOSE = Buffer.from("}"),
+  COMMA = Buffer.from(",");
+const ARRAY_OPEN = Buffer.from("["),
+  ARRAY_CLOSE = Buffer.from("]");
+function auditJSON(value, key = null) {
+  const immutable =
+    validatedReceipts.has(value) || validatedArchives.has(value);
+  const cached = immutable ? encodedAudit.get(value) : null;
+  if (cached?.key === key) return cached.bytes;
+  const bytes = Buffer.from(
+    (key === null ? "" : JSON.stringify(key) + ":") + JSON.stringify(value),
+  );
+  if (immutable) encodedAudit.set(value, { key, bytes });
+  return bytes;
+}
+export function serializeStore(s) {
+  const chunks = [OPEN];
+  let first = true;
+  for (const [key, value] of Object.entries(s)) {
+    if (value === undefined) continue;
+    if (!first) chunks.push(COMMA);
+    first = false;
+    chunks.push(Buffer.from(JSON.stringify(key) + ":"));
+    if (key === "receipts") {
+      chunks.push(OPEN);
+      let firstReceipt = true;
+      for (const [id, entry] of Object.entries(value)) {
+        if (!firstReceipt) chunks.push(COMMA);
+        firstReceipt = false;
+        chunks.push(auditJSON(entry, id));
+      }
+      chunks.push(CLOSE);
+    } else if (key === "resetHistory") {
+      chunks.push(ARRAY_OPEN);
+      value.forEach((entry, index) => {
+        if (index) chunks.push(COMMA);
+        chunks.push(auditJSON(entry));
+      });
+      chunks.push(ARRAY_CLOSE);
+    } else chunks.push(Buffer.from(JSON.stringify(value)));
+  }
+  chunks.push(CLOSE);
+  return Buffer.concat(chunks);
+}
 function freezeReceipt(value) {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
     for (const child of Object.values(value)) freezeReceipt(child);
@@ -90,6 +143,8 @@ export function validateStore(s) {
     }
   validateNavigation(s);
   validateContent(s);
+  validateCall(s);
+  validateMockNavigation(s);
   validateEnding(s);
   const history = s.resetHistory || [],
     ids = new Set();
@@ -103,6 +158,14 @@ export function validateStore(s) {
       continue;
     }
     assertContract("resetArchive", a);
+    validateMockNavigation(a);
+    if (
+      a.mockNavigation?.owned ||
+      a.mockNavigation?.attempts.some((x) =>
+        ["pending", "unknown"].includes(x.outcome),
+      )
+    )
+      throw new Error("정리가 끝나지 않은 모의 내비 보존 기록");
     if (
       ids.has(a.runId) ||
       a.runSeq >= s.runSeq ||

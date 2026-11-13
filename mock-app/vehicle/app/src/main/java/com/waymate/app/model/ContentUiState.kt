@@ -9,6 +9,15 @@ data class ContentQuestion(
 
 data class ContentPreset(val id: String, val text: String)
 
+data class CallSampleLine(val id: String, val speaker: String, val text: String)
+
+data class CallUiState(
+    val id: String,
+    val status: String,
+    val canPlay: Boolean,
+    val lines: List<CallSampleLine>,
+)
+
 data class ContentThread(
     val id: String,
     val status: String,
@@ -34,4 +43,5 @@ data class ContentUiState(
     val pendingType: String? = null,
     val canRetry: Boolean = false,
     val replyDone: String = "",
+    val call: CallUiState? = null,
 )

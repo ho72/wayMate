@@ -1,6 +1,6 @@
 # wayMate Pleos 차량 앱
 
-Kotlin/Compose 차량 앱입니다. 현재 **v4 connected/my_trip 불러오기·드래곤 홈·복원·만남 동의·실제 내비 승인**을 지원합니다. [13 실행·변경 기록](../../docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. P02 공개 문답·말 전달과 [P03 만남 재연·P04 독립 선택/두 결말](../../docs_prototype/16_만남_재연_및_P04_두_결말.md), O01 안전한 초기화를 지원합니다. 실제 낭독·통화 샘플은 후속입니다. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
+Kotlin/Compose 차량 앱입니다. 현재 **v4 connected/my_trip 불러오기·드래곤 홈·복원·만남 동의·실제 내비 승인**을 지원합니다. [13 실행·변경 기록](../../docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. P02 공개 문답·말 전달과 [P03 만남 재연·P04 독립 선택/두 결말](../../docs_prototype/16_만남_재연_및_P04_두_결말.md), O01 안전한 초기화를 지원합니다. 준비 합성 음성 34개·일반 통화 동의/샘플·포커스 중단·캐릭터 최소 동작·모의 내비 실패/미확인을 지원합니다. [1차 최신 검수](../../docs_prototype/23_1차_개발_완료_및_검수.md)를 먼저 확인하세요. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
 
 ## Android Studio
 
@@ -38,7 +38,7 @@ adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.mock/com.waymat
 | 경로 | 책임 |
 |---|---|
 | `main/.../app`, `MainActivity` | Repository→화면 상태 조립·수명주기 |
-| `main/.../data/api`, `repository` | v3 JSON·HTTP·단일 요청·명령 영수증·복원 |
+| `main/.../data/api`, `repository` | v4 JSON·HTTP·단일 요청·명령 영수증·복원 |
 | `main/.../model` | 순수 Journey 표시 데이터·확인한 core 버전 |
 | `main/.../ui/screens/handoff`, `ui/components`, `ui/theme` | 시작/홈·캐릭터·색/타이포, SDK 직접 호출 없음 |
 | `main/res/values/strings_home.xml` | 시작·홈 문구 |
@@ -48,7 +48,7 @@ adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.mock/com.waymat
 | `mock/.../platform/navigation` | SDK 없이 변경 차단 |
 | `realDebug/.../platform/navigation` | 이전 시험 코드 보존·Activity 비활성 |
 
-Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/reference.png`를 빌드 중 drawable-nodpi로 복사합니다. a-01=승인한 정적 드래곤, a-02=햇살 Canvas입니다. 실제 3D/동작/립싱크·음성은 없습니다.
+Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/reference.png`를 빌드 중 drawable-nodpi로 복사합니다. a-01=승인한 정적 드래곤, a-02=햇살 Canvas입니다. 같은 렌더 이미지에 대기/발화/중단 동작을 적용하며 실제 3D rig·정교한 립싱크는 없습니다. `copyPreparedSpeech`는 공통 한국어 합성 음성 34개를 APK assets에 복사합니다. 준비 음성과 기기 TTS·실제 상대 통신을 구분합니다.
 
 ## 실제 내비 승인
 
@@ -69,3 +69,8 @@ CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬�
 확장 창·3분할 130% 글자 회귀는 `./scripts/verify-window-ui.sh wide|font`로 실행합니다. 먼저 실제 Pleos 창 크기를 준비해야 합니다. mockDebug 전용 오프라인 Activity를 사용하며 SDK를 호출하지 않습니다. [18 검수 범위·재현 방법](../../docs_prototype/18_확장_창_및_글자_확대_검수.md)을 참고하세요. CI는 기기 테스트 APK를 빌드하며 Pleos UI 테스트 실행을 대신하지 않습니다.
 
 모바일의 연결·공통 시간 확인 후 connected 전달을 준비하고 차량에서 불러오세요. 차량에는 신규 후보·매칭 버튼이 없습니다. 홈 → 만남 제안 받기 → 같은 제안의 B 수락(O01) → 내비 승인으로 진행합니다. 만남 취소 뒤 추가한 경유지는 별도로 제거 승인합니다.
+
+
+1차 서버·APK·JVM·Lint 검사: `./scripts/verify-first-pass.sh`. Pleos 준비 음성/포커스·통화/모의 승인·실제 창/수명주기 기기 회귀 7개까지 실행하려면 `./scripts/verify-first-pass.sh device`. 기기 APK 설치는 데이터를 보존하는 갱신이다. 검수용 모의 앱이 실행 중이면 검사가 앱을 종료하므로 현재 요청은 서버/앱 데이터에 보존하고 다시 들어가 확인한다.
+
+`-PwaymateApiPort=3001`로 별도 검수 서버를 지정할 수 있다. 시연본 인계는 기본 3000 빌드로 `mock-app`에서 `node scripts/package-first-pass.mjs`를 실행한다. APK·서버/웹·계약·소재와 SHA-256 목록이 `runtime/first-pass/handoff`에 생성된다. 개인 상태·journal·인증값은 포함하지 않는다.

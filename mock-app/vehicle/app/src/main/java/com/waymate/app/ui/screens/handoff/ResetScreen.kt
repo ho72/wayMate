@@ -16,6 +16,7 @@ fun ResetScreen(
     onApprove: (String, String) -> Unit,
     onCancel: () -> Unit,
     onRetry: () -> Unit,
+    onAction: (String, String) -> Unit = { _, _ -> },
 ) {
     var reviewed by remember { mutableStateOf<String?>(null) }
     Surface(Modifier.fillMaxSize()) {
@@ -26,6 +27,12 @@ fun ResetScreen(
             Text("wayMate · 처음부터 준비하기", style = MaterialTheme.typography.headlineMedium)
             Text("새 회차를 열기 전에 현재 여행과 내비 정리를 확인해요.")
             Text(state.status, style = MaterialTheme.typography.titleLarge)
+            if (state.mockNavigation != null) {
+                MockNavigationPanel(state.mockNavigation, onAction)
+                OutlinedButton(onClick = onRetry, enabled = state.canRetry) { Text("정리 상태 다시 확인") }
+                Text("모의 정리 결과와 실제 차량 ACK를 확인한 뒤에만 새 회차를 열어요.")
+                return@Column
+            }
             Text("현재 목적지: ${state.destination}")
             Text(
                 "이미 추가한 wayMate 경유지는 운전자의 별도 제거 승인이 필요해요. 원래 목적지는 유지해요. 미확정 작업이 남으면 ACK와 새 회차를 기다려요."

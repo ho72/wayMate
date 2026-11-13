@@ -259,7 +259,8 @@ class HandoffRepository(
             dismissedEndingScope = null
             contentVisible = false
             meetingVisible = false
-            navigationVisible = r.optBoolean("navigationRequired")
+            navigationVisible =
+                r.optBoolean("navigationRequired") || state?.optJSONObject("mockNavigation") != null
             loaded = null
             candidate = null
             socialNotice = null
@@ -275,7 +276,19 @@ class HandoffRepository(
             if (
                 c.getString("type") in listOf("NAV_REPORT", "NAV_CANCEL") ||
                     c.getString("type") == "NAV_REMOVE_APPROVE" &&
-                        c.getJSONObject("target").optString("resetId") == r.getString("id")
+                        c.getJSONObject("target").optString("resetId") == r.getString("id") ||
+                    c.getString("type") == "NAV_RETRY" &&
+                        c.getJSONObject("payload").optString("source") == "mock" &&
+                        c.getJSONObject("payload").optString("operation") == "remove" &&
+                        state?.optJSONObject("mockNavigation")?.optJSONArray("attempts")?.let {
+                            attempts ->
+                            (0 until attempts.length()).any { i ->
+                                val a = attempts.getJSONObject(i)
+                                a.optString("attemptId") ==
+                                    c.getJSONObject("target").optString("attemptId") &&
+                                    a.optString("resetId") == r.getString("id")
+                            }
+                        } == true
             )
                 sendPending()
             else clearPending() // Reset gates prevent a late ordinary command or old add grant.
@@ -803,6 +816,9 @@ class HandoffRepository(
         val second = evidence.getJSONObject("second")
         val q = second.getLong("querySeq")
         if (q > observedSeq) {
+            // Render the fresh SDK snapshot before durable telemetry can outlive its freshness
+            // window. User intents already queue safely behind NAV_OBSERVE, then re-query.
+            show()
             navCommand("NAV_OBSERVE", navPayload().put("source", "real").put("evidence", evidence))
             observedSeq = q
         }
@@ -892,6 +908,47 @@ class HandoffRepository(
     }
 
     private fun navigationUi(): NavigationUiState {
+        if (state?.optString("navigationMode") == "mock") {
+            val n = state?.optJSONObject("mockNavigation")
+            val route = n?.optJSONObject("route")
+            val a =
+                n?.optJSONArray("attempts")?.let {
+                    if (it.length() > 0) it.getJSONObject(it.length() - 1) else null
+                }
+            val bindings = mutableMapOf<String, String>()
+            if (foreground && !loading && pending == null) {
+                state?.optJSONObject("actionBindings")?.let { all ->
+                    all.keys().forEach { key ->
+                        val b = all.getJSONObject(key)
+                        if (
+                            key.startsWith("NAV_") &&
+                                b.getJSONObject("payload").optString("source") == "mock" &&
+                                (key == "NAV_CANCEL" || restricted == false && networkReady)
+                        )
+                            bindings[key] = b.toString()
+                    }
+                }
+            }
+            return NavigationUiState(
+                visible = navigationVisible,
+                source = "mock",
+                status =
+                    navigationNotice
+                        ?: when (a?.optString("outcome")) {
+                            "pending" -> "운전자 승인 저장 · 시연자의 모의 결과를 기다려요."
+                            "unknown" -> "모의 결과 미확인 · 결과 해소 전 재시도·진행·초기화를 잠갔어요."
+                            "failed" -> "모의 실패 확인 · 같은 경로를 다시 확인하고 새로 승인해 주세요."
+                            "applied" -> "모의 경유지 추가 확인 · 실제 SDK 호출 없음"
+                            "removed" -> "모의 경유지 제거 확인 · 원래 목적지 유지"
+                            "not_dispatched" -> "모의 승인 취소 · 경로 변경 없음"
+                            else -> "운전자 승인 후 시연 패널에서 모의 결과를 지정해요."
+                        },
+                destination =
+                    route?.optJSONObject("destination")?.optString("name") ?: "모의 기존 목적지 D",
+                mockWaypointPresent = (route?.optJSONArray("waypoints")?.length() ?: 0) > 0,
+                mockActions = bindings,
+            )
+        }
         val n = state?.optJSONObject("navigation")
         val list = attempts()
         val unresolved = list.any { it.getString("outcome") in listOf("pending", "unknown") }
@@ -1016,7 +1073,15 @@ class HandoffRepository(
         if (closed || !foreground) return
         val stop =
             type in
-                listOf("MEETING_CANCEL", "CONNECT_END", "PROFILE_PRIVATE", "CANCEL_PENDING_COMMAND")
+                listOf(
+                    "MEETING_CANCEL",
+                    "CONNECT_END",
+                    "PROFILE_PRIVATE",
+                    "CANCEL_PENDING_COMMAND",
+                    "CALL_CANCEL",
+                    "CALL_END",
+                    "NAV_CANCEL",
+                )
         if (
             !stop &&
                 (restricted != false ||
@@ -1108,7 +1173,8 @@ class HandoffRepository(
             )) bindings?.optJSONObject(type)?.let { actions[type] = it.toString() }
         pending
             ?.takeIf {
-                it.getString("type") in listOf("MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND")
+                it.getString("type") in
+                    listOf("MEETING_PROPOSE", "NAV_APPROVE", "MESSAGE_SEND", "CALL_PROPOSE")
             }
             ?.let { original ->
                 actions["CANCEL_PENDING_COMMAND"] =
@@ -1227,6 +1293,7 @@ class HandoffRepository(
                     current?.optJSONObject("vehicle")?.optBoolean("foreground") == true,
                     current?.optJSONObject("social")?.optBoolean("testRestricted") == true,
                 ),
+            mockNavigation = current?.optString("navigationMode") == "mock",
             cleanupRequired = j?.optBoolean("cleanupRequired") == true,
             actions = actions,
             notice = socialNotice ?: j?.optString("blockedReason")?.takeUnless { it == "null" },
@@ -1246,7 +1313,7 @@ class HandoffRepository(
         val actions = mutableMapOf<String, String>()
         current?.optJSONObject("actionBindings")?.let { bindings ->
             bindings.keys().forEach { key ->
-                if (key.startsWith("MESSAGE_"))
+                if (key.startsWith("MESSAGE_") || key.startsWith("CALL_"))
                     actions[key] = bindings.getJSONObject(key).toString()
             }
         }
@@ -1311,6 +1378,23 @@ class HandoffRepository(
             pendingType = pending?.optString("type"),
             canRetry = foreground && restricted == false && !loading,
             replyDone = c?.optString("replyDone") ?: "",
+            call =
+                current?.optJSONObject("call")?.let { call ->
+                    val lines = call.getJSONArray("lines")
+                    com.waymate.app.model.CallUiState(
+                        call.getString("id"),
+                        call.getString("status"),
+                        call.getBoolean("canPlay"),
+                        (0 until lines.length()).map { index ->
+                            val line = lines.getJSONObject(index)
+                            com.waymate.app.model.CallSampleLine(
+                                line.getString("id"),
+                                line.getString("speaker"),
+                                line.getString("text"),
+                            )
+                        },
+                    )
+                },
         )
     }
 
@@ -1338,6 +1422,7 @@ class HandoffRepository(
             canCancel = r != null && n.canCancel,
             canRetry = foreground && !loading,
             reviewed = reviewed,
+            mockNavigation = n.takeIf { it.source == "mock" },
         )
     }
 

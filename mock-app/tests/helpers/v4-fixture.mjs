@@ -95,7 +95,7 @@ export async function fixture(t) {
       },
       "car",
     );
-  const activate = async (mode = "connected") => {
+  const activate = async (mode = "connected", navigationSource = "real") => {
     await send("HANDOFF_PREPARE", { mode });
     await send(
       "CAR_SESSION_OPEN",
@@ -103,7 +103,7 @@ export async function fixture(t) {
         deviceId: device,
         vehicleSessionId: session,
         pendingAttempts: [],
-        navigationSource: "real",
+        navigationSource,
       },
       "car",
     );
@@ -198,6 +198,7 @@ export async function fixture(t) {
       "car",
     );
   return {
+    close: () => app.close(),
     read,
     receipt: (actor, runId, commandId) =>
       app.receipt(actor, actor === "web" ? id : null, runId, commandId),

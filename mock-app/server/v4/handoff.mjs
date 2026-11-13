@@ -1,3 +1,5 @@
+import { callTypes, applyCall } from "./call.mjs";
+import { initialMockNavigation, realPending } from "./mock-navigation.mjs";
 import { journeyTypes, applyJourney } from "./ending.mjs";
 import { applyContent } from "./content.mjs";
 import { resetBindings } from "./reset.mjs";
@@ -134,6 +136,11 @@ function activate(s, origin) {
 }
 export function apply(s, c, clientId, now) {
   const p = c.payload;
+  if (
+    callTypes.has(c.type) ||
+    (c.type === "B_RESPONSE" && c.target.kind === "call")
+  )
+    return applyCall(s, c, now);
   if (
     journeyTypes.has(c.type) ||
     (c.type === "B_RESPONSE" && c.target.kind === "final")
@@ -272,6 +279,17 @@ export function apply(s, c, clientId, now) {
       }
       break;
     case "CAR_SESSION_OPEN":
+      if (p.navigationSource === "mock") {
+        if (realPending(s) || s.navigation?.owned || s.recovery)
+          fail(
+            423,
+            "RECOVERY_REQUIRED",
+            "실제 내비 정리·복구를 모의 세션으로 대신할 수 없어요.",
+          );
+        s.navigationMode = "mock";
+        s.mockNavigation ??= initialMockNavigation();
+      } else if (!s.navigationMode)
+        s.navigationMode = p.navigationSource ?? "unsupported";
       if (s.navigation) s.navigation.observation = null;
       if (s.vehicleActivation && s.vehicleActivation.deviceId !== p.deviceId)
         fail(409, "INVALID_TRANSITION", "이미 시작한 차량에서 이어가 주세요.");

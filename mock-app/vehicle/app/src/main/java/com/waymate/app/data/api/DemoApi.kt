@@ -1,5 +1,6 @@
 package com.waymate.app.data.api
 
+import com.waymate.app.BuildConfig
 import java.net.HttpURLConnection
 import java.net.URI
 import org.json.JSONObject
@@ -8,7 +9,7 @@ class ApiException(val status: Int, val body: JSONObject) :
     Exception(body.optJSONObject("error")?.optString("message") ?: "서버 오류")
 
 /** Blocking transport. Call only from the repository's single background executor. */
-class DemoApi(private val baseUrl: String = "http://10.0.2.2:3000") {
+class DemoApi(private val baseUrl: String = BuildConfig.API_BASE_URL) {
     fun request(path: String, body: JSONObject? = null): JSONObject {
         val connection = URI(baseUrl + path).toURL().openConnection() as HttpURLConnection
         try {

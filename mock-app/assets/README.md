@@ -1,7 +1,7 @@
-# 이미지·음성 원본 · CONTENT 담당
+# 시연 소재
 
-`images/`·`audio/`는 웹과 차량이 함께 쓸 소재 원본 위치입니다. [파란 아기 드래곤](images/characters/blue-dragon-v1/README.md)을 캐릭터 외형 기준으로 채택해 정적 시안을 보관했습니다. 실제 3D 모델·동작/음성 소재와 동기화 스크립트는 준비되지 않았습니다. 기존 차량 화면의 Compose 캐릭터는 기본 화면용 그림이며 채택 시안의 앱 적용은 후속 구현입니다.
+[파란 드래곤](images/characters/blue-dragon-v1/README.md)은 채택된 렌더 외형이다. 차량에서 같은 이미지에 최소 대기/발화/중단 동작을 적용한다. 3D rig·정교한 립싱크는 제공하지 않는다.
 
-02번의 문장 ID·발화자·표현·공개 조건·선행 cue·fallback을 함께 확인합니다. A의 변경 가능한 별명은 자막의 저장값으로 표시하고 고정 녹음으로 덮지 않습니다. 방문 캐릭터 소개와 상대 사용자 메시지·통화 샘플의 출처를 구분합니다.
+[준비 음성 34개](audio/prepared-v1/README.md)를 차량 APK에 복사한다. 원본은 `audio/prepared-v1`이며 `shared/assets-manifest.json`이 자막·발화자·출처·공개 조건·표현을 연결한다. 실제 사람 통신이나 마이크 수집으로 표시하지 않는다. 공개 정보와 선행 cue의 사용 가능 여부는 서버 projection이 결정하고, 음원 파일이 존재한다는 이유로 비공개/미발생 대사를 재생하지 않는다.
 
-CONTENT가 파일·자막을 준비하고 SERVER가 manifest 형식과 공개 조건을 맞춥니다. W01에서 `shared/assets-manifest.json`을 확정한 뒤 WEB·CAR가 같은 assetId를 사용합니다. 차량용 복사는 향후 `scripts/sync-assets.mjs`로 자동화하고 각 담당자가 따로 복사한 파일을 원본으로 삼지 않습니다.
+`node scripts/generate-prepared-speech.mjs`는 macOS에서 음원·index·공통 manifest를 함께 갱신한다. Android 빌드의 copy 작업이 이미지와 준비 음성을 자동 포함한다. 재생 실패는 자막·중단으로 처리한다.

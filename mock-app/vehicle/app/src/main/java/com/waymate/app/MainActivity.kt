@@ -12,6 +12,7 @@ import com.waymate.app.platform.navigation.createNavigationDriver
 import com.waymate.app.platform.restrictions.VehicleRestrictions
 import com.waymate.app.platform.speech.AgentSpeech
 import com.waymate.app.platform.speech.SpeechState
+import com.waymate.app.platform.speech.WindowPlaybackLifecycle
 import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.theme.WayMateTheme
 
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         speech = AgentSpeech(applicationContext) { speechState = it }
+        WindowPlaybackLifecycle(this, speech::allowPlayback)
         repository =
             HandoffRepository(applicationContext, createNavigationDriver(applicationContext)) {
                 ui =
@@ -83,7 +85,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onPause() {
-        speech.interrupt()
         repository.pause()
         restrictions.stop()
         super.onPause()

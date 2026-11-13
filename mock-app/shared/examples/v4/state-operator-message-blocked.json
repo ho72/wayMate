@@ -4,6 +4,13 @@
   "completedRunIds": [],
   "completedNavigation": [],
   "recovery": null,
+  "recoveryStatus": {
+    "canConfirm": false,
+    "procedures": [],
+    "message": "등록·검증된 시험 환경 복구 절차가 없어 강제 확인할 수 없어요. 기존 실행의 실제 재조회·정리 보고가 필요해요."
+  },
+  "navigationMode": "unsupported",
+  "mockNavigation": null,
   "journey": {
     "phase": "none",
     "replay": false,
@@ -88,6 +95,7 @@
         "threadId": "00000000-0000-4000-8000-000000000025"
       }
     ],
+    "callResponseEnabled": false,
     "messageResponseEnabled": false,
     "navMapping": {
       "storyPlace": "바다쉼표 카페",
@@ -96,6 +104,7 @@
     }
   },
   "content": null,
+  "call": null,
   "schemaVersion": 4,
   "scope": "mobile-meeting-v4",
   "storeId": "00000000-0000-4000-8000-000000000016",

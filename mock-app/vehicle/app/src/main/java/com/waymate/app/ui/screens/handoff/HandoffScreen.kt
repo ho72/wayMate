@@ -214,6 +214,10 @@ private fun CharacterPanel(state: HandoffUiState, modifier: Modifier, wide: Bool
         AgentCharacter(
             state.journey?.avatarId ?: state.preparation?.avatarId ?: "a-01",
             Modifier.fillMaxWidth().height(if (wide) 440.dp else 300.dp),
+            motionEnabled =
+                state.loadEnabled ||
+                    state.startEnabled ||
+                    (state.journey != null && !state.content.blocked),
         )
         Text(
             if (state.journey != null) stringResource(R.string.home_companion)

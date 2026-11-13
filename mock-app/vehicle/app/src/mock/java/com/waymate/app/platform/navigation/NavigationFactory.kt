@@ -5,8 +5,8 @@ import org.json.JSONObject
 
 fun createNavigationDriver(context: Context): NavigationDriver =
     object : NavigationDriver {
-        override val source = "unsupported"
-        override val message = "실제 내비 연동은 Pleos용 real 앱에서 사용할 수 있어요."
+        override val source = "mock"
+        override val message = "모의 내비 · 운전자 승인 후 시연자가 결과를 지정해요. 실제 SDK는 호출하지 않아요."
 
         override fun resume() {}
 

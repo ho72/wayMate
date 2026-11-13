@@ -143,6 +143,8 @@ function render() {
   if (retryReset) retryReset.hidden = !resetPending;
   const key = JSON.stringify([
     state.journey,
+    state.mockNavigation,
+    state.recoveryStatus,
     state.actionBindings,
     state.social,
     pending,
@@ -154,6 +156,7 @@ function render() {
   if (key === last) return;
   last = key;
   renderJourney();
+  renderNavigation();
   const root = document.getElementById("requests");
   root.replaceChildren();
   for (const t of state.social.pendingResponses) {
@@ -164,9 +167,11 @@ function render() {
         "h2",
         t.kind === "message"
           ? "B 메시지 답변"
-          : t.kind === "connection"
-            ? "B 대화 연결 응답"
-            : "B 만남 제안 응답",
+          : t.kind === "call"
+            ? "B 일반 통화 동의"
+            : t.kind === "connection"
+              ? "B 대화 연결 응답"
+              : "B 만남 제안 응답",
       ),
     );
     card.append(
@@ -174,9 +179,11 @@ function render() {
         "p",
         t.kind === "message"
           ? "현재 메시지에 대응하는 준비된 답장·후속 질문을 보냅니다. 만남 동의와 구분해요."
-          : t.kind === "meeting"
-            ? "바다쉼표 카페 · 14:15~14:35 · 현재 제안에만 응답"
-            : "모바일 연결 요청 · 차량 접속 없이 응답 가능",
+          : t.kind === "call"
+            ? "양쪽 동의 후 준비된 음성과 자막을 재생해요. 실제 상대 통신·만남 동의와 구분해요."
+            : t.kind === "meeting"
+              ? "바다쉼표 카페 · 14:15~14:35 · 현재 제안에만 응답"
+              : "모바일 연결 요청 · 차량 접속 없이 응답 가능",
       ),
     );
     const messageBlocked =
@@ -204,6 +211,9 @@ function render() {
       );
       b.disabled =
         messageBlocked ||
+        (t.kind === "call" &&
+          decision === "accept" &&
+          state.social.callResponseEnabled !== true) ||
         !!pending ||
         !!resetPending ||
         !!state.reset ||
@@ -276,7 +286,9 @@ async function sendCommand(type, payload, target, reviewedRun = null) {
               ? "만남을 마치고 양쪽 최종 선택을 함께 열었어요."
               : type === "REPLAY_FINAL"
                 ? "새 최종 선택 회차를 열었어요. 양쪽이 독립적으로 선택해 주세요."
-                : "이야기 배경을 반영했어요.",
+                : type.startsWith("NAV_MOCK")
+                  ? "모의 내비 상태를 저장했어요. 실제 SDK 증빙과 분리돼요."
+                  : "시연 설정을 저장했어요.",
     );
   } catch (e) {
     status(e.message);
@@ -390,4 +402,89 @@ function renderJourney() {
       "시간 전환은 가상 만남 재연이에요. GPS 도착·실제 B 접속·새 내비 변경을 만들지 않아요.",
     ),
   );
+}
+
+function renderNavigation() {
+  const root = document.getElementById("navigation-controls");
+  if (!root) return;
+  root.replaceChildren(el("h2", "내비 시연·복구"));
+  const restriction = el(
+    "button",
+    state.social.testRestricted ? "시연 잠금 해제" : "시연 제한 잠금",
+  );
+  restriction.disabled = !!pending || !!resetPending;
+  const run = state.runId,
+    enabled = !state.social.testRestricted;
+  restriction.onclick = () =>
+    sendCommand("SET_TEST_RESTRICTION", { enabled }, {}, run);
+  root.append(
+    restriction,
+    el("p", "시연 잠금 해제는 실제 차량 제한을 해제하지 않아요."),
+  );
+
+  const n = state.mockNavigation;
+  if (n) {
+    root.append(
+      el(
+        "p",
+        `모의 전용 · 실제 SDK 호출 없음 · 원래 목적지 ${n.route.destination.name} · 경유지 ${n.route.waypoints.length}개`,
+      ),
+    );
+    const a = n.attempts.at(-1);
+    if (a)
+      root.append(
+        el(
+          "p",
+          `${a.operation === "add" ? "추가" : "제거"} 요청 · ${a.outcome} · ${a.attemptId}`,
+        ),
+      );
+    if (a && ["pending", "unknown"].includes(a.outcome)) {
+      for (const [outcome, label] of [
+        [a.operation === "add" ? "applied" : "removed", "모의 성공"],
+        ["failed", "모의 실패"],
+        ["unknown", "모의 결과 미확인"],
+      ]) {
+        const button = el("button", label);
+        button.disabled = !!pending || !!resetPending || a.outcome === outcome;
+        const run = state.runId;
+        button.onclick = () =>
+          sendCommand(
+            "NAV_MOCK_RESULT",
+            { outcome },
+            { attemptId: a.attemptId, operation: a.operation },
+            run,
+          );
+        root.append(button);
+      }
+    } else
+      root.append(
+        el("p", "차량에서 경로를 확인하고 승인해야 새 모의 요청이 생겨요."),
+      );
+  }
+  const binding = state.actionBindings?.NAV_MOCK_CONTINUE;
+  if (binding) {
+    const button = el("button", "실제 미실행 이력 보존 후 모의로 계속");
+    button.disabled =
+      !!pending || !!resetPending || !!state.reset || !!state.recovery;
+    const run = state.runId;
+    button.onclick = () =>
+      sendCommand(binding.commandType, binding.payload, binding.target, run);
+    root.append(button);
+  }
+  root.append(
+    el(
+      "p",
+      "모의 결과는 실제 SDK 기록과 분리됩니다. 미확인은 결과를 확정할 때까지 진행·초기화를 잠가요.",
+    ),
+  );
+  root.append(
+    el(
+      "p",
+      state.recoveryStatus?.message ||
+        "등록된 실제 복구 절차 없음 · 강제 완료를 제공하지 않아요.",
+    ),
+  );
+  const recovery = el("button", "실제 복구 확인 · 등록 절차 없음");
+  recovery.disabled = true;
+  root.append(recovery);
 }

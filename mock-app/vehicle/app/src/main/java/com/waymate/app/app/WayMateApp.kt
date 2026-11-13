@@ -34,7 +34,7 @@ fun WayMateApp(
     onProfileCue: (String) -> Unit,
 ) {
     if (state.reset.visible)
-        ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry)
+        ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry, onSocialAction)
     else if (state.ending.visible)
         EndingScreen(
             state.ending,
@@ -70,9 +70,17 @@ fun WayMateApp(
             state.social,
             onSocialAction,
             onRetry,
+            state.journey,
         )
     else if (state.social.visible)
-        MeetingScreen(state.social, onCloseMeeting, onSocialAction, onOpenNavigation, onRetry)
+        MeetingScreen(
+            state.social,
+            onCloseMeeting,
+            onSocialAction,
+            onOpenNavigation,
+            onRetry,
+            state.journey,
+        )
     else
         HandoffScreen(
             state = state,

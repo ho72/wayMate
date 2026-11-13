@@ -1,4 +1,5 @@
 import { linked } from "./social.mjs";
+import { applyMockNavigation, mockMode } from "./mock-navigation.mjs";
 import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual as equal } from "node:util";
 import { fail, parked } from "./handoff.mjs";
@@ -319,6 +320,14 @@ export function validateNavigation(s) {
 }
 
 export function applyNavigation(s, c, now) {
+  if (c.type.startsWith("NAV_MOCK_") || c.payload.source === "mock")
+    return applyMockNavigation(s, c, now);
+  if (mockMode(s) && ["NAV_APPROVE", "NAV_DISPATCH_BEGIN"].includes(c.type))
+    fail(
+      409,
+      "NAV_NOT_READY",
+      "모의 표시 모드에서 실제 실행권을 새로 발급하지 않아요.",
+    );
   const m = s.social.meeting,
     p = c.payload,
     n = s.navigation;
