@@ -47,4 +47,4 @@ jobs:
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
           printf 'sdk.dir=%s\n' "$ANDROID_HOME" > local.properties
       - name: Build APKs, test route verification, and run Android Lint
-        run: ./gradlew :app:assembleMockDebug :app:assembleRealDebug :app:lintMockDebug :app:lintRealDebug :app:testMockDebugUnitTest --no-daemon --console=plain
+        run: ./gradlew :app:assembleMockDebug :app:assembleMockDebugAndroidTest :app:assembleRealDebug :app:lintMockDebug :app:lintRealDebug :app:testMockDebugUnitTest --no-daemon --console=plain

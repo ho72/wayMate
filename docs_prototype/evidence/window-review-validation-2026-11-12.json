@@ -1,0 +1,313 @@
+{
+  "date": "2026-11-12",
+  "reviewedHead": "39cbb721138542cfc3d1ca0e419390216bde3df4",
+  "pullRequest": "https://github.com/ho72/wayMate/pull/6",
+  "scope": "Offline mockDebug UI tests on actual Pleos windows; no repository, network, SDK navigation, or audio engine instantiated",
+  "environment": {
+    "pleos": "2.1.0 API34 ARM64",
+    "emulator": "37.2.13",
+    "androidUser": 10,
+    "physicalPixels": [
+      2560,
+      1440
+    ],
+    "densityDpi": 160,
+    "systemFontScale": 1.0,
+    "fontTestActivityAndDialogScale": 1.3,
+    "portraitWindowDp": [
+      841,
+      1210
+    ],
+    "portraitWindowX": 1718
+  },
+  "expanded": {
+    "testsPassed": 2,
+    "measurements": {
+      "windowWidth": 1682,
+      "windowHeight": 1210,
+      "characterWidth": 468,
+      "contentWidth": 1138,
+      "gap": 28,
+      "padding": 24
+    },
+    "endingCharacterDp": [
+      468,
+      300
+    ],
+    "extra190DpGapReproduced": false,
+    "testedApkHashes": [
+      "33c07375c13be5745a7166356c0b8b15ab9a894c6794e8dc6f7e1baa5e4eb37a  app/build/outputs/apk/mock/debug/app-mock-debug.apk",
+      "60c58e03c714a2ff1c71c1ab56ebad6915baaf69584525c54f6e845f258eab4b  app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk"
+    ]
+  },
+  "font": {
+    "testsPassed": 7,
+    "results": [
+      {
+        "case": "font130-answer",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "공개 프로필에 근거한 준비된 답변 · B에게 전송되지 않아요.": {
+            "fontScale": 1.3,
+            "width": 482,
+            "height": 31,
+            "lineCount": 1,
+            "rightmostLine": 480.8812,
+            "lastLineBottom": 31
+          }
+        }
+      },
+      {
+        "case": "font130-final-review",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "함께 여행 이어가기": {
+            "fontScale": 1.3,
+            "width": 131,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 129.24469,
+            "lastLineBottom": 27
+          },
+          "내 캐릭터와 여행 이어가기": {
+            "fontScale": 1.3,
+            "width": 180,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 178.74255,
+            "lastLineBottom": 27
+          },
+          "확인하고 선택 제출": {
+            "fontScale": 1.3,
+            "width": 131,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 129.24469,
+            "lastLineBottom": 27
+          }
+        }
+      },
+      {
+        "case": "font130-home",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "만남·여행 선택 다시 보기": {
+            "fontScale": 1.3,
+            "width": 174,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 172.74255,
+            "lastLineBottom": 27
+          },
+          "대화 고르기": {
+            "fontScale": 1.3,
+            "width": 81,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 79.74681,
+            "lastLineBottom": 27
+          },
+          "만남 상태 확인": {
+            "fontScale": 1.3,
+            "width": 100,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 98.99575,
+            "lastLineBottom": 27
+          },
+          "연결 종료": {
+            "fontScale": 1.3,
+            "width": 66,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 64.622345,
+            "lastLineBottom": 27
+          }
+        }
+      },
+      {
+        "case": "font130-navigation-review",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "승인하고 추가": {
+            "fontScale": 1.3,
+            "width": 96,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 94.871284,
+            "lastLineBottom": 27
+          }
+        }
+      },
+      {
+        "case": "font130-own-ending",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "좋아. 이번엔 나랑 천천히 가보자. 원래 가려던 해변에서 잠깐 쉬어도 다음 일정은 지킬 수 있는 계획이야.": {
+            "fontScale": 1.3,
+            "width": 793,
+            "height": 64,
+            "lineCount": 2,
+            "rightmostLine": 779,
+            "lastLineBottom": 64
+          }
+        }
+      },
+      {
+        "case": "font130-reset-review",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "승인하고 제거": {
+            "fontScale": 1.3,
+            "width": 96,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 94.871284,
+            "lastLineBottom": 27
+          },
+          "돌아가기": {
+            "fontScale": 1.3,
+            "width": 62,
+            "height": 27,
+            "lineCount": 1,
+            "rightmostLine": 60.497875,
+            "lastLineBottom": 27
+          }
+        }
+      },
+      {
+        "case": "font130-together-ending",
+        "fontScale": 1.3,
+        "windowX": 1718,
+        "activityFontScale": 1.3,
+        "texts": {
+          "사진은 한 장만 찍고 천천히 걸을까요?": {
+            "fontScale": 1.3,
+            "width": 358,
+            "height": 32,
+            "lineCount": 1,
+            "rightmostLine": 358,
+            "lastLineBottom": 32
+          }
+        }
+      }
+    ],
+    "testedApkHashes": [
+      "33c07375c13be5745a7166356c0b8b15ab9a894c6794e8dc6f7e1baa5e4eb37a  app/build/outputs/apk/mock/debug/app-mock-debug.apk",
+      "60c58e03c714a2ff1c71c1ab56ebad6915baaf69584525c54f6e845f258eab4b  app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk"
+    ]
+  },
+  "build": {
+    "mockRealAndInstrumentedApks": true,
+    "jvmTestsPassed": 39,
+    "lint": {
+      "mockDebug": {
+        "errors": 0,
+        "warnings": 26
+      },
+      "realDebug": {
+        "errors": 0,
+        "warnings": 26
+      }
+    },
+    "nodeTests": {
+      "previouslyPassed": 234,
+      "rerunLocallyThisFollowup": false
+    },
+    "installedRealApkMatchesLocal": true,
+    "realApkSha256": "848087960c8b9eb69749b7f4e98a2c8dbdd79c5b8b8859f4c278b18fc94d8fe3",
+    "reviewHostsAbsentFromRealManifest": true
+  },
+  "sdkJournal": {
+    "byteIdenticalBeforeAfter": true,
+    "sha256": "6e2c95eaf39cacbc5c6cf7fb490de78f75806ca9465613e88e711dbaea5c7f84",
+    "records": 11,
+    "sdkMutationsFromUiFixtures": 0
+  },
+  "finalRealWindowBounds": {
+    "DrivingView": [
+      0,
+      0,
+      853,
+      1300
+    ],
+    "nativeNavigation": [
+      853,
+      90,
+      1694,
+      1300
+    ],
+    "wayMate": [
+      1718,
+      90,
+      2559,
+      1300
+    ]
+  },
+  "officialArmFeed": {
+    "url": "https://nexus-playground.pleos.ai/repository/raw-releases/connect-avd/2.x/crp-arm64-sys-img.xml",
+    "package": "system-images;android-34;pleos_car_emulator;arm64-v8a",
+    "remoteRevision": 2,
+    "installedPackageXmlRevision": 2,
+    "archiveSha1": "24d28eb2f18eba5e87c861a7eb2bdccebb049419"
+  },
+  "limitations": [
+    "Native basemap unresolved",
+    "System-wide 130% transition and route preservation not passed",
+    "Real driving, audio, performance and full accessibility not covered",
+    "SDK success evidence remains the separate document 17 run"
+  ],
+  "sources": [
+    {
+      "file": "mock-app/vehicle/app/src/androidTestMock/java/com/waymate/app/ui/screens/handoff/WindowReviewTest.kt",
+      "sha256": "e3f189df4c0133da2fbaf61273c7b94cfef0860f6c1711b584d5d0e11e575181"
+    },
+    {
+      "file": "mock-app/vehicle/app/src/mockDebug/java/com/waymate/app/ui/testing/WindowReviewActivity.kt",
+      "sha256": "5fde9088cabcb8501404ebb90ab7dbd56fb861c59d3a867f507dabdb9a3d7827"
+    },
+    {
+      "file": "mock-app/vehicle/scripts/verify-window-ui.sh",
+      "sha256": "9adbe15e1b31b5275ae63ac07e882c0cad8cfdadf403e9fd5fbbc25e479018ba"
+    }
+  ],
+  "captures": [
+    {
+      "file": "window-review-expanded-ending-2026-11-12.png",
+      "sha256": "2d5794b41c57381e877696e1ae0c65df8492151e3e53e82e8216007def5c4d28",
+      "source": "raw UiAutomation screenshot"
+    },
+    {
+      "file": "window-review-font130-home-2026-11-12.png",
+      "sha256": "9f398c129e8f096a384e3db21bad1b3e8c726edb06466d647340d72b389ded1f",
+      "source": "raw UiAutomation screenshot"
+    },
+    {
+      "file": "window-review-font130-final-review-2026-11-12.png",
+      "sha256": "2daf4b31339d6118471a302844c32cc2165d9fa1d874d45e8ec2176d2e03ce10",
+      "source": "raw UiAutomation screenshot"
+    },
+    {
+      "file": "window-review-font130-navigation-review-2026-11-12.png",
+      "sha256": "2e2507f9a2bf626c09f2aae7f31bee8e4e75bfb4aca0a341590999cc96417f92",
+      "source": "raw UiAutomation screenshot"
+    },
+    {
+      "file": "window-review-real-home-2026-11-12.png",
+      "sha256": "692d8c6de1dffdf3243dc2745c1c649477866af101b22cd352b56ded1e69fae6",
+      "source": "raw adb screencap; real APK, system font 1.0"
+    }
+  ]
+}

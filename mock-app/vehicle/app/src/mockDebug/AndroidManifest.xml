@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity android:name=".ui.testing.WindowReviewActivity" android:exported="false" android:resizeableActivity="true" android:label="wayMate 오프라인 화면 검수" />
+        <activity android:name=".ui.testing.LargeFontReviewActivity" android:exported="false" android:resizeableActivity="true" android:label="wayMate 130% 화면 검수" />
+    </application>
+</manifest>

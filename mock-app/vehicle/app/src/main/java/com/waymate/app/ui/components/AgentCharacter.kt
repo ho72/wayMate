@@ -1,7 +1,10 @@
 package com.waymate.app.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -18,5 +21,8 @@ fun AgentCharacter(avatarId: String, modifier: Modifier = Modifier) {
             modifier,
             contentScale = ContentScale.Fit,
         )
-    else TravelFriend(modifier, sunny = true)
+    else
+        Box(modifier, contentAlignment = Alignment.Center) {
+            TravelFriend(Modifier.aspectRatio(1f), sunny = true)
+        }
 }
