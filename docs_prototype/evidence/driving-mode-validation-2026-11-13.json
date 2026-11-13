@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-13",
+  "environment": "Pleos Connect ARM 2.1.0 / API34",
+  "nodeTests": {
+    "passed": 272,
+    "failed": 0
+  },
+  "jvmTests": {
+    "passed": 43,
+    "failed": 0
+  },
+  "deviceTests": {
+    "passed": 14,
+    "failed": 0,
+    "groups": {
+      "realConsoleTransition": 1,
+      "liveSdkAudit": 4,
+      "mockAudioAndUiRegression": 9
+    }
+  },
+  "lint": {
+    "real": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 26
+    },
+    "mock": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 26
+    }
+  },
+  "installedManifest": {
+    "distractionOptimized": true
+  },
+  "physicalRouteChanges": 0,
+  "newJourneyAck": false,
+  "currentRunSeq": 6,
+  "journal": {
+    "records": 16,
+    "unchanged": true,
+    "sha256": "91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231"
+  },
+  "observedCarStatusFacts": [
+    {
+      "restrictionKnown": true,
+      "restricted": false,
+      "foreground": true,
+      "uxRestrictions": {
+        "requiresDo": false,
+        "activeRestrictions": 0
+      }
+    },
+    {
+      "restrictionKnown": true,
+      "restricted": true,
+      "foreground": true,
+      "uxRestrictions": {
+        "requiresDo": true,
+        "activeRestrictions": 80
+      }
+    }
+  ],
+  "transition": [
+    {
+      "stage": "parked",
+      "gear": "Park",
+      "speedKph": 0,
+      "capture": "driving-mode-parked-2026-11-13.png",
+      "sha256": "a0e0cb09bbda5fc0529b498b6e8bb8c723b52caf3cd5bc8c0effc5f5f2cea275"
+    },
+    {
+      "stage": "driving",
+      "gear": "Drive",
+      "speedKph": 36,
+      "capture": "driving-mode-driving-2026-11-13.png",
+      "sha256": "2e840d0b5a4342e0d841364ed3919f0a670146f939f60449b3f299df27e36658"
+    },
+    {
+      "stage": "returned-parked",
+      "gear": "Park",
+      "speedKph": 0,
+      "capture": "driving-mode-returned-parked-2026-11-13.png",
+      "sha256": "19afce475545d6622500e71097da7ac3b6d885af2669d1eac9f6d8b7bbf996e1"
+    }
+  ],
+  "platformAndroidTts": {
+    "initializationStatus": -1,
+    "pleosSpeechSdkIntegrated": false,
+    "androidEngines": [],
+    "koreanLanguageStatus": null
+  },
+  "capabilityScope": "DO + static character / local prepared narration only; STT/live voice conversation and actual vehicle/store review remain unverified.",
+  "initialFailures": [
+    "Console DDS bridge inactive until a UI session heartbeat is maintained",
+    "Local parked frame appeared before fresh server allowedActions",
+    "Fractional monotonic remaining time violated the integer contract; fixed and regression added",
+    "Expired raw observations must remain valid while restrictionKnown becomes false; restore regression added"
+  ],
+  "logs": [
+    {
+      "file": "node-final-verified.log",
+      "sha256": "30f5cbd13418896c46b262fbfe4551b7cde4b11391d37df4855e0fd176135400"
+    },
+    {
+      "file": "gradle-final-verified.log",
+      "sha256": "c13bd37a7a888d4232b6e19a714d2e788d867cd5df269ddfa41b6624fd867d88"
+    },
+    {
+      "file": "real-transition-final.log",
+      "sha256": "1a8ec63d212b88a672239643610e76f695ba21972bda788a1c962b5185656396"
+    },
+    {
+      "file": "sdk-verified.log",
+      "sha256": "c3dfc98cdbe24d30ba6b7d568f1cb1eba6451f128d1f209498741d04ba8f525f"
+    },
+    {
+      "file": "ui-regression.log",
+      "sha256": "e42e2fd8c61bc4b8b8d2969851625da99aba5bdf0cf6276ddac1ef7d2fb123f8"
+    }
+  ]
+}

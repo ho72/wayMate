@@ -108,7 +108,11 @@
     "restrictionKnown": false,
     "restricted": true,
     "foreground": false,
-    "fresh": false
+    "fresh": false,
+    "uxRestrictions": null,
+    "interactionMode": "blocked",
+    "preparedAudioAllowed": false,
+    "freshForMs": 0
   },
   "allowedActions": [
     "ONBOARDING_ANSWER"

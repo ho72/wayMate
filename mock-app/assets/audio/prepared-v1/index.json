@@ -4,6 +4,14 @@
   "language": "ko-KR",
   "entries": [
     {
+      "file": "speech_20d2c76b7d862680b5badee3.m4a",
+      "sha256Text": "20d2c76b7d862680b5badee33800ebb855fec20f5f560fc9b9341ce27fc76a03",
+      "text": "천천히, 안전하게 가요. 일정이랑 다음 이야기는 정차한 뒤 함께 확인해요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
       "file": "speech_1e1e6d3af138643d41ca6125.m4a",
       "sha256Text": "1e1e6d3af138643d41ca6125c666dbc7d63e1cfaaccc1485186f24a5ef47cd11",
       "text": "안녕하세요. 먼저 목소리로 인사드려요.",

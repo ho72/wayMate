@@ -1,4 +1,5 @@
 import { validateCall } from "./call.mjs";
+import { consistentRestriction } from "./interaction-mode.mjs";
 import { validateMockNavigation } from "./mock-navigation.mjs";
 import { initialStory, validateEnding } from "./ending.mjs";
 import { initialContent, validateContent } from "./content.mjs";
@@ -59,6 +60,7 @@ export function initialState() {
       vehicleEpoch: 0,
       statusSeq: 0,
       restrictionKnown: false,
+      uxRestrictions: null,
       restricted: true,
       foreground: false,
       seenAt: null,
@@ -124,6 +126,7 @@ function freezeReceipt(value) {
   }
 }
 export function validateStore(s) {
+  if (!consistentRestriction(s.vehicle)) throw new Error("주행 제한 관측 불일치");
   // Existing entries are deeply immutable. Revalidate new entries only, while
   // keeping every receipt and still validating all business state and invariants.
   assertContract("store", { ...s, receipts: {}, resetHistory: [] });

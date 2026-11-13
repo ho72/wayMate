@@ -95,6 +95,7 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             mockNavigation: true,
             registeredRecovery: false,
             drivingVoice: false,
+            drivingLimited: true,
             mcSample: false,
             reviewSample: false,
             reasonInput: false,

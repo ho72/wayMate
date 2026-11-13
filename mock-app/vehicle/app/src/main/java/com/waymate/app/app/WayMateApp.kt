@@ -1,6 +1,9 @@
 package com.waymate.app.app
 
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.waymate.app.platform.speech.SpeechState
 import com.waymate.app.ui.screens.handoff.ContentScreen
 import com.waymate.app.ui.screens.handoff.EndingScreen
@@ -9,6 +12,8 @@ import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.screens.handoff.MeetingScreen
 import com.waymate.app.ui.screens.handoff.NavigationScreen
 import com.waymate.app.ui.screens.handoff.ResetScreen
+import com.waymate.app.ui.screens.handoff.DrivingScreen
+import com.waymate.app.platform.restrictions.InteractionMode
 
 @Composable
 fun WayMateApp(
@@ -33,63 +38,67 @@ fun WayMateApp(
     onCloseEnding: () -> Unit,
     onProfileCue: (String) -> Unit,
 ) {
-    if (state.reset.visible)
-        ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry, onSocialAction)
-    else if (state.ending.visible)
-        EndingScreen(
-            state.ending,
-            state.journey,
-            speech,
-            onSpeak,
-            onStopSpeech,
-            onSocialAction,
-            onCloseEnding,
-            onOpenNavigation,
-            onRetry,
-        )
-    else if (state.content.visible)
-        ContentScreen(
-            state.content,
-            state.journey,
-            speech,
-            onSpeak,
-            onStopSpeech,
-            onSocialAction,
-            onMessageRead,
-            onProfileCue,
-            onCloseContent,
-            onOpenMeeting,
-            onRetry,
-        )
-    else if (state.navigation.visible)
-        NavigationScreen(
-            state.navigation,
-            onCloseNavigation,
-            onApproveNavigation,
-            onCancelNavigation,
-            state.social,
-            onSocialAction,
-            onRetry,
-            state.journey,
-        )
-    else if (state.social.visible)
-        MeetingScreen(
-            state.social,
-            onCloseMeeting,
-            onSocialAction,
-            onOpenNavigation,
-            onRetry,
-            state.journey,
-        )
-    else
-        HandoffScreen(
-            state = state,
-            onLoadJourney = onLoadJourney,
-            onStartTrip = onStartTrip,
-            onOpenNavigation = onOpenNavigation,
-            onOpenMeeting = onOpenMeeting,
-            onSocialAction = onSocialAction,
-            onOpenContent = onOpenContent,
-            onOpenEnding = onOpenEnding,
-        )
+    if (state.driving.mode != InteractionMode.PARKED)
+        DrivingScreen(state.driving, state.journey, speech, onSpeak, onStopSpeech)
+    else Box(Modifier.testTag("parked-mode")) {
+        if (state.reset.visible)
+            ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry, onSocialAction)
+        else if (state.ending.visible)
+            EndingScreen(
+                state.ending,
+                state.journey,
+                speech,
+                onSpeak,
+                onStopSpeech,
+                onSocialAction,
+                onCloseEnding,
+                onOpenNavigation,
+                onRetry,
+            )
+        else if (state.content.visible)
+            ContentScreen(
+                state.content,
+                state.journey,
+                speech,
+                onSpeak,
+                onStopSpeech,
+                onSocialAction,
+                onMessageRead,
+                onProfileCue,
+                onCloseContent,
+                onOpenMeeting,
+                onRetry,
+            )
+        else if (state.navigation.visible)
+            NavigationScreen(
+                state.navigation,
+                onCloseNavigation,
+                onApproveNavigation,
+                onCancelNavigation,
+                state.social,
+                onSocialAction,
+                onRetry,
+                state.journey,
+            )
+        else if (state.social.visible)
+            MeetingScreen(
+                state.social,
+                onCloseMeeting,
+                onSocialAction,
+                onOpenNavigation,
+                onRetry,
+                state.journey,
+            )
+        else
+            HandoffScreen(
+                state = state,
+                onLoadJourney = onLoadJourney,
+                onStartTrip = onStartTrip,
+                onOpenNavigation = onOpenNavigation,
+                onOpenMeeting = onOpenMeeting,
+                onSocialAction = onSocialAction,
+                onOpenContent = onOpenContent,
+                onOpenEnding = onOpenEnding,
+            )
+    }
 }

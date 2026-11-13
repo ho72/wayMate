@@ -7,7 +7,12 @@
       "source": "assets/images/characters/blue-dragon-v1/reference.png",
       "sha256": "5381e9dcffc64a159c4cdd07243c4d654a0f7010ea3010a6db08ef7b30f8300d",
       "kind": "opaque_static_image",
-      "states": ["still", "idle", "speaking", "interrupted"],
+      "states": [
+        "still",
+        "idle",
+        "speaking",
+        "interrupted"
+      ],
       "webUrl": "/character.png",
       "androidDrawable": "blue_dragon",
       "motion": "Compose transform of rendered still; no 3D rig or lip sync"
@@ -15,16 +20,38 @@
     "a-02": {
       "label": "햇살 친구",
       "kind": "procedural_canvas",
-      "states": ["still", "idle", "speaking", "interrupted"]
+      "states": [
+        "still",
+        "idle",
+        "speaking",
+        "interrupted"
+      ]
     },
     "b-01": {
       "label": "솔바람의 에이전트",
       "kind": "procedural_canvas",
-      "states": ["still", "idle", "speaking", "interrupted"],
+      "states": [
+        "still",
+        "idle",
+        "speaking",
+        "interrupted"
+      ],
       "presentation": "existing prototype canvas"
     }
   },
   "audioCues": {
+    "speech_20d2c76b7d862680b5badee3": {
+      "assetId": "speech_20d2c76b7d862680b5badee3",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_20d2c76b7d862680b5badee3.m4a",
+      "captionId": "speech_20d2c76b7d862680b5badee3",
+      "text": "천천히, 안전하게 가요. 일정이랑 다음 이야기는 정차한 뒤 함께 확인해요.",
+      "speaker": "agent",
+      "sourceKind": "own_agent",
+      "requiredPublicFields": [],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
     "speech_1e1e6d3af138643d41ca6125": {
       "assetId": "speech_1e1e6d3af138643d41ca6125",
       "kind": "audio",
@@ -398,7 +425,10 @@
       "text": "둘 다 바다 산책이랑 카페를 좋아하니까, 오늘 본 바다 이야기로 시작해보면 어때요? 솔바람도 조용히 같이 있는 시간을 편하게 느낀대요.",
       "speaker": "agent",
       "sourceKind": "peer_agent",
-      "requiredPublicFields": ["interests", "conversationStyle"],
+      "requiredPublicFields": [
+        "interests",
+        "conversationStyle"
+      ],
       "styleVariant": "neutral",
       "playbackSource": "prepared_synthetic_speech"
     },

@@ -8,7 +8,11 @@ import android.os.Handler
 import android.os.Looper
 
 /** Unknown is blocked. Subscribe and re-read on every foreground entry. */
-class VehicleRestrictions(private val context: Context, private val changed: (Boolean?) -> Unit) {
+class VehicleRestrictions(
+    private val context: Context,
+    private val observed: (UxObservation?) -> Unit = {},
+    private val changed: (Boolean?) -> Unit,
+) {
     private var car: Car? = null
     private var manager: CarUxRestrictionsManager? = null
     private var active = false
@@ -17,7 +21,7 @@ class VehicleRestrictions(private val context: Context, private val changed: (Bo
     fun start() {
         val token = ++generation
         active = true
-        changed(null)
+        unknown()
         try {
             car =
                 Car.createCar(
@@ -27,7 +31,7 @@ class VehicleRestrictions(private val context: Context, private val changed: (Bo
                 ) { connected, ready ->
                     if (!active || token != generation) return@createCar
                     if (!ready) {
-                        changed(null)
+                        unknown()
                         return@createCar
                     }
                     try {
@@ -37,27 +41,28 @@ class VehicleRestrictions(private val context: Context, private val changed: (Bo
                         manager?.registerListener { restrictions ->
                             if (active && token == generation) publish(restrictions)
                         }
-                        manager?.currentCarUxRestrictions?.let(::publish) ?: changed(null)
+                        manager?.currentCarUxRestrictions?.let(::publish) ?: unknown()
                     } catch (_: Exception) {
-                        changed(null)
+                        unknown()
                     }
                 }
         } catch (_: Exception) {
-            changed(null)
+            unknown()
         }
     }
 
     private fun publish(r: CarUxRestrictions) {
-        changed(
-            r.isRequiresDistractionOptimization ||
-                r.activeRestrictions != CarUxRestrictions.UX_RESTRICTIONS_BASELINE
-        )
+        val value = UxObservation(r.isRequiresDistractionOptimization, r.activeRestrictions)
+        observed(value)
+        changed(value.restricted)
     }
+
+    private fun unknown() { observed(null); changed(null) }
 
     fun stop() {
         generation++
         active = false
-        changed(null)
+        unknown()
         try {
             manager?.unregisterListener()
         } catch (_: Exception) {
