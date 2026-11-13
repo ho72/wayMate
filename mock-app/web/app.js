@@ -1,4 +1,5 @@
 import { DemoClient } from "./shared/client-v4.mjs";
+import { ConsultationClient } from "./shared/consultation-v1.mjs";
 import {
   POLL_MS,
   QUESTIONS,
@@ -8,6 +9,9 @@ import {
 } from "/protocol.mjs";
 const api = new DemoClient(),
   $ = (id) => document.getElementById(id);
+const consultation = new ConsultationClient(api);
+let aiReview = false;
+let aiDraftRevision = 0;
 let renderedRun = null;
 let busy = false,
   polling = false,
@@ -28,6 +32,7 @@ function draftKey() {
 function answerRevision() {
   return Math.max(
     0,
+    api.state?.consultation?.revision || 0,
     ...Object.values(api.state?.onboarding || {}).map((a) => a.revision),
   );
 }
@@ -39,6 +44,17 @@ function drafts() {
   }
 }
 function preserveDraft() {
+  if (consultation.enabled && !api.state.profile) {
+    consultation.setDraft($("answer").value);
+    $("count").textContent = `${[...$("answer").value].length} / 500자`;
+    $("send").disabled =
+      busy ||
+      !!consultation.pending ||
+      !online ||
+      !$("answer").value.trim() ||
+      [...$("answer").value].length > 500;
+    return;
+  }
   if (!currentQuestion) return;
   const d = drafts();
   d[currentQuestion] = {
@@ -72,6 +88,7 @@ function showQuestion(id) {
 function render() {
   const s = api.state;
   if (!s) return;
+  consultation.observe();
   const resetting = !!s.reset || !!s.recovery;
   $("reset-panel").hidden = !resetting;
   document.querySelector(".conversation").hidden = resetting;
@@ -93,6 +110,7 @@ function render() {
     locked =
       busy ||
       !!api.pending ||
+      !!consultation.pending ||
       !online ||
       !owns ||
       active ||
@@ -101,6 +119,7 @@ function render() {
     next = editing || order.find((k) => !s.onboarding[k]);
   const historyVersion = JSON.stringify([
     s.onboarding,
+    s.consultation,
     s.profile,
     s.trip,
     s.publication,
@@ -111,7 +130,19 @@ function render() {
     historyKey = historyVersion;
     const history = $("history");
     history.replaceChildren();
-    for (const id of order) {
+    for (const turn of consultation.enabled
+      ? s.consultation?.turns || []
+      : []) {
+      const user = node("div", null, "message user"),
+        agent = node("div", null, "message agent");
+      user.append(node("p", turn.message, "raw"));
+      agent.append(
+        node("span", "wayMate · AI", "speaker"),
+        node("p", turn.result.reply),
+      );
+      history.append(user, agent);
+    }
+    for (const id of consultation.enabled ? [] : order) {
       const a = s.onboarding[id];
       if (!a) continue;
       const agent = node("div", null, "message agent");
@@ -145,6 +176,10 @@ function render() {
           ),
         ),
       );
+    if (s.profile?.introduction)
+      history.append(
+        confirmedTurn("본인 모바일에서 확인한 소개", s.profile.introduction),
+      );
     if (s.trip)
       history.append(
         confirmedTurn(
@@ -167,14 +202,25 @@ function render() {
         ),
       );
   }
-  showQuestion(next);
+  if (!consultation.enabled) showQuestion(next);
+  if (consultation.enabled) {
+    currentQuestion = null;
+    $("question").textContent = "내 친구에게 이야기하기";
+    if (document.activeElement !== $("answer"))
+      $("answer").value = consultation.draft;
+  }
   $("answer-form").hidden =
-    !next || !owns || active || !!s.social?.connection.attempted;
+    (!consultation.enabled && !next) ||
+    (consultation.enabled && !!s.profile) ||
+    !owns ||
+    active ||
+    !!s.social?.connection.attempted;
   $("composer-hint").hidden = !$("answer-form").hidden;
   for (const el of $("answer-form").elements) el.disabled = locked;
   $("send").disabled =
     locked || !$("answer").value.trim() || [...$("answer").value].length > 500;
   $("food-example").hidden = currentQuestion !== "interests";
+  $("example").hidden = consultation.enabled;
   for (const el of $("profile-form").elements) el.disabled = locked;
   $("save").disabled =
     locked ||
@@ -194,6 +240,7 @@ function render() {
   $("recover").hidden = !api.pending;
   $("retry").hidden = !api.pending;
   renderFlow(s, owns);
+  renderConsultation(locked, owns);
   if (!owns) {
     status("이 여행을 준비한 브라우저를 사용해 주세요.");
     return;
@@ -256,6 +303,22 @@ $("example").onclick = () => example(QUESTIONS[currentQuestion].example);
 $("food-example").onclick = () => example(FOOD_CUE);
 $("answer-form").onsubmit = (e) => {
   e.preventDefault();
+  if (consultation.enabled) {
+    const message = $("answer").value;
+    if (!message.trim() || [...message].length > 500 || consultation.pending)
+      return;
+    work(async () => {
+      status("이야기를 듣고 답변과 소개 초안을 준비하고 있어요.");
+      await consultation.send(message);
+      aiReview = false;
+      $("answer").value = "";
+      applyAiDraft();
+      historyKey = null;
+      scrollKey = null;
+      status("이야기를 이어가거나 소개 초안을 확인해 주세요.");
+    });
+    return;
+  }
   const answerText = $("answer").value,
     questionId = currentQuestion,
     source = inputSource;
@@ -308,6 +371,12 @@ $("profile-form").onsubmit = (e) => {
       alias,
       avatarId: document.querySelector("input[name=avatar]:checked").value,
       confirmedSummary: summary,
+      ...(api.state.consultation
+        ? {
+            consultationRevision: aiDraftRevision,
+            introduction: $("ai-introduction").value.trim(),
+          }
+        : {}),
     });
     manualStage = null;
     status("직접 확인한 소개값만 저장했어요. 여행 계획도 확인해 주세요.");
@@ -347,6 +416,10 @@ $("retry").onclick = () =>
     status("같은 요청의 저장 결과를 확인했어요.");
   });
 function clearPreparationUi() {
+  aiReview = false;
+  aiDraftRevision = 0;
+  $("ai-consent").checked = false;
+  $("ai-introduction").value = "";
   $("answer").value = "";
   $("alias").value = "파도";
   document.querySelector('input[name=avatar][value="a-01"]').checked = true;
@@ -375,6 +448,97 @@ function clearPreparationUi() {
   publicSelection = new Set(["alias", "avatarId"]);
   if ($("review-dialog").open) $("review-dialog").close();
 }
+
+function applyAiDraft(persist = true) {
+  const draft = api.state.consultation?.turns.at(-1)?.result;
+  if (!draft) return;
+  const s = draft.summary;
+  aiDraftRevision = api.state.consultation.revision;
+  $("sea").checked = s.interests.includes("sea_walk");
+  $("cafe").checked = s.interests.includes("cafe");
+  $("activity").checked = !!s.activityPreference;
+  $("pace").checked = !!s.pace;
+  $("conversation").checked = !!s.conversationStyle;
+  $("style").value = s.speakingStyle || "";
+  $("expression").checked = !!s.expressionPresetIds.length;
+  $("ai-introduction").value = draft.introduction;
+  profileStep = "character";
+  if (persist) persistProfileDraft();
+}
+function renderConsultation(locked, owns) {
+  const s = api.state,
+    enabled = consultation.enabled;
+  const fresh =
+    owns &&
+    !s.profile &&
+    !s.vehicleActivation &&
+    !s.social?.connection.attempted &&
+    !Object.keys(s.onboarding).length;
+  $("conversation-mode").textContent = enabled
+    ? "AI와 나눈 이야기는 본인 모바일에만 보여요. 소개·공개는 따로 확인해요."
+    : "준비된 대화로 함께하는 프로토타입";
+  $("ai-choice").hidden = !fresh || enabled;
+  $("ai-description").textContent = consultation.available
+    ? "자유로운 이야기로 AI가 나를 알아가고, 소개 초안을 함께 만들어요."
+    : "지금은 준비된 시연 대화예요. AI 상담은 아직 연결되지 않았어요.";
+  $("ai-start").hidden = !consultation.available;
+  $("ai-consent-label").hidden = !consultation.available;
+  $("ai-start").disabled = locked || !$("ai-consent").checked;
+  $("ai-actions").hidden = !enabled || !fresh;
+  $("ai-retry").hidden = !consultation.pending;
+  $("ai-retry").disabled = busy || !online || !consultation.available;
+  $("ai-review").disabled = locked || !s.consultation?.turns.length;
+  $("ai-introduction-review").hidden = !s.consultation;
+  if (enabled) {
+    $("send").disabled =
+      locked ||
+      !online ||
+      !consultation.available ||
+      !$("answer").value.trim() ||
+      [...$("answer").value].length > 500 ||
+      (s.consultation?.revision || 0) >= 20;
+    $("count").textContent = `${[...$("answer").value].length} / 500자`;
+    if (!s.profile && !aiReview) {
+      $("conversation-prompt").textContent = s.consultation?.turns.length
+        ? "더 이야기해도 좋고, 지금까지의 이야기로 소개를 확인해도 좋아."
+        : "어떤 여행을 좋아해? 요즘 마음에 드는 시간이나 장소부터 편하게 이야기해줘.";
+    }
+    if (
+      s.consultation &&
+      (aiDraftRevision !== s.consultation.revision ||
+        !$("ai-introduction").value.trim() ||
+        [...$("ai-introduction").value].length > 300)
+    )
+      $("save").disabled = true;
+  }
+}
+$("ai-consent").onchange = render;
+$("ai-start").onclick = () => {
+  if (!$("ai-consent").checked) return;
+  consultation.enable();
+  $("answer").value = "";
+  currentQuestion = null;
+  historyKey = null;
+  render();
+  $("answer").focus();
+};
+$("ai-review").onclick = () => {
+  if (aiDraftRevision !== api.state.consultation?.revision) applyAiDraft();
+  aiReview = true;
+  persistProfileDraft();
+  render();
+};
+$("ai-retry").onclick = () =>
+  work(async () => {
+    await consultation.send();
+    applyAiDraft();
+    historyKey = null;
+    status("같은 메시지의 답변을 확인했어요.");
+  });
+$("ai-introduction").oninput = () => {
+  persistProfileDraft();
+  render();
+};
 async function synchronizeReset() {
   if (!api.state?.reset) return;
   api.prepareResetCleanup();
@@ -419,6 +583,7 @@ const summaryInputs = [
 ];
 function localSummary() {
   const v = emptySummary();
+  if (api.state?.consultation) v.summarySource = "user_confirmed_ai";
   v.interests = ["sea", "cafe"]
     .filter((id) => $(id).checked)
     .map((id) => (id === "sea" ? "sea_walk" : "cafe"));
@@ -474,12 +639,14 @@ function persistProfileDraft() {
   localStorage.setItem(
     profileDraftKey(),
     JSON.stringify({
-      revision: answerRevision(),
+      revision: api.state.consultation ? aiDraftRevision : answerRevision(),
       step: profileStep,
       alias: $("alias").value,
       avatar: document.querySelector("input[name=avatar]:checked").value,
       selected: summaryInputs.filter((id) => $(id).checked),
       style: $("style").value,
+      introduction: $("ai-introduction").value,
+      aiReview,
     }),
   );
 }
@@ -498,6 +665,10 @@ function restoreProfileDraft() {
     $("style").value = ["", "calm", "light_humor"].includes(d.style)
       ? d.style
       : "";
+    $("ai-introduction").value =
+      typeof d.introduction === "string" ? d.introduction : "";
+    aiReview = !!d.aiReview;
+    if (api.state.consultation) aiDraftRevision = d.revision;
     profileStep =
       d.step === "summary" && validAlias() ? "summary" : "character";
   } catch {
@@ -650,7 +821,9 @@ function renderFlow(s, owns) {
   $("delivery-card").hidden = stage !== "transfer";
   $("profile-card").hidden =
     stage !== "onboarding" ||
-    questionOrder(s.onboarding).some((k) => !s.onboarding[k]);
+    (consultation.enabled
+      ? !aiReview
+      : questionOrder(s.onboarding).some((k) => !s.onboarding[k]));
   $("character-review").hidden = profileStep !== "character";
   $("summary-review").hidden = profileStep !== "summary";
   $("trip-card").hidden = stage !== "trip";
@@ -969,9 +1142,12 @@ function myTripButton() {
 
 try {
   await api.read();
+  const scenario = await api.request("/api/scenario");
+  consultation.available = !!scenario.capabilities?.aiConsultation;
   online = true;
   const p = api.state.profile;
   if (p) {
+    aiDraftRevision = p.consultationRevision || 0;
     $("alias").value = p.alias;
     document.querySelector(`input[value="${p.avatarId}"]`).checked = true;
     const s = p.privateSummary;
@@ -982,7 +1158,9 @@ try {
     $("conversation").checked = !!s.conversationStyle;
     $("style").value = s.speakingStyle || "";
     $("expression").checked = !!s.expressionPresetIds.length;
+    $("ai-introduction").value = p.introduction || "";
   }
+  if (!p && api.state.consultation) applyAiDraft(false);
   restoreProfileDraft();
   await synchronizeReset();
   if (api.pending) await api.recover();

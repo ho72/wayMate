@@ -42,7 +42,7 @@ object JourneyParser {
             interests.distinct().size == interests.size &&
                 interests.all { it in listOf("sea_walk", "cafe") }
         )
-        require(summary.getString("summarySource") == "user_confirmed_demo")
+        require(summary.getString("summarySource") in listOf("user_confirmed_demo", "user_confirmed_ai"))
         for ((key, allowed) in
             listOf(
                 "activityPreference" to "walk_first_photos_occasional",

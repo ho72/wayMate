@@ -1,0 +1,14 @@
+{
+  "reply": "바다를 보며 천천히 걷는 시간이 좋구나. 여행에서 쉬는 시간도 넉넉한 게 편해?",
+  "introduction": "바다를 보며 여유롭게 걷는 여행을 좋아해요.",
+  "summary": {
+    "interests": [
+      "sea_walk"
+    ],
+    "activityPreference": null,
+    "pace": "relaxed",
+    "conversationStyle": null,
+    "expressionPresetIds": [],
+    "speakingStyle": null
+  }
+}

@@ -27,7 +27,9 @@ export class DemoClient {
         ...(body ? { "Content-Type": "application/json" } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(
+        path === "/api/consultation/turns" ? 35000 : 5000,
+      ),
     });
     const result = await response.json();
     const state =
@@ -52,7 +54,11 @@ export class DemoClient {
     return result;
   }
   clearRunDrafts(runId) {
-    for (const prefix of ["waymate.draft.v4", "waymate.profileDraft.v4"])
+    for (const prefix of [
+      "waymate.draft.v4",
+      "waymate.profileDraft.v4",
+      "waymate.consultation.v1",
+    ])
       localStorage.removeItem(`${prefix}.${this.id}.${runId}`);
   }
   observeReset(state) {

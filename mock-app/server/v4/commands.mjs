@@ -16,6 +16,7 @@ import { apply, fail, fresh, approval } from "./handoff.mjs";
 import { validateStore } from "./state.mjs";
 import { applyNavigation } from "./navigation.mjs";
 import { project } from "./projection.mjs";
+import { consultationGuard } from "./consultation.mjs";
 export function coordinator(
   file,
   initial,
@@ -92,6 +93,39 @@ export function coordinator(
       accepting = false;
       await queue;
     },
+    consultationContext: (id, request) =>
+      serial(async () => {
+        await expire();
+        const hit = consultationGuard(state, id, request);
+        if (hit) return { replayed: true, state: projection("web", id) };
+        if (!state.clientId || !state.consultation) {
+          const next = cloneState();
+          next.clientId = id;
+          next.consultation ??= { revision: 0, turns: [] };
+          next.version++;
+          validateStore(next);
+          await save(next);
+        }
+        return { turns: structuredClone(state.consultation?.turns || []) };
+      }),
+    consultationCommit: (id, request, result) =>
+      serial(async () => {
+        await expire();
+        const hit = consultationGuard(state, id, request);
+        if (hit) return { replayed: true, state: projection("web", id) };
+        const next = cloneState();
+        next.consultation ??= { revision: 0, turns: [] };
+        next.consultation.turns.push({
+          requestId: request.requestId,
+          message: request.message,
+          result: structuredClone(result),
+        });
+        next.consultation.revision++;
+        next.version++;
+        validateStore(next);
+        await save(next);
+        return { replayed: false, state: projection("web", id) };
+      }),
     read: (actor, id) =>
       serial(async () => {
         await expire();
@@ -199,7 +233,11 @@ export function coordinator(
           c.type === "CAR_STATUS" &&
           ["restrictionKnown", "restricted", "foreground"].every(
             (k) => next.vehicle[k] === state.vehicle[k],
-          ) && isDeepStrictEqual(next.vehicle.uxRestrictions ?? null, state.vehicle.uxRestrictions ?? null);
+          ) &&
+          isDeepStrictEqual(
+            next.vehicle.uxRestrictions ?? null,
+            state.vehicle.uxRestrictions ?? null,
+          );
         if (!heartbeat && c.type !== "NAV_OBSERVE") next.version++;
         const receipt = {
           runId: c.runId,

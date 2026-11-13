@@ -4,6 +4,7 @@ import { coordinator } from "./commands.mjs";
 import { initialState, validateStore } from "./state.mjs";
 import { openStore } from "../store.mjs";
 import { QUESTIONS } from "../../shared/config/protocol-v4.mjs";
+import { consultationService } from "./consultation.mjs";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const staticFiles = new Map([
   [
@@ -17,6 +18,10 @@ const staticFiles = new Map([
   ["/operator.js", ["../../web/operator.js", "text/javascript; charset=utf-8"]],
   ["/", ["../../web/index.html", "text/html; charset=utf-8"]],
   ["/app.js", ["../../web/app.js", "text/javascript; charset=utf-8"]],
+  [
+    "/shared/consultation-v1.mjs",
+    ["../../web/shared/consultation-v1.mjs", "text/javascript; charset=utf-8"],
+  ],
   ["/style.css", ["../../web/style.css", "text/css; charset=utf-8"]],
   [
     "/shared/client-v4.mjs",
@@ -27,9 +32,17 @@ const staticFiles = new Map([
     ["../../shared/config/protocol-v4.mjs", "text/javascript; charset=utf-8"],
   ],
 ]);
-export async function startServer({ file, port = 3000, now, fault } = {}) {
+export async function startServer({
+  file,
+  port = 3000,
+  now,
+  fault,
+  aiProvider = null,
+  aiTimeoutMs,
+} = {}) {
   const store = await openStore(file, initialState, validateStore);
   const api = coordinator(file, store.data, { now, fault });
+  const ai = consultationService(api, aiProvider, { timeoutMs: aiTimeoutMs });
   // Validate all projected store fields on startup rather than serving partial corrupted state.
   try {
     await api.read("web", store.data.clientId);
@@ -106,6 +119,7 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             safeReset: true,
             agentContent: true,
             finalChoices: true,
+            aiConsultation: actor === "web" && ai.available,
           },
         });
       if (req.method === "GET" && url.pathname === "/api/state") {
@@ -137,7 +151,15 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             url.pathname.split("/").pop(),
           ),
         );
-      if (req.method === "POST" && url.pathname === "/api/commands") {
+      if (
+        req.method === "POST" &&
+        ["/api/commands", "/api/consultation/turns"].includes(url.pathname)
+      ) {
+        if (url.pathname === "/api/consultation/turns" && actor !== "web")
+          throw Object.assign(
+            new Error("본인 모바일에서만 상담할 수 있어요."),
+            { status: 403, code: "ACTOR_FORBIDDEN" },
+          );
         if (req.headers.origin && req.headers.origin !== `http://${host}`)
           throw Object.assign(new Error("다른 출처에서 저장할 수 없습니다."), {
             status: 403,
@@ -175,7 +197,12 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
             code: "INVALID_PAYLOAD",
           });
         }
-        return send(200, await api.command(c, actor, id));
+        return send(
+          200,
+          url.pathname === "/api/consultation/turns"
+            ? await ai.turn(id, c)
+            : await api.command(c, actor, id),
+        );
       }
       send(404, {
         ok: false,
@@ -218,6 +245,7 @@ export async function startServer({ file, port = 3000, now, fault } = {}) {
         );
         // Stop accepting domain work and drain committed writes before dropping persistent
         // browser/emulator sockets or releasing the single-writer lock.
+        await ai.close();
         await api.close();
         server.closeAllConnections();
         await stopped;

@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-14",
+  "baseCommit": "901a3250b6e3b3a367c59b3bcf5ace753a2930f9",
+  "scope": "Optional real AI consultation and private introduction draft; default demo flow retained.",
+  "automated": {
+    "nodePassed": 293,
+    "nodeFailed": 0,
+    "aiSubsetPassed": 20,
+    "aiSubsetIncludedInNodeTotal": true,
+    "jvmPassed": 46,
+    "androidParserDevicePassed": 2,
+    "realMockApkAndTestApkBuilds": true,
+    "lint": {
+      "errors": 0,
+      "fatal": 0,
+      "realWarnings": 26,
+      "mockWarnings": 26
+    },
+    "v3v4ExamplesUnchanged": true
+  },
+  "liveApiAndBrowser": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "syntheticInputOnly": true,
+    "successfulConversationTurns": 3,
+    "multiTurnContextVerified": true,
+    "correctionVerified": true,
+    "userEditedIntroductionSaved": true,
+    "explicitConfirmationRevision": 3,
+    "noAutomaticPublication": true,
+    "privateViewsChecked": [
+      "car",
+      "operator"
+    ],
+    "crossTabOldReviewDisabled": true,
+    "reloadPreservedEdits": true,
+    "viewport": {
+      "width": 430,
+      "height": 932
+    }
+  },
+  "testDataCleanup": {
+    "method": "O01 reset plus same-browser web ACK",
+    "newRunSeq": 2,
+    "privateConversationAndProfileRemoved": true,
+    "original3000ServerNotReset": true
+  },
+  "originalNavigation": {
+    "journalRecords": 16,
+    "journalSha256": "91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231",
+    "unchanged": true,
+    "sdkMutationCallsByThisValidation": 0
+  },
+  "initialFindings": [
+    "Provider rejected legacy enum/const schema branches without explicit type; provider schema conversion fixed and actual calls retried.",
+    "An initial compound activity suggestion included unmentioned photos; prompt narrowed, user correction reflected, and explicit review remains required."
+  ],
+  "evidence": [
+    {
+      "path": "mock-app/runtime/backend-next/node-final.log",
+      "sha256": "1bd92e07d07a8e2feebffe00d5f579507394744346fb52735065ad97f35251c6"
+    },
+    {
+      "path": "mock-app/runtime/backend-next/ai-final.log",
+      "sha256": "a7172df68a44e8dac31b3a6462871ea795ea75a5cd298a40c9cc60afaff02098"
+    },
+    {
+      "path": "mock-app/runtime/backend-next/gradle.log",
+      "sha256": "fae84a97b41b1d98f8098e2ab7c897ec04a3e4fc99649adecd1ebc5407591088"
+    },
+    {
+      "path": "mock-app/runtime/backend-next/ai-handoff-device.log",
+      "sha256": "6d5bfe8ee43bab120027f705c329f88e643ae182f81e018ba7c9c445393ee32c"
+    },
+    {
+      "path": "docs_prototype/evidence/ai-live-chat-2026-11-14.png",
+      "sha256": "05a2a2fc3525fe28819eb3a596abf7055d4b1d515c9fa3cb6c928c959dde28e6"
+    },
+    {
+      "path": "docs_prototype/evidence/ai-live-introduction-review-2026-11-14.png",
+      "sha256": "4f5db7345069d1145c875884787702499e9b5bb4e98dbd6e268ec39bc31be596"
+    }
+  ],
+  "limits": [
+    "Actual live calls used synthetic test input only; automated tests use response doubles.",
+    "Free-text introduction and raw chat are not delivered to vehicle/peer; only explicitly confirmed supported summary fields are.",
+    "Operating authentication, database/multi-user deployment, live peers, AI recommendations and in-vehicle voice conversation are not implemented by this change.",
+    "Credentials, complete state files and SDK journal contents are excluded."
+  ]
+}

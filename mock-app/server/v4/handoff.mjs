@@ -92,7 +92,10 @@ export function allowed(s, actor, clientId, now) {
             !unresolved(s) &&
             !s.navigation?.owned &&
             (preparation(s) ||
-              (!s.profile && !s.trip && !Object.keys(s.onboarding).length))
+              (!s.profile &&
+                !s.trip &&
+                !s.consultation &&
+                !Object.keys(s.onboarding).length))
               ? ["CAR_START_TRIP"]
               : []),
           ]
@@ -112,8 +115,9 @@ export function allowed(s, actor, clientId, now) {
   return [
     ...new Set([
       ...extra,
-      "ONBOARDING_ANSWER",
-      ...(questionOrder(s.onboarding).every((k) => s.onboarding[k]?.confirmed)
+      ...(!s.consultation ? ["ONBOARDING_ANSWER"] : []),
+      ...(s.consultation?.turns.length ||
+      questionOrder(s.onboarding).every((k) => s.onboarding[k]?.confirmed)
         ? ["PROFILE_CONFIRM"]
         : []),
       ...(s.profile ? ["TRIP_SAVE"] : []),
@@ -221,6 +225,28 @@ export function apply(s, c, clientId, now) {
       break;
     }
     case "PROFILE_CONFIRM": {
+      if (s.consultation) {
+        if (
+          p.consultationRevision !== s.consultation.revision ||
+          p.confirmedSummary.summarySource !== "user_confirmed_ai" ||
+          !p.introduction?.trim()
+        )
+          fail(
+            409,
+            "STALE_STATE",
+            "최신 AI 소개 초안과 공개할 요약 항목을 직접 확인해 주세요.",
+          );
+      } else if (
+        p.consultationRevision !== undefined ||
+        p.introduction !== undefined ||
+        p.confirmedSummary.summarySource === "user_confirmed_ai"
+      ) {
+        fail(
+          400,
+          "INVALID_PAYLOAD",
+          "상담 기록 없는 AI 소개를 저장할 수 없어요.",
+        );
+      }
       const alias = p.alias.normalize("NFC").trim();
       if (!alias || [...alias].length > 10 || /[\r\n]/.test(alias))
         fail(400, "INVALID_PAYLOAD", "별명은 줄바꿈 없이 1~10자여야 합니다.");
@@ -231,6 +257,12 @@ export function apply(s, c, clientId, now) {
         avatarId: p.avatarId,
         privateSummary: structuredClone(p.confirmedSummary),
         confirmed: true,
+        ...(s.consultation
+          ? {
+              introduction: p.introduction.trim(),
+              consultationRevision: p.consultationRevision,
+            }
+          : {}),
       };
       s.publication = "pending";
       s.publicationVersion++;
@@ -315,8 +347,15 @@ export function apply(s, c, clientId, now) {
       };
       break;
     case "CAR_STATUS":
-      if (!consistentRestriction(p) || (p.uxRestrictions && !p.restrictionKnown))
-        fail(400, "INVALID_TRANSITION", "제한 관측과 restricted 값이 일치하지 않습니다.");
+      if (
+        !consistentRestriction(p) ||
+        (p.uxRestrictions && !p.restrictionKnown)
+      )
+        fail(
+          400,
+          "INVALID_TRANSITION",
+          "제한 관측과 restricted 값이 일치하지 않습니다.",
+        );
       if (
         p.vehicleSessionId !== s.vehicle.vehicleSessionId ||
         p.statusSeq <= s.vehicle.statusSeq
@@ -327,7 +366,11 @@ export function apply(s, c, clientId, now) {
           "현재 세션의 증가하는 상태 번호가 필요합니다.",
         );
       const { displayedCue: _displayedCue, ...status } = p;
-      Object.assign(s.vehicle, { ...status, uxRestrictions: p.uxRestrictions ?? null, seenAt: now });
+      Object.assign(s.vehicle, {
+        ...status,
+        uxRestrictions: p.uxRestrictions ?? null,
+        seenAt: now,
+      });
       break;
     case "CAR_LOADED":
       if (
