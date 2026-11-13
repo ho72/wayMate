@@ -124,14 +124,14 @@ class SdkConnectionAuditTest {
     }
 
     @Test
-    fun installedMainActivityRemainsParkedOnlyWithoutDoDeclaration() {
+    fun installedMainActivityDeclaresDoForTheRestrictedSurface() {
         @Suppress("DEPRECATION")
         val info = context.packageManager.getActivityInfo(
             android.content.ComponentName(context.packageName, "com.waymate.app.MainActivity"),
             PackageManager.GET_META_DATA,
         )
-        assertFalse(info.metaData?.getBoolean("distractionOptimized", false) == true)
-        save("manifest", JSONObject().put("distractionOptimized", false))
+        assertTrue(info.metaData?.getBoolean("distractionOptimized", false) == true)
+        save("manifest", JSONObject().put("distractionOptimized", true))
     }
 
     @Test

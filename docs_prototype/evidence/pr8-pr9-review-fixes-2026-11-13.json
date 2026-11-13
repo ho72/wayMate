@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-13",
+  "pullRequests": [
+    8,
+    9
+  ],
+  "fixes": {
+    "pr8": "Scope SDK unknown verification to explicit stop(); no ready=false disconnect claim.",
+    "pr9": [
+      "Publish one immutable RestrictionSnapshot and capture one report for known/restricted/raw fields.",
+      "Generate Kotlin masks from shared/config/driving-policy.json, also consumed by server."
+    ]
+  },
+  "nodeTests": {
+    "pr8": 264,
+    "pr9": 273,
+    "failed": 0
+  },
+  "jvmTests": {
+    "passed": 46,
+    "failed": 0,
+    "newTests": 3
+  },
+  "deviceTests": {
+    "passed": 14,
+    "failed": 0,
+    "realTransitionAndSdk": 5,
+    "mockAudioAndUi": 9
+  },
+  "lint": {
+    "real": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 26
+    },
+    "mock": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 26
+    }
+  },
+  "apkBuilds": [
+    "realDebug",
+    "mockDebug",
+    "realDebugAndroidTest",
+    "mockDebugAndroidTest"
+  ],
+  "journal": {
+    "records": 16,
+    "unchanged": true,
+    "sha256": "91fe2f73a6fc869ccd5906eaebbe55ecade5a974edbf29ba1f6dd3854cb3d231"
+  },
+  "physicalRouteChanges": 0,
+  "testSetupCorrection": "The initial mock invocation used the wrong test package and failed class loading; rerun with ui.screens.handoff package passed all 9 tests.",
+  "logs": [
+    {
+      "path": "mock-app/runtime/pr8-pr9-review/pr8-node.log",
+      "sha256": "16dcfce7b81fea584920994028b5003a50f2da277e0b6523c3ac938aa3418018"
+    },
+    {
+      "path": "mock-app/runtime/pr8-pr9-review/pr9-node.log",
+      "sha256": "8cc5c393fe73514cfe7694da907ab1df330bf68328b4a3b7a67b3b66582e9657"
+    },
+    {
+      "path": "mock-app/runtime/pr8-pr9-review/pr9-gradle.log",
+      "sha256": "f9c8230901f1c9d23d1e14510b2e5ab34ce5898eba5299726d7aa2baae9eb922"
+    },
+    {
+      "path": "mock-app/runtime/pr8-pr9-review/real-device.log",
+      "sha256": "ab140917935b936944ed69f9f31931d479f6500e1e3e70da22a0b483372a9713"
+    },
+    {
+      "path": "mock-app/runtime/pr8-pr9-review/mock-device.log",
+      "sha256": "eab43197b93250645e54d92d95ea6ce6664324e48198e651b5589998d0670ef5"
+    }
+  ]
+}

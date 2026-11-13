@@ -301,7 +301,11 @@
     "restrictionKnown": true,
     "restricted": false,
     "foreground": true,
-    "fresh": true
+    "fresh": true,
+    "uxRestrictions": null,
+    "interactionMode": "blocked",
+    "preparedAudioAllowed": false,
+    "freshForMs": 2000
   },
   "allowedActions": [
     "RESET_ACK"

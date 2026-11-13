@@ -199,7 +199,7 @@ export function coordinator(
           c.type === "CAR_STATUS" &&
           ["restrictionKnown", "restricted", "foreground"].every(
             (k) => next.vehicle[k] === state.vehicle[k],
-          );
+          ) && isDeepStrictEqual(next.vehicle.uxRestrictions ?? null, state.vehicle.uxRestrictions ?? null);
         if (!heartbeat && c.type !== "NAV_OBSERVE") next.version++;
         const receipt = {
           runId: c.runId,

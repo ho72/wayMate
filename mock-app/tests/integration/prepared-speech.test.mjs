@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { GENERAL_CALL, FAMILIAR_CALL } from "../../shared/config/call-v4.mjs";
+import { DRIVING_NARRATION } from "../../shared/config/driving-v4.mjs";
 import {
   GENERAL_MEETING,
   FAMILIAR_MEETING,
@@ -34,6 +35,7 @@ test("bundled audio includes both call samples and every ending narration, with 
     ...FAMILIAR_MEETING,
     ...TOGETHER_SCENE,
   ].map((x) => x.text);
+  texts.push(DRIVING_NARRATION);
   for (const q of OWN_QUESTIONS)
     for (const closing of Object.values(OWN_CLOSINGS))
       texts.push(q.reply + " " + closing);

@@ -57,10 +57,18 @@
                   "maxLength": 500
                 },
                 "inputSource": {
-                  "enum": ["typed", "example", "example_edited"]
+                  "enum": [
+                    "typed",
+                    "example",
+                    "example_edited"
+                  ]
                 }
               },
-              "required": ["questionId", "answerText", "inputSource"],
+              "required": [
+                "questionId",
+                "answerText",
+                "inputSource"
+              ],
               "additionalProperties": false
             }
           },
@@ -120,13 +128,20 @@
                   "pattern": "^[^\\r\\n]+$"
                 },
                 "avatarId": {
-                  "enum": ["a-01", "a-02"]
+                  "enum": [
+                    "a-01",
+                    "a-02"
+                  ]
                 },
                 "confirmedSummary": {
                   "$ref": "#/$defs/summary"
                 }
               },
-              "required": ["alias", "avatarId", "confirmedSummary"],
+              "required": [
+                "alias",
+                "avatarId",
+                "confirmedSummary"
+              ],
               "additionalProperties": false
             }
           },
@@ -166,7 +181,10 @@
               "minimum": 0
             },
             "actor": {
-              "enum": ["web", "car"]
+              "enum": [
+                "web",
+                "car"
+              ]
             },
             "type": {
               "const": "PROFILE_PRIVATE"
@@ -189,7 +207,10 @@
                   "minimum": 0
                 }
               },
-              "required": ["profileVersion", "publicationVersion"],
+              "required": [
+                "profileVersion",
+                "publicationVersion"
+              ],
               "additionalProperties": false
             }
           },
@@ -250,7 +271,10 @@
                   "const": false
                 }
               },
-              "required": ["presetId", "shareSummaryApproved"],
+              "required": [
+                "presetId",
+                "shareSummaryApproved"
+              ],
               "additionalProperties": false
             }
           },
@@ -305,10 +329,15 @@
               "type": "object",
               "properties": {
                 "mode": {
-                  "enum": ["connected", "my_trip"]
+                  "enum": [
+                    "connected",
+                    "my_trip"
+                  ]
                 }
               },
-              "required": ["mode"],
+              "required": [
+                "mode"
+              ],
               "additionalProperties": false
             }
           },
@@ -375,10 +404,18 @@
                   "maxItems": 0
                 },
                 "navigationSource": {
-                  "enum": ["real", "unsupported", "mock"]
+                  "enum": [
+                    "real",
+                    "unsupported",
+                    "mock"
+                  ]
                 }
               },
-              "required": ["deviceId", "vehicleSessionId", "pendingAttempts"],
+              "required": [
+                "deviceId",
+                "vehicleSessionId",
+                "pendingAttempts"
+              ],
               "additionalProperties": false
             }
           },
@@ -450,10 +487,18 @@
                   "type": "boolean"
                 },
                 "uiContext": {
-                  "enum": ["handoff", "home", "meeting", "navigation"]
+                  "enum": [
+                    "handoff",
+                    "home",
+                    "meeting",
+                    "navigation"
+                  ]
                 },
                 "displayedCue": {
                   "$ref": "#/$defs/displayedCue"
+                },
+                "uxRestrictions": {
+                  "$ref": "#/$defs/uxRestrictions"
                 }
               },
               "required": [
@@ -533,7 +578,10 @@
                   "$ref": "#/$defs/sourceVersions"
                 },
                 "mode": {
-                  "enum": ["connected", "my_trip"]
+                  "enum": [
+                    "connected",
+                    "my_trip"
+                  ]
                 }
               },
               "required": [
@@ -609,7 +657,11 @@
                       "$ref": "#/$defs/sourceVersions"
                     }
                   },
-                  "required": ["origin", "vehicleSessionId", "sourceVersions"],
+                  "required": [
+                    "origin",
+                    "vehicleSessionId",
+                    "sourceVersions"
+                  ],
                   "additionalProperties": false
                 },
                 {
@@ -626,7 +678,11 @@
                       "const": "gangneung-01"
                     }
                   },
-                  "required": ["origin", "vehicleSessionId", "presetId"],
+                  "required": [
+                    "origin",
+                    "vehicleSessionId",
+                    "presetId"
+                  ],
                   "additionalProperties": false
                 }
               ]
@@ -770,7 +826,10 @@
                   "minimum": 1
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "reviewed": {
                   "$ref": "#/$defs/navEvidence"
@@ -956,7 +1015,12 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 },
                 "outcome": {
-                  "enum": ["unknown", "applied", "removed", "not_dispatched"]
+                  "enum": [
+                    "unknown",
+                    "applied",
+                    "removed",
+                    "not_dispatched"
+                  ]
                 },
                 "evidence": {
                   "anyOf": [
@@ -1044,7 +1108,11 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["vehicleSessionId", "vehicleEpoch", "attemptId"],
+              "required": [
+                "vehicleSessionId",
+                "vehicleEpoch",
+                "attemptId"
+              ],
               "additionalProperties": false
             }
           },
@@ -1120,7 +1188,10 @@
                   }
                 }
               },
-              "required": ["profileVersion", "approvedFields"],
+              "required": [
+                "profileVersion",
+                "approvedFields"
+              ],
               "additionalProperties": false
             }
           },
@@ -1182,7 +1253,10 @@
                   "type": "boolean"
                 }
               },
-              "required": ["tripVersion", "approved"],
+              "required": [
+                "tripVersion",
+                "approved"
+              ],
               "additionalProperties": false
             }
           },
@@ -1243,7 +1317,10 @@
                   "$ref": "#/$defs/sourceVersions"
                 }
               },
-              "required": ["candidateId", "sourceVersions"],
+              "required": [
+                "candidateId",
+                "sourceVersions"
+              ],
               "additionalProperties": false
             }
           },
@@ -1300,7 +1377,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId", "requestId"],
+              "required": [
+                "connectionId",
+                "requestId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -1363,17 +1443,25 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId", "requestId"],
+              "required": [
+                "connectionId",
+                "requestId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "sharedWindow": {
-                  "const": ["14:00", "15:00"]
+                  "const": [
+                    "14:00",
+                    "15:00"
+                  ]
                 }
               },
-              "required": ["sharedWindow"],
+              "required": [
+                "sharedWindow"
+              ],
               "additionalProperties": false
             }
           },
@@ -1413,7 +1501,10 @@
               "minimum": 0
             },
             "actor": {
-              "enum": ["web", "car"]
+              "enum": [
+                "web",
+                "car"
+              ]
             },
             "type": {
               "const": "CONNECT_END"
@@ -1426,7 +1517,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId"],
+              "required": [
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -1485,7 +1578,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId"],
+              "required": [
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -1495,7 +1590,9 @@
                   "const": "fiction-cafe-01"
                 }
               },
-              "required": ["placeId"],
+              "required": [
+                "placeId"
+              ],
               "additionalProperties": false
             }
           },
@@ -1552,7 +1649,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId", "proposalId"],
+              "required": [
+                "connectionId",
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -1611,7 +1711,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId"],
+              "required": [
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -1666,7 +1768,10 @@
               "type": "object",
               "properties": {
                 "kind": {
-                  "enum": ["connection", "meeting"]
+                  "enum": [
+                    "connection",
+                    "meeting"
+                  ]
                 },
                 "requestId": {
                   "type": "string",
@@ -1688,17 +1793,28 @@
                   ]
                 }
               },
-              "required": ["kind", "requestId", "connectionId", "proposalId"],
+              "required": [
+                "kind",
+                "requestId",
+                "connectionId",
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "decision": {
-                  "enum": ["accept", "reject", "cancel"]
+                  "enum": [
+                    "accept",
+                    "reject",
+                    "cancel"
+                  ]
                 }
               },
-              "required": ["decision"],
+              "required": [
+                "decision"
+              ],
               "additionalProperties": false
             }
           },
@@ -1756,7 +1872,9 @@
                   "type": "boolean"
                 }
               },
-              "required": ["enabled"],
+              "required": [
+                "enabled"
+              ],
               "additionalProperties": false
             }
           },
@@ -1814,7 +1932,10 @@
                       "const": "meeting_cancel"
                     }
                   },
-                  "required": ["proposalId", "reason"],
+                  "required": [
+                    "proposalId",
+                    "reason"
+                  ],
                   "additionalProperties": false
                 },
                 {
@@ -1828,7 +1949,10 @@
                       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                     }
                   },
-                  "required": ["reason", "resetId"],
+                  "required": [
+                    "reason",
+                    "resetId"
+                  ],
                   "additionalProperties": false
                 }
               ]
@@ -1845,7 +1969,10 @@
                   "minimum": 1
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "reviewed": {
                   "$ref": "#/$defs/navEvidence"
@@ -1908,7 +2035,10 @@
               "minimum": 0
             },
             "actor": {
-              "enum": ["web", "car"]
+              "enum": [
+                "web",
+                "car"
+              ]
             },
             "type": {
               "const": "CANCEL_PENDING_COMMAND"
@@ -1936,7 +2066,10 @@
                   ]
                 }
               },
-              "required": ["originalCommandId", "originalType"],
+              "required": [
+                "originalCommandId",
+                "originalType"
+              ],
               "additionalProperties": false
             }
           },
@@ -1989,7 +2122,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["runId"],
+              "required": [
+                "runId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2048,7 +2183,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["resetId"],
+              "required": [
+                "resetId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2071,11 +2208,18 @@
                       "const": true
                     }
                   },
-                  "required": ["ui", "audio", "pendingRequests"],
+                  "required": [
+                    "ui",
+                    "audio",
+                    "pendingRequests"
+                  ],
                   "additionalProperties": false
                 }
               },
-              "required": ["webClientId", "cleared"],
+              "required": [
+                "webClientId",
+                "cleared"
+              ],
               "additionalProperties": false
             }
           },
@@ -2128,7 +2272,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["resetId"],
+              "required": [
+                "resetId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2159,7 +2305,11 @@
                       "const": true
                     }
                   },
-                  "required": ["ui", "audio", "pendingRequests"],
+                  "required": [
+                    "ui",
+                    "audio",
+                    "pendingRequests"
+                  ],
                   "additionalProperties": false
                 },
                 "pendingAttemptIds": {
@@ -2198,7 +2348,10 @@
                           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                         },
                         "outcome": {
-                          "enum": ["removed", "not_dispatched"]
+                          "enum": [
+                            "removed",
+                            "not_dispatched"
+                          ]
                         },
                         "acknowledged": {
                           "const": true
@@ -2286,17 +2439,24 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId"],
+              "required": [
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "messagePresetId": {
-                  "enum": ["M1", "M2"]
+                  "enum": [
+                    "M1",
+                    "M2"
+                  ]
                 }
               },
-              "required": ["messagePresetId"],
+              "required": [
+                "messagePresetId"
+              ],
               "additionalProperties": false
             }
           },
@@ -2352,17 +2512,25 @@
                   "const": "F1"
                 }
               },
-              "required": ["threadId", "followupQuestionId"],
+              "required": [
+                "threadId",
+                "followupQuestionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "replyPresetId": {
-                  "enum": ["R1", "R2"]
+                  "enum": [
+                    "R1",
+                    "R2"
+                  ]
                 }
               },
-              "required": ["replyPresetId"],
+              "required": [
+                "replyPresetId"
+              ],
               "additionalProperties": false
             }
           },
@@ -2426,7 +2594,12 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["kind", "requestId", "connectionId", "threadId"],
+              "required": [
+                "kind",
+                "requestId",
+                "connectionId",
+                "threadId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2436,7 +2609,9 @@
                   "const": "reply"
                 }
               },
-              "required": ["decision"],
+              "required": [
+                "decision"
+              ],
               "additionalProperties": false
             }
           },
@@ -2489,7 +2664,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["proposalId"],
+              "required": [
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2548,7 +2725,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["proposalId"],
+              "required": [
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2607,7 +2786,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["proposalId"],
+              "required": [
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2617,7 +2798,9 @@
                   "type": "boolean"
                 }
               },
-              "required": ["peerIntroSeen"],
+              "required": [
+                "peerIntroSeen"
+              ],
               "additionalProperties": false
             }
           },
@@ -2674,7 +2857,10 @@
                   "minimum": 1
                 }
               },
-              "required": ["finalId", "finalRound"],
+              "required": [
+                "finalId",
+                "finalRound"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2741,17 +2927,26 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["finalId", "finalRound", "requestId"],
+              "required": [
+                "finalId",
+                "finalRound",
+                "requestId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "choice": {
-                  "enum": ["together", "my_agent"]
+                  "enum": [
+                    "together",
+                    "my_agent"
+                  ]
                 }
               },
-              "required": ["choice"],
+              "required": [
+                "choice"
+              ],
               "additionalProperties": false
             }
           },
@@ -2815,17 +3010,27 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["kind", "finalId", "finalRound", "requestId"],
+              "required": [
+                "kind",
+                "finalId",
+                "finalRound",
+                "requestId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "decision": {
-                  "enum": ["together", "my_agent"]
+                  "enum": [
+                    "together",
+                    "my_agent"
+                  ]
                 }
               },
-              "required": ["decision"],
+              "required": [
+                "decision"
+              ],
               "additionalProperties": false
             }
           },
@@ -2878,7 +3083,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["connectionId"],
+              "required": [
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -2888,7 +3095,9 @@
                   "const": "plain"
                 }
               },
-              "required": ["requestedMode"],
+              "required": [
+                "requestedMode"
+              ],
               "additionalProperties": false
             }
           },
@@ -2945,7 +3154,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["callId", "requestId"],
+              "required": [
+                "callId",
+                "requestId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3004,7 +3216,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["callId"],
+              "required": [
+                "callId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3074,17 +3288,27 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["kind", "callId", "requestId", "connectionId"],
+              "required": [
+                "kind",
+                "callId",
+                "requestId",
+                "connectionId"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "decision": {
-                  "enum": ["accept", "reject"]
+                  "enum": [
+                    "accept",
+                    "reject"
+                  ]
                 }
               },
-              "required": ["decision"],
+              "required": [
+                "decision"
+              ],
               "additionalProperties": false
             }
           },
@@ -3142,7 +3366,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3228,7 +3455,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["proposalId"],
+              "required": [
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3238,7 +3467,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3327,7 +3559,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["reason", "resetId"],
+              "required": [
+                "reason",
+                "resetId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3337,7 +3572,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3426,7 +3664,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["reason", "proposalId"],
+              "required": [
+                "reason",
+                "proposalId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3436,7 +3677,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3521,7 +3765,9 @@
                   "const": "driver_waypoint"
                 }
               },
-              "required": ["reason"],
+              "required": [
+                "reason"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3531,7 +3777,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3617,7 +3866,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["attemptId"],
+              "required": [
+                "attemptId"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3627,7 +3878,10 @@
                   "const": "mock"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 },
                 "vehicleSessionId": {
                   "type": "string",
@@ -3788,20 +4042,33 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 },
                 "operation": {
-                  "enum": ["add", "remove"]
+                  "enum": [
+                    "add",
+                    "remove"
+                  ]
                 }
               },
-              "required": ["attemptId", "operation"],
+              "required": [
+                "attemptId",
+                "operation"
+              ],
               "additionalProperties": false
             },
             "payload": {
               "type": "object",
               "properties": {
                 "outcome": {
-                  "enum": ["applied", "removed", "failed", "unknown"]
+                  "enum": [
+                    "applied",
+                    "removed",
+                    "failed",
+                    "unknown"
+                  ]
                 }
               },
-              "required": ["outcome"],
+              "required": [
+                "outcome"
+              ],
               "additionalProperties": false
             }
           },
@@ -3913,7 +4180,9 @@
                   }
                 }
               },
-              "required": ["attemptIds"],
+              "required": [
+                "attemptIds"
+              ],
               "additionalProperties": false
             },
             "payload": {
@@ -3929,7 +4198,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["recoveryProcedureId", "evidenceId"],
+              "required": [
+                "recoveryProcedureId",
+                "evidenceId"
+              ],
               "additionalProperties": false
             }
           },
@@ -3954,7 +4226,10 @@
         "interests": {
           "type": "array",
           "items": {
-            "enum": ["sea_walk", "cafe"]
+            "enum": [
+              "sea_walk",
+              "cafe"
+            ]
           },
           "minItems": 0,
           "maxItems": 2,
@@ -3993,7 +4268,9 @@
         "expressionPresetIds": {
           "type": "array",
           "items": {
-            "enum": ["quiet-companion"]
+            "enum": [
+              "quiet-companion"
+            ]
           },
           "minItems": 0,
           "maxItems": 1
@@ -4001,7 +4278,10 @@
         "speakingStyle": {
           "anyOf": [
             {
-              "enum": ["calm", "light_humor"]
+              "enum": [
+                "calm",
+                "light_humor"
+              ]
             },
             {
               "type": "null"
@@ -4032,7 +4312,10 @@
           "maxLength": 10
         },
         "avatarId": {
-          "enum": ["a-01", "a-02"]
+          "enum": [
+            "a-01",
+            "a-02"
+          ]
         },
         "summary": {
           "$ref": "#/$defs/summary"
@@ -4040,7 +4323,10 @@
         "speakingStyle": {
           "anyOf": [
             {
-              "enum": ["calm", "light_humor"]
+              "enum": [
+                "calm",
+                "light_humor"
+              ]
             },
             {
               "type": "null"
@@ -4048,7 +4334,12 @@
           ]
         }
       },
-      "required": ["alias", "avatarId", "summary", "speakingStyle"],
+      "required": [
+        "alias",
+        "avatarId",
+        "summary",
+        "speakingStyle"
+      ],
       "additionalProperties": false
     },
     "trip": {
@@ -4111,7 +4402,10 @@
           "minimum": 0
         }
       },
-      "required": ["profile", "trip"],
+      "required": [
+        "profile",
+        "trip"
+      ],
       "additionalProperties": false
     },
     "handoff": {
@@ -4140,7 +4434,10 @@
           "$ref": "#/$defs/sourceVersions"
         },
         "mode": {
-          "enum": ["connected", "my_trip"]
+          "enum": [
+            "connected",
+            "my_trip"
+          ]
         },
         "owner": {
           "$ref": "#/$defs/owner"
@@ -4238,7 +4535,11 @@
           "minimum": 0
         },
         "view": {
-          "enum": ["web", "car", "operator"]
+          "enum": [
+            "web",
+            "car",
+            "operator"
+          ]
         },
         "clientId": {
           "anyOf": [
@@ -4273,7 +4574,11 @@
           "minimum": 0
         },
         "publication": {
-          "enum": ["pending", "private", "published"]
+          "enum": [
+            "pending",
+            "private",
+            "published"
+          ]
         },
         "trip": {
           "anyOf": [
@@ -4306,7 +4611,10 @@
                   "$ref": "#/$defs/sourceVersions"
                 },
                 "mode": {
-                  "enum": ["connected", "my_trip"]
+                  "enum": [
+                    "connected",
+                    "my_trip"
+                  ]
                 },
                 "acknowledged": {
                   "type": "boolean"
@@ -4355,6 +4663,24 @@
             },
             "fresh": {
               "type": "boolean"
+            },
+            "uxRestrictions": {
+              "$ref": "#/$defs/uxRestrictions"
+            },
+            "interactionMode": {
+              "enum": [
+                "parked",
+                "driving_limited",
+                "blocked"
+              ]
+            },
+            "preparedAudioAllowed": {
+              "type": "boolean"
+            },
+            "freshForMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2000
             }
           },
           "required": [
@@ -4388,7 +4714,11 @@
                 "type": "object"
               }
             },
-            "required": ["commandType", "target", "payload"],
+            "required": [
+              "commandType",
+              "target",
+              "payload"
+            ],
             "additionalProperties": false
           }
         },
@@ -4404,7 +4734,10 @@
                 "type": "string"
               }
             },
-            "required": ["code", "message"],
+            "required": [
+              "code",
+              "message"
+            ],
             "additionalProperties": false
           }
         },
@@ -4429,7 +4762,11 @@
           ]
         },
         "journeyMode": {
-          "enum": [null, "my_trip", "connected"]
+          "enum": [
+            null,
+            "my_trip",
+            "connected"
+          ]
         },
         "preparationPreview": {
           "anyOf": [
@@ -4508,7 +4845,11 @@
                   "type": "string"
                 }
               },
-              "required": ["runId", "attemptId", "message"],
+              "required": [
+                "runId",
+                "attemptId",
+                "message"
+              ],
               "additionalProperties": false
             },
             {
@@ -4544,7 +4885,11 @@
                 }
               }
             },
-            "required": ["runId", "deviceId", "settledAttemptIds"],
+            "required": [
+              "runId",
+              "deviceId",
+              "settledAttemptIds"
+            ],
             "additionalProperties": false
           }
         },
@@ -4589,7 +4934,12 @@
           ]
         },
         "navigationMode": {
-          "enum": [null, "real", "mock", "unsupported"]
+          "enum": [
+            null,
+            "real",
+            "mock",
+            "unsupported"
+          ]
         },
         "recoveryStatus": {
           "anyOf": [
@@ -4686,7 +5036,12 @@
           "const": "mobile-meeting-v4"
         }
       },
-      "required": ["schemaVersion", "storeId", "status", "scope"],
+      "required": [
+        "schemaVersion",
+        "storeId",
+        "status",
+        "scope"
+      ],
       "additionalProperties": false
     },
     "success": {
@@ -4728,7 +5083,11 @@
           "additionalProperties": false
         }
       },
-      "required": ["ok", "receipt", "state"],
+      "required": [
+        "ok",
+        "receipt",
+        "state"
+      ],
       "additionalProperties": false
     },
     "error": {
@@ -4747,14 +5106,20 @@
               "type": "string"
             }
           },
-          "required": ["code", "message"],
+          "required": [
+            "code",
+            "message"
+          ],
           "additionalProperties": false
         },
         "state": {
           "$ref": "#/$defs/state"
         }
       },
-      "required": ["ok", "error"],
+      "required": [
+        "ok",
+        "error"
+      ],
       "additionalProperties": false
     },
     "store": {
@@ -4807,7 +5172,11 @@
           "maximum": 9007199254740991
         },
         "publication": {
-          "enum": ["pending", "private", "published"]
+          "enum": [
+            "pending",
+            "private",
+            "published"
+          ]
         },
         "publicationVersion": {
           "type": "integer",
@@ -4858,7 +5227,10 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["handoffId", "vehicleSessionId"],
+              "required": [
+                "handoffId",
+                "vehicleSessionId"
+              ],
               "additionalProperties": false
             },
             {
@@ -4922,10 +5294,22 @@
               ]
             },
             "uiContext": {
-              "enum": ["handoff", "home", "meeting", "navigation"]
+              "enum": [
+                "handoff",
+                "home",
+                "meeting",
+                "navigation"
+              ]
             },
             "navigationSource": {
-              "enum": ["real", "unsupported", "mock"]
+              "enum": [
+                "real",
+                "unsupported",
+                "mock"
+              ]
+            },
+            "uxRestrictions": {
+              "$ref": "#/$defs/uxRestrictions"
             }
           },
           "required": [
@@ -4963,7 +5347,11 @@
                 "$ref": "#/$defs/receipt"
               }
             },
-            "required": ["command", "clientId", "receipt"],
+            "required": [
+              "command",
+              "clientId",
+              "receipt"
+            ],
             "additionalProperties": false
           }
         },
@@ -4988,7 +5376,11 @@
           ]
         },
         "journeyMode": {
-          "enum": [null, "my_trip", "connected"]
+          "enum": [
+            null,
+            "my_trip",
+            "connected"
+          ]
         },
         "onboardingRevision": {
           "type": "integer",
@@ -5039,7 +5431,11 @@
                   "type": "string"
                 }
               },
-              "required": ["runId", "attemptId", "message"],
+              "required": [
+                "runId",
+                "attemptId",
+                "message"
+              ],
               "additionalProperties": false
             },
             {
@@ -5107,7 +5503,12 @@
           ]
         },
         "navigationMode": {
-          "enum": [null, "real", "mock", "unsupported"]
+          "enum": [
+            null,
+            "real",
+            "mock",
+            "unsupported"
+          ]
         }
       },
       "required": [
@@ -5184,7 +5585,11 @@
               "$ref": "#/$defs/state"
             }
           },
-          "required": ["status", "receipt", "state"],
+          "required": [
+            "status",
+            "receipt",
+            "state"
+          ],
           "additionalProperties": false
         },
         {
@@ -5197,7 +5602,10 @@
               "$ref": "#/$defs/state"
             }
           },
-          "required": ["status", "state"],
+          "required": [
+            "status",
+            "state"
+          ],
           "additionalProperties": false
         }
       ]
@@ -5215,7 +5623,10 @@
           "maxLength": 10
         },
         "avatarId": {
-          "enum": ["a-01", "a-02"]
+          "enum": [
+            "a-01",
+            "a-02"
+          ]
         },
         "privateSummary": {
           "$ref": "#/$defs/summary"
@@ -5242,7 +5653,11 @@
           "maxLength": 500
         },
         "inputSource": {
-          "enum": ["typed", "example", "example_edited"]
+          "enum": [
+            "typed",
+            "example",
+            "example_edited"
+          ]
         },
         "confirmed": {
           "const": true
@@ -5252,7 +5667,12 @@
           "minimum": 1
         }
       },
-      "required": ["answerText", "inputSource", "confirmed", "revision"],
+      "required": [
+        "answerText",
+        "inputSource",
+        "confirmed",
+        "revision"
+      ],
       "additionalProperties": false
     },
     "onboarding": {
@@ -5281,7 +5701,11 @@
       "type": "object",
       "properties": {
         "origin": {
-          "enum": ["handoff", "stored_preparation", "demo_preset"]
+          "enum": [
+            "handoff",
+            "stored_preparation",
+            "demo_preset"
+          ]
         },
         "profileVersion": {
           "type": "integer",
@@ -5327,14 +5751,22 @@
           "$ref": "#/$defs/trip"
         }
       },
-      "required": ["sourceVersions", "owner", "ownerTrip"],
+      "required": [
+        "sourceVersions",
+        "owner",
+        "ownerTrip"
+      ],
       "additionalProperties": false
     },
     "publicApproval": {
       "type": "object",
       "properties": {
         "status": {
-          "enum": ["pending", "private", "published"]
+          "enum": [
+            "pending",
+            "private",
+            "published"
+          ]
         },
         "profileVersion": {
           "type": "integer",
@@ -5363,7 +5795,11 @@
         "introTemplateId": {
           "anyOf": [
             {
-              "enum": ["INTRO_NEUTRAL", "INTRO_CALM", "INTRO_LIGHT"]
+              "enum": [
+                "INTRO_NEUTRAL",
+                "INTRO_CALM",
+                "INTRO_LIGHT"
+              ]
             },
             {
               "type": "null"
@@ -5402,7 +5838,12 @@
           "maxLength": 200
         }
       },
-      "required": ["latitude", "longitude", "name", "poiId"],
+      "required": [
+        "latitude",
+        "longitude",
+        "name",
+        "poiId"
+      ],
       "additionalProperties": false
     },
     "navSnapshot": {
@@ -5473,7 +5914,12 @@
           "$ref": "#/$defs/navPoint"
         }
       },
-      "required": ["sessionId", "receivedAt", "poiId", "point"],
+      "required": [
+        "sessionId",
+        "receivedAt",
+        "poiId",
+        "point"
+      ],
       "additionalProperties": false
     },
     "navEvidence": {
@@ -5489,7 +5935,11 @@
           "$ref": "#/$defs/navLookup"
         }
       },
-      "required": ["first", "second", "lookup"],
+      "required": [
+        "first",
+        "second",
+        "lookup"
+      ],
       "additionalProperties": false
     },
     "navObservation": {
@@ -5531,7 +5981,10 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "operation": {
-          "enum": ["add", "remove"]
+          "enum": [
+            "add",
+            "remove"
+          ]
         },
         "deviceId": {
           "type": "string",
@@ -5567,7 +6020,10 @@
           ]
         },
         "dispatch": {
-          "enum": ["not_started", "may_have_executed"]
+          "enum": [
+            "not_started",
+            "may_have_executed"
+          ]
         },
         "executionRecordId": {
           "anyOf": [
@@ -5592,7 +6048,13 @@
           ]
         },
         "outcome": {
-          "enum": ["pending", "unknown", "applied", "removed", "not_dispatched"]
+          "enum": [
+            "pending",
+            "unknown",
+            "applied",
+            "removed",
+            "not_dispatched"
+          ]
         },
         "reports": {
           "type": "array",
@@ -5604,7 +6066,12 @@
                 "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
               },
               "outcome": {
-                "enum": ["unknown", "applied", "removed", "not_dispatched"]
+                "enum": [
+                  "unknown",
+                  "applied",
+                  "removed",
+                  "not_dispatched"
+                ]
               },
               "evidence": {
                 "anyOf": [
@@ -5617,12 +6084,19 @@
                 ]
               }
             },
-            "required": ["reportId", "outcome", "evidence"],
+            "required": [
+              "reportId",
+              "outcome",
+              "evidence"
+            ],
             "additionalProperties": false
           }
         },
         "context": {
-          "enum": ["driver_waypoint", "meeting"]
+          "enum": [
+            "driver_waypoint",
+            "meeting"
+          ]
         },
         "proposalId": {
           "anyOf": [
@@ -5676,7 +6150,11 @@
           "$ref": "#/$defs/navPoint"
         }
       },
-      "required": ["attemptId", "destination", "waypoint"],
+      "required": [
+        "attemptId",
+        "destination",
+        "waypoint"
+      ],
       "additionalProperties": false
     },
     "navigation": {
@@ -5709,7 +6187,11 @@
           ]
         }
       },
-      "required": ["observation", "attempts", "owned"],
+      "required": [
+        "observation",
+        "attempts",
+        "owned"
+      ],
       "additionalProperties": false
     },
     "publicPeer": {
@@ -5914,13 +6396,19 @@
           "type": "object",
           "properties": {
             "variant": {
-              "enum": ["general", "familiar"]
+              "enum": [
+                "general",
+                "familiar"
+              ]
             },
             "startedAt": {
               "type": "string"
             }
           },
-          "required": ["variant", "startedAt"],
+          "required": [
+            "variant",
+            "startedAt"
+          ],
           "additionalProperties": false
         },
         "endedAt": {
@@ -5992,10 +6480,17 @@
                 ]
               },
               "actor": {
-                "enum": ["web", "car"]
+                "enum": [
+                  "web",
+                  "car"
+                ]
               }
             },
-            "required": ["commandId", "type", "actor"],
+            "required": [
+              "commandId",
+              "type",
+              "actor"
+            ],
             "additionalProperties": false
           }
         }
@@ -6053,7 +6548,11 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": ["B", "C", "D"]
+                "enum": [
+                  "B",
+                  "C",
+                  "D"
+                ]
               },
               "name": {
                 "type": "string",
@@ -6067,7 +6566,12 @@
                 "type": "boolean"
               }
             },
-            "required": ["id", "name", "reason", "detailAvailable"],
+            "required": [
+              "id",
+              "name",
+              "reason",
+              "detailAvailable"
+            ],
             "additionalProperties": false
           }
         },
@@ -6082,7 +6586,10 @@
                 "type": "object",
                 "properties": {
                   "kind": {
-                    "enum": ["connection", "meeting"]
+                    "enum": [
+                      "connection",
+                      "meeting"
+                    ]
                   },
                   "requestId": {
                     "type": "string",
@@ -6104,7 +6611,12 @@
                     ]
                   }
                 },
-                "required": ["kind", "requestId", "connectionId", "proposalId"],
+                "required": [
+                  "kind",
+                  "requestId",
+                  "connectionId",
+                  "proposalId"
+                ],
                 "additionalProperties": false
               },
               {
@@ -6126,7 +6638,12 @@
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   }
                 },
-                "required": ["kind", "requestId", "connectionId", "threadId"],
+                "required": [
+                  "kind",
+                  "requestId",
+                  "connectionId",
+                  "threadId"
+                ],
                 "additionalProperties": false
               },
               {
@@ -6148,7 +6665,12 @@
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   }
                 },
-                "required": ["kind", "callId", "requestId", "connectionId"],
+                "required": [
+                  "kind",
+                  "callId",
+                  "requestId",
+                  "connectionId"
+                ],
                 "additionalProperties": false
               }
             ]
@@ -6167,7 +6689,11 @@
               "const": "separate_sdk_fixture"
             }
           },
-          "required": ["storyPlace", "sdkPlace", "source"],
+          "required": [
+            "storyPlace",
+            "sdkPlace",
+            "source"
+          ],
           "additionalProperties": false
         },
         "testRestricted": {
@@ -6262,15 +6788,25 @@
                           "const": true
                         }
                       },
-                      "required": ["ui", "audio", "pendingRequests"],
+                      "required": [
+                        "ui",
+                        "audio",
+                        "pendingRequests"
+                      ],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["webClientId", "cleared"],
+                  "required": [
+                    "webClientId",
+                    "cleared"
+                  ],
                   "additionalProperties": false
                 }
               },
-              "required": ["commandId", "payload"],
+              "required": [
+                "commandId",
+                "payload"
+              ],
               "additionalProperties": false
             },
             {
@@ -6315,7 +6851,11 @@
                           "const": true
                         }
                       },
-                      "required": ["ui", "audio", "pendingRequests"],
+                      "required": [
+                        "ui",
+                        "audio",
+                        "pendingRequests"
+                      ],
                       "additionalProperties": false
                     },
                     "pendingAttemptIds": {
@@ -6354,7 +6894,10 @@
                               "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                             },
                             "outcome": {
-                              "enum": ["removed", "not_dispatched"]
+                              "enum": [
+                                "removed",
+                                "not_dispatched"
+                              ]
                             },
                             "acknowledged": {
                               "const": true
@@ -6393,7 +6936,10 @@
                   "additionalProperties": false
                 }
               },
-              "required": ["commandId", "payload"],
+              "required": [
+                "commandId",
+                "payload"
+              ],
               "additionalProperties": false
             },
             {
@@ -6521,10 +7067,22 @@
               ]
             },
             "uiContext": {
-              "enum": ["handoff", "home", "meeting", "navigation"]
+              "enum": [
+                "handoff",
+                "home",
+                "meeting",
+                "navigation"
+              ]
             },
             "navigationSource": {
-              "enum": ["real", "unsupported", "mock"]
+              "enum": [
+                "real",
+                "unsupported",
+                "mock"
+              ]
+            },
+            "uxRestrictions": {
+              "$ref": "#/$defs/uxRestrictions"
             }
           },
           "required": [
@@ -6572,7 +7130,11 @@
                 "$ref": "#/$defs/receipt"
               }
             },
-            "required": ["command", "clientId", "receipt"],
+            "required": [
+              "command",
+              "clientId",
+              "receipt"
+            ],
             "additionalProperties": false
           }
         },
@@ -6641,7 +7203,10 @@
           "type": "boolean"
         },
         "status": {
-          "enum": ["waiting", "needs_recovery"]
+          "enum": [
+            "waiting",
+            "needs_recovery"
+          ]
         },
         "blockedReasons": {
           "type": "array",
@@ -6704,7 +7269,11 @@
           "type": "string"
         },
         "webCleanup": {
-          "enum": ["acknowledged", "deferred", "not_required"]
+          "enum": [
+            "acknowledged",
+            "deferred",
+            "not_required"
+          ]
         }
       },
       "required": [
@@ -6728,7 +7297,10 @@
           "type": "boolean"
         }
       },
-      "required": ["command", "requiresRecovery"],
+      "required": [
+        "command",
+        "requiresRecovery"
+      ],
       "additionalProperties": false
     },
     "receiptEntry": {
@@ -6752,7 +7324,11 @@
           "$ref": "#/$defs/receipt"
         }
       },
-      "required": ["command", "clientId", "receipt"],
+      "required": [
+        "command",
+        "clientId",
+        "receipt"
+      ],
       "additionalProperties": false
     },
     "messageThread": {
@@ -6771,14 +7347,22 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "messagePresetId": {
-          "enum": ["M1", "M2"]
+          "enum": [
+            "M1",
+            "M2"
+          ]
         },
         "createdBy": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": ["waiting", "received", "replied", "closed"]
+          "enum": [
+            "waiting",
+            "received",
+            "replied",
+            "closed"
+          ]
         },
         "sentAt": {
           "type": "string",
@@ -6787,7 +7371,10 @@
         "responsePresetId": {
           "anyOf": [
             {
-              "enum": ["M1", "M2"]
+              "enum": [
+                "M1",
+                "M2"
+              ]
             },
             {
               "type": "null"
@@ -6807,7 +7394,10 @@
         "replyPresetId": {
           "anyOf": [
             {
-              "enum": ["R1", "R2"]
+              "enum": [
+                "R1",
+                "R2"
+              ]
             },
             {
               "type": "null"
@@ -6839,7 +7429,9 @@
           }
         }
       },
-      "required": ["threads"],
+      "required": [
+        "threads"
+      ],
       "additionalProperties": false
     },
     "messageView": {
@@ -6858,14 +7450,22 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "messagePresetId": {
-          "enum": ["M1", "M2"]
+          "enum": [
+            "M1",
+            "M2"
+          ]
         },
         "createdBy": {
           "type": "string",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": ["waiting", "received", "replied", "closed"]
+          "enum": [
+            "waiting",
+            "received",
+            "replied",
+            "closed"
+          ]
         },
         "sentAt": {
           "type": "string",
@@ -6874,7 +7474,10 @@
         "responsePresetId": {
           "anyOf": [
             {
-              "enum": ["M1", "M2"]
+              "enum": [
+                "M1",
+                "M2"
+              ]
             },
             {
               "type": "null"
@@ -6894,7 +7497,10 @@
         "replyPresetId": {
           "anyOf": [
             {
-              "enum": ["R1", "R2"]
+              "enum": [
+                "R1",
+                "R2"
+              ]
             },
             {
               "type": "null"
@@ -6978,7 +7584,10 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": ["Q1", "Q2"]
+                "enum": [
+                  "Q1",
+                  "Q2"
+                ]
               },
               "text": {
                 "type": "string",
@@ -6992,7 +7601,12 @@
                 "type": "boolean"
               }
             },
-            "required": ["id", "text", "answer", "known"],
+            "required": [
+              "id",
+              "text",
+              "answer",
+              "known"
+            ],
             "additionalProperties": false
           }
         },
@@ -7002,14 +7616,20 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": ["M1", "M2"]
+                "enum": [
+                  "M1",
+                  "M2"
+                ]
               },
               "text": {
                 "type": "string",
                 "maxLength": 1000
               }
             },
-            "required": ["id", "text"],
+            "required": [
+              "id",
+              "text"
+            ],
             "additionalProperties": false
           }
         },
@@ -7019,14 +7639,20 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": ["R1", "R2"]
+                "enum": [
+                  "R1",
+                  "R2"
+                ]
               },
               "text": {
                 "type": "string",
                 "maxLength": 1000
               }
             },
-            "required": ["id", "text"],
+            "required": [
+              "id",
+              "text"
+            ],
             "additionalProperties": false
           }
         },
@@ -7100,7 +7726,10 @@
           ]
         }
       },
-      "required": ["peerIntroSeen", "cue"],
+      "required": [
+        "peerIntroSeen",
+        "cue"
+      ],
       "additionalProperties": false
     },
     "endingCheckpoint": {
@@ -7168,7 +7797,10 @@
         "aChoice": {
           "anyOf": [
             {
-              "enum": ["together", "my_agent"]
+              "enum": [
+                "together",
+                "my_agent"
+              ]
             },
             {
               "type": "null"
@@ -7178,7 +7810,10 @@
         "bChoice": {
           "anyOf": [
             {
-              "enum": ["together", "my_agent"]
+              "enum": [
+                "together",
+                "my_agent"
+              ]
             },
             {
               "type": "null"
@@ -7186,7 +7821,12 @@
           ]
         },
         "status": {
-          "enum": ["pending", "together", "my_agent", "cancelled"]
+          "enum": [
+            "pending",
+            "together",
+            "my_agent",
+            "cancelled"
+          ]
         }
       },
       "required": [
@@ -7204,7 +7844,10 @@
       "type": "object",
       "properties": {
         "mode": {
-          "enum": ["normal", "final_replay"]
+          "enum": [
+            "normal",
+            "final_replay"
+          ]
         },
         "checkpointId": {
           "anyOf": [
@@ -7218,7 +7861,10 @@
           ]
         }
       },
-      "required": ["mode", "checkpointId"],
+      "required": [
+        "mode",
+        "checkpointId"
+      ],
       "additionalProperties": false
     },
     "journeyView": {
@@ -7243,7 +7889,10 @@
         "storyTime": {
           "anyOf": [
             {
-              "enum": ["14:15", "14:35"]
+              "enum": [
+                "14:15",
+                "14:35"
+              ]
             },
             {
               "type": "null"
@@ -7275,12 +7924,20 @@
                   ]
                 },
                 "status": {
-                  "enum": ["pending", "together", "my_agent", "cancelled"]
+                  "enum": [
+                    "pending",
+                    "together",
+                    "my_agent",
+                    "cancelled"
+                  ]
                 },
                 "myChoice": {
                   "anyOf": [
                     {
-                      "enum": ["together", "my_agent"]
+                      "enum": [
+                        "together",
+                        "my_agent"
+                      ]
                     },
                     {
                       "type": "null"
@@ -7288,7 +7945,13 @@
                   ]
                 }
               },
-              "required": ["id", "round", "requestId", "status", "myChoice"],
+              "required": [
+                "id",
+                "round",
+                "requestId",
+                "status",
+                "myChoice"
+              ],
               "additionalProperties": false
             },
             {
@@ -7308,14 +7971,20 @@
                 "type": "string"
               }
             },
-            "required": ["speaker", "text"],
+            "required": [
+              "speaker",
+              "text"
+            ],
             "additionalProperties": false
           }
         },
         "meetingVariant": {
           "anyOf": [
             {
-              "enum": ["general", "familiar"]
+              "enum": [
+                "general",
+                "familiar"
+              ]
             },
             {
               "type": "null"
@@ -7341,7 +8010,10 @@
             "type": "object",
             "properties": {
               "id": {
-                "enum": ["rest", "photo"]
+                "enum": [
+                  "rest",
+                  "photo"
+                ]
               },
               "text": {
                 "type": "string"
@@ -7350,7 +8022,11 @@
                 "type": "string"
               }
             },
-            "required": ["id", "text", "reply"],
+            "required": [
+              "id",
+              "text",
+              "reply"
+            ],
             "additionalProperties": false
           }
         },
@@ -7411,7 +8087,13 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": ["requested", "active", "declined", "ended", "cancelled"]
+          "enum": [
+            "requested",
+            "active",
+            "declined",
+            "ended",
+            "cancelled"
+          ]
         },
         "aConsent": {
           "type": "boolean"
@@ -7420,7 +8102,10 @@
           "type": "boolean"
         },
         "sample": {
-          "enum": ["general", "familiar"]
+          "enum": [
+            "general",
+            "familiar"
+          ]
         }
       },
       "required": [
@@ -7448,13 +8133,20 @@
           ]
         },
         "speaker": {
-          "enum": ["A", "B"]
+          "enum": [
+            "A",
+            "B"
+          ]
         },
         "text": {
           "type": "string"
         }
       },
-      "required": ["id", "speaker", "text"],
+      "required": [
+        "id",
+        "speaker",
+        "text"
+      ],
       "additionalProperties": false
     },
     "callView": {
@@ -7473,7 +8165,13 @@
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "status": {
-          "enum": ["requested", "active", "declined", "ended", "cancelled"]
+          "enum": [
+            "requested",
+            "active",
+            "declined",
+            "ended",
+            "cancelled"
+          ]
         },
         "aConsent": {
           "type": "boolean"
@@ -7518,7 +8216,10 @@
           "const": "mock"
         },
         "operation": {
-          "enum": ["add", "remove"]
+          "enum": [
+            "add",
+            "remove"
+          ]
         },
         "deviceId": {
           "type": "string",
@@ -7559,7 +8260,10 @@
           ]
         },
         "context": {
-          "enum": ["meeting", "driver_waypoint"]
+          "enum": [
+            "meeting",
+            "driver_waypoint"
+          ]
         },
         "proposalId": {
           "anyOf": [
@@ -7573,7 +8277,12 @@
           ]
         },
         "reason": {
-          "enum": ["add", "meeting_cancel", "reset_cleanup", "driver_waypoint"]
+          "enum": [
+            "add",
+            "meeting_cancel",
+            "reset_cleanup",
+            "driver_waypoint"
+          ]
         },
         "resetId": {
           "anyOf": [
@@ -7597,7 +8306,10 @@
           ]
         },
         "dispatch": {
-          "enum": ["awaiting_result", "settled"]
+          "enum": [
+            "awaiting_result",
+            "settled"
+          ]
         },
         "results": {
           "type": "array",
@@ -7609,10 +8321,18 @@
                 "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
               },
               "outcome": {
-                "enum": ["applied", "removed", "failed", "unknown"]
+                "enum": [
+                  "applied",
+                  "removed",
+                  "failed",
+                  "unknown"
+                ]
               }
             },
-            "required": ["commandId", "outcome"],
+            "required": [
+              "commandId",
+              "outcome"
+            ],
             "additionalProperties": false
           }
         }
@@ -7661,7 +8381,11 @@
               }
             }
           },
-          "required": ["revision", "destination", "waypoints"],
+          "required": [
+            "revision",
+            "destination",
+            "waypoints"
+          ],
           "additionalProperties": false
         },
         "attempts": {
@@ -7680,7 +8404,9 @@
                   "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                 }
               },
-              "required": ["attemptId"],
+              "required": [
+                "attemptId"
+              ],
               "additionalProperties": false
             },
             {
@@ -7689,7 +8415,12 @@
           ]
         }
       },
-      "required": ["source", "route", "attempts", "owned"],
+      "required": [
+        "source",
+        "route",
+        "attempts",
+        "owned"
+      ],
       "additionalProperties": false
     },
     "recoveryStatus": {
@@ -7706,7 +8437,32 @@
           "type": "string"
         }
       },
-      "required": ["canConfirm", "procedures", "message"],
+      "required": [
+        "canConfirm",
+        "procedures",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "uxRestrictions": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "requiresDo": {
+          "type": "boolean"
+        },
+        "activeRestrictions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      },
+      "required": [
+        "requiresDo",
+        "activeRestrictions"
+      ],
       "additionalProperties": false
     }
   }

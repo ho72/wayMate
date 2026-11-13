@@ -10,6 +10,10 @@ import com.waymate.app.app.WayMateApp
 import com.waymate.app.data.repository.HandoffRepository
 import com.waymate.app.platform.navigation.createNavigationDriver
 import com.waymate.app.platform.restrictions.VehicleRestrictions
+import com.waymate.app.platform.restrictions.UxObservation
+import com.waymate.app.platform.restrictions.DrivingModePolicy
+import com.waymate.app.platform.restrictions.InteractionMode
+import com.waymate.app.model.DrivingUiState
 import com.waymate.app.platform.speech.AgentSpeech
 import com.waymate.app.platform.speech.SpeechState
 import com.waymate.app.platform.speech.WindowPlaybackLifecycle
@@ -17,11 +21,12 @@ import com.waymate.app.ui.screens.handoff.HandoffUiState
 import com.waymate.app.ui.theme.WayMateTheme
 
 class MainActivity : ComponentActivity() {
-    private var ui by mutableStateOf(HandoffUiState())
+    private var ui by mutableStateOf(HandoffUiState(driving = DrivingUiState(mode = InteractionMode.BLOCKED)))
     private lateinit var speech: AgentSpeech
     private var speechState by mutableStateOf(SpeechState())
     private lateinit var repository: HandoffRepository
     private lateinit var restrictions: VehicleRestrictions
+    private var ux: UxObservation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +48,16 @@ class MainActivity : ComponentActivity() {
                         it.social,
                         it.navigation,
                         it.reset,
+                        it.driving,
                     )
             }
         restrictions =
-            VehicleRestrictions(this) { value ->
-                if (value != false) speech.interrupt()
-                repository.restriction(value)
+            VehicleRestrictions(this, observed = { next ->
+                if (ux != next) speech.interrupt()
+                ux = next
+                repository.restriction(next)
+            }) { value ->
+                if (value == null) speech.interrupt()
             }
         setContent {
             WayMateTheme {
@@ -68,7 +77,14 @@ class MainActivity : ComponentActivity() {
                     repository::closeContent,
                     repository::markMessageRead,
                     speechState,
-                    speech::speak,
+                    { text ->
+                        val mode = DrivingModePolicy.select(ux)
+                        if (mode == InteractionMode.PARKED ||
+                            mode == InteractionMode.DRIVING_LIMITED &&
+                            text == DrivingUiState.NARRATION && repository.mayPlayDrivingAudio())
+                            speech.speak(text)
+                        else speech.interrupt()
+                    },
                     speech::interrupt,
                     repository::openEnding,
                     repository::closeEnding,

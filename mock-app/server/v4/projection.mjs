@@ -1,4 +1,6 @@
 import { callProjection, callBindings } from "./call.mjs";
+import { interactionMode } from "./interaction-mode.mjs";
+import { STATUS_TTL_MS } from "../../shared/config/protocol-v4.mjs";
 import { mockProjection, mockBindings } from "./mock-navigation.mjs";
 import { recoveryStatus } from "./recovery.mjs";
 import { journeyProjection, journeyBindings } from "./ending.mjs";
@@ -84,6 +86,10 @@ export function project(s, actor, clientId, now) {
       restricted: s.vehicle.restricted,
       foreground: s.vehicle.foreground,
       fresh: fresh(s, now),
+      uxRestrictions: s.vehicle.uxRestrictions ?? null,
+      interactionMode: interactionMode(s, now),
+      preparedAudioAllowed: interactionMode(s, now) === "driving_limited",
+      freshForMs: fresh(s, now) ? Math.max(0, Math.min(STATUS_TTL_MS, Math.floor(STATUS_TTL_MS - (now - s.vehicle.seenAt)))) : 0,
     },
     allowedActions: actions,
     actionBindings: {

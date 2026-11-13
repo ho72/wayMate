@@ -1,4 +1,5 @@
 import { callTypes, applyCall } from "./call.mjs";
+import { consistentRestriction } from "./interaction-mode.mjs";
 import { initialMockNavigation, realPending } from "./mock-navigation.mjs";
 import { journeyTypes, applyJourney } from "./ending.mjs";
 import { applyContent } from "./content.mjs";
@@ -34,6 +35,7 @@ export const parked = (s, now) =>
   fresh(s, now) &&
   s.vehicle.restrictionKnown &&
   !s.vehicle.restricted &&
+  consistentRestriction(s.vehicle) &&
   s.vehicle.foreground;
 export const canLoad = (s, now) =>
   !s.vehicleActivation &&
@@ -306,12 +308,15 @@ export function apply(s, c, clientId, now) {
         vehicleEpoch: s.vehicle.vehicleEpoch + 1,
         statusSeq: 0,
         restrictionKnown: false,
+        uxRestrictions: null,
         restricted: true,
         foreground: false,
         seenAt: null,
       };
       break;
     case "CAR_STATUS":
+      if (!consistentRestriction(p) || (p.uxRestrictions && !p.restrictionKnown))
+        fail(400, "INVALID_TRANSITION", "제한 관측과 restricted 값이 일치하지 않습니다.");
       if (
         p.vehicleSessionId !== s.vehicle.vehicleSessionId ||
         p.statusSeq <= s.vehicle.statusSeq
@@ -322,7 +327,7 @@ export function apply(s, c, clientId, now) {
           "현재 세션의 증가하는 상태 번호가 필요합니다.",
         );
       const { displayedCue: _displayedCue, ...status } = p;
-      Object.assign(s.vehicle, { ...status, seenAt: now });
+      Object.assign(s.vehicle, { ...status, uxRestrictions: p.uxRestrictions ?? null, seenAt: now });
       break;
     case "CAR_LOADED":
       if (

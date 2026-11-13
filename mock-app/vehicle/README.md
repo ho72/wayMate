@@ -1,6 +1,6 @@
 # wayMate Pleos 차량 앱
 
-Kotlin/Compose 차량 앱입니다. 현재 **v4 connected/my_trip 불러오기·드래곤 홈·복원·만남 동의·실제 내비 승인**을 지원합니다. [13 실행·변경 기록](../../docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. P02 공개 문답·말 전달과 [P03 만남 재연·P04 독립 선택/두 결말](../../docs_prototype/16_만남_재연_및_P04_두_결말.md), O01 안전한 초기화를 지원합니다. 준비 합성 음성 34개·일반 통화 동의/샘플·포커스 중단·캐릭터 최소 동작·모의 내비 실패/미확인을 지원합니다. [1차 최신 검수](../../docs_prototype/23_1차_개발_완료_및_검수.md)를 먼저 확인하세요. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
+Kotlin/Compose 차량 앱입니다. 현재 **v4 connected/my_trip 불러오기·드래곤 홈·복원·만남 동의·실제 내비 승인**을 지원합니다. [13 실행·변경 기록](../../docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. P02 공개 문답·말 전달과 [P03 만남 재연·P04 독립 선택/두 결말](../../docs_prototype/16_만남_재연_및_P04_두_결말.md), O01 안전한 초기화를 지원합니다. 준비 합성 음성 35개·일반 통화 동의/샘플·포커스 중단·캐릭터 최소 동작·모의 내비 실패/미확인을 지원합니다. [1차 최신 검수](../../docs_prototype/23_1차_개발_완료_및_검수.md)를 먼저 확인하세요. [현재 실행·검증](../../docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)을 참고하세요.
 
 ## Android Studio
 
@@ -48,7 +48,7 @@ adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.mock/com.waymat
 | `mock/.../platform/navigation` | SDK 없이 변경 차단 |
 | `realDebug/.../platform/navigation` | 이전 시험 코드 보존·Activity 비활성 |
 
-Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/reference.png`를 빌드 중 drawable-nodpi로 복사합니다. a-01=승인한 정적 드래곤, a-02=햇살 Canvas입니다. 같은 렌더 이미지에 대기/발화/중단 동작을 적용하며 실제 3D rig·정교한 립싱크는 없습니다. `copyPreparedSpeech`는 공통 한국어 합성 음성 34개를 APK assets에 복사합니다. 준비 음성과 기기 TTS·실제 상대 통신을 구분합니다.
+Gradle `copyCharacter`가 공통 `assets/images/characters/blue-dragon-v1/reference.png`를 빌드 중 drawable-nodpi로 복사합니다. a-01=승인한 정적 드래곤, a-02=햇살 Canvas입니다. 같은 렌더 이미지에 대기/발화/중단 동작을 적용하며 실제 3D rig·정교한 립싱크는 없습니다. `copyPreparedSpeech`는 공통 한국어 합성 음성 35개를 APK assets에 복사합니다. 준비 음성과 기기 TTS·실제 상대 통신을 구분합니다.
 
 ## 실제 내비 승인
 
@@ -71,6 +71,11 @@ CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬�
 모바일의 연결·공통 시간 확인 후 connected 전달을 준비하고 차량에서 불러오세요. 차량에는 신규 후보·매칭 버튼이 없습니다. 홈 → 만남 제안 받기 → 같은 제안의 B 수락(O01) → 내비 승인으로 진행합니다. 만남 취소 뒤 추가한 경유지는 별도로 제거 승인합니다.
 
 
-1차 서버·APK·JVM·Lint 검사: `./scripts/verify-first-pass.sh`. Pleos 준비 음성/포커스·통화/모의 승인·실제 창/수명주기 기기 회귀 7개까지 실행하려면 `./scripts/verify-first-pass.sh device`. 기기 APK 설치는 데이터를 보존하는 갱신이다. 검수용 모의 앱이 실행 중이면 검사가 앱을 종료하므로 현재 요청은 서버/앱 데이터에 보존하고 다시 들어가 확인한다.
+1차 서버·APK·JVM·Lint 검사: `./scripts/verify-first-pass.sh`. Pleos 준비 음성/포커스·통화/모의 승인·실제 창/수명주기 기기 회귀 9개까지 실행하려면 `./scripts/verify-first-pass.sh device`. 기기 APK 설치는 데이터를 보존하는 갱신이다. 검수용 모의 앱이 실행 중이면 검사가 앱을 종료하므로 현재 요청은 서버/앱 데이터에 보존하고 다시 들어가 확인한다.
 
 `-PwaymateApiPort=3001`로 별도 검수 서버를 지정할 수 있다. 시연본 인계는 기본 3000 빌드로 `mock-app`에서 `node scripts/package-first-pass.mjs`를 실행한다. APK·서버/웹·계약·소재와 SHA-256 목록이 `runtime/first-pass/handoff`에 생성된다. 개인 상태·journal·인증값은 포함하지 않는다.
+
+
+주행 간편 모드는 MainActivity의 DO 선언과 실제 UXR 기반 정적 캐릭터 화면을 사용합니다. 정차 상세 기능과 분리하며 짧은 준비 음원/중단만 제공합니다. 실제 Console P→D·36km/h→P 전환은 `DrivingModeTransitionDeviceTest`, 모의 승인창/유효 시간은 `DrivingSurfaceTest`로 검사합니다. 8088 포트 포워딩·기기 준비·음성 인식 미지원 범위는 [26번](../../docs_prototype/26_캐릭터_중심_주행_정차_모드.md)을 따릅니다.
+
+허용 제한 마스크는 `shared/config/driving-policy.json` 한 곳에서 관리합니다. 서버가 직접 읽고, 차량 빌드의 `generateDrivingProfiles`가 Kotlin 정책을 생성합니다. 생성 파일은 직접 수정하지 않습니다. 제한 관측은 `RestrictionSnapshot` 하나로 전달해 CAR_STATUS의 known·restricted·raw 값이 서로 다른 시점에서 섞이지 않게 합니다.

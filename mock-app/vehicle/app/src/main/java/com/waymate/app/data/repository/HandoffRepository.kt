@@ -10,6 +10,10 @@ import com.waymate.app.data.api.JourneyParser
 import com.waymate.app.model.Journey
 import com.waymate.app.model.NavigationUiState
 import com.waymate.app.platform.navigation.NavigationDriver
+import com.waymate.app.platform.restrictions.UxObservation
+import com.waymate.app.platform.restrictions.RestrictionSnapshot
+import com.waymate.app.platform.restrictions.DrivingModePolicy
+import com.waymate.app.model.DrivingUiState
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
@@ -49,10 +53,12 @@ class HandoffRepository(
     private var sessionId = UUID.randomUUID().toString()
     private var seq = 0L
     @Volatile private var foreground = false
-    @Volatile private var restricted: Boolean? = null
+    @Volatile private var restrictionSnapshot = RestrictionSnapshot.UNKNOWN
+    private val restricted: Boolean? get() = restrictionSnapshot.restricted
     @Volatile private var closed = false
     @Volatile private var loading = false
     @Volatile private var state: JSONObject? = null
+    @Volatile private var stateReceivedAt = 0L
     @Volatile private var pending = preferences.getString("pending", null)?.let(::JSONObject)
     private var stopPending = preferences.getString("stopPending", null)?.let(::JSONObject)
     private val stopCommands =
@@ -131,18 +137,20 @@ class HandoffRepository(
     fun resume() {
         foreground = true
         navigation.resume()
-        restricted = null
+        restrictionSnapshot = RestrictionSnapshot.UNKNOWN
         main.removeCallbacks(tick)
         main.post(tick)
     }
 
-    fun restriction(value: Boolean?) {
-        if (restricted != value) {
+    fun restriction(ux: UxObservation?) {
+        val next = RestrictionSnapshot(ux)
+        if (restrictionSnapshot != next) {
             lifecycleGeneration++
             navIntent = null
+            navigation.abandonGrant()
         }
-        restricted = value
-        if (value != false) show("정차 상태와 차량 제한을 확인한 뒤 불러올 수 있어요.")
+        restrictionSnapshot = next
+        show(if (next.restricted != false) "정차 후 상세 기능을 이어갈 수 있어요." else null)
     }
 
     fun pause() {
@@ -150,7 +158,7 @@ class HandoffRepository(
         lifecycleGeneration++
         navIntent = null
         navigation.pause()
-        restricted = null
+        restrictionSnapshot = RestrictionSnapshot.UNKNOWN
         main.removeCallbacks(tick)
         if (navigation.hasWork()) main.post(tick)
         show("화면이 비활성화되어 여행 불러오기를 잠시 멈췄어요.")
@@ -210,6 +218,8 @@ class HandoffRepository(
         if (preferences.getString("lastRunId", null) != current.getString("runId"))
             check(preferences.edit().putString("lastRunId", current.getString("runId")).commit())
         state = current
+        // Subtract the full HTTP/save latency from a server freshness budget, never extend it.
+        stateReceivedAt = api.lastResponseRequestStartedAt
     }
 
     private fun recordedScopeAllowed(rec: JSONObject): Boolean {
@@ -436,14 +446,17 @@ class HandoffRepository(
 
     private fun report() {
         val command = envelope("CAR_STATUS", JSONObject())
-        val value = restricted
+        val restriction = restrictionSnapshot.reportFields()
         val payload =
             JSONObject()
                 .put("vehicleSessionId", sessionId)
                 .put("statusSeq", ++seq)
-                .put("restrictionKnown", value != null)
-                .put("restricted", value != false)
+                .put("restrictionKnown", restriction.restrictionKnown)
+                .put("restricted", restriction.restricted)
                 .put("foreground", foreground)
+                .put("uxRestrictions", restriction.ux?.let {
+                    JSONObject().put("requiresDo", it.requiresDo).put("activeRestrictions", it.activeRestrictions)
+                } ?: JSONObject.NULL)
                 .put(
                     "uiContext",
                     if (navigationVisible) "navigation"
@@ -471,6 +484,9 @@ class HandoffRepository(
     private fun sync() {
         recoverStop()
         val observed = read()
+        // Publish a real restriction transition before recovering any pending approval.
+        if (foreground && restricted != false &&
+            observed.getJSONObject("vehicle").optString("vehicleSessionId") == sessionId) report()
         if (observed.optJSONObject("reset") != null || observed.optJSONObject("recovery") != null) {
             syncReset()
             return
@@ -1462,6 +1478,12 @@ class HandoffRepository(
                 social = socialUi(),
                 navigation = navigationUi(),
                 reset = resetUi(),
+                driving = DrivingUiState(
+                    mode = DrivingModePolicy.select(restrictionSnapshot.ux),
+                    canPlayPreparedAudio = mayPlayDrivingAudio(),
+                    status = loaded?.let { "다음 일정 ${it.nextVisit}" } ?: "정차하면 여행을 이어갈 수 있어요",
+                    audioValidUntil = stateReceivedAt + (current?.optJSONObject("vehicle")?.optLong("freshForMs") ?: 0L),
+                ),
                 preparation =
                     current?.optJSONObject("preparationPreview")?.let {
                         JourneyParser.preparation(it)
@@ -1476,5 +1498,15 @@ class HandoffRepository(
                     )
                 )
         }
+    }
+
+    fun mayPlayDrivingAudio(): Boolean {
+        val vehicle = state?.optJSONObject("vehicle") ?: return false
+        val restriction = restrictionSnapshot
+        return foreground && networkReady &&
+            DrivingModePolicy.select(restriction.ux) == com.waymate.app.platform.restrictions.InteractionMode.DRIVING_LIMITED &&
+            vehicle.optString("vehicleSessionId") == sessionId &&
+            vehicle.optBoolean("preparedAudioAllowed") && vehicle.optBoolean("fresh") &&
+            SystemClock.elapsedRealtime() < stateReceivedAt + vehicle.optLong("freshForMs")
     }
 }

@@ -279,7 +279,11 @@
       "restrictionKnown": true,
       "restricted": false,
       "foreground": true,
-      "fresh": true
+      "fresh": true,
+      "uxRestrictions": null,
+      "interactionMode": "parked",
+      "preparedAudioAllowed": false,
+      "freshForMs": 2000
     },
     "allowedActions": [
       "CONNECT_END",

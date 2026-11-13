@@ -3,6 +3,7 @@ import { mkdir, writeFile, readFile, access } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { GENERAL_CALL, FAMILIAR_CALL } from "../shared/config/call-v4.mjs";
+import { DRIVING_NARRATION } from "../shared/config/driving-v4.mjs";
 import {
   GENERAL_MEETING,
   FAMILIAR_MEETING,
@@ -25,6 +26,7 @@ const temp = new URL("../runtime/speech-generation/", import.meta.url);
 await mkdir(directory, { recursive: true });
 await mkdir(temp, { recursive: true });
 const items = [
+  { text: DRIVING_NARRATION },
   ...GENERAL_CALL,
   ...FAMILIAR_CALL,
   ...GENERAL_MEETING,
