@@ -6,9 +6,21 @@ import { fixture } from "../helpers/v4-fixture.mjs";
 import { validateStore } from "../../server/v4/state.mjs";
 import { project } from "../../server/v4/projection.mjs";
 import { assertContract } from "../../server/v4/validation.mjs";
+import { DRIVING_ALLOWED_MASKS } from "../../shared/config/driving-v4.mjs";
 
 const moving = { requiresDo: true, activeRestrictions: 80 };
 const parked = { requiresDo: false, activeRestrictions: 0 };
+test("shared driving profiles are valid and every configured mask is used by the server", async t => {
+  const raw = JSON.parse(await readFile(new URL("../../shared/config/driving-policy.json", import.meta.url)));
+  assert.equal(raw.schemaVersion, 1);
+  assert.deepEqual(raw.allowedMasks, [0, 80]);
+  assert.deepEqual(DRIVING_ALLOWED_MASKS, raw.allowedMasks);
+  const f = await setup(t);
+  for (const [i, mask] of DRIVING_ALLOWED_MASKS.entries()) {
+    await status(f, 2 + i, { requiresDo: true, activeRestrictions: mask });
+    assert.equal((await f.read("car")).vehicle.interactionMode, "driving_limited");
+  }
+});
 async function setup(t) {
   const f = await fixture(t);
   await f.connect(); await f.activate("connected", "mock");

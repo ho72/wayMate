@@ -77,3 +77,5 @@ CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬�
 
 
 주행 간편 모드는 MainActivity의 DO 선언과 실제 UXR 기반 정적 캐릭터 화면을 사용합니다. 정차 상세 기능과 분리하며 짧은 준비 음원/중단만 제공합니다. 실제 Console P→D·36km/h→P 전환은 `DrivingModeTransitionDeviceTest`, 모의 승인창/유효 시간은 `DrivingSurfaceTest`로 검사합니다. 8088 포트 포워딩·기기 준비·음성 인식 미지원 범위는 [26번](../../docs_prototype/26_캐릭터_중심_주행_정차_모드.md)을 따릅니다.
+
+허용 제한 마스크는 `shared/config/driving-policy.json` 한 곳에서 관리합니다. 서버가 직접 읽고, 차량 빌드의 `generateDrivingProfiles`가 Kotlin 정책을 생성합니다. 생성 파일은 직접 수정하지 않습니다. 제한 관측은 `RestrictionSnapshot` 하나로 전달해 CAR_STATUS의 known·restricted·raw 값이 서로 다른 시점에서 섞이지 않게 합니다.

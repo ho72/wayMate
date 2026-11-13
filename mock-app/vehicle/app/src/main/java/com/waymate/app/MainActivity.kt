@@ -55,9 +55,9 @@ class MainActivity : ComponentActivity() {
             VehicleRestrictions(this, observed = { next ->
                 if (ux != next) speech.interrupt()
                 ux = next
+                repository.restriction(next)
             }) { value ->
                 if (value == null) speech.interrupt()
-                repository.restriction(value, ux)
             }
         setContent {
             WayMateTheme {

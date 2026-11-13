@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,8 @@ plugins {
 }
 
 val apiPort = providers.gradleProperty("waymateApiPort").orElse("3000").get().toInt().also { require(it in 1024..65535) }
+val drivingSourceDirectory = layout.buildDirectory.dir("generated/driving-policy-source")
+val drivingTestResources = layout.buildDirectory.dir("generated/driving-policy-test-resources")
 
 android {
     namespace = "com.waymate.app"
@@ -38,6 +42,8 @@ android {
 
     sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/character-res"))
     sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("generated/speech-assets"))
+    sourceSets["main"].java.srcDir(drivingSourceDirectory)
+    sourceSets["test"].resources.srcDir(drivingTestResources)
     androidResources { noCompress += "m4a" }
 
     buildFeatures {
@@ -89,3 +95,29 @@ val copyPreparedSpeech by tasks.registering(Copy::class) {
     into(layout.buildDirectory.dir("generated/speech-assets/speech"))
 }
 tasks.named("preBuild") { dependsOn(copyPreparedSpeech) }
+
+// The server reads this same JSON. Generate the native policy; do not maintain another mask list.
+val generateDrivingProfiles by tasks.registering {
+    val policy = layout.projectDirectory.file("../../shared/config/driving-policy.json")
+    inputs.file(policy)
+    outputs.dir(drivingSourceDirectory)
+    outputs.dir(drivingTestResources)
+    doLast {
+        val data = JsonSlurper().parse(policy.asFile) as Map<*, *>
+        require(data["schemaVersion"] == 1)
+        val masks = (data["allowedMasks"] as List<*>).map {
+            require(it is Number && it.toDouble() == it.toInt().toDouble())
+            it.toInt().also { value -> require(value in 0..511) }
+        }
+        require(masks.isNotEmpty() && masks.distinct().size == masks.size)
+        val output = drivingSourceDirectory.get().file("com/waymate/app/platform/restrictions/DrivingProfiles.kt").asFile
+        output.parentFile.mkdirs()
+        output.writeText("package com.waymate.app.platform.restrictions\n\n" +
+            "// Generated from shared/config/driving-policy.json.\n" +
+            "internal object DrivingProfiles { val allowedMasks: Set<Int> = setOf(${masks.joinToString(", ")}) }\n")
+        val resource = drivingTestResources.get().file("driving-policy.json").asFile
+        resource.parentFile.mkdirs()
+        policy.asFile.copyTo(resource, overwrite = true)
+    }
+}
+tasks.named("preBuild") { dependsOn(generateDrivingProfiles) }

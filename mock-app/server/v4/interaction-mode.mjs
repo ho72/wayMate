@@ -1,4 +1,5 @@
 import { STATUS_TTL_MS } from "../../shared/config/protocol-v4.mjs";
+import { DRIVING_ALLOWED_MASKS } from "../../shared/config/driving-v4.mjs";
 
 // This first driving surface is static and contains no business actions or voice transcription.
 // Only the observed emulator's baseline and NO_VIDEO|NO_SETUP profiles are enabled.
@@ -9,7 +10,7 @@ export function interactionMode(s, now) {
     return "blocked";
   const ux = v.uxRestrictions;
   if (!v.restricted && (!ux || (!ux.requiresDo && ux.activeRestrictions === 0))) return "parked";
-  if (v.restricted && ux?.requiresDo && [0, 0x50].includes(ux.activeRestrictions))
+  if (v.restricted && ux?.requiresDo && DRIVING_ALLOWED_MASKS.includes(ux.activeRestrictions))
     return "driving_limited";
   return "blocked";
 }

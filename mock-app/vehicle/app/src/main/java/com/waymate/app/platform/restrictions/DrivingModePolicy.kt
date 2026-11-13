@@ -10,7 +10,7 @@ object DrivingModePolicy {
     fun select(ux: UxObservation?): InteractionMode = when {
         ux == null -> InteractionMode.BLOCKED
         !ux.requiresDo && ux.activeRestrictions == 0 -> InteractionMode.PARKED
-        ux.requiresDo && ux.activeRestrictions in listOf(0, 0x50) -> InteractionMode.DRIVING_LIMITED
+        ux.requiresDo && ux.activeRestrictions in DrivingProfiles.allowedMasks -> InteractionMode.DRIVING_LIMITED
         else -> InteractionMode.BLOCKED
     }
 }
