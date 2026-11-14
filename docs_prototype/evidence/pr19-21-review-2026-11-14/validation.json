@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-14",
+  "reviews": {
+    "19": "Retain QA 28, renumber v5 design to 31, include #18 documents with both README entry points",
+    "20": "No additional defects; synchronize reviewed predecessor",
+    "21": [
+      "Bind asynchronous chat work to its originating view and conversation",
+      "Whitelist tool names before execution/events and tolerate legacy labels"
+    ]
+  },
+  "checks": {
+    "service": {
+      "passed": 42,
+      "failed": 0,
+      "previous": 15,
+      "addedUi": 20,
+      "addedToolsAndHistory": 7
+    },
+    "mockApp": {
+      "passed": 328,
+      "failed": 0
+    },
+    "qaEvidenceChecksums": 37,
+    "relativeLinksVerified": true,
+    "uniqueDocumentNumbers": [
+      "28",
+      "29",
+      "30",
+      "31",
+      "32"
+    ],
+    "mergeTreeWithQa18": "passed",
+    "externalAiCalls": 0,
+    "androidDeviceTestsRepeated": false
+  },
+  "browser": {
+    "host": "isolated localhost fixture",
+    "postTargets": [
+      "A",
+      "B"
+    ],
+    "bDraftPreserved": true,
+    "aResultSavedToA": true,
+    "bNextSendSavedToB": true,
+    "temporaryServerAndDatabaseRemoved": true
+  },
+  "preservation": {
+    "userGradlePropertiesUnchanged": true,
+    "mainMerged": false,
+    "liveAppServersUnchanged": true
+  }
+}

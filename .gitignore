@@ -34,3 +34,8 @@ key.properties
 /.playwright-cli/
 
 /output/playwright/
+
+# Actual account/conversation database and local service verification
+/service/runtime/*
+!/service/runtime/.gitkeep
+/service/output/
