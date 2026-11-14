@@ -211,6 +211,13 @@ function targetConnection(s, t) {
   if (t.connectionId !== s.social.connection.id)
     fail(409, "STALE_STATE", "현재 연결을 다시 확인해 주세요.");
 }
+function endConnection(s) {
+  const connection = s.social.connection;
+  if (connection.status === "linked") {
+    connection.status = "ended";
+    connection.version++;
+  }
+}
 function cancelMeeting(s) {
   closeContent(s);
   const m = s.social.meeting;
@@ -278,6 +285,7 @@ export function applySocial(s, c, id, now) {
       ["proposed", "confirmed"].includes(m.status)
     ) {
       cancelMeeting(s);
+      endConnection(s);
       return;
     }
     if (
@@ -292,7 +300,11 @@ export function applySocial(s, c, id, now) {
       );
     m.bConsent = p.decision === "accept";
     m.status = p.decision === "accept" ? "confirmed" : "declined";
-    if (m.status === "declined") closeContent(s);
+    if (m.status === "declined") {
+      m.aConsent = false;
+      closeContent(s);
+      endConnection(s);
+    }
     return;
   }
   const actions = socialBindings(s, a, now);
@@ -404,12 +416,12 @@ export function applySocial(s, c, id, now) {
       if (t.connectionId !== m.connectionId || t.proposalId !== m.proposalId)
         fail(409, "STALE_STATE", "취소할 만남이 바뀌었어요.");
       cancelMeeting(s);
+      endConnection(s);
       break;
     case "MEETING_DECLINE":
       targetConnection(s, t);
       m.status = "declined";
-      con.status = "ended";
-      con.version++;
+      endConnection(s);
       closeContent(s);
       break;
   }
@@ -469,7 +481,11 @@ export function socialProjection(s, actor, now) {
   return {
     connection: structuredClone(c),
     meeting: structuredClone(m),
-    peer: activePeer || (actor === "web" && publicReady(s)) ? peer : null,
+    peer:
+      activePeer ||
+      (actor === "web" && publicReady(s) &&
+        !["ended", "cancelled", "declined"].includes(c.status))
+        ? peer : null,
     testRestricted: s.social.testRestricted,
     tripShareApproved: s.social.tripShareApproved,
     approvedFields: s.social.approvedFields,
