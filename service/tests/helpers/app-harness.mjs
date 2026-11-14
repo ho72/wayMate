@@ -1,4 +1,5 @@
 import vm from "node:vm";
+import { webcrypto } from "node:crypto";
 import { readFile } from "node:fs/promises";
 // Run the shipped browser handlers with controlled I/O; rendering is observed, not reimplemented.
 export async function appHarness(api) {
@@ -24,10 +25,18 @@ export async function appHarness(api) {
         classList: { toggle() {} },
         setAttribute() {},
         reset() {},
+        open: false,
+        close() {
+          this.open = false;
+        },
+        showModal() {
+          this.open = true;
+        },
       });
     return elements.get(id);
   };
   const context = {
+    crypto: webcrypto,
     ServiceClient: class {
       constructor() {
         return api;
@@ -86,7 +95,7 @@ export async function appHarness(api) {
     draw=()=>{stats.draws++;stats.displayed=S.chat?.id??S.view;};
     renderChrome=()=>{};updateComposer=()=>{};scrollBottom=()=>{};
     notice=message=>stats.notices.push(message);refresh=async()=>{};
-    globalThis.app={S,route,newChat,stream,turnView,identity,submit:$('message-form').onsubmit};
+    globalThis.app={S,route,newChat,stream,turnView,identity,refreshVehicles,reviewVehicleSend,vehicleAction,vehicleTripControls,submit:$('message-form').onsubmit};
   `,
     context,
   );

@@ -1608,3 +1608,63 @@ dialog h2 {
 .map-link {
   min-height: 44px;
 }
+
+.vehicle-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+.vehicle-card {
+  padding: 18px;
+  background: var(--surface, #f4faf9);
+  border: 1px solid #d9e8e7;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.vehicle-card h3 {
+  margin: 0 0 8px;
+}
+.vehicle-card p {
+  margin: 4px 0;
+}
+.vehicle-card button {
+  flex-shrink: 0;
+}
+#vehicle-pair-form,
+#vehicle-send-form {
+  display: grid;
+  gap: 12px;
+}
+#vehicle-send-form select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #ccd9df;
+  border-radius: 12px;
+  padding: 12px;
+  background: white;
+  color: inherit;
+  font: inherit;
+}
+#trip-vehicle-controls {
+  margin-top: 24px;
+}
+#vehicle-confirm-dialog {
+  max-width: 520px;
+}
+#vehicle-confirm-dialog .draft-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+@media (max-width: 480px) {
+  .vehicle-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .vehicle-card button {
+    align-self: flex-start;
+  }
+}

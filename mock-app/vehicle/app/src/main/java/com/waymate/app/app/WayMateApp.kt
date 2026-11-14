@@ -37,6 +37,7 @@ fun WayMateApp(
     onOpenEnding: () -> Unit,
     onCloseEnding: () -> Unit,
     onProfileCue: (String) -> Unit,
+    onOpenPersonalTrip: (() -> Unit)? = null,
 ) {
     if (state.driving.mode != InteractionMode.PARKED)
         DrivingScreen(state.driving, state.journey, speech, onSpeak, onStopSpeech)
@@ -99,6 +100,7 @@ fun WayMateApp(
                 onSocialAction = onSocialAction,
                 onOpenContent = onOpenContent,
                 onOpenEnding = onOpenEnding,
+                onOpenPersonalTrip = onOpenPersonalTrip,
             )
     }
 }

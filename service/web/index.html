@@ -118,7 +118,7 @@
           autocomplete="username"
           minlength="3"
           maxlength="32"
-          pattern="[a-zA-Z0-9][a-zA-Z0-9_.-]{2,31}"
+          pattern="[a-zA-Z0-9][a-zA-Z0-9_.\-]{2,31}"
           placeholder="영문·숫자로 3~32자"
           required
         />
@@ -179,6 +179,23 @@
         ></button>
       </div>
       <div id="trip-content"></div>
+    </dialog>
+    <dialog id="vehicle-confirm-dialog" aria-labelledby="vehicle-confirm-title">
+      <div class="dialog-header">
+        <h2 id="vehicle-confirm-title">이 여행을 차로 보낼까요?</h2>
+      </div>
+      <div id="vehicle-confirm-detail"></div>
+      <p id="vehicle-confirm-hint" class="field-hint">
+        별명·캐릭터와 선택한 여행 일정만 전해요. 차량에서 직접 받은 뒤 수신
+        완료로 표시해요.
+      </p>
+      <div class="draft-actions">
+        <button class="main-button" data-action="vehicle-send-confirm">
+          확인하고 보내기</button
+        ><button class="outline-button" data-action="vehicle-send-cancel">
+          돌아가기
+        </button>
+      </div>
     </dialog>
     <div
       id="notice"

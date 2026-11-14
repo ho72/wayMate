@@ -7,6 +7,7 @@ plugins {
 }
 
 val apiPort = providers.gradleProperty("waymateApiPort").orElse("3000").get().toInt().also { require(it in 1024..65535) }
+val personalApiPort = providers.gradleProperty("waymatePersonalApiPort").orElse("3004").get().toInt().also { require(it in 1024..65535) }
 val drivingSourceDirectory = layout.buildDirectory.dir("generated/driving-policy-source")
 val drivingTestResources = layout.buildDirectory.dir("generated/driving-policy-test-resources")
 
@@ -18,6 +19,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:$apiPort\"")
+        buildConfigField("String", "PERSONAL_API_BASE_URL", "\"http://10.0.2.2:$personalApiPort\"")
         applicationId = "com.waymate.app"
         minSdk = 28
         targetSdk = 34

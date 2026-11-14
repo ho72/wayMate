@@ -3,9 +3,10 @@ import { mkdir, open, unlink, chmod } from "node:fs/promises";
 import { dirname } from "node:path";
 import { randomUUID, createHash } from "node:crypto";
 import { error, validate } from "./contracts.mjs";
+import { installVehicleSchema, vehicleStore } from "./vehicle-store.mjs";
 const parse = (value) => JSON.parse(value);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-export async function openRepository(file) {
+export async function openRepository(file, { now = Date.now } = {}) {
   await mkdir(dirname(file), { recursive: true, mode: 0o700 });
   const lock = await open(file + ".lock", "wx", 0o600).catch(() => {
     throw error(
@@ -23,7 +24,7 @@ export async function openRepository(file) {
     db.exec(
       "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;",
     );
-    if (db.prepare("PRAGMA user_version").get().user_version > 1)
+    if (db.prepare("PRAGMA user_version").get().user_version > 2)
       throw new Error("Unsupported database version");
     db.exec(`
       CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, handle TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, profile TEXT NOT NULL, profile_version INTEGER NOT NULL DEFAULT 1, consent_at INTEGER, created_at INTEGER NOT NULL);
@@ -35,9 +36,9 @@ export async function openRepository(file) {
       CREATE TABLE IF NOT EXISTS trips(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,draft_id TEXT NOT NULL UNIQUE REFERENCES drafts(id),body TEXT NOT NULL,created_at INTEGER NOT NULL);
       CREATE INDEX IF NOT EXISTS chats_owner ON chats(user_id,updated_at);
       CREATE INDEX IF NOT EXISTS turns_chat ON turns(chat_id,created_at);
-      PRAGMA user_version=1;
       UPDATE turns SET status='failed',error_code='INTERRUPTED' WHERE status='pending';
     `);
+    installVehicleSchema(db);
   } catch (e) {
     db?.close();
     await unlink(file + ".lock");
@@ -456,5 +457,9 @@ export async function openRepository(file) {
       await unlink(file + ".lock");
     },
   };
+  Object.assign(
+    repo,
+    vehicleStore({ q, all, run, transaction, getUser: repo.getUser, now }),
+  );
   return repo;
 }

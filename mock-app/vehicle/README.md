@@ -27,7 +27,7 @@ adb -s emulator-5554 install -r app/build/outputs/apk/mock/debug/app-mock-debug.
 adb -s emulator-5554 shell am start --user 10 -n com.waymate.app.mock/com.waymate.app.MainActivity
 ```
 
-현재 Pleos 사용자는 10입니다. 기기/사용자가 다르면 실제 값으로 바꿉니다. 차량 API는 `http://10.0.2.2:3000`이며 debug HTTP 허용도 이 주소로 제한합니다. `uses-library android.car`는 이미지 부팅 클래스 경로에서 제공되므로 optional로 선언합니다.
+현재 Pleos 사용자는 10입니다. 기기/사용자가 다르면 실제 값으로 바꿉니다. 기존 시연 API는 `http://10.0.2.2:3000`, 새 개인 여행 API는 `http://10.0.2.2:3004`입니다. Debug HTTP는 `10.0.2.2`와 기기 내부 HTTP 회귀용 `localhost`만 허용하며 Release 허용 범위는 넓히지 않았습니다. `uses-library android.car`는 이미지 부팅 클래스 경로에서 제공되므로 optional로 선언합니다.
 
 - 웹 전달본은 CAR_LOADED 성공 뒤 홈으로 이동합니다.
 - 직접 시작은 확인 화면에 표시한 core 버전으로 CAR_START_TRIP을 보냅니다. 기본값은 준비가 전혀 없을 때만 별도 확인합니다.
@@ -79,3 +79,19 @@ CI는 mock/real APK·Lint와 단위 테스트를 검사합니다. 실제 에뮬�
 주행 간편 모드는 MainActivity의 DO 선언과 실제 UXR 기반 정적 캐릭터 화면을 사용합니다. 정차 상세 기능과 분리하며 짧은 준비 음원/중단만 제공합니다. 실제 Console P→D·36km/h→P 전환은 `DrivingModeTransitionDeviceTest`, 모의 승인창/유효 시간은 `DrivingSurfaceTest`로 검사합니다. 8088 포트 포워딩·기기 준비·음성 인식 미지원 범위는 [26번](../../docs_prototype/26_캐릭터_중심_주행_정차_모드.md)을 따릅니다.
 
 허용 제한 마스크는 `shared/config/driving-policy.json` 한 곳에서 관리합니다. 서버가 직접 읽고, 차량 빌드의 `generateDrivingProfiles`가 Kotlin 정책을 생성합니다. 생성 파일은 직접 수정하지 않습니다. 제한 관측은 `RestrictionSnapshot` 하나로 전달해 CAR_STATUS의 known·restricted·raw 값이 서로 다른 시점에서 섞이지 않게 합니다.
+
+
+## 실제 계정과 내 여행 연결
+
+[34 계약·화면·검수](../../docs_prototype/34_계정_차량_페어링_및_여행_전달.md)를 따른다. `service/`를 3004에서 실행하고 정차한 차량의 **내 계정 여행**으로 들어간다. 차량 코드 → 모바일 마이 연결 요청 → 차량 본인 계정 확인 → 모바일 저장 여행 선택/전송 확인 → 차량 여행 받기/확인 → 저장 후 ACK 순서다. 기본값은 `PERSONAL_API_BASE_URL=http://10.0.2.2:3004`이며 `-PwaymatePersonalApiPort=3006`으로 격리 검수 포트만 바꿀 수 있다. v4 포트의 `waymateApiPort`와 독립이다.
+
+`main/.../personal/`은 독립 Activity·UXR 리스너·Repository·decoder·일정 화면이다. 이 Activity는 기존 HandoffRepository·내비 드라이버를 만들지 않는다. API 주소별 장치 자격 증명과 개인 여행 파일을 앱 전용 경로에 보존한다. 별명·캐릭터는 확정 전송본 기준이며 일정·메모·이전/다음 날을 표시한다. 주행/미확인/오프라인에는 개인정보를 숨기고 이전 승인창을 폐기한다. 정차 복귀로 수신·연결 승인·ACK를 자동 실행하지 않는다.
+
+```sh
+./gradlew :app:assembleMockDebug :app:assembleMockDebugAndroidTest
+adb install --user 10 -r app/build/outputs/apk/mock/debug/app-mock-debug.apk
+adb install --user 10 -r app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk
+adb shell am instrument --user 10 -w -e class com.waymate.app.personal.PersonalTripReviewTest,com.waymate.app.personal.PersonalTripRepositoryTest com.waymate.app.mock.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+새 회귀 11개는 실제 Compose/decoder와 기기 내부 HTTP·AtomicFile을 검증한다. 실제 서비스·모바일과의 종단 검수는 34번의 별도 기록이다. 이 전달본의 장소 문자열을 기존 만남 전용 내비 승인에 넣지 않는다.

@@ -32,6 +32,7 @@ fun HandoffScreen(
     onSocialAction: (String, String) -> Unit,
     onOpenContent: () -> Unit,
     onOpenEnding: () -> Unit,
+    onOpenPersonalTrip: (() -> Unit)? = null,
 ) {
     var socialReview by remember { mutableStateOf<Pair<String, String>?>(null) }
     var confirmStart by remember { mutableStateOf(false) }
@@ -76,6 +77,9 @@ fun HandoffScreen(
                                 TextButton(onClick = { socialReview = "PROFILE_PRIVATE" to binding }) { Text("소개 공개 철회") }
                             }
                         }
+                    }
+                    onOpenPersonalTrip?.let { open ->
+                        VehicleOutlineButton(onClick = open) { Text("내 계정 여행") }
                     }
                     state.notice?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall) }
                 }
