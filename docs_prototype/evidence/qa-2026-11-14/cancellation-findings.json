@@ -1,0 +1,8 @@
+{
+  "setup": "Normal web-role API fixture after main browser journey was already validated",
+  "nativeUi": "Actual MainActivity NavigationScreen cancel button",
+  "confirmationShown": false,
+  "meetingStatus": "cancelled",
+  "expectedConnectionStatus": "ended",
+  "actualConnectionStatus": "linked"
+}
