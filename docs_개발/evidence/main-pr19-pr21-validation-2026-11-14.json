@@ -1,0 +1,71 @@
+{
+  "main": "f60caf166d83f57aa9bc1ad26b9a769389b3f1b6",
+  "mergeOrder": [
+    19,
+    20,
+    21
+  ],
+  "merged": true,
+  "sourceTreeMatchesVerifiedPR21": true,
+  "service": {
+    "tests": 42,
+    "pass": 42
+  },
+  "mockServer": {
+    "tests": 328,
+    "pass": 328
+  },
+  "checks": {
+    "docFiles": 38,
+    "relativeLinks": 444,
+    "missing": [],
+    "jvm": {
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "mockDebug": {
+        "Error": 0,
+        "Fatal": 0,
+        "Warning": 33
+      },
+      "realDebug": {
+        "Error": 0,
+        "Fatal": 0,
+        "Warning": 33
+      }
+    }
+  },
+  "contractExamplesDiff": 0,
+  "qaChecksums": {
+    "pass": 37,
+    "total": 37
+  },
+  "localGradleInputsPreserved": true,
+  "localGradleUpToDateTasks": true,
+  "deviceTestsRepeated": false,
+  "externalAICalls": 0,
+  "mainPushCI": [
+    {
+      "workflow": "Mobile service checks",
+      "commit": "f60caf166d83f57aa9bc1ad26b9a769389b3f1b6",
+      "result": "success",
+      "url": "https://github.com/ho72/wayMate/actions/runs/43596562019"
+    },
+    {
+      "workflow": "Handoff checks",
+      "commit": "2d361ccbb267a171ad7a0302671f0a0e3ea2feb0",
+      "result": "success",
+      "url": "https://github.com/ho72/wayMate/actions/runs/43596505326"
+    },
+    {
+      "workflow": "Vehicle checks",
+      "commit": "2d361ccbb267a171ad7a0302671f0a0e3ea2feb0",
+      "result": "success",
+      "url": "https://github.com/ho72/wayMate/actions/runs/43596505309"
+    }
+  ],
+  "mainPushCINote": "Server/vehicle sources and workflows are unchanged between their last modifying merge and final main."
+}
