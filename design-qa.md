@@ -8,7 +8,7 @@ final result: passed
 
 참조 841×1210 CSS px, deviceScaleFactor 1과 실제 Pleos 앱 영역 841×1210 px, fontScale 1.0을 같은 크기로 합성하여 나란히 열어 비교했다. 합성 PNG는 macOS 출력 배율로 3412×2508이며 양쪽 배율이 같다. 모바일 구현은 430×932 CSS px/1x에서 별도 확인했다. 130%와 확장 1682×1210은 접근성·반응형 회귀로 구분했다.
 
-대표 비교: [홈](docs_prototype/evidence/v5-comparison-home-2026-11-14.png), [최종 선택](docs_prototype/evidence/v5-comparison-choice-2026-11-14.png). [전체 화면과 검증 범위](docs_prototype/28_v5_디자인_적용_및_검수.md).
+대표 비교: [홈](docs_prototype/evidence/v5-comparison-home-2026-11-14.png), [최종 선택](docs_prototype/evidence/v5-comparison-choice-2026-11-14.png). [전체 화면과 검증 범위](docs_prototype/31_v5_디자인_적용_및_검수.md).
 
 ## 발견·수정·재검수
 

@@ -1,0 +1,113 @@
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:copyCharacter UP-TO-DATE
+> Task :app:copyPreparedSpeech UP-TO-DATE
+> Task :app:generateDrivingProfiles UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preMockDebugBuild UP-TO-DATE
+> Task :app:generateMockDebugBuildConfig UP-TO-DATE
+> Task :app:checkMockDebugAarMetadata UP-TO-DATE
+> Task :app:generateMockDebugResValues UP-TO-DATE
+> Task :app:mapMockDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateMockDebugResources UP-TO-DATE
+> Task :app:mergeMockDebugResources UP-TO-DATE
+> Task :app:packageMockDebugResources UP-TO-DATE
+> Task :app:parseMockDebugLocalResources UP-TO-DATE
+> Task :app:createMockDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksMockDebug UP-TO-DATE
+> Task :app:processMockDebugMainManifest UP-TO-DATE
+> Task :app:processMockDebugManifest UP-TO-DATE
+> Task :app:processMockDebugManifestForPackage UP-TO-DATE
+> Task :app:processMockDebugResources UP-TO-DATE
+> Task :app:compileMockDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileMockDebug UP-TO-DATE
+> Task :app:compileMockDebugJavaWithJavac UP-TO-DATE
+> Task :app:preMockDebugUnitTestBuild UP-TO-DATE
+> Task :app:processMockDebugJavaRes UP-TO-DATE
+> Task :app:javaPreCompileMockDebugUnitTest
+> Task :app:preMockDebugAndroidTestBuild SKIPPED
+> Task :app:generateMockDebugAndroidTestResValues
+> Task :app:extractProguardFiles
+> Task :app:bundleMockDebugClassesToCompileJar
+> Task :app:bundleMockDebugClassesToRuntimeJar
+> Task :app:generateMockDebugLintReportModel
+> Task :app:compileMockDebugUnitTestKotlin
+> Task :app:generateMockDebugAndroidTestLintModel
+> Task :app:compileMockDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processMockDebugUnitTestJavaRes
+> Task :app:testMockDebugUnitTest
+> Task :app:generateMockDebugUnitTestLintModel
+> Task :app:preRealDebugBuild UP-TO-DATE
+> Task :app:generateRealDebugBuildConfig
+> Task :app:generateRealDebugResValues
+> Task :app:checkRealDebugAarMetadata
+> Task :app:mapRealDebugSourceSetPaths
+> Task :app:generateRealDebugResources
+> Task :app:packageRealDebugResources
+> Task :app:createRealDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksRealDebug
+> Task :app:parseRealDebugLocalResources
+> Task :app:processRealDebugMainManifest
+> Task :app:processRealDebugManifest
+> Task :app:javaPreCompileRealDebug
+> Task :app:processRealDebugManifestForPackage
+> Task :app:preRealDebugAndroidTestBuild SKIPPED
+> Task :app:generateRealDebugAndroidTestResValues
+> Task :app:preRealDebugUnitTestBuild UP-TO-DATE
+> Task :app:mergeRealDebugNativeDebugMetadata NO-SOURCE
+> Task :app:mergeRealDebugShaders
+> Task :app:compileRealDebugShaders NO-SOURCE
+> Task :app:generateRealDebugAssets UP-TO-DATE
+> Task :app:mergeRealDebugResources
+> Task :app:mergeRealDebugAssets
+> Task :app:compressRealDebugAssets
+> Task :app:desugarRealDebugFileDependencies
+> Task :app:mergeRealDebugJniLibFolders
+> Task :app:checkRealDebugDuplicateClasses
+> Task :app:mergeRealDebugNativeLibs
+> Task :app:processRealDebugResources
+> Task :app:mergeLibDexRealDebug
+> Task :app:validateSigningRealDebug
+
+> Task :app:stripRealDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+
+> Task :app:writeRealDebugAppMetadata
+> Task :app:writeRealDebugSigningConfigVersions
+> Task :app:mergeExtDexRealDebug
+
+> Task :app:compileRealDebugKotlin
+w: repo:/mock-app/vehicle/app/src/realDebug/java/com/waymate/app/platform/navigation/NaviProbeActivity.kt:748:17 Condition is always 'true'.
+w: repo:/mock-app/vehicle/app/src/realDebug/java/com/waymate/app/platform/navigation/NaviProbeActivity.kt:771:17 Condition is always 'true'.
+
+> Task :app:compileRealDebugJavaWithJavac
+> Task :app:bundleRealDebugClassesToCompileJar
+> Task :app:generateRealDebugLintReportModel
+> Task :app:lintAnalyzeMockDebug
+> Task :app:generateRealDebugAndroidTestLintModel
+> Task :app:generateRealDebugUnitTestLintModel
+> Task :app:lintAnalyzeMockDebugUnitTest
+> Task :app:dexBuilderRealDebug
+> Task :app:mergeRealDebugGlobalSynthetics
+> Task :app:processRealDebugJavaRes
+> Task :app:lintAnalyzeMockDebugAndroidTest
+> Task :app:mergeProjectDexRealDebug
+> Task :app:mergeRealDebugJavaResource
+> Task :app:packageRealDebug
+> Task :app:createRealDebugApkListingFileRedirect
+> Task :app:assembleRealDebug
+> Task :app:lintAnalyzeRealDebugAndroidTest
+> Task :app:lintAnalyzeRealDebugUnitTest
+
+> Task :app:lintReportMockDebug
+Wrote HTML report to repo:/mock-app/vehicle/app/build/reports/lint-results-mockDebug.html
+
+> Task :app:lintMockDebug
+> Task :app:lintAnalyzeRealDebug
+
+> Task :app:lintReportRealDebug
+Wrote HTML report to repo:/mock-app/vehicle/app/build/reports/lint-results-realDebug.html
+
+> Task :app:lintRealDebug
+
+BUILD SUCCESSFUL in 1m 8s
+84 actionable tasks: 63 executed, 21 up-to-date

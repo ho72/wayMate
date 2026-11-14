@@ -1,0 +1,23 @@
+{
+  "validationBaseline": "901a3250b6e3b3a367c59b3bcf5ace753a2930f9",
+  "publicationBase": "b84ebec1d274bf133af043ffe745e2e6fa90bac9",
+  "unchangedCauseFiles": [
+    "mock-app/server/v4/social.mjs",
+    "mock-app/shared/config/content-v4.mjs",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/NavigationScreen.kt",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/EndingScreen.kt"
+  ],
+  "mobileHero": "Static dragon image and alt remain at index.html lines35-38; updated app.js does not replace hero src",
+  "isolatedCurrentBaseReproduction": {
+    "freshCoordinatorCases": 4,
+    "matchesBaselineEvidence": true,
+    "remainingLinkedCases": [
+      "A_cancel",
+      "B_reject",
+      "B_cancel"
+    ],
+    "Q2WithoutOwnerPublicInterests": "UNKNOWN"
+  },
+  "fullNodeDeviceRegressionOnPublicationBaseRerun": false,
+  "optionalAiExtensionIncludedInHistoricalCounts": false
+}

@@ -1,0 +1,1652 @@
+
+> waymate-mock@0.1.0 test
+> node --test tests/**/*.test.mjs
+
+TAP version 13
+# Subtest: shared command: command-answer-interests.json
+ok 1 - shared command: command-answer-interests.json
+  ---
+  duration_ms: 39.032875
+  type: 'test'
+  ...
+# Subtest: shared command: command-answer-activity.json
+ok 2 - shared command: command-answer-activity.json
+  ---
+  duration_ms: 2.074208
+  type: 'test'
+  ...
+# Subtest: shared command: command-answer-pace.json
+ok 3 - shared command: command-answer-pace.json
+  ---
+  duration_ms: 16.943625
+  type: 'test'
+  ...
+# Subtest: shared command: command-answer-conversation.json
+ok 4 - shared command: command-answer-conversation.json
+  ---
+  duration_ms: 3.92875
+  type: 'test'
+  ...
+# Subtest: shared command: command-profile_confirm.json
+ok 5 - shared command: command-profile_confirm.json
+  ---
+  duration_ms: 0.952375
+  type: 'test'
+  ...
+# Subtest: shared command: command-profile_private.json
+ok 6 - shared command: command-profile_private.json
+  ---
+  duration_ms: 1.900125
+  type: 'test'
+  ...
+# Subtest: shared command: command-trip_save.json
+ok 7 - shared command: command-trip_save.json
+  ---
+  duration_ms: 2.414916
+  type: 'test'
+  ...
+# Subtest: shared command: command-handoff_prepare.json
+ok 8 - shared command: command-handoff_prepare.json
+  ---
+  duration_ms: 1.675042
+  type: 'test'
+  ...
+# Subtest: shared state: state-web-waiting.json
+ok 9 - shared state: state-web-waiting.json
+  ---
+  duration_ms: 12.400792
+  type: 'test'
+  ...
+# Subtest: shared handoff: handoff-my-trip.json
+ok 10 - shared handoff: handoff-my-trip.json
+  ---
+  duration_ms: 5.2805
+  type: 'test'
+  ...
+# Subtest: shared command: command-car_session_open.json
+ok 11 - shared command: command-car_session_open.json
+  ---
+  duration_ms: 0.901167
+  type: 'test'
+  ...
+# Subtest: shared command: command-car_status.json
+ok 12 - shared command: command-car_status.json
+  ---
+  duration_ms: 0.813959
+  type: 'test'
+  ...
+# Subtest: shared state: state-car-ready.json
+ok 13 - shared state: state-car-ready.json
+  ---
+  duration_ms: 1.834125
+  type: 'test'
+  ...
+# Subtest: shared command: command-car_loaded.json
+ok 14 - shared command: command-car_loaded.json
+  ---
+  duration_ms: 0.986458
+  type: 'test'
+  ...
+# Subtest: shared success: success-car-loaded.json
+ok 15 - shared success: success-car-loaded.json
+  ---
+  duration_ms: 2.291458
+  type: 'test'
+  ...
+# Subtest: shared state: state-web-confirmed.json
+ok 16 - shared state: state-web-confirmed.json
+  ---
+  duration_ms: 0.769625
+  type: 'test'
+  ...
+# Subtest: shared health: health.json
+ok 17 - shared health: health.json
+  ---
+  duration_ms: 1.282417
+  type: 'test'
+  ...
+# Subtest: car contract rejects peer data and unsupported avatar
+ok 18 - car contract rejects peer data and unsupported avatar
+  ---
+  duration_ms: 0.958084
+  type: 'test'
+  ...
+# Subtest: v3 command: command-answer-interests.json
+ok 19 - v3 command: command-answer-interests.json
+  ---
+  duration_ms: 7.37825
+  type: 'test'
+  ...
+# Subtest: v3 command: command-answer-activity.json
+ok 20 - v3 command: command-answer-activity.json
+  ---
+  duration_ms: 2.605916
+  type: 'test'
+  ...
+# Subtest: v3 command: command-answer-conversation.json
+ok 21 - v3 command: command-answer-conversation.json
+  ---
+  duration_ms: 1.107917
+  type: 'test'
+  ...
+# Subtest: v3 command: command-answer-expression.json
+ok 22 - v3 command: command-answer-expression.json
+  ---
+  duration_ms: 0.659708
+  type: 'test'
+  ...
+# Subtest: v3 command: command-profile_confirm.json
+ok 23 - v3 command: command-profile_confirm.json
+  ---
+  duration_ms: 0.988333
+  type: 'test'
+  ...
+# Subtest: v3 command: command-profile_private.json
+ok 24 - v3 command: command-profile_private.json
+  ---
+  duration_ms: 6.586083
+  type: 'test'
+  ...
+# Subtest: v3 command: command-trip_save.json
+ok 25 - v3 command: command-trip_save.json
+  ---
+  duration_ms: 1.158417
+  type: 'test'
+  ...
+# Subtest: v3 command: command-handoff_prepare.json
+ok 26 - v3 command: command-handoff_prepare.json
+  ---
+  duration_ms: 1.043375
+  type: 'test'
+  ...
+# Subtest: v3 state: state-web-waiting.json
+ok 27 - v3 state: state-web-waiting.json
+  ---
+  duration_ms: 2.359542
+  type: 'test'
+  ...
+# Subtest: v3 handoff: handoff-prepared-trip.json
+ok 28 - v3 handoff: handoff-prepared-trip.json
+  ---
+  duration_ms: 1.484666
+  type: 'test'
+  ...
+# Subtest: v3 command: command-car_session_open.json
+ok 29 - v3 command: command-car_session_open.json
+  ---
+  duration_ms: 2.092625
+  type: 'test'
+  ...
+# Subtest: v3 command: command-car_status.json
+ok 30 - v3 command: command-car_status.json
+  ---
+  duration_ms: 1.137125
+  type: 'test'
+  ...
+# Subtest: v3 state: state-car-ready.json
+ok 31 - v3 state: state-car-ready.json
+  ---
+  duration_ms: 3.355208
+  type: 'test'
+  ...
+# Subtest: v3 command: command-car_loaded.json
+ok 32 - v3 command: command-car_loaded.json
+  ---
+  duration_ms: 1.015208
+  type: 'test'
+  ...
+# Subtest: v3 success: success-car-loaded.json
+ok 33 - v3 success: success-car-loaded.json
+  ---
+  duration_ms: 2.164
+  type: 'test'
+  ...
+# Subtest: v3 state: state-web-confirmed.json
+ok 34 - v3 state: state-web-confirmed.json
+  ---
+  duration_ms: 1.390708
+  type: 'test'
+  ...
+# Subtest: v3 health: health.json
+ok 35 - v3 health: health.json
+  ---
+  duration_ms: 0.693625
+  type: 'test'
+  ...
+# Subtest: v4 command: command-answer-interests.json
+ok 36 - v4 command: command-answer-interests.json
+  ---
+  duration_ms: 336.873708
+  type: 'test'
+  ...
+# Subtest: v4 command: command-answer-activity.json
+ok 37 - v4 command: command-answer-activity.json
+  ---
+  duration_ms: 0.932375
+  type: 'test'
+  ...
+# Subtest: v4 command: command-answer-conversation.json
+ok 38 - v4 command: command-answer-conversation.json
+  ---
+  duration_ms: 0.562
+  type: 'test'
+  ...
+# Subtest: v4 command: command-answer-expression.json
+ok 39 - v4 command: command-answer-expression.json
+  ---
+  duration_ms: 0.657875
+  type: 'test'
+  ...
+# Subtest: v4 command: command-profile_confirm.json
+ok 40 - v4 command: command-profile_confirm.json
+  ---
+  duration_ms: 2.262834
+  type: 'test'
+  ...
+# Subtest: v4 command: command-trip_save.json
+ok 41 - v4 command: command-trip_save.json
+  ---
+  duration_ms: 16.664583
+  type: 'test'
+  ...
+# Subtest: v4 command: command-profile_publish.json
+ok 42 - v4 command: command-profile_publish.json
+  ---
+  duration_ms: 0.838917
+  type: 'test'
+  ...
+# Subtest: v4 command: command-trip_share_confirm.json
+ok 43 - v4 command: command-trip_share_confirm.json
+  ---
+  duration_ms: 0.667334
+  type: 'test'
+  ...
+# Subtest: v4 command: command-connect_request.json
+ok 44 - v4 command: command-connect_request.json
+  ---
+  duration_ms: 2.211208
+  type: 'test'
+  ...
+# Subtest: v4 command: command-b-connection-accept.json
+ok 45 - v4 command: command-b-connection-accept.json
+  ---
+  duration_ms: 1.183459
+  type: 'test'
+  ...
+# Subtest: v4 command: command-confirm_window.json
+ok 46 - v4 command: command-confirm_window.json
+  ---
+  duration_ms: 0.676
+  type: 'test'
+  ...
+# Subtest: v4 command: command-handoff_prepare.json
+ok 47 - v4 command: command-handoff_prepare.json
+  ---
+  duration_ms: 0.547042
+  type: 'test'
+  ...
+# Subtest: v4 state: state-web-waiting.json
+ok 48 - v4 state: state-web-waiting.json
+  ---
+  duration_ms: 158.148583
+  type: 'test'
+  ...
+# Subtest: v4 handoff: handoff-connected.json
+ok 49 - v4 handoff: handoff-connected.json
+  ---
+  duration_ms: 3.658292
+  type: 'test'
+  ...
+# Subtest: v4 command: command-car_session_open.json
+ok 50 - v4 command: command-car_session_open.json
+  ---
+  duration_ms: 0.636375
+  type: 'test'
+  ...
+# Subtest: v4 command: command-car_status.json
+ok 51 - v4 command: command-car_status.json
+  ---
+  duration_ms: 0.389917
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-ready.json
+ok 52 - v4 state: state-car-ready.json
+  ---
+  duration_ms: 0.531917
+  type: 'test'
+  ...
+# Subtest: v4 command: command-car_loaded.json
+ok 53 - v4 command: command-car_loaded.json
+  ---
+  duration_ms: 0.42025
+  type: 'test'
+  ...
+# Subtest: v4 success: success-car-loaded.json
+ok 54 - v4 success: success-car-loaded.json
+  ---
+  duration_ms: 5.552
+  type: 'test'
+  ...
+# Subtest: v4 state: state-web-confirmed.json
+ok 55 - v4 state: state-web-confirmed.json
+  ---
+  duration_ms: 0.737791
+  type: 'test'
+  ...
+# Subtest: v4 health: health.json
+ok 56 - v4 health: health.json
+  ---
+  duration_ms: 0.808792
+  type: 'test'
+  ...
+# Subtest: v4 command: command-message-send.json
+ok 57 - v4 command: command-message-send.json
+  ---
+  duration_ms: 1.115458
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-message-waiting.json
+ok 58 - v4 state: state-car-message-waiting.json
+  ---
+  duration_ms: 1.43475
+  type: 'test'
+  ...
+# Subtest: v4 state: state-operator-message-waiting.json
+ok 59 - v4 state: state-operator-message-waiting.json
+  ---
+  duration_ms: 4.3325
+  type: 'test'
+  ...
+# Subtest: v4 command: command-message-restriction-on.json
+ok 60 - v4 command: command-message-restriction-on.json
+  ---
+  duration_ms: 0.771584
+  type: 'test'
+  ...
+# Subtest: v4 state: state-operator-message-blocked.json
+ok 61 - v4 state: state-operator-message-blocked.json
+  ---
+  duration_ms: 0.889666
+  type: 'test'
+  ...
+# Subtest: v4 command: command-message-restriction-off.json
+ok 62 - v4 command: command-message-restriction-off.json
+  ---
+  duration_ms: 0.428042
+  type: 'test'
+  ...
+# Subtest: v4 command: command-message-b-reply.json
+ok 63 - v4 command: command-message-b-reply.json
+  ---
+  duration_ms: 0.382208
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-message-received.json
+ok 64 - v4 state: state-car-message-received.json
+  ---
+  duration_ms: 0.793167
+  type: 'test'
+  ...
+# Subtest: v4 command: command-message-followup.json
+ok 65 - v4 command: command-message-followup.json
+  ---
+  duration_ms: 0.417083
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-message-replied.json
+ok 66 - v4 state: state-car-message-replied.json
+  ---
+  duration_ms: 0.946667
+  type: 'test'
+  ...
+# Subtest: v4 command: command-meeting_propose.json
+ok 67 - v4 command: command-meeting_propose.json
+  ---
+  duration_ms: 1.643375
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-meeting-waiting.json
+ok 68 - v4 state: state-car-meeting-waiting.json
+  ---
+  duration_ms: 0.453959
+  type: 'test'
+  ...
+# Subtest: v4 command: command-b-meeting-accept.json
+ok 69 - v4 command: command-b-meeting-accept.json
+  ---
+  duration_ms: 0.330208
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-meeting-confirmed.json
+ok 70 - v4 state: state-car-meeting-confirmed.json
+  ---
+  duration_ms: 0.338375
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-car-session.json
+ok 71 - v4 command: command-ending-car-session.json
+  ---
+  duration_ms: 0.323417
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-status.json
+ok 72 - v4 command: command-ending-status.json
+  ---
+  duration_ms: 0.26975
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-nav-before.json
+ok 73 - v4 command: command-ending-nav-before.json
+  ---
+  duration_ms: 0.798875
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-nav-approve.json
+ok 74 - v4 command: command-ending-nav-approve.json
+  ---
+  duration_ms: 0.623334
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-nav-dispatch.json
+ok 75 - v4 command: command-ending-nav-dispatch.json
+  ---
+  duration_ms: 0.324167
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-nav-applied.json
+ok 76 - v4 command: command-ending-nav-applied.json
+  ---
+  duration_ms: 0.526833
+  type: 'test'
+  ...
+# Subtest: v4 command: command-ending-nav-observed.json
+ok 77 - v4 command: command-ending-nav-observed.json
+  ---
+  duration_ms: 0.356584
+  type: 'test'
+  ...
+# Subtest: v4 command: command-meeting-start.json
+ok 78 - v4 command: command-meeting-start.json
+  ---
+  duration_ms: 1.51425
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-meeting-reenactment.json
+ok 79 - v4 state: state-car-meeting-reenactment.json
+  ---
+  duration_ms: 1.311875
+  type: 'test'
+  ...
+# Subtest: v4 command: command-meeting-end.json
+ok 80 - v4 command: command-meeting-end.json
+  ---
+  duration_ms: 0.567542
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-final-open.json
+ok 81 - v4 state: state-car-final-open.json
+  ---
+  duration_ms: 0.45325
+  type: 'test'
+  ...
+# Subtest: v4 state: state-operator-final-open.json
+ok 82 - v4 state: state-operator-final-open.json
+  ---
+  duration_ms: 0.307292
+  type: 'test'
+  ...
+# Subtest: v4 command: command-final-b-first.json
+ok 83 - v4 command: command-final-b-first.json
+  ---
+  duration_ms: 0.406208
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-final-b-first-hidden.json
+ok 84 - v4 state: state-car-final-b-first-hidden.json
+  ---
+  duration_ms: 0.360541
+  type: 'test'
+  ...
+# Subtest: v4 command: command-final-a-submit.json
+ok 85 - v4 command: command-final-a-submit.json
+  ---
+  duration_ms: 0.315209
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-own-ending.json
+ok 86 - v4 state: state-car-own-ending.json
+  ---
+  duration_ms: 0.332584
+  type: 'test'
+  ...
+# Subtest: v4 command: command-replay-final.json
+ok 87 - v4 command: command-replay-final.json
+  ---
+  duration_ms: 0.287708
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-final-replay.json
+ok 88 - v4 state: state-car-final-replay.json
+  ---
+  duration_ms: 0.264208
+  type: 'test'
+  ...
+# Subtest: v4 command: command-replay-a-submit.json
+ok 89 - v4 command: command-replay-a-submit.json
+  ---
+  duration_ms: 0.235375
+  type: 'test'
+  ...
+# Subtest: v4 command: command-replay-b-submit.json
+ok 90 - v4 command: command-replay-b-submit.json
+  ---
+  duration_ms: 0.22725
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-together-ending.json
+ok 91 - v4 state: state-car-together-ending.json
+  ---
+  duration_ms: 0.843833
+  type: 'test'
+  ...
+# Subtest: v4 command: command-reset-begin-car.json
+ok 92 - v4 command: command-reset-begin-car.json
+  ---
+  duration_ms: 1.074875
+  type: 'test'
+  ...
+# Subtest: v4 state: state-car-reset-waiting.json
+ok 93 - v4 state: state-car-reset-waiting.json
+  ---
+  duration_ms: 0.631
+  type: 'test'
+  ...
+# Subtest: v4 command: command-reset-ack-car.json
+ok 94 - v4 command: command-reset-ack-car.json
+  ---
+  duration_ms: 0.434083
+  type: 'test'
+  ...
+# Subtest: v4 success: success-reset-ack.json
+ok 95 - v4 success: success-reset-ack.json
+  ---
+  duration_ms: 0.833875
+  type: 'test'
+  ...
+# Subtest: v4 state: state-new-run.json
+ok 96 - v4 state: state-new-run.json
+  ---
+  duration_ms: 0.26975
+  type: 'test'
+  ...
+# Subtest: v4 command: command-reset-web-seed.json
+ok 97 - v4 command: command-reset-web-seed.json
+  ---
+  duration_ms: 0.338125
+  type: 'test'
+  ...
+# Subtest: v4 command: command-reset-begin-web.json
+ok 98 - v4 command: command-reset-begin-web.json
+  ---
+  duration_ms: 1.330417
+  type: 'test'
+  ...
+# Subtest: v4 state: state-web-reset-waiting.json
+ok 99 - v4 state: state-web-reset-waiting.json
+  ---
+  duration_ms: 0.459875
+  type: 'test'
+  ...
+# Subtest: v4 command: command-reset-ack-web.json
+ok 100 - v4 command: command-reset-ack-web.json
+  ---
+  duration_ms: 0.279625
+  type: 'test'
+  ...
+# Subtest: real HTTP: web values survive restart, GET is not ACK, fresh vehicle ACK confirms exact snapshot
+ok 101 - real HTTP: web values survive restart, GET is not ACK, fresh vehicle ACK confirms exact snapshot
+  ---
+  duration_ms: 411.378292
+  type: 'test'
+  ...
+# Subtest: duplicate before version check; changed envelope rejected; stale new writes rejected; receipt retained on restart
+ok 102 - duplicate before version check; changed envelope rejected; stale new writes rejected; receipt retained on restart
+  ---
+  duration_ms: 91.204625
+  type: 'test'
+  ...
+# Subtest: restriction unknown, active, background, expired, old session/sequence block ACK; same heartbeat keeps version
+ok 103 - restriction unknown, active, background, expired, old session/sequence block ACK; same heartbeat keeps version
+  ---
+  duration_ms: 795.5705
+  type: 'test'
+  ...
+# Subtest: profile change invalidates old handoff, source mismatch rejected, repeated preparation preserves ID
+ok 104 - profile change invalidates old handoff, source mismatch rejected, repeated preparation preserves ID
+  ---
+  duration_ms: 1132.746542
+  type: 'test'
+  ...
+# Subtest: role, view, schema, consent, cross-origin and static boundaries enforced
+ok 105 - role, view, schema, consent, cross-origin and static boundaries enforced
+  ---
+  duration_ms: 552.465042
+  type: 'test'
+  ...
+# Subtest: before-rename failure preserves old state; after-rename uncertainty stops writes and recovers receipt
+ok 106 - before-rename failure preserves old state; after-rename uncertainty stops writes and recovers receipt
+  ---
+  duration_ms: 233.989667
+  type: 'test'
+  ...
+# Subtest: corrupted state is never reset and second writer cannot open the same file
+ok 107 - corrupted state is never reset and second writer cannot open the same file
+  ---
+  duration_ms: 167.637625
+  type: 'test'
+  ...
+# Subtest: concurrent writes are serialized: only one stale-version mutation commits; same-ID races replay one receipt
+ok 108 - concurrent writes are serialized: only one stale-version mutation commits; same-ID races replay one receipt
+  ---
+  duration_ms: 251.898959
+  type: 'test'
+  ...
+# Subtest: v3 preserves exact free text and Unicode limits; raw answers never reach car, handoff or foreign web
+ok 109 - v3 preserves exact free text and Unicode limits; raw answers never reach car, handoff or foreign web
+  ---
+  duration_ms: 676.009625
+  type: 'test'
+  ...
+# Subtest: prepared follow-up uses exact demo cue; earlier edits invalidate later branch, profile and handoff
+ok 110 - prepared follow-up uses exact demo cue; earlier edits invalidate later branch, profile and handoff
+  ---
+  duration_ms: 858.307
+  type: 'test'
+  ...
+# Subtest: unconfirmed summary remains empty/null; normalized alias and explicit enums only
+ok 111 - unconfirmed summary remains empty/null; normalized alias and explicit enums only
+  ---
+  duration_ms: 653.524417
+  type: 'test'
+  ...
+# Subtest: publication changes do not invalidate core snapshot or alter trip share version; private is not a handoff prerequisite
+ok 112 - publication changes do not invalidate core snapshot or alter trip share version; private is not a handoff prerequisite
+  ---
+  duration_ms: 690.193458
+  type: 'test'
+  ...
+# Subtest: stored preparation starts independently of handoff ACK, then web mutations are server blocked
+ok 113 - stored preparation starts independently of handoff ACK, then web mutations are server blocked
+  ---
+  duration_ms: 681.361083
+  type: 'test'
+  ...
+# Subtest: default start requires no preparation, does not fabricate handoff, and only same device restores after fresh restrictions
+ok 114 - default start requires no preparation, does not fabricate handoff, and only same device restores after fresh restrictions
+  ---
+  duration_ms: 518.466417
+  type: 'test'
+  ...
+# Subtest: default start cannot overwrite even a partial web preparation; v2 requests and files are rejected without rewriting
+ok 115 - default start cannot overwrite even a partial web preparation; v2 requests and files are rejected without rewriting
+  ---
+  duration_ms: 381.872541
+  type: 'test'
+  ...
+# Subtest: driver approval grants one transient execution lease; replay, receipt and projection cannot dispatch
+ok 116 - driver approval grants one transient execution lease; replay, receipt and projection cannot dispatch
+  ---
+  duration_ms: 133.326083
+  type: 'test'
+  ...
+# Subtest: actual double SDK observations verify add and owned FIRST removal while preserving D and raw 0,0
+ok 117 - actual double SDK observations verify add and owned FIRST removal while preserving D and raw 0,0
+  ---
+  duration_ms: 227.666791
+  type: 'test'
+  ...
+# Subtest: no approval while restricted, paused, unsupported, stale or outside navigation screen
+ok 118 - no approval while restricted, paused, unsupported, stale or outside navigation screen
+  ---
+  duration_ms: 842.646208
+  type: 'test'
+  ...
+# Subtest: foreign waypoint, changed review and unknown execution prevent another mutation
+ok 119 - foreign waypoint, changed review and unknown execution prevent another mutation
+  ---
+  duration_ms: 537.270958
+  type: 'test'
+  ...
+# Subtest: zero coordinate compatibility requires exact current POI and independently verified location
+ok 120 - zero coordinate compatibility requires exact current POI and independently verified location
+  ---
+  duration_ms: 447.57575
+  type: 'test'
+  ...
+# Subtest: restart clears observations and session epoch blocks stale executor; settled ownership persists
+ok 121 - restart clears observations and session epoch blocks stale executor; settled ownership persists
+  ---
+  duration_ms: 622.487083
+  type: 'test'
+  ...
+# Subtest: unexecuted approval can be explicitly canceled; lease cannot be canceled into a false removal
+ok 122 - unexecuted approval can be explicitly canceled; lease cannot be canceled into a false removal
+  ---
+  duration_ms: 553.550375
+  type: 'test'
+  ...
+# Subtest: lost grant response recovers a receipt without another grant; web hides location history
+ok 123 - lost grant response recovers a receipt without another grant; web hides location history
+  ---
+  duration_ms: 447.641375
+  type: 'test'
+  ...
+# Subtest: journal reserved before a rejected grant reports not_dispatched without claiming a removal
+ok 124 - journal reserved before a rejected grant reports not_dispatched without claiming a removal
+  ---
+  duration_ms: 392.329333
+  type: 'test'
+  ...
+# Subtest: bundled audio includes both call samples and every ending narration, with valid unambiguous assets
+ok 125 - bundled audio includes both call samples and every ending narration, with valid unambiguous assets
+  ---
+  duration_ms: 52.88875
+  type: 'test'
+  ...
+# Subtest: plain call needs both consents; sample is car-only and meeting stays separate
+ok 126 - plain call needs both consents; sample is car-only and meeting stays separate
+  ---
+  duration_ms: 1665.137334
+  type: 'test'
+  ...
+# Subtest: pending call CALL_CANCEL invalidates late consent
+ok 127 - pending call CALL_CANCEL invalidates late consent
+  ---
+  duration_ms: 1003.039958
+  type: 'test'
+  ...
+# Subtest: pending call reject invalidates late consent
+ok 128 - pending call reject invalidates late consent
+  ---
+  duration_ms: 998.233875
+  type: 'test'
+  ...
+# Subtest: pending call CONNECT_END invalidates late consent
+ok 129 - pending call CONNECT_END invalidates late consent
+  ---
+  duration_ms: 962.691583
+  type: 'test'
+  ...
+# Subtest: pending call RESET_BEGIN invalidates late consent
+ok 130 - pending call RESET_BEGIN invalidates late consent
+  ---
+  duration_ms: 955.12275
+  type: 'test'
+  ...
+# Subtest: inactive vehicle preserves request, blocks acceptance, and still permits stop
+ok 131 - inactive vehicle preserves request, blocks acceptance, and still permits stop
+  ---
+  duration_ms: 1363.745666
+  type: 'test'
+  ...
+# Subtest: restart keeps same active consent, but projection never manufactures playback
+ok 132 - restart keeps same active consent, but projection never manufactures playback
+  ---
+  duration_ms: 1186.416375
+  type: 'test'
+  ...
+# Subtest: lost proposal can be cancelled before or after receipt, without resurrecting consent
+ok 133 - lost proposal can be cancelled before or after receipt, without resurrecting consent
+  ---
+  duration_ms: 973.248792
+  type: 'test'
+  ...
+# Subtest: only valid Q1 display history unlocks familiar greeting; private interest is not required
+ok 134 - only valid Q1 display history unlocks familiar greeting; private interest is not required
+  ---
+  duration_ms: 798.368708
+  type: 'test'
+  ...
+# Subtest: role, target, duplicate proposal and my_trip cannot create unauthorized calls
+ok 135 - role, target, duplicate proposal and my_trip cannot create unauthorized calls
+  ---
+  duration_ms: 793.405084
+  type: 'test'
+  ...
+# Subtest: operator message response submits the current thread with reply, never a meeting acceptance
+ok 136 - operator message response submits the current thread with reply, never a meeting acceptance
+  ---
+  duration_ms: 38.892416
+  type: 'test'
+  ...
+# Subtest: operator keeps a blocked message visible, disables sending, then enables the same request
+ok 137 - operator keeps a blocked message visible, disables sending, then enables the same request
+  ---
+  duration_ms: 4.412917
+  type: 'test'
+  ...
+# Subtest: profile answers require every public fact; private A interests and missing B fields are unknown
+ok 138 - profile answers require every public fact; private A interests and missing B fields are unknown
+  ---
+  duration_ms: 1.229542
+  type: 'test'
+  ...
+# Subtest: M1: only explicit send creates B request; matching response and one followup reply
+ok 139 - M1: only explicit send creates B request; matching response and one followup reply
+  ---
+  duration_ms: 1690.271542
+  type: 'test'
+  ...
+# Subtest: M2: only explicit send creates B request; matching response and one followup reply
+ok 140 - M2: only explicit send creates B request; matching response and one followup reply
+  ---
+  duration_ms: 1044.737125
+  type: 'test'
+  ...
+# Subtest: duplicate send receipt and restart preserve one message; cannot reply before a real B event
+ok 141 - duplicate send receipt and restart preserve one message; cannot reply before a real B event
+  ---
+  duration_ms: 1163.883292
+  type: 'test'
+  ...
+# Subtest: a waiting message stays visible while vehicle is restricted, stale or in background
+ok 142 - a waiting message stays visible while vehicle is restricted, stale or in background
+  ---
+  duration_ms: 1280.993667
+  type: 'test'
+  ...
+# Subtest: reusing a completed preset needs a fresh explicit command and never reuses its thread or reply
+ok 143 - reusing a completed preset needs a fresh explicit command and never reuses its thread or reply
+  ---
+  duration_ms: 1046.883625
+  type: 'test'
+  ...
+# Subtest: CONNECT_END closes waiting message and rejects late B reply
+ok 144 - CONNECT_END closes waiting message and rejects late B reply
+  ---
+  duration_ms: 999.209041
+  type: 'test'
+  ...
+# Subtest: MEETING_CANCEL closes waiting message and rejects late B reply
+ok 145 - MEETING_CANCEL closes waiting message and rejects late B reply
+  ---
+  duration_ms: 1080.915209
+  type: 'test'
+  ...
+# Subtest: MEETING_DECLINE closes waiting message and rejects late B reply
+ok 146 - MEETING_DECLINE closes waiting message and rejects late B reply
+  ---
+  duration_ms: 869.347
+  type: 'test'
+  ...
+# Subtest: restriction, stale vehicle, reset and wrong actor block sending/B events without losing a waiting message
+ok 147 - restriction, stale vehicle, reset and wrong actor block sending/B events without losing a waiting message
+  ---
+  duration_ms: 903.94375
+  type: 'test'
+  ...
+# Subtest: stale thread or arbitrary/free-text payload cannot reply to another request
+ok 148 - stale thread or arbitrary/free-text payload cannot reply to another request
+  ---
+  duration_ms: 683.538375
+  type: 'test'
+  ...
+# Subtest: cancelling an unconfirmed send stops late delivery; already-sent cancellation is not a recall
+ok 149 - cancelling an unconfirmed send stops late delivery; already-sent cancellation is not a recall
+  ---
+  duration_ms: 703.32525
+  type: 'test'
+  ...
+# Subtest: reset empties messages only after car ACK and old B commands cannot enter the new run
+ok 150 - reset empties messages only after car ACK and old B commands cannot enter the new run
+  ---
+  duration_ms: 661.038208
+  type: 'test'
+  ...
+# Subtest: my_trip has no peer content or message bindings
+ok 151 - my_trip has no peer content or message bindings
+  ---
+  duration_ms: 396.591083
+  type: 'test'
+  ...
+# Subtest: meeting rejection closes pending messages without pretending a reply or consent occurred
+ok 152 - meeting rejection closes pending messages without pretending a reply or consent occurred
+  ---
+  duration_ms: 662.314708
+  type: 'test'
+  ...
+# Subtest: cancelling an undelivered meeting proposal also closes an existing message wait
+ok 153 - cancelling an undelivered meeting proposal also closes an existing message wait
+  ---
+  duration_ms: 565.678208
+  type: 'test'
+  ...
+# Subtest: shared driving profiles are valid and every configured mask is used by the server
+ok 154 - shared driving profiles are valid and every configured mask is used by the server
+  ---
+  duration_ms: 1721.522167
+  type: 'test'
+  ...
+# Subtest: driving projection permits only prepared local output, not new social or navigation actions
+ok 155 - driving projection permits only prepared local output, not new social or navigation actions
+  ---
+  duration_ms: 905.070791
+  type: 'test'
+  ...
+# Subtest: raw restrictions cannot be disguised as parked by restricted=false
+ok 156 - raw restrictions cannot be disguised as parked by restricted=false
+  ---
+  duration_ms: 818.005791
+  type: 'test'
+  ...
+# Subtest: legacy restricted, unknown, unverified profiles and stale status fail closed
+ok 157 - legacy restricted, unknown, unverified profiles and stale status fail closed
+  ---
+  duration_ms: 1103.067916
+  type: 'test'
+  ...
+# Subtest: same restricted boolean with a different raw profile advances the business version
+ok 158 - same restricted boolean with a different raw profile advances the business version
+  ---
+  duration_ms: 1078.736333
+  type: 'test'
+  ...
+# Subtest: return to parked restores actions without applying old approval or creating a call
+ok 159 - return to parked restores actions without applying old approval or creating a call
+  ---
+  duration_ms: 1039.612666
+  type: 'test'
+  ...
+# Subtest: reset blocks driving output and stored contradictory restriction observations are rejected
+ok 160 - reset blocks driving output and stored contradictory restriction observations are rejected
+  ---
+  duration_ms: 976.30075
+  type: 'test'
+  ...
+# Subtest: fractional monotonic server time produces a conservative integer freshness budget
+ok 161 - fractional monotonic server time produces a conservative integer freshness budget
+  ---
+  duration_ms: 935.613666
+  type: 'test'
+  ...
+# Subtest: expired raw observations remain valid on disk without reopening driving playback
+ok 162 - expired raw observations remain valid on disk without reopening driving playback
+  ---
+  duration_ms: 763.845792
+  type: 'test'
+  ...
+# Subtest: operator opens both B choices before A submits and posts only the current B target
+ok 163 - operator opens both B choices before A submits and posts only the current B target
+  ---
+  duration_ms: 35.839208
+  type: 'test'
+  ...
+# Subtest: recovering an old B receipt after replay does not submit a choice to the new round
+ok 164 - recovering an old B receipt after replay does not submit a choice to the new round
+  ---
+  duration_ms: 24.294542
+  type: 'test'
+  ...
+# Subtest: A first: together/together waits for both, protects choices and resolves once
+ok 165 - A first: together/together waits for both, protects choices and resolves once
+  ---
+  duration_ms: 2193.309834
+  type: 'test'
+  ...
+# Subtest: B first: together/together waits for both, protects choices and resolves once
+ok 166 - B first: together/together waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1491.568583
+  type: 'test'
+  ...
+# Subtest: A first: together/my_agent waits for both, protects choices and resolves once
+ok 167 - A first: together/my_agent waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1450.009875
+  type: 'test'
+  ...
+# Subtest: B first: together/my_agent waits for both, protects choices and resolves once
+ok 168 - B first: together/my_agent waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1423.932458
+  type: 'test'
+  ...
+# Subtest: A first: my_agent/together waits for both, protects choices and resolves once
+ok 169 - A first: my_agent/together waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1402.1985
+  type: 'test'
+  ...
+# Subtest: B first: my_agent/together waits for both, protects choices and resolves once
+ok 170 - B first: my_agent/together waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1261.485917
+  type: 'test'
+  ...
+# Subtest: A first: my_agent/my_agent waits for both, protects choices and resolves once
+ok 171 - A first: my_agent/my_agent waits for both, protects choices and resolves once
+  ---
+  duration_ms: 1133.705958
+  type: 'test'
+  ...
+# Subtest: B first: my_agent/my_agent waits for both, protects choices and resolves once
+ok 172 - B first: my_agent/my_agent waits for both, protects choices and resolves once
+  ---
+  duration_ms: 964.195458
+  type: 'test'
+  ...
+# Subtest: start requires current approved applied navigation; end cannot skip reenactment or mint a second round
+ok 173 - start requires current approved applied navigation; end cannot skip reenactment or mint a second round
+  ---
+  duration_ms: 667.949792
+  type: 'test'
+  ...
+# Subtest: duplicate end/choice receipts do not reopen or resubmit; fresh commands cannot change a submitted choice
+ok 174 - duplicate end/choice receipts do not reopen or resubmit; fresh commands cannot change a submitted choice
+  ---
+  duration_ms: 891.043875
+  type: 'test'
+  ...
+# Subtest: nearly simultaneous independent slots survive optimistic conflict and explicit resubmission
+ok 175 - nearly simultaneous independent slots survive optimistic conflict and explicit resubmission
+  ---
+  duration_ms: 807.413042
+  type: 'test'
+  ...
+# Subtest: replay preserves current live state and actual navigation, creates new private slots, rejects all old targets
+ok 176 - replay preserves current live state and actual navigation, creates new private slots, rejects all old targets
+  ---
+  duration_ms: 589.27525
+  type: 'test'
+  ...
+# Subtest: normal connection end cancels a pending choice, never substitutes a missing selection
+ok 177 - normal connection end cancels a pending choice, never substitutes a missing selection
+  ---
+  duration_ms: 428.44775
+  type: 'test'
+  ...
+# Subtest: restriction, stale vehicle and unknown SDK facts block time changes, submissions and replay
+ok 178 - restriction, stale vehicle and unknown SDK facts block time changes, submissions and replay
+  ---
+  duration_ms: 504.217083
+  type: 'test'
+  ...
+# Subtest: restart restores pending independent choices and role-specific receipt queries never reveal the peer choice
+ok 179 - restart restores pending independent choices and role-specific receipt queries never reveal the peer choice
+  ---
+  duration_ms: 455.729458
+  type: 'test'
+  ...
+# Subtest: stored final invariants reject fabricated results or checkpoints
+ok 180 - stored final invariants reject fabricated results or checkpoints
+  ---
+  duration_ms: 415.996584
+  type: 'test'
+  ...
+# Subtest: meeting script uses explicit cue/public/story evidence: familiar
+ok 181 - meeting script uses explicit cue/public/story evidence: familiar
+  ---
+  duration_ms: 395.087
+  type: 'test'
+  ...
+# Subtest: meeting script uses explicit cue/public/story evidence: no-cue
+ok 182 - meeting script uses explicit cue/public/story evidence: no-cue
+  ---
+  duration_ms: 213.392208
+  type: 'test'
+  ...
+# Subtest: meeting script uses explicit cue/public/story evidence: no-peer-intro
+ok 183 - meeting script uses explicit cue/public/story evidence: no-peer-intro
+  ---
+  duration_ms: 271.129708
+  type: 'test'
+  ...
+# Subtest: meeting script uses explicit cue/public/story evidence: private-interests
+ok 184 - meeting script uses explicit cue/public/story evidence: private-interests
+  ---
+  duration_ms: 224.910584
+  type: 'test'
+  ...
+# Subtest: meeting script uses explicit cue/public/story evidence: wrong-run
+ok 185 - meeting script uses explicit cue/public/story evidence: wrong-run
+  ---
+  duration_ms: 238.216833
+  type: 'test'
+  ...
+# Subtest: unknown SDK attempt cannot be promoted to a meeting or checkpoint
+ok 186 - unknown SDK attempt cannot be promoted to a meeting or checkpoint
+  ---
+  duration_ms: 229.10125
+  type: 'test'
+  ...
+# Subtest: old SDK grants and new add approvals remain closed during final replay
+ok 187 - old SDK grants and new add approvals remain closed during final replay
+  ---
+  duration_ms: 249.29125
+  type: 'test'
+  ...
+# Subtest: reset after completed meeting removes the owned waypoint before clearing choices/checkpoint
+ok 188 - reset after completed meeting removes the owned waypoint before clearing choices/checkpoint
+  ---
+  duration_ms: 300.222959
+  type: 'test'
+  ...
+# Subtest: unsubmitted B receives byte-equivalent state for either peer choice
+ok 189 - unsubmitted B receives byte-equivalent state for either peer choice
+  ---
+  duration_ms: 335.141167
+  type: 'test'
+  ...
+# Subtest: unsubmitted A receives byte-equivalent state for either peer choice
+ok 190 - unsubmitted A receives byte-equivalent state for either peer choice
+  ---
+  duration_ms: 312.291584
+  type: 'test'
+  ...
+# Subtest: blocked-request visibility never revives a message after meeting starts or final replay opens
+ok 191 - blocked-request visibility never revives a message after meeting starts or final replay opens
+  ---
+  duration_ms: 268.981958
+  type: 'test'
+  ...
+# Subtest: historical choices and checkpoint cannot be corrupted to fabricate replay outcomes
+ok 192 - historical choices and checkpoint cannot be corrupted to fabricate replay outcomes
+  ---
+  duration_ms: 255.459167
+  type: 'test'
+  ...
+# Subtest: ending-only replay keeps independent choice open after live connection end and publication withdrawal
+ok 193 - ending-only replay keeps independent choice open after live connection end and publication withdrawal
+  ---
+  duration_ms: 299.855208
+  type: 'test'
+  ...
+# Subtest: several replays preserve one completed meeting and current navigation without regenerating it
+ok 194 - several replays preserve one completed meeting and current navigation without regenerating it
+  ---
+  duration_ms: 365.48725
+  type: 'test'
+  ...
+# Subtest: replay after a together ending preserves linked live state: car first
+ok 195 - replay after a together ending preserves linked live state: car first
+  ---
+  duration_ms: 363.346167
+  type: 'test'
+  ...
+# Subtest: replay after a together ending preserves linked live state: operator first
+ok 196 - replay after a together ending preserves linked live state: operator first
+  ---
+  duration_ms: 405.928292
+  type: 'test'
+  ...
+# Subtest: operator mock result uses the current attempt, operation and run, with no real command
+ok 197 - operator mock result uses the current attempt, operation and run, with no real command
+  ---
+  duration_ms: 17.921875
+  type: 'test'
+  ...
+# Subtest: settled mock result exposes no mutation buttons and unregistered recovery stays disabled
+ok 198 - settled mock result exposes no mutation buttons and unregistered recovery stays disabled
+  ---
+  duration_ms: 3.740459
+  type: 'test'
+  ...
+# Subtest: operator call acceptance respects restrictions while refusal remains a stop choice
+ok 199 - operator call acceptance respects restrictions while refusal remains a stop choice
+  ---
+  duration_ms: 2.80525
+  type: 'test'
+  ...
+# Subtest: mock approval needs consent; operator result alone changes the mock route, never real evidence
+ok 200 - mock approval needs consent; operator result alone changes the mock route, never real evidence
+  ---
+  duration_ms: 1800.615417
+  type: 'test'
+  ...
+# Subtest: failed add requires a fresh explicit retry and keeps the failed record immutable
+ok 201 - failed add requires a fresh explicit retry and keeps the failed record immutable
+  ---
+  duration_ms: 1201.687084
+  type: 'test'
+  ...
+# Subtest: unknown retains last route and locks retry/meeting until a later operator result
+ok 202 - unknown retains last route and locks retry/meeting until a later operator result
+  ---
+  duration_ms: 1186.930334
+  type: 'test'
+  ...
+# Subtest: cancellation never discards a late mock applied result; separate removal preserves destination
+ok 203 - cancellation never discards a late mock applied result; separate removal preserves destination
+  ---
+  duration_ms: 1456.948209
+  type: 'test'
+  ...
+# Subtest: O01 waits for unknown, explicit removal, and the actual current car ACK
+ok 204 - O01 waits for unknown, explicit removal, and the actual current car ACK
+  ---
+  duration_ms: 1405.91025
+  type: 'test'
+  ...
+# Subtest: mock results cannot target a real attempt, switch away from real work, or unlock recovery
+ok 205 - mock results cannot target a real attempt, switch away from real work, or unlock recovery
+  ---
+  duration_ms: 1039.890458
+  type: 'test'
+  ...
+# Subtest: facts may arrive under restriction but do not unlock progression; duplicate result replays once
+ok 206 - facts may arrive under restriction but do not unlock progression; duplicate result replays once
+  ---
+  duration_ms: 986.212625
+  type: 'test'
+  ...
+# Subtest: mock route supports independent final choice and replay without another navigation attempt
+ok 207 - mock route supports independent final choice and replay without another navigation attempt
+  ---
+  duration_ms: 1048.32675
+  type: 'test'
+  ...
+# Subtest: mock unknown survives server restart; wrong operation, old revision and settled targets fail
+ok 208 - mock unknown survives server restart; wrong operation, old revision and settled targets fail
+  ---
+  duration_ms: 1035.380166
+  type: 'test'
+  ...
+# Subtest: mock execution cancellation is a stop action and cannot rewrite an unknown result
+ok 209 - mock execution cancellation is a stop action and cannot rewrite an unknown result
+  ---
+  duration_ms: 789.636083
+  type: 'test'
+  ...
+# Subtest: explicit mock continuation preserves real not-dispatched history
+ok 210 - explicit mock continuation preserves real not-dispatched history
+  ---
+  duration_ms: 736.529292
+  type: 'test'
+  ...
+# Subtest: corrupted mock route, ownership and result history are rejected on restoration
+ok 211 - corrupted mock route, ownership and result history are rejected on restoration
+  ---
+  duration_ms: 674.267208
+  type: 'test'
+  ...
+# Subtest: operator preserves unknown B response after receipt GET 403 and retries the same command
+ok 212 - operator preserves unknown B response after receipt GET 403 and retries the same command
+  ---
+  duration_ms: 19.812458
+  type: 'test'
+  ...
+# Subtest: operator preserves unknown B response after receipt GET 500 and retries the same command
+ok 213 - operator preserves unknown B response after receipt GET 500 and retries the same command
+  ---
+  duration_ms: 3.882583
+  type: 'test'
+  ...
+# Subtest: operator preserves unknown B response after state GET 403 and retries the same command
+ok 214 - operator preserves unknown B response after state GET 403 and retries the same command
+  ---
+  duration_ms: 2.281125
+  type: 'test'
+  ...
+# Subtest: operator preserves unknown B response after state GET 500 and retries the same command
+ok 215 - operator preserves unknown B response after state GET 500 and retries the same command
+  ---
+  duration_ms: 3.377084
+  type: 'test'
+  ...
+# Subtest: operator closes a definitively rejected B response POST 409
+ok 216 - operator closes a definitively rejected B response POST 409
+  ---
+  duration_ms: 2.454875
+  type: 'test'
+  ...
+# Subtest: operator closes a definitively rejected B response POST 500
+ok 217 - operator closes a definitively rejected B response POST 500
+  ---
+  duration_ms: 2.610584
+  type: 'test'
+  ...
+# Subtest: operator retains B response after uncertain POST 503
+ok 218 - operator retains B response after uncertain POST 503
+  ---
+  duration_ms: 2.871208
+  type: 'test'
+  ...
+# Subtest: operator retains B response after uncertain POST timeout
+ok 219 - operator retains B response after uncertain POST timeout
+  ---
+  duration_ms: 5.58125
+  type: 'test'
+  ...
+# Subtest: operator may start reset while a B response is unknown; rejecting reset POST keeps B response
+ok 220 - operator may start reset while a B response is unknown; rejecting reset POST keeps B response
+  ---
+  duration_ms: 26.002333
+  type: 'test'
+  ...
+# Subtest: lost reset response survives GET failure then recovers by receipt without another POST
+ok 221 - lost reset response survives GET failure then recovers by receipt without another POST
+  ---
+  duration_ms: 4.92
+  type: 'test'
+  ...
+# Subtest: observing reset closes old B pending and disables old response actions
+ok 222 - observing reset closes old B pending and disables old response actions
+  ---
+  duration_ms: 2.207291
+  type: 'test'
+  ...
+# Subtest: operator identifies the waiting participant and explains recovery without bypassing ACK
+ok 223 - operator identifies the waiting participant and explains recovery without bypassing ACK
+  ---
+  duration_ms: 2.867584
+  type: 'test'
+  ...
+# Subtest: web reset clears only its current v4 drafts and ordinary outbox before cleanup ACK
+ok 224 - web reset clears only its current v4 drafts and ordinary outbox before cleanup ACK
+  ---
+  duration_ms: 1141.105875
+  type: 'test'
+  ...
+# Subtest: lost final web ACK response recovers across reload without another POST or another run
+ok 225 - lost final web ACK response recovers across reload without another POST or another run
+  ---
+  duration_ms: 483.044333
+  type: 'test'
+  ...
+# Subtest: reset ACK lookup failure preserves its exact durable command for retry
+ok 226 - reset ACK lookup failure preserves its exact durable command for retry
+  ---
+  duration_ms: 454.080292
+  type: 'test'
+  ...
+# Subtest: active vehicle reset clears browser drafts without requiring a browser ACK
+ok 227 - active vehicle reset clears browser drafts without requiring a browser ACK
+  ---
+  duration_ms: 922.100833
+  type: 'test'
+  ...
+# Subtest: a stale browser returning after several completed resets clears old v4 state without submitting anything
+ok 228 - a stale browser returning after several completed resets clears old v4 state without submitting anything
+  ---
+  duration_ms: 579.336208
+  type: 'test'
+  ...
+# Subtest: an upgraded browser without a last-run pointer clears its completed drafts on first read
+ok 229 - an upgraded browser without a last-run pointer clears its completed drafts on first read
+  ---
+  duration_ms: 419.787709
+  type: 'test'
+  ...
+# Subtest: ordinary polls do not repeat completed-run or active-reset draft cleanup
+ok 230 - ordinary polls do not repeat completed-run or active-reset draft cleanup
+  ---
+  duration_ms: 551.498625
+  type: 'test'
+  ...
+# Subtest: empty run reset completes atomically and keeps store identity
+ok 231 - empty run reset completes atomically and keeps store identity
+  ---
+  duration_ms: 712.53875
+  type: 'test'
+  ...
+# Subtest: web-only reset waits for the owning browser cleanup and rejects late old commands
+ok 232 - web-only reset waits for the owning browser cleanup and rejects late old commands
+  ---
+  duration_ms: 443.111791
+  type: 'test'
+  ...
+# Subtest: active vehicle reset does not require a closed mobile and persists until vehicle ACK
+ok 233 - active vehicle reset does not require a closed mobile and persists until vehicle ACK
+  ---
+  duration_ms: 1072.033708
+  type: 'test'
+  ...
+# Subtest: reset cleanup removes only owned waypoint without cancelling a confirmed meeting
+ok 234 - reset cleanup removes only owned waypoint without cancelling a confirmed meeting
+  ---
+  duration_ms: 1635.742584
+  type: 'test'
+  ...
+# Subtest: unknown dispatched add blocks reset ACK; late add is retained then explicitly removed
+ok 235 - unknown dispatched add blocks reset ACK; late add is retained then explicitly removed
+  ---
+  duration_ms: 1624.059083
+  type: 'test'
+  ...
+# Subtest: reset closes ungranted approvals but never grants their late dispatch
+ok 236 - reset closes ungranted approvals but never grants their late dispatch
+  ---
+  duration_ms: 1229.613417
+  type: 'test'
+  ...
+# Subtest: late never-granted not_dispatched report preserves audit without locking the next run
+ok 237 - late never-granted not_dispatched report preserves audit without locking the next run
+  ---
+  duration_ms: 1352.1005
+  type: 'test'
+  ...
+# Subtest: lost web identity cannot bypass the required owner ACK
+ok 238 - lost web identity cannot bypass the required owner ACK
+  ---
+  duration_ms: 405.86575
+  type: 'test'
+  ...
+# Subtest: reset rejects wrong reset/device/session, claimed pending work, stale and changed baseline proof
+ok 239 - reset rejects wrong reset/device/session, claimed pending work, stale and changed baseline proof
+  ---
+  duration_ms: 1320.375125
+  type: 'test'
+  ...
+# Subtest: restriction blocks reset removal and real cleanup ACK, without hiding cleanup state
+ok 240 - restriction blocks reset removal and real cleanup ACK, without hiding cleanup state
+  ---
+  duration_ms: 962.88175
+  type: 'test'
+  ...
+# Subtest: old SDK replay cannot produce another grant or resurrect business state after reset
+ok 241 - old SDK replay cannot produce another grant or resurrect business state after reset
+  ---
+  duration_ms: 1002.138584
+  type: 'test'
+  ...
+# Subtest: new conflicting fact from known archived SDK attempt is retained and locks the new run
+ok 242 - new conflicting fact from known archived SDK attempt is retained and locks the new run
+  ---
+  duration_ms: 1016.147667
+  type: 'test'
+  ...
+# Subtest: receipt caching preserves every audit entry and rejects a replaced or mutated receipt
+ok 243 - receipt caching preserves every audit entry and rejects a replaced or mutated receipt
+  ---
+  duration_ms: 224.013166
+  type: 'test'
+  ...
+# Subtest: mutating a caller command after commit cannot change an immutable idempotency receipt
+ok 244 - mutating a caller command after commit cannot change an immutable idempotency receipt
+  ---
+  duration_ms: 43.841042
+  type: 'test'
+  ...
+# Subtest: completed SDK audit is immutable across another reset and rejects changed cleanup evidence
+ok 245 - completed SDK audit is immutable across another reset and rejects changed cleanup evidence
+  ---
+  duration_ms: 708.151917
+  type: 'test'
+  ...
+# Subtest: shutdown drains already queued writes, then refuses any new work
+ok 246 - shutdown drains already queued writes, then refuses any new work
+  ---
+  duration_ms: 1187.571958
+  type: 'test'
+  ...
+# Subtest: HTTP shutdown closes a speculative idle connection and releases the writer lock exactly once
+ok 247 - HTTP shutdown closes a speculative idle connection and releases the writer lock exactly once
+  ---
+  duration_ms: 117.161209
+  type: 'test'
+  ...
+# Subtest: mobile matching works without a vehicle; B accept alone does not link; A confirms exact window
+ok 248 - mobile matching works without a vehicle; B accept alone does not link; A confirms exact window
+  ---
+  duration_ms: 936.375333
+  type: 'test'
+  ...
+# Subtest: car cannot match or read candidates/raw answers; connected ACK validates all source versions
+ok 249 - car cannot match or read candidates/raw answers; connected ACK validates all source versions
+  ---
+  duration_ms: 892.527292
+  type: 'test'
+  ...
+# Subtest: meeting needs its own A proposal and current B consent; navigation remains separate
+ok 250 - meeting needs its own A proposal and current B consent; navigation remains separate
+  ---
+  duration_ms: 1235.276917
+  type: 'test'
+  ...
+# Subtest: cancel after approval blocks dispatch; late B accept cannot revive cancelled meeting
+ok 251 - cancel after approval blocks dispatch; late B accept cannot revive cancelled meeting
+  ---
+  duration_ms: 1768.421875
+  type: 'test'
+  ...
+# Subtest: late physical add preserves cancellation and requires explicit owned removal
+ok 252 - late physical add preserves cancellation and requires explicit owned removal
+  ---
+  duration_ms: 1099.409042
+  type: 'test'
+  ...
+# Subtest: activation locks mobile mutation, end hides peer, withdraw keeps owner and ACK history
+ok 253 - activation locks mobile mutation, end hides peer, withdraw keeps owner and ACK history
+  ---
+  duration_ms: 597.993583
+  type: 'test'
+  ...
+# Subtest: public interest omitted means neutral recommendation; private raw and schedule never leak
+ok 254 - public interest omitted means neutral recommendation; private raw and schedule never leak
+  ---
+  duration_ms: 293.490125
+  type: 'test'
+  ...
+# Subtest: one attempt per run survives rejection/cancel; cancel unknown command tombstones late arrival
+ok 255 - one attempt per run survives rejection/cancel; cancel unknown command tombstones late arrival
+  ---
+  duration_ms: 317.676916
+  type: 'test'
+  ...
+# Subtest: restriction and stale heartbeat block meeting/B acceptance but preserve cancellation and reports
+ok 256 - restriction and stale heartbeat block meeting/B acceptance but preserve cancellation and reports
+  ---
+  duration_ms: 687.324208
+  type: 'test'
+  ...
+# Subtest: stale connected snapshot cannot ACK after live connection end, and my_trip never exposes peer
+ok 257 - stale connected snapshot cannot ACK after live connection end, and my_trip never exposes peer
+  ---
+  duration_ms: 568.781167
+  type: 'test'
+  ...
+# Subtest: same device restores active meeting and ACK after restart without another user consent
+ok 258 - same device restores active meeting and ACK after restart without another user consent
+  ---
+  duration_ms: 491.622541
+  type: 'test'
+  ...
+# Subtest: public approval records exactly selected fields and never infers an unconfirmed style
+ok 259 - public approval records exactly selected fields and never infers an unconfirmed style
+  ---
+  duration_ms: 154.94975
+  type: 'test'
+  ...
+# Subtest: cancelling a received navigation approval preserves meeting consent and allows fresh approval
+ok 260 - cancelling a received navigation approval preserves meeting consent and allows fresh approval
+  ---
+  duration_ms: 389.259375
+  type: 'test'
+  ...
+# Subtest: cancelling an undelivered navigation approval blocks its late arrival without cancelling meeting
+ok 261 - cancelling an undelivered navigation approval blocks its late arrival without cancelling meeting
+  ---
+  duration_ms: 306.698833
+  type: 'test'
+  ...
+# Subtest: approval cancellation after dispatch preserves physical facts and meeting consent
+ok 262 - approval cancellation after dispatch preserves physical facts and meeting consent
+  ---
+  duration_ms: 365.142708
+  type: 'test'
+  ...
+# Subtest: undelivered unrelated proposal cancellation preserves proposed meeting
+ok 263 - undelivered unrelated proposal cancellation preserves proposed meeting
+  ---
+  duration_ms: 328.680458
+  type: 'test'
+  ...
+# Subtest: undelivered unrelated proposal cancellation preserves confirmed meeting
+ok 264 - undelivered unrelated proposal cancellation preserves confirmed meeting
+  ---
+  duration_ms: 322.624417
+  type: 'test'
+  ...
+# Subtest: undelivered first meeting proposal keeps a tombstone across restart and rejects late arrival
+ok 265 - undelivered first meeting proposal keeps a tombstone across restart and rejects late arrival
+  ---
+  duration_ms: 313.423125
+  type: 'test'
+  ...
+# Subtest: received proposal cancellation revokes only that proposal and late B response cannot revive it
+ok 266 - received proposal cancellation revokes only that proposal and late B response cannot revive it
+  ---
+  duration_ms: 270.725625
+  type: 'test'
+  ...
+# Subtest: unknown connection cancellation cannot end a different linked connection
+ok 267 - unknown connection cancellation cannot end a different linked connection
+  ---
+  duration_ms: 201.942375
+  type: 'test'
+  ...
+# Subtest: cached immutable audit JSON preserves exact disk format, new receipts and mutable business fields
+ok 268 - cached immutable audit JSON preserves exact disk format, new receipts and mutable business fields
+  ---
+  duration_ms: 1356.809375
+  type: 'test'
+  ...
+# Subtest: encoder failure preserves the committed file and removes the uncommitted temporary file
+ok 269 - encoder failure preserves the committed file and removes the uncommitted temporary file
+  ---
+  duration_ms: 90.295166
+  type: 'test'
+  ...
+# Subtest: v4 browser recovers a lost cancellation response by receipt; original connection never revives
+ok 270 - v4 browser recovers a lost cancellation response by receipt; original connection never revives
+  ---
+  duration_ms: 804.134625
+  type: 'test'
+  ...
+# Subtest: v4 refuses a v3 server and preserves older outbox and drafts
+ok 271 - v4 refuses a v3 server and preserves older outbox and drafts
+  ---
+  duration_ms: 0.837666
+  type: 'test'
+  ...
+# Subtest: web response loss: reload recovers receipt without posting again; missing receipt keeps exact request for explicit retry
+ok 272 - web response loss: reload recovers receipt without posting again; missing receipt keeps exact request for explicit retry
+  ---
+  duration_ms: 267.033625
+  type: 'test'
+  ...
+# Subtest: web refuses an old server projection without overwriting a pending command or draft
+ok 273 - web refuses an old server projection without overwriting a pending command or draft
+  ---
+  duration_ms: 0.31225
+  type: 'test'
+  ...
+1..273
+# tests 273
+# suites 0
+# pass 273
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 21369.135542

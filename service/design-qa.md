@@ -6,7 +6,7 @@ final result: passed
 
 출발점은 사용자 제공 `말이통행_v5_Interactive.html`과 이를 적용한 기존 모바일 화면이다. 현재 요청은 **실제 계정/자유 대화/개인 여행 저장 기능 확장**이므로 기존 목업의 고정 상담 질문·시연 표시·단계 이동은 의도적으로 교체한다. 새 홈·계정·보관함은 시안에 없는 서비스 화면이다. 이 QA는 시안의 시연 내용을 그대로 복제했다는 판정이 아니라, 같은 디자인 계통 안에서 실제 기능을 사용할 수 있는지의 판정이다.
 
-- 시각 기준: 기존 검수된 `mock-app/runtime/design-v5-reference/mobile-chat.png` 430×932 및 [v5 모바일 증거](../docs_prototype/evidence/v5-mobile-2026-11-14.png), [28번 디자인 기준](../docs_prototype/28_v5_디자인_적용_및_검수.md).
+- 시각 기준: 기존 검수된 `mock-app/runtime/design-v5-reference/mobile-chat.png` 430×932 및 [v5 모바일 증거](../docs_prototype/evidence/v5-mobile-2026-11-14.png), [31번 디자인 기준](../docs_prototype/31_v5_디자인_적용_및_검수.md).
 - 구현: [430×932 실제 상담·저장](../docs_prototype/evidence/service-mobile-chat-2026-11-14.png), [홈](../docs_prototype/evidence/service-mobile-home-2026-11-14.png), [로그아웃 홈](../docs_prototype/evidence/service-guest-home-2026-11-14.png), [프로필](../docs_prototype/evidence/service-mobile-profile-2026-11-14.png), [1360×1000 데스크톱](../docs_prototype/evidence/service-desktop-home-2026-11-14.png).
 - 같은 430×932 영역으로 배치한 [전체 비교 884×972](../docs_prototype/evidence/service-design-comparison-2026-11-14.png)를 열어 검토했다. 왼쪽은 시연형 상담 시작, 오른쪽은 실제 AI 상담 완료/저장 상태이므로 내용과 진행 상태의 픽셀 일치를 주장하지 않는다. 읽을 수 있는 동일 크기의 입력 영역·본문·아이콘·카드를 직접 확인했으며 추가 확대 합성은 필요하지 않았다.
 - 브라우저 배율은 1.1로 관측됐다. 실제 CSS 430×932를 확인한 뒤 캡처 clip 473×1025로 원래 화면 전체를 430×932 PNG에 담았다. 기존 fullPage 캡처가 배율을 중복 차감해 오른쪽/아래를 자르던 문제는 초기 증거에서 제외했다. 레이아웃 자체의 넘침은 DOM 경계와 별도로 판정했다.
