@@ -74,6 +74,39 @@ function closeStream() {
   S.partial = "";
   S.phase = "";
 }
+function viewContext() {
+  return {
+    owner: S.user?.id,
+    identity: identityEpoch,
+    route: routeVersion,
+    view: S.view,
+    chatId: S.chatId,
+    hash: location.hash,
+  };
+}
+function currentView(context) {
+  return (
+    context.owner === S.user?.id &&
+    context.identity === identityEpoch &&
+    context.route === routeVersion &&
+    context.view === S.view &&
+    context.chatId === S.chatId &&
+    context.hash === location.hash
+  );
+}
+async function reloadChat(context, turnId = null) {
+  if (!currentView(context) || !context.chatId) return;
+  const data = await api.request(`/api/chats/${context.chatId}`);
+  if (!currentView(context)) return;
+  if (data.chat?.id !== context.chatId)
+    throw new Error("대화를 다시 확인해 주세요.");
+  S.chat = data.chat;
+  draw();
+  if (turnId) {
+    scrollBottom(true);
+    stream(turnId, context.chatId);
+  }
+}
 function identity(data) {
   if (S.user?.id !== data.user?.id) identityEpoch++;
   S.user = data.user;
@@ -173,7 +206,14 @@ function draftCard(d) {
   return `<section class="draft-card"><div class="draft-top"><div class="draft-kicker">${icon(trip ? "route" : "spark")}${trip ? "우리의 여행 계획" : "친구가 기억할 취향"} · ${d.status === "confirmed" ? "저장 완료" : "함께 확인할 초안"}</div><h3>${esc(trip ? body.title : "이렇게 기억해도 괜찮을까요?")}</h3>${trip ? `<span class="draft-meta">${esc(body.destination)} · ${body.days.length}일${body.startDate ? " · " + esc(body.startDate) : " · 날짜 미정"}</span>` : ""}</div><div class="draft-body">${trip ? `<p>${esc(body.summary)}</p><div class="trip-preview-days">${body.days.map((day) => `<div class="preview-day"><span class="day-chip">DAY ${day.dayNumber}</span><span>${day.stops.map((s) => esc(s.title)).join(" · ")}</span></div>`).join("")}</div>` : `<div class="interest-list">${body.interests.map((x) => `<span class="interest-chip">${esc(x)}</span>`).join("")}</div><p>${esc(body.travelStyle)}</p><p>${esc(body.about)}</p>`}<div class="draft-actions">${d.status === "confirmed" ? `<span class="saved-indicator">${icon("check")}${trip ? "내 여행에 저장했어요" : "친구가 기억하고 있어요"}</span>` : `<button class="main-button" data-action="confirm-draft" data-id="${d.id}">${trip ? "내 여행에 저장하기" : "이 취향으로 기억해줘"}</button>`}</div>${trip ? '<p class="field-hint">영업·교통 정보는 출발 전 지도에서 확인해 주세요.</p>' : ""}</div></section>`;
 }
 function turnView(t) {
-  return `<article class="turn" id="turn-${t.id}"><div class="user-message">${esc(t.message)}</div><div class="agent-label"><img src="${art()}" alt="">${friend()}</div>${t.events?.length ? `<div class="tool-events">${[...new Set(t.events.map((x) => x.label))].map((label) => `<span class="tool-event">${icon("check")}${esc(label.replace(" 있어요", " 있었어요"))}</span>`).join("")}</div>` : ""}<div class="agent-message" id="reply-${t.id}">${pretty(t.reply || "")}</div>${t.status === "pending" ? `<div class="thinking" id="thinking-${t.id}" role="status"><span class="thinking-dot"></span><span>${esc(S.phase || "이야기를 듣고 있어요")}</span></div>` : ""}${["failed", "cancelled"].includes(t.status) ? `<div class="failed-turn">${t.status === "cancelled" ? "답변을 멈췄어요." : "답변을 끝까지 받지 못했어요. 입력한 이야기는 그대로 남아 있어요."}<br><button class="text-button" data-action="retry-turn" data-id="${t.id}" data-attempt="${t.attempt}">이 메시지로 다시 이야기하기</button></div>` : ""}${(t.drafts || []).map(draftCard).join("")}</article>`;
+  const labels = [
+    ...new Set(
+      (Array.isArray(t.events) ? t.events : [])
+        .map((event) => event?.label)
+        .filter((label) => typeof label === "string" && label.trim()),
+    ),
+  ];
+  return `<article class="turn" id="turn-${t.id}"><div class="user-message">${esc(t.message)}</div><div class="agent-label"><img src="${art()}" alt="">${friend()}</div>${labels.length ? `<div class="tool-events">${labels.map((label) => `<span class="tool-event">${icon("check")}${esc(label.replace(" 있어요", " 있었어요"))}</span>`).join("")}</div>` : ""}<div class="agent-message" id="reply-${t.id}">${pretty(t.reply || "")}</div>${t.status === "pending" ? `<div class="thinking" id="thinking-${t.id}" role="status"><span class="thinking-dot"></span><span>${esc(S.phase || "이야기를 듣고 있어요")}</span></div>` : ""}${["failed", "cancelled"].includes(t.status) ? `<div class="failed-turn">${t.status === "cancelled" ? "답변을 멈췄어요." : "답변을 끝까지 받지 못했어요. 입력한 이야기는 그대로 남아 있어요."}<br><button class="text-button" data-action="retry-turn" data-id="${t.id}" data-attempt="${t.attempt}">이 메시지로 다시 이야기하기</button></div>` : ""}${(t.drafts || []).map(draftCard).join("")}</article>`;
 }
 function chatView() {
   if (!S.user)
@@ -278,12 +318,13 @@ function scrollBottom(force = false) {
     });
 }
 function stream(turnId, chatId) {
+  if (S.view !== "chat" || S.chatId !== chatId || S.chat?.id !== chatId) return;
   closeStream();
-  const owner = S.user.id;
+  const context = viewContext();
   const es = new EventSource(`/api/turns/${turnId}/events`);
   S.stream = es;
   const valid = () =>
-    S.user?.id === owner && S.chatId === chatId && S.stream === es;
+    currentView(context) && S.chat?.id === chatId && S.stream === es;
   function update() {
     const el = $(`reply-${turnId}`);
     if (el) el.innerHTML = pretty(S.partial);
@@ -314,7 +355,14 @@ function stream(turnId, chatId) {
       es.close();
       return;
     }
-    S.chat = JSON.parse(event.data).chat;
+    const chat = JSON.parse(event.data).chat;
+    if (chat?.id !== chatId) {
+      es.close();
+      S.stream = null;
+      notice("대화의 응답을 다시 확인해 주세요.");
+      return;
+    }
+    S.chat = chat;
     es.close();
     S.stream = null;
     S.partial = "";
@@ -358,9 +406,12 @@ async function newChat(prompt = "") {
     return;
   }
   if (location.hash === "#chat") {
+    ++routeVersion;
+    closeStream();
     S.chat = null;
     S.chatId = null;
     draw();
+    restoreInput();
   } else location.hash = "chat";
   if (prompt) {
     await new Promise((r) => requestAnimationFrame(r));
@@ -407,6 +458,7 @@ document.addEventListener("click", async (event) => {
   const button = event.target.closest("[data-action]");
   if (!button) return;
   const action = button.dataset.action;
+  const context = viewContext();
   try {
     if (action === "close-dialog") {
       button.closest("dialog").close();
@@ -450,10 +502,9 @@ document.addEventListener("click", async (event) => {
         "PATCH",
       );
       await refresh();
-      if (S.chatId === button.dataset.id) {
-        S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
-        draw();
-      }
+      if (!currentView(context)) return;
+      if (context.chatId === button.dataset.id) await reloadChat(context);
+      if (!currentView(context)) return;
       await history();
       return;
     }
@@ -501,7 +552,9 @@ document.addEventListener("click", async (event) => {
       );
       S.user = data.user;
       S.trips = data.trips;
-      if (S.chatId) S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
+      if (!currentView(context)) return;
+      if (context.chatId) await reloadChat(context);
+      if (!currentView(context)) return;
       draw();
       notice(
         data.result.kind === "trip"
@@ -521,20 +574,17 @@ document.addEventListener("click", async (event) => {
         `/api/turns/${button.dataset.id}/retry`,
         { attempt: Number(button.dataset.attempt) },
       );
-      S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
-      draw();
-      stream(response.turnId, S.chatId);
+      await reloadChat(context, response.turnId);
       return;
     }
     if (action === "resolve-pending") {
-      const response = await api.resolve(S.chatId);
-      S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
-      draw();
-      stream(response.turnId, S.chatId);
+      const response = await api.resolve(context.chatId);
+      await reloadChat(context, response.turnId);
       return;
     }
   } catch (e) {
     button.disabled = false;
+    if (!currentView(context)) return;
     notice(e.message);
     if (e.status === 401) {
       await refresh();
@@ -640,39 +690,61 @@ $("message-form").onsubmit = async (event) => {
   event.preventDefault();
   if (
     submitting ||
+    S.view !== "chat" ||
     !S.user ||
     !S.user.aiConsent ||
     !$("message").value.trim() ||
-    S.chat?.turns.some((t) => t.status === "pending")
+    S.chat?.archived ||
+    S.chat?.turns.some((t) => t.status === "pending") ||
+    (S.chatId && S.chat?.id !== S.chatId)
   )
     return;
-  const text = $("message").value.trim(),
+  const input = $("message").value,
+    text = input.trim(),
     previousKey = draftKey();
+  const context = viewContext(),
+    originalChatId = context.chatId;
+  let chat = S.chat,
+    accepted = false;
   submitting = true;
   updateComposer();
   try {
-    if (!S.chatId) {
+    if (!chat) {
       const data = await api.request("/api/chats", {});
-      S.chatId = data.chat.id;
-      S.chat = data.chat;
-      window.history.replaceState(null, "", "#chat/" + S.chatId);
+      if (context.owner !== S.user?.id || context.identity !== identityEpoch)
+        return;
+      chat = data.chat;
+      if (currentView(context)) {
+        S.chatId = chat.id;
+        S.chat = chat;
+        window.history.replaceState(null, "", "#chat/" + chat.id);
+        context.chatId = chat.id;
+        context.hash = location.hash;
+      }
     }
-    const response = await api.send(S.chat, text);
-    localStorage.removeItem(previousKey);
-    $("message").value = "";
-    S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
-    draw();
-    scrollBottom(true);
-    stream(response.turnId, S.chatId);
-  } catch (e) {
-    notice(e.message);
-    if (S.chatId) {
+    const response = await api.send(chat, text);
+    accepted = true;
+    if (
+      currentView(context) ||
+      (originalChatId && S.chatId !== originalChatId)
+    ) {
       try {
-        S.chat = (await api.request(`/api/chats/${S.chatId}`)).chat;
+        if (localStorage.getItem(previousKey)?.trim() === text)
+          localStorage.removeItem(previousKey);
       } catch {}
-      draw();
     }
-    $("message").value = text;
+    if (!currentView(context)) return;
+    if ($("message").value === input) $("message").value = "";
+    await reloadChat(context, response.turnId);
+  } catch (e) {
+    if (!currentView(context)) return;
+    notice(e.message);
+    try {
+      await reloadChat(context);
+    } catch {}
+    if (!currentView(context)) return;
+    if (!accepted && (!$("message").value || $("message").value === input))
+      $("message").value = input;
   } finally {
     submitting = false;
     updateComposer();

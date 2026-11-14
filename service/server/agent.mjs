@@ -28,14 +28,14 @@ const definitions = [
     preferenceSchema,
   ],
 ];
-const labels = {
-  get_profile: "저장한 취향을 살펴보고 있어요",
-  get_saved_trips: "이전 여행을 살펴보고 있어요",
-  propose_trip: "여행 일정을 함께 정리하고 있어요",
-  propose_preferences: "기억할 취향을 정리하고 있어요",
-};
+const labels = new Map([
+  ["get_profile", "저장한 취향을 살펴보고 있어요"],
+  ["get_saved_trips", "이전 여행을 살펴보고 있어요"],
+  ["propose_trip", "여행 일정을 함께 정리하고 있어요"],
+  ["propose_preferences", "기억할 취향을 정리하고 있어요"],
+]);
 const ajv = new Ajv({ strict: false });
-const validators = Object.fromEntries(
+const validators = new Map(
   definitions.map(([name, , schema]) => [name, ajv.compile(schema)]),
 );
 const instructions = `너는 말이통행의 실제 개인 여행 에이전트다. 한국어로 편안하고 따뜻하게 대화한다.
@@ -122,7 +122,8 @@ export function openAIAgent({ apiKey, model = "gpt-4.1-mini", client } = {}) {
           let result;
           try {
             const args = JSON.parse(call.arguments);
-            if (!validators[call.name]?.(args))
+            const validator = validators.get(call.name);
+            if (!validator || !validator(args))
               throw error(
                 422,
                 "INVALID_TOOL",
@@ -204,13 +205,19 @@ export function agentRunner(repo, agent) {
           execute: async (name, args) => {
             if (job.controller.signal.aborted)
               throw error(409, "CANCELLED", "중단했어요.");
+            const validator = validators.get(name),
+              label = labels.get(name);
+            if (!validator || !label || !validator(args))
+              throw error(422, "INVALID_TOOL", "지원하지 않는 작업이에요.");
+            const kind = name === "propose_trip" ? "trip" : "preferences";
+            if (name === "propose_trip" || name === "propose_preferences")
+              validate(kind, args);
             if (job.events.length >= 8)
               throw error(
                 422,
                 "TOOL_LIMIT",
                 "한 번에 너무 많은 작업을 요청했어요.",
               );
-            const label = labels[name];
             job.events.push({ name, label });
             publish("phase", { label });
             if (name === "get_profile") return repo.getUser(user).profile;
@@ -218,8 +225,6 @@ export function agentRunner(repo, agent) {
               return repo.listTrips(user).slice(0, 10);
             if (!["propose_trip", "propose_preferences"].includes(name))
               throw error(422, "INVALID_TOOL", "지원하지 않는 작업이에요.");
-            const kind = name === "propose_trip" ? "trip" : "preferences";
-            validate(kind, args);
             const draft = {
               id: randomUUID(),
               kind,
