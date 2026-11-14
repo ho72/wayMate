@@ -11,7 +11,7 @@
       name="description"
       content="나를 알아가는 AI 여행 친구. 대화로 취향을 발견하고, 나다운 여행을 함께 준비해요."
     />
-    <title>말이통행 · 나의 AI 여행 친구</title>
+    <title>두루밋 · 나의 AI 여행 친구</title>
     <link rel="icon" type="image/png" href="/assets/dragon.png" />
     <link rel="stylesheet" href="/app.css" />
     <script type="module" src="/app.js"></script>
@@ -21,7 +21,7 @@
       <aside class="desktop-sidebar" aria-label="서비스 메뉴">
         <a href="#home" class="brand"
           ><img src="/assets/dragon.png" alt="" /><span
-            >말이통행<small>나의 AI 여행 친구</small></span
+            >두루밋<small>나의 AI 여행 친구</small></span
           ></a
         >
         <button class="new-chat main-button" data-action="new-chat">
@@ -118,7 +118,7 @@
           autocomplete="username"
           minlength="3"
           maxlength="32"
-          pattern="[a-zA-Z0-9][a-zA-Z0-9_.-]{2,31}"
+          pattern="[a-zA-Z0-9][a-zA-Z0-9_.\-]{2,31}"
           placeholder="영문·숫자로 3~32자"
           required
         />
@@ -179,6 +179,23 @@
         ></button>
       </div>
       <div id="trip-content"></div>
+    </dialog>
+    <dialog id="vehicle-confirm-dialog" aria-labelledby="vehicle-confirm-title">
+      <div class="dialog-header">
+        <h2 id="vehicle-confirm-title">이 여행을 차로 보낼까요?</h2>
+      </div>
+      <div id="vehicle-confirm-detail"></div>
+      <p id="vehicle-confirm-hint" class="field-hint">
+        별명·캐릭터와 선택한 여행 일정만 전해요. 차량에서 직접 받은 뒤 수신
+        완료로 표시해요.
+      </p>
+      <div class="draft-actions">
+        <button class="main-button" data-action="vehicle-send-confirm">
+          확인하고 보내기</button
+        ><button class="outline-button" data-action="vehicle-send-cancel">
+          돌아가기
+        </button>
+      </div>
     </dialog>
     <div
       id="notice"

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "scope": "account-trip-v1",
+  "status": "active",
+  "device": {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "name": "내 차"
+  },
+  "canInteract": true,
+  "pairing": {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "expiresAt": null,
+    "code": null,
+    "account": {
+      "displayName": "검수친구",
+      "avatar": "bear"
+    }
+  },
+  "delivery": {
+    "id": "00000000-0000-4000-8000-000000000003",
+    "pairingId": "00000000-0000-4000-8000-000000000002",
+    "revision": 1,
+    "createdAt": 1800000000000,
+    "acknowledgedAt": 1800000001000,
+    "snapshot": {
+      "profileVersion": 1,
+      "owner": {
+        "displayName": "검수친구",
+        "avatar": "bear"
+      },
+      "trip": {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "plan": {
+          "title": "내 바다 여행",
+          "destination": "강릉",
+          "startDate": null,
+          "endDate": null,
+          "summary": "내가 확인한 계획",
+          "days": [
+            {
+              "dayNumber": 1,
+              "date": null,
+              "stops": [
+                {
+                  "time": "13:00",
+                  "title": "해변 산책",
+                  "description": "천천히 걸어요",
+                  "category": "walk",
+                  "placeQuery": "강릉 해변"
+                }
+              ]
+            }
+          ],
+          "notes": [
+            "지도에서 확인해요"
+          ]
+        }
+      }
+    }
+  }
+}

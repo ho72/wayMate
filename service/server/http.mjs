@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 import { openRepository } from "./store.mjs";
 import { agentRunner } from "./agent.mjs";
 import { error, UUID } from "./contracts.mjs";
+import { nativeVehicleRoute, accountVehicleRoute } from "./vehicle-http.mjs";
 const derive = promisify(scrypt);
 const key = () => randomBytes(32).toString("base64url");
 async function passwordHash(password, salt = randomBytes(16).toString("hex")) {
@@ -87,6 +88,7 @@ export async function startService({
   host = "127.0.0.1",
   origin = `http://127.0.0.1:${port}`,
   agent,
+  vehicleNow,
 } = {}) {
   if (!agent) throw new Error("A real agent provider is required");
   const originUrl = new URL(origin);
@@ -99,7 +101,7 @@ export async function startService({
     originUrl.hash
   )
     throw new Error("Invalid public origin");
-  const repo = await openRepository(file),
+  const repo = await openRepository(file, { now: vehicleNow || Date.now }),
     runner = agentRunner(repo, agent),
     limit = throttle();
   const cookieName =
@@ -139,7 +141,15 @@ export async function startService({
         port === 0 ? `127.0.0.1:${server.address().port}` : originUrl.host;
       const effectiveOrigin =
         port === 0 ? `http://${authority}` : originUrl.origin;
-      if (req.headers.host !== authority)
+      const nativePath = new URL(req.url, effectiveOrigin).pathname.startsWith(
+        "/api/vehicle/",
+      );
+      const emulatorHost =
+        originUrl.protocol === "http:" &&
+        originUrl.hostname === "127.0.0.1" &&
+        nativePath &&
+        req.headers.host === `10.0.2.2:${server.address().port}`;
+      if (req.headers.host !== authority && !emulatorHost)
         throw error(403, "BAD_HOST", "이 주소로는 연결할 수 없어요.");
       if (req.headers["sec-fetch-site"] === "cross-site")
         throw error(
@@ -169,12 +179,24 @@ export async function startService({
       if (!["GET", "POST", "PUT", "PATCH"].includes(method))
         throw error(405, "METHOD_NOT_ALLOWED", "지원하지 않는 요청이에요.");
       const changing = method !== "GET";
-      if (changing && req.headers.origin !== effectiveOrigin)
+      if (!nativePath && changing && req.headers.origin !== effectiveOrigin)
         throw error(
           403,
           "BAD_ORIGIN",
           "페이지를 새로 연 뒤 다시 시도해 주세요.",
         );
+      if (
+        await nativeVehicleRoute({
+          req,
+          path: url.pathname,
+          method,
+          repo,
+          send,
+          jsonBody,
+          limit,
+        })
+      )
+        return;
       const rawToken = token(req),
         session = rawToken ? repo.session(rawToken) : null;
       if (method === "GET" && url.pathname === "/api/session")
@@ -186,6 +208,7 @@ export async function startService({
                 csrf: session.csrf,
                 chats: repo.listChats(session.userId),
                 trips: repo.listTrips(session.userId),
+                vehicles: repo.vehicleList(session.userId),
               }
             : { user: null, csrf: null, chats: [], trips: [] },
         );
@@ -265,6 +288,7 @@ export async function startService({
           csrf,
           chats: repo.listChats(user.id),
           trips: repo.listTrips(user.id),
+          vehicles: repo.vehicleList(user.id),
         });
       }
       if (!session)
@@ -276,6 +300,19 @@ export async function startService({
           "페이지를 새로 열고 다시 시도해 주세요.",
         );
       const user = session.userId;
+      if (
+        await accountVehicleRoute({
+          req,
+          path: url.pathname,
+          method,
+          user,
+          repo,
+          send,
+          jsonBody,
+          limit,
+        })
+      )
+        return;
       if (method === "POST" && url.pathname === "/api/auth/logout") {
         runner.revokeSession(session.tokenHash);
         repo.revokeSession(rawToken);

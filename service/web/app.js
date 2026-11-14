@@ -3,6 +3,12 @@ const $ = (id) => document.getElementById(id),
   api = new ServiceClient();
 const S = {
   user: null,
+  vehicles: [],
+  vehicleBusy: false,
+  vehicleReadVersion: 0,
+  vehicleCode: "",
+  vehicleReview: null,
+  openTripId: null,
   chats: [],
   trips: [],
   chat: null,
@@ -108,16 +114,29 @@ async function reloadChat(context, turnId = null) {
   }
 }
 function identity(data) {
-  if (S.user?.id !== data.user?.id) identityEpoch++;
+  if (S.user?.id !== data.user?.id) {
+    identityEpoch++;
+    S.vehicleBusy = false;
+    S.vehicleReadVersion++;
+    S.vehicles = [];
+    S.vehicleCode = "";
+    S.vehicleReview = null;
+    S.openTripId = null;
+    $("vehicle-confirm-dialog")?.close?.();
+    $("trip-dialog")?.close?.();
+  }
   S.user = data.user;
   api.identity(data.user, data.user ? (data.csrf ?? api.csrf) : null);
   if (data.chats) S.chats = data.chats;
   if (data.trips) S.trips = data.trips;
+  if (data.vehicles) S.vehicles = data.vehicles;
 }
 async function refresh() {
-  const epoch = identityEpoch;
+  const epoch = identityEpoch,
+    vehicleVersion = S.vehicleReadVersion;
   const data = await api.request("/api/session");
   if (epoch !== identityEpoch) return;
+  if (vehicleVersion !== S.vehicleReadVersion) delete data.vehicles;
   identity(data);
   if (!S.user) {
     S.chats = [];
@@ -129,7 +148,7 @@ async function refresh() {
   return data;
 }
 function brand() {
-  return `<a href="#home" class="brand"><img src="${art()}" alt=""><span>말이통행</span></a>`;
+  return `<a href="#home" class="brand"><img src="${art()}" alt=""><span>두루밋</span></a>`;
 }
 function renderChrome() {
   $("message-form").setAttribute("aria-label", `${friend()}에게 메시지 보내기`);
@@ -221,6 +240,162 @@ function chatView() {
   const turns = S.chat?.turns || [];
   return `<div class="chat-page">${!turns.length ? `<section class="chat-empty"><img src="${art()}" alt="반갑게 인사하는 ${friend()}"><p class="eyebrow">A LITTLE CHAT, A NEW JOURNEY</p><h1>안녕, 나는 ${friend()}야.</h1><p>오늘은 어떤 마음이야?<br>가고 싶은 곳이 없어도, 편하게 이야기해 줘.</p>${!S.user.aiConsent ? consentView() : `<div class="prompt-chips">${prompts.map(([, title, , p]) => `<button class="prompt-chip" data-action="fill-prompt" data-prompt="${esc(p)}">${title}</button>`).join("")}</div>`}</section>` : turns.map(turnView).join("")}${!S.user.aiConsent && turns.length ? consentView() : ""}${S.chatId && api.pending(S.chatId) ? '<section class="consent-card"><p>메시지의 전송 결과를 확인하고 있어요. 같은 내용으로 확인하면 중복 답변을 만들지 않아요.</p><button class="secondary-button" data-action="resolve-pending">전송 결과 확인</button></section>' : ""}</div>`;
 }
+function vehicleStatus(vehicle) {
+  if (vehicle.status === "requested") return "차량에서 계정 확인을 기다려요";
+  if (!vehicle.delivery) return "연결됨 · 받을 여행을 골라 주세요";
+  return vehicle.delivery.acknowledgedAt
+    ? "차량에서 여행을 받았어요"
+    : "차량에서 여행 수신을 기다려요";
+}
+function vehiclePanel() {
+  return `<section class="profile-card" id="vehicle-panel"><div class="section-heading"><div><h2>내 차와 연결</h2><p class="muted">정차한 차량 화면의 코드를 입력해 주세요.</p></div><button class="text-button" data-action="vehicle-refresh">상태 새로고침</button></div><form id="vehicle-pair-form"><label for="vehicle-code">차량 연결 코드</label><input id="vehicle-code" name="code" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="8자리 연결 코드" value="${esc(S.vehicleCode || "")}" required><button class="main-button" type="submit" ${S.vehicleBusy ? "disabled" : ""}>이 계정으로 연결 요청</button></form><div class="vehicle-list">${(S.vehicles || []).map((v) => `<div class="vehicle-card"><div><h3>${esc(v.name)}</h3><p>${esc(vehicleStatus(v))}</p>${v.delivery ? `<p class="small muted">${esc(v.delivery.title)}</p>` : ""}</div><button class="outline-button" data-action="vehicle-revoke" data-id="${v.id}">연결 해제</button></div>`).join("") || '<p class="muted">아직 연결한 차량이 없어요. 차량 앱의 ‘내 계정 여행’에서 시작해 주세요.</p>'}</div></section>`;
+}
+function vehicleTripControls(tripId) {
+  const active = (S.vehicles || []).filter((v) => v.status === "active");
+  const pending = active.filter((v) => api.vehiclePending?.(v.id));
+  return `<section class="profile-card" id="trip-vehicle-controls"><div class="section-heading"><h3>이 여행을 내 차로</h3><button class="text-button" data-action="vehicle-refresh">수신 상태 확인</button></div>${active.length ? `<form id="vehicle-send-form" data-trip="${tripId}"><label for="vehicle-destination">연결한 차량</label><select id="vehicle-destination" name="deviceId">${active.map((v) => `<option value="${v.id}">${esc(v.name)} · ${esc(vehicleStatus(v))}</option>`).join("")}</select><p class="field-hint">별명·캐릭터와 지금 보는 여행만 전달해요. 내비 경로는 바뀌지 않아요.</p><button class="main-button" type="submit" ${S.vehicleBusy ? "disabled" : ""}>차량에 보낼 내용 확인</button></form>${pending.map((v) => `<p>‘${esc(v.name)}’의 이전 전송 결과가 미확인이에요.</p><button class="secondary-button" data-action="vehicle-resolve" data-id="${v.id}">이전 전송 결과 확인</button>`).join("")}` : '<p>먼저 마이에서 차량을 연결해 주세요. 차량에서도 계정을 확인해야 여행을 보낼 수 있어요.</p><button class="main-button" data-action="vehicle-go-me">내 차 연결하기</button>'}</section>`;
+}
+function paintVehiclePanels() {
+  const panel = $("vehicle-panel");
+  if (panel && S.view === "me") panel.outerHTML = vehiclePanel();
+  const controls = $("trip-vehicle-controls");
+  if (controls && $("trip-dialog").open && S.openTripId)
+    controls.outerHTML = vehicleTripControls(S.openTripId);
+}
+async function refreshVehicles() {
+  if (!S.user) return;
+  const owner = S.user.id,
+    epoch = identityEpoch,
+    read = ++S.vehicleReadVersion;
+  const data = await api.request("/api/vehicles");
+  if (
+    epoch !== identityEpoch ||
+    owner !== S.user?.id ||
+    read !== S.vehicleReadVersion
+  )
+    return;
+  S.vehicles = data.vehicles;
+  paintVehiclePanels();
+}
+function closeVehicleReview() {
+  S.vehicleReview = null;
+  $("vehicle-confirm-dialog")?.close?.();
+}
+function reviewVehicleSend(tripId, deviceId) {
+  const trip = S.trips.find((t) => t.id === tripId),
+    vehicle = S.vehicles.find(
+      (v) => v.id === deviceId && v.status === "active",
+    );
+  if (!trip || !vehicle || !S.user)
+    throw new Error("최신 여행과 차량 연결을 확인해 주세요.");
+  if (api.vehiclePending(deviceId))
+    throw new Error("먼저 이전 여행의 전송 결과를 확인해 주세요.");
+  S.vehicleReview = {
+    kind: "send",
+    context: viewContext(),
+    deviceId,
+    body: {
+      requestId: crypto.randomUUID(),
+      pairingId: vehicle.pairingId,
+      expectedRevision: vehicle.delivery?.revision || 0,
+      tripId,
+      profileVersion: S.user.profileVersion,
+    },
+  };
+  $("vehicle-confirm-hint").hidden = false;
+  $("vehicle-confirm-title").textContent = "이 여행을 차로 보낼까요?";
+  $("vehicle-confirm-detail").innerHTML =
+    `<h3>${esc(vehicle.name)}</h3><p>${esc(trip.title)} · ${trip.days.length}일</p><p>함께할 친구: ${esc(S.user.profile.displayName)} · ${friend()}</p><p>이 차량에서만 확인할 여행이에요. 대화 원문과 다른 여행은 보내지 않아요.</p>`;
+  document.querySelector('[data-action="vehicle-send-confirm"]').textContent =
+    "확인하고 보내기";
+  $("vehicle-confirm-dialog").showModal();
+}
+async function vehicleAction(action, button) {
+  if (!action.startsWith("vehicle-")) return false;
+  if (action === "vehicle-go-me") {
+    $("trip-dialog").close();
+    location.hash = "me";
+    return true;
+  }
+  if (action === "vehicle-send-cancel") {
+    closeVehicleReview();
+    return true;
+  }
+  if (action === "vehicle-refresh") {
+    await refreshVehicles();
+    return true;
+  }
+  if (action === "vehicle-revoke") {
+    const vehicle = S.vehicles.find((v) => v.id === button.dataset.id);
+    if (!vehicle) return true;
+    S.vehicleReview = {
+      kind: "revoke",
+      context: viewContext(),
+      deviceId: vehicle.id,
+      body: { pairingId: vehicle.pairingId },
+    };
+    $("vehicle-confirm-hint").hidden = true;
+    $("vehicle-confirm-title").textContent = "차량 연결을 해제할까요?";
+    $("vehicle-confirm-detail").innerHTML =
+      `<h3>${esc(vehicle.name)}</h3><p>차량에서 내 계정과 여행을 더 이상 확인할 수 없게 돼요. 다시 연결하려면 차량의 새 코드가 필요해요.</p>`;
+    document.querySelector('[data-action="vehicle-send-confirm"]').textContent =
+      "연결 해제 확인";
+    $("vehicle-confirm-dialog").showModal();
+    return true;
+  }
+  if (S.vehicleBusy) return true;
+  const review = S.vehicleReview,
+    context = review?.context || viewContext();
+  if (action === "vehicle-send-confirm" && (!review || !currentView(context))) {
+    closeVehicleReview();
+    return true;
+  }
+  const owner = S.user?.id;
+  S.vehicleBusy = true;
+  S.vehicleReadVersion++;
+  button.disabled = true;
+  try {
+    let data;
+    if (action === "vehicle-resolve")
+      data = await api.resolveVehicle(button.dataset.id);
+    else if (action === "vehicle-send-confirm")
+      data =
+        review.kind === "send"
+          ? await api.sendVehicle(review.deviceId, review.body)
+          : await api.request(
+              `/api/vehicles/${review.deviceId}/revoke`,
+              review.body,
+            );
+    else return true;
+    if (owner !== S.user?.id || !currentView(context)) return true;
+    S.vehicleReadVersion++;
+    S.vehicles = data.vehicles;
+    closeVehicleReview();
+    paintVehiclePanels();
+    notice(
+      review?.kind === "revoke"
+        ? "차량 연결을 해제했어요."
+        : "전송 결과를 확인했어요. 차량에서 받으면 수신 완료로 표시해요.",
+    );
+  } catch (e) {
+    if (owner === S.user?.id && currentView(context)) {
+      if (review?.kind === "send") {
+        closeVehicleReview();
+        if (e.status === 409) await refreshVehicles().catch(() => {});
+      }
+      paintVehiclePanels();
+      notice(e.message);
+    }
+  } finally {
+    if (owner === S.user?.id && context.identity === identityEpoch) {
+      S.vehicleBusy = false;
+      button.disabled = false;
+      paintVehiclePanels();
+    }
+  }
+  return true;
+}
+
 function meView() {
   if (!S.user)
     return `<div class="page"><div class="empty-card"><img src="${art()}" width="130" height="130" alt=""><h1>나와 내 친구의 공간</h1><p>로그인하고 나다운 취향과 여행을 차곡차곡 남겨보세요.</p><button class="main-button" data-action="login">로그인하기</button></div></div>`;
@@ -235,7 +410,7 @@ function meView() {
     )
     .join(
       "",
-    )}</div><label for="my-interests">좋아하는 것</label><input id="my-interests" name="interests" placeholder="바다 산책, 조용한 카페처럼 쉼표로 구분해 주세요" value="${esc(p.interests.join(", "))}"><label for="my-style">편한 여행 방식</label><textarea id="my-style" name="travelStyle" maxlength="300" rows="2" placeholder="여유롭게 걷고, 중간중간 쉬는 여행이 좋아요">${esc(p.travelStyle)}</textarea><label for="my-about">친구가 알아두면 좋을 이야기</label><textarea id="my-about" name="about" maxlength="500" rows="3" placeholder="여행할 때 나를 편하게 해주는 것들을 알려주세요">${esc(p.about)}</textarea><p class="field-hint">건강·연락처 같은 민감정보는 남기지 않는 게 좋아요.</p><button class="main-button" type="submit">내 정보 저장하기</button></form></section><section class="profile-card"><div class="settings-row"><div><b>AI 대화 동의</b><p>대화와 저장한 취향·여행을 OpenAI에 전달해요.<br>동의를 철회하면 새 답변과 진행 중 답변을 멈춰요.</p></div><button class="outline-button" data-action="${S.user.aiConsent ? "revoke-consent" : "open-consent"}">${S.user.aiConsent ? "동의 철회" : "대화 시작하기"}</button></div></section><section class="profile-card"><div class="settings-row"><div><b>나의 계정</b><p>대화와 여행은 이 계정에 저장돼요.</p></div><button class="outline-button" data-action="logout">로그아웃</button></div></section></div>`;
+    )}</div><label for="my-interests">좋아하는 것</label><input id="my-interests" name="interests" placeholder="바다 산책, 조용한 카페처럼 쉼표로 구분해 주세요" value="${esc(p.interests.join(", "))}"><label for="my-style">편한 여행 방식</label><textarea id="my-style" name="travelStyle" maxlength="300" rows="2" placeholder="여유롭게 걷고, 중간중간 쉬는 여행이 좋아요">${esc(p.travelStyle)}</textarea><label for="my-about">친구가 알아두면 좋을 이야기</label><textarea id="my-about" name="about" maxlength="500" rows="3" placeholder="여행할 때 나를 편하게 해주는 것들을 알려주세요">${esc(p.about)}</textarea><p class="field-hint">건강·연락처 같은 민감정보는 남기지 않는 게 좋아요.</p><button class="main-button" type="submit">내 정보 저장하기</button></form></section>${vehiclePanel()}<section class="profile-card"><div class="settings-row"><div><b>AI 대화 동의</b><p>대화와 저장한 취향·여행을 OpenAI에 전달해요.<br>동의를 철회하면 새 답변과 진행 중 답변을 멈춰요.</p></div><button class="outline-button" data-action="${S.user.aiConsent ? "revoke-consent" : "open-consent"}">${S.user.aiConsent ? "동의 철회" : "대화 시작하기"}</button></div></section><section class="profile-card"><div class="settings-row"><div><b>나의 계정</b><p>대화와 여행은 이 계정에 저장돼요.</p></div><button class="outline-button" data-action="logout">로그아웃</button></div></section></div>`;
 }
 function updateComposer() {
   const visible = S.view === "chat" && !!S.user;
@@ -283,6 +458,7 @@ function restoreInput() {
 }
 async function route() {
   const version = ++routeVersion;
+  closeVehicleReview();
   closeStream();
   const match = location.hash.match(
     /^#(home|chat|trips|me)(?:\/([\da-f-]+))?$/i,
@@ -308,6 +484,8 @@ async function route() {
   restoreInput();
   $("main-content").scrollTop = 0;
   const pending = S.chat?.turns.find((t) => t.status === "pending");
+  if (S.user && ["me", "trips"].includes(S.view))
+    refreshVehicles().catch((e) => notice(e.message));
   if (pending) stream(pending.id, S.chat.id);
   else if (S.view === "chat") scrollBottom(true);
 }
@@ -443,6 +621,7 @@ async function history() {
   if (!$("history-dialog").open) $("history-dialog").showModal();
 }
 function openTrip(id) {
+  S.openTripId = id;
   const t = S.trips.find((x) => x.id === id);
   if (!t) {
     notice("여행을 다시 불러와 주세요.");
@@ -451,7 +630,9 @@ function openTrip(id) {
   $("trip-title").textContent = t.title;
   $("trip-content").innerHTML =
     `<p class="trip-dialog-desc">${esc(t.destination)} · ${t.startDate ? esc(t.startDate) : "날짜 미정"}${t.endDate && t.endDate !== t.startDate ? " – " + esc(t.endDate) : ""}</p><p>${esc(t.summary)}</p>${t.days.map((day) => `<section class="day-section"><h3><span class="day-chip">DAY ${day.dayNumber}</span>${day.date ? `<small>${esc(day.date)}</small>` : ""}</h3>${day.stops.map((stop) => `<div class="stop-item">${stop.time ? `<div class="stop-time">${esc(stop.time)}</div>` : ""}<b>${esc(stop.title)}</b><p>${esc(stop.description)}</p><a class="map-link" href="https://map.naver.com/p/search/${encodeURIComponent(stop.placeQuery || t.destination + " " + stop.title)}" target="_blank" rel="noopener noreferrer">${icon("pin")}지도에서 확인</a></div>`).join("")}</section>`).join("")}<div class="trip-notes">출발 전 영업·예약·교통 정보를 확인해 주세요.${t.notes.length ? `<ul>${t.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}</div>`;
-  $("trip-dialog").showModal();
+  $("trip-content").innerHTML += vehicleTripControls(id);
+  if (!$("trip-dialog").open) $("trip-dialog").showModal();
+  refreshVehicles().catch((e) => notice(e.message));
 }
 
 document.addEventListener("click", async (event) => {
@@ -460,6 +641,7 @@ document.addEventListener("click", async (event) => {
   const action = button.dataset.action;
   const context = viewContext();
   try {
+    if (await vehicleAction(action, button)) return;
     if (action === "close-dialog") {
       button.closest("dialog").close();
       return;
@@ -629,6 +811,46 @@ document.addEventListener("change", (event) => {
       !event.target.checked;
 });
 document.addEventListener("submit", async (event) => {
+  if (event.target.id === "vehicle-send-form") {
+    event.preventDefault();
+    try {
+      reviewVehicleSend(
+        event.target.dataset.trip,
+        new FormData(event.target).get("deviceId"),
+      );
+    } catch (e) {
+      notice(e.message);
+    }
+    return;
+  }
+  if (event.target.id === "vehicle-pair-form") {
+    event.preventDefault();
+    if (S.vehicleBusy || !S.user) return;
+    const owner = S.user.id,
+      epoch = identityEpoch,
+      button = event.target.querySelector('[type="submit"]');
+    const code = new FormData(event.target).get("code").replace(/[\s-]/g, "");
+    S.vehicleBusy = true;
+    S.vehicleReadVersion++;
+    button.disabled = true;
+    try {
+      const data = await api.request("/api/vehicles/pair", { code });
+      if (owner !== S.user?.id || epoch !== identityEpoch) return;
+      S.vehicleReadVersion++;
+      S.vehicles = data.vehicles;
+      S.vehicleCode = "";
+      notice("차량 화면에서 연결할 계정을 확인해 주세요.");
+    } catch (e) {
+      if (owner === S.user?.id && epoch === identityEpoch) notice(e.message);
+    } finally {
+      if (owner === S.user?.id && epoch === identityEpoch) {
+        S.vehicleBusy = false;
+        button.disabled = false;
+        paintVehiclePanels();
+      }
+    }
+    return;
+  }
   if (event.target.id !== "profile-form") return;
   event.preventDefault();
   const button = event.target.querySelector('[type="submit"]');
@@ -765,3 +987,20 @@ try {
   $("main-content").innerHTML =
     '<div class="error-page"><h1>친구와 연결하지 못했어요</h1><p>연결을 확인하고 페이지를 다시 열어 주세요.</p><a class="main-button" href="/">다시 연결하기</a></div>';
 }
+
+document.addEventListener("input", (event) => {
+  if (event.target.id === "vehicle-code") S.vehicleCode = event.target.value;
+});
+$("vehicle-confirm-dialog").addEventListener("cancel", closeVehicleReview);
+setInterval(() => {
+  if (
+    !S.user ||
+    document.hidden ||
+    S.vehicleBusy ||
+    S.vehicleReview ||
+    !(["me"].includes(S.view) || $("trip-dialog").open) ||
+    document.activeElement?.closest?.("#vehicle-panel, #trip-vehicle-controls")
+  )
+    return;
+  refreshVehicles().catch(() => {});
+}, 10000);

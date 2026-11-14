@@ -32,6 +32,11 @@ fun HandoffScreen(
     onSocialAction: (String, String) -> Unit,
     onOpenContent: () -> Unit,
     onOpenEnding: () -> Unit,
+    onOpenPersonalTrip: (() -> Unit)? = null,
+    onOpenPlaces: (() -> Unit)? = null,
+    onOpenItinerary: (() -> Unit)? = null,
+    onOpenVoice: (() -> Unit)? = null,
+    personalNavigationPending: Boolean = false,
 ) {
     var socialReview by remember { mutableStateOf<Pair<String, String>?>(null) }
     var confirmStart by remember { mutableStateOf(false) }
@@ -63,6 +68,13 @@ fun HandoffScreen(
                             onOpenContent, onOpenMeeting, onOpenNavigation)
                     }
                     if (journey != null) {
+                        if (state.social.peerAlias == null || personalNavigationPending) onOpenPlaces?.let { open ->
+                            VehicleOutlineButton(onClick = open) { Text(if (personalNavigationPending) "개인 안내 결과 확인 필요" else "장소 물어보기") }
+                        }
+                        onOpenItinerary?.let { open -> VehicleOutlineButton(onClick = open) { Text("내 일정과 안내 확인") } }
+                        if (state.content.peerAlias != null) onOpenVoice?.let { open ->
+                            VehicleOutlineButton(onClick = open) { Text("음성 대화 화면 미리보기") }
+                        }
                         TextButton(onClick = { showPlan = !showPlan }) { Text(if (showPlan) "일정 접기" else "내 일정 자세히 보기") }
                         if (showPlan) JourneyPanel(state, onLoadJourney, {}, Modifier.fillMaxWidth())
                         TextButton(onClick = { showManage = !showManage }) { Text(if (showManage) "여행 관리 접기" else "여행 관리") }
@@ -76,6 +88,9 @@ fun HandoffScreen(
                                 TextButton(onClick = { socialReview = "PROFILE_PRIVATE" to binding }) { Text("소개 공개 철회") }
                             }
                         }
+                    }
+                    onOpenPersonalTrip?.let { open ->
+                        VehicleOutlineButton(onClick = open) { Text("내 계정 여행") }
                     }
                     state.notice?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall) }
                 }

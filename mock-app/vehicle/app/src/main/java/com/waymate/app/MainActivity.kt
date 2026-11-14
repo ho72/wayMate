@@ -1,6 +1,8 @@
 package com.waymate.app
 
 import android.os.Bundle
+import android.content.Intent
+import com.waymate.app.personal.PersonalTripActivity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
@@ -89,6 +91,7 @@ class MainActivity : ComponentActivity() {
                     repository::openEnding,
                     repository::closeEnding,
                     repository::markProfileCue,
+                    { startActivity(Intent(this, PersonalTripActivity::class.java)) },
                 )
             }
         }

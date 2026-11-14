@@ -1,6 +1,14 @@
 package com.waymate.app.app
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.platform.LocalContext
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import com.waymate.app.ui.screens.extras.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -37,14 +45,54 @@ fun WayMateApp(
     onOpenEnding: () -> Unit,
     onCloseEnding: () -> Unit,
     onProfileCue: (String) -> Unit,
+    onOpenPersonalTrip: (() -> Unit)? = null,
 ) {
+    val scope = "${state.journey?.handoffId}:${state.journey?.handoffVersion}:${state.journey?.tripVersion}"
+    var extra by rememberSaveable(scope, stateSaver = listSaver<VehiclePageFlow, String>(
+        save = { it.save() }, restore = { VehiclePageFlow.restore(it) },
+    )) { mutableStateOf(VehiclePageFlow()) }
+    val pages = rememberSaveableStateHolder()
+    val activity = LocalContext.current as? ComponentActivity
+    var foreground by remember { mutableStateOf(true) }
+    DisposableEffect(activity) {
+        val observer = object : DefaultLifecycleObserver {
+            override fun onPause(owner: LifecycleOwner) { foreground = false; extra = extra.unavailable(); onStopSpeech() }
+            override fun onResume(owner: LifecycleOwner) { foreground = true }
+        }
+        activity?.lifecycle?.addObserver(observer)
+        onDispose { activity?.lifecycle?.removeObserver(observer) }
+    }
+    val parked = state.driving.mode == InteractionMode.PARKED
+    LaunchedEffect(parked, state.reset.visible) {
+        if (!parked || state.reset.visible) extra = extra.unavailable()
+    }
+    LaunchedEffect(state.content.peerAlias, state.content.call?.status, state.ending.phase) {
+        if ((extra.page == VehiclePage.VOICE && state.content.peerAlias == null) ||
+            (extra.page == VehiclePage.MC && state.content.call?.status != "active") ||
+            (extra.page == VehiclePage.REVIEW && state.ending.phase != "together")) extra = extra.home()
+    }
+    fun openExtra(page: VehiclePage) {
+        onStopSpeech()
+        extra = if (page == VehiclePage.ITINERARY) extra.reviewSchedule() else extra.open(page)
+    }
+    fun extraHome() { extra = extra.home(); onStopSpeech(); onCloseContent(); onCloseEnding() }
     if (state.driving.mode != InteractionMode.PARKED)
         DrivingScreen(state.driving, state.journey, speech, onSpeak, onStopSpeech)
     else Box(Modifier.testTag("parked-mode")) {
         if (state.reset.visible)
             ResetScreen(state.reset, onApproveNavigation, onCancelNavigation, onRetry, onSocialAction)
+        else if (extra.page != VehiclePage.HOME)
+            VehicleExtraScreen(extra, state.journey, foreground,
+                { extra = it }, ::extraHome,
+                { extra = extra.home() },
+                {
+                    extra = extra.home()
+                    state.content.actions["CALL_END"]?.let { onSocialAction("CALL_END", it) }
+                },
+                { extra = extra.home() },
+            )
         else if (state.ending.visible)
-            EndingScreen(
+            pages.SaveableStateProvider("ending:${state.ending.scope}") { EndingScreen(
                 state.ending,
                 state.journey,
                 speech,
@@ -54,9 +102,11 @@ fun WayMateApp(
                 onCloseEnding,
                 onOpenNavigation,
                 onRetry,
-            )
+                onOpenItinerary = { openExtra(VehiclePage.ITINERARY) },
+                onOpenReview = { openExtra(VehiclePage.REVIEW) },
+            ) }
         else if (state.content.visible)
-            ContentScreen(
+            pages.SaveableStateProvider("content:${state.content.scope}") { ContentScreen(
                 state.content,
                 state.journey,
                 speech,
@@ -68,7 +118,11 @@ fun WayMateApp(
                 onCloseContent,
                 onOpenMeeting,
                 onRetry,
-            )
+                onOpenPlaces = { openExtra(VehiclePage.REQUEST) },
+                onOpenVoice = { openExtra(VehiclePage.VOICE) },
+                onOpenMc = { openExtra(VehiclePage.MC) },
+                onOpenItinerary = { openExtra(VehiclePage.ITINERARY) },
+            ) }
         else if (state.navigation.visible)
             NavigationScreen(
                 state.navigation,
@@ -99,6 +153,11 @@ fun WayMateApp(
                 onSocialAction = onSocialAction,
                 onOpenContent = onOpenContent,
                 onOpenEnding = onOpenEnding,
+                onOpenPersonalTrip = onOpenPersonalTrip,
+                onOpenPlaces = { openExtra(VehiclePage.REQUEST) },
+                onOpenItinerary = { openExtra(VehiclePage.ITINERARY) },
+                onOpenVoice = { openExtra(VehiclePage.VOICE) },
+                personalNavigationPending = extra.locked,
             )
     }
 }

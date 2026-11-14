@@ -40,6 +40,47 @@ export class ServiceClient {
       );
     return data;
   }
+  vehiclePendingKey(deviceId, owner = this.userId) {
+    return `waymate.service.vehicle-pending.${owner}.${deviceId}`;
+  }
+  vehiclePending(deviceId) {
+    try {
+      return JSON.parse(
+        this.storage.getItem(this.vehiclePendingKey(deviceId)) || "null",
+      );
+    } catch {
+      return null;
+    }
+  }
+  async sendVehicle(deviceId, body) {
+    if (this.vehiclePending(deviceId))
+      throw Object.assign(
+        new Error("먼저 이전 여행의 전송 결과를 확인해 주세요."),
+        { code: "VEHICLE_PENDING" },
+      );
+    this.storage.setItem(
+      this.vehiclePendingKey(deviceId),
+      JSON.stringify(body),
+    );
+    return this.resolveVehicle(deviceId);
+  }
+  async resolveVehicle(deviceId) {
+    const body = this.vehiclePending(deviceId),
+      owner = this.userId;
+    if (!body) throw new Error("확인할 전송 요청이 없어요.");
+    try {
+      const result = await this.request(
+        `/api/vehicles/${deviceId}/deliveries`,
+        body,
+      );
+      this.storage.removeItem(this.vehiclePendingKey(deviceId, owner));
+      return result;
+    } catch (e) {
+      if (e.status && e.status < 500 && e.status !== 429)
+        this.storage.removeItem(this.vehiclePendingKey(deviceId, owner));
+      throw e;
+    }
+  }
   pendingKey(chatId) {
     return `waymate.service.pending.${this.userId}.${chatId}`;
   }
