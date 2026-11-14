@@ -86,12 +86,6 @@ function showQuestion(id) {
   $("count").textContent = `${[...$("answer").value].length} / 500자`;
 }
 function render() {
-  const sceneAvatar = api.state?.profile?.avatarId || document.querySelector('input[name="avatar"]:checked')?.value || "a-01";
-  const scene = $("scene-character");
-  const src = sceneAvatar === "a-01" ? "/character.png" : "/bear.png";
-  if (scene.getAttribute("src") !== src) scene.setAttribute("src", src);
-  scene.alt = sceneAvatar === "a-01" ? "함께 여행할 파란 드래곤 친구" : "함께 여행할 포근한 곰 친구";
-
   const s = api.state;
   if (!s) return;
   consultation.observe();
@@ -246,6 +240,16 @@ function render() {
   $("recover").hidden = !api.pending;
   $("retry").hidden = !api.pending;
   renderFlow(s, owns);
+  // Preview the radio selection only in the profile editor. Other screens show
+  // the confirmed identity that will be sent to the vehicle, even before save.
+  const previewingProfile = !$("profile-form").hidden && !$("profile-card").hidden;
+  const draftAvatar = document.querySelector("input[name=avatar]:checked")?.value;
+  const sceneAvatar =
+    (previewingProfile && draftAvatar) || s.profile?.avatarId || draftAvatar || "a-01";
+  const scene = $("scene-character");
+  const src = sceneAvatar === "a-01" ? "/character.png" : "/bear.png";
+  if (scene.getAttribute("src") !== src) scene.setAttribute("src", src);
+  scene.alt = sceneAvatar === "a-01" ? "함께 여행할 파란 드래곤 친구" : "함께 여행할 포근한 곰 친구";
   renderConsultation(locked, owns);
   if (!owns) {
     status("이 여행을 준비한 브라우저를 사용해 주세요.");
