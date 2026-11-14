@@ -24,7 +24,8 @@ fun NavigationScreen(
     onRetry: () -> Unit,
     journey: com.waymate.app.model.Journey? = null,
 ) {
-    var review by remember { mutableStateOf<Pair<String, String>?>(null) }
+    val cancellationBinding = social.actions["MEETING_CANCEL"]
+    var review by remember(cancellationBinding, state.source) { mutableStateOf<Pair<String, String>?>(null) }
     VehicleBackground {
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
@@ -36,7 +37,7 @@ fun NavigationScreen(
             if (state.source == "mock") {
                 MockNavigationPanel(state, onSocialAction)
                 social.actions["MEETING_CANCEL"]?.let { b ->
-                    VehicleOutlineButton(onClick = { onSocialAction("MEETING_CANCEL", b) }) {
+                    VehicleOutlineButton(onClick = { review = "meeting_cancel" to b }) {
                         Text("만남 취소")
                     }
                 }
@@ -115,17 +116,20 @@ fun NavigationScreen(
             },
             text = {
                 Text(
-                    "소프트웨어드림센터\n${if(r.first=="meeting_cancel")"만남을 취소해요. 내비 경유지는 별도 제거 승인으로 정리해요." else if(add)"현재 목적지로 가는 길에 추가해요." else "wayMate가 추가한 첫 번째 경유지만 제거해요."}\n목적지: ${reviewedDestination}\n${if(r.first=="meeting_cancel") "만남 취소와 내비 경유지 제거는 별도 동작이에요." else "정차 상태에서 승인 후 실제 내비에 요청해요."}"
+                    "${if(state.source == "mock") "바다쉼표 카페 · 모의 경로" else "소프트웨어드림센터"}\n${if(r.first=="meeting_cancel")"만남과 상대 연결을 종료해요. 처리 중인 내비 결과를 확인하고, 추가한 경유지는 별도 제거 승인으로 정리해요." else if(add)"현재 목적지로 가는 길에 추가해요." else "wayMate가 추가한 첫 번째 경유지만 제거해요."}\n목적지: ${reviewedDestination}\n${if(r.first=="meeting_cancel") "만남 취소와 내비 경유지 제거는 별도 동작이에요." else "정차 상태에서 승인 후 실제 내비에 요청해요."}"
                 )
             },
             confirmButton = {
                 TextButton(
-                    onClick = {
+                    onClick = confirm@{
+                        if (review != r) return@confirm
                         review = null
-                        if (r.first == "meeting_cancel") onSocialAction("MEETING_CANCEL", r.second)
+                        if (r.first == "meeting_cancel") {
+                            if (social.actions["MEETING_CANCEL"] == r.second) onSocialAction("MEETING_CANCEL", r.second)
+                        }
                         else onApprove(r.first, r.second)
                     },
-                    enabled = r.first == "meeting_cancel" || social.canInteract && !state.busy,
+                    enabled = if (r.first == "meeting_cancel") social.actions["MEETING_CANCEL"] == r.second else social.canInteract && !state.busy,
                 ) {
                     Text(
                         if (r.first == "meeting_cancel") "만남 취소 확인"
@@ -133,7 +137,7 @@ fun NavigationScreen(
                     )
                 }
             },
-            dismissButton = { TextButton(onClick = { review = null }) { Text("취소") } },
+            dismissButton = { TextButton(onClick = { review = null }) { Text(if (r.first == "meeting_cancel") "돌아가기" else "취소") } },
         )
     }
 }

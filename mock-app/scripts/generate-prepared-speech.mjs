@@ -16,6 +16,7 @@ import {
   FOLLOWUP,
   REPLIES,
   UNKNOWN,
+  PEER_TOPIC_GENERAL,
   REPLY_DONE,
   profileAnswer,
 } from "../shared/config/content-v4.mjs";
@@ -43,6 +44,7 @@ const items = [
     FOLLOWUP.text,
     ...Object.values(REPLIES),
     UNKNOWN,
+    PEER_TOPIC_GENERAL,
     REPLY_DONE,
     profileAnswer("Q1", peer),
     profileAnswer("Q2", peer, ["sea_walk", "cafe"]),
@@ -108,26 +110,7 @@ console.log(`Prepared speech: ${index.entries.length} local clips`);
 const manifestPath = new URL("../shared/assets-manifest.json", import.meta.url);
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 manifest.schemaVersion = 4;
-manifest.characters["a-01"].states = [
-  "still",
-  "idle",
-  "speaking",
-  "interrupted",
-];
-manifest.characters["a-02"].states = [
-  "still",
-  "idle",
-  "speaking",
-  "interrupted",
-];
-manifest.characters["b-01"] = {
-  label: "솔바람의 에이전트",
-  kind: "procedural_canvas",
-  states: ["still", "idle", "speaking", "interrupted"],
-  presentation: "existing prototype canvas",
-};
-manifest.characters["a-01"].motion =
-  "Compose transform of rendered still; no 3D rig or lip sync";
+// Audio regeneration must preserve the selected image assets and character metadata.
 const meetingTexts = new Set(
   [...GENERAL_MEETING, ...FAMILIAR_MEETING, ...TOGETHER_SCENE].map(
     (x) => x.text,
@@ -149,6 +132,7 @@ manifest.audioCues = Object.fromEntries(
             ? "peer_message_fixture"
             : entry.text.startsWith("반가워요. 저는 솔바람") ||
                 entry.text === UNKNOWN ||
+                entry.text === PEER_TOPIC_GENERAL ||
                 entry.text === profileAnswer("Q1", peer) ||
                 entry.text === profileAnswer("Q2", peer, ["sea_walk", "cafe"])
               ? "peer_agent"
@@ -166,7 +150,8 @@ manifest.audioCues = Object.fromEntries(
         requiredPublicFields:
           entry.text === profileAnswer("Q1", peer)
             ? ["interests", "pace", "activityPreference", "expressionPresetIds"]
-            : entry.text === profileAnswer("Q2", peer, ["sea_walk", "cafe"])
+            : entry.text === profileAnswer("Q2", peer, ["sea_walk", "cafe"]) ||
+                entry.text === PEER_TOPIC_GENERAL
               ? ["interests", "conversationStyle"]
               : [],
         styleVariant: entry.text.includes("ㅎㅎ") ? "light_humor" : "neutral",
