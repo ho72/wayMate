@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-14",
+  "issues": [
+    12,
+    13,
+    14
+  ],
+  "environment": {
+    "node": "22.22.2",
+    "java": "21.0.12",
+    "pleos": "Connect ARM 2.1.0 / API 34"
+  },
+  "checks": {
+    "targetedTermination": 39,
+    "targetedTopicAndSpeech": 26,
+    "nodeTotal": 328,
+    "service": 15,
+    "jvm": 46,
+    "mockDeviceTotal": 27,
+    "mockDeviceAddedCancellation": 5,
+    "mockDeviceAddedPreparedTopic": 1,
+    "realSdkMutations": 0,
+    "lint": {
+      "mock": {
+        "errors": 0,
+        "fatal": 0,
+        "warnings": 33
+      },
+      "real": {
+        "errors": 0,
+        "fatal": 0,
+        "warnings": 33
+      }
+    },
+    "apks": [
+      "mock",
+      "real",
+      "mockAndroidTest",
+      "realAndroidTest"
+    ],
+    "updatedExamples": 7
+  },
+  "preservation": {
+    "realNavigationJournalSha256Unchanged": true,
+    "userGradlePropertiesUnchanged": true,
+    "liveServerReset": false,
+    "restoredActivity": "com.waymate.app.real.MainActivity"
+  },
+  "scope": "Isolated server fixtures and offline production mock UI; bundled audio playback uses the emulator media engine, not platform TTS."
+}
