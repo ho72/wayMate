@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-14",
+  "pullRequests": [
+    10,
+    11
+  ],
+  "reviewedHeads": {
+    "pr10": "5749120982086c91d5ba0eaebf76c300d31c7a02",
+    "pr11": "fe4b29f4d8e9e624414a58cba015f163c305364b"
+  },
+  "pr10DocumentationFix": "Separate main baseline demo from optional AI extension; synchronize the same documentation into PR11.",
+  "pr10DocumentLinksVerified": 129,
+  "pr11Fixes": [
+    "Read-only AI preflight; first successful turn and owner saved atomically.",
+    "Legacy zero-turn reservations removed on startup without deleting actual conversation or owner.",
+    "Explicit demo fallback preserves raw draft after definitive provider failure.",
+    "Unknown write/connection outcome and saved conversation keep fallback blocked.",
+    "Commit guard rejects late results after demo input, another owner, vehicle activation or reset."
+  ],
+  "nodeTests": {
+    "passed": 314,
+    "failed": 0,
+    "aiSubsetPassed": 41,
+    "newCases": 21
+  },
+  "previousAndroidValidationRerunLocally": false,
+  "browser": {
+    "viewport": [
+      430,
+      932
+    ],
+    "provider": "503 response double, no real OpenAI request",
+    "originalDraftPreserved": true,
+    "explicitDemoSwitch": true,
+    "reloadPreservesDraft": true,
+    "demoAnswerSaved": true,
+    "nextQuestionShown": true,
+    "sameRun": true,
+    "resetCommands": 0
+  },
+  "logs": [
+    {
+      "path": "mock-app/runtime/pr10-pr11-review/pr11-node-all.log",
+      "sha256": "c9f962d95dc432f0e9c459e3b7ac1f6a2699cbce8590c121db70b21907ea30e8"
+    },
+    {
+      "path": "mock-app/runtime/pr10-pr11-review/pr11-ai-final.log",
+      "sha256": "a48d2bb57ed19ce5367b11bbde01d69aea56a7b1818a9f68c5579f4ea169ec7c"
+    },
+    {
+      "path": "mock-app/runtime/pr10-pr11-review/pr11-examples.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "mock-app/server/v4/commands.mjs",
+      "sha256": "0992e3528eb36836174d61de8349f2e49daca5f8823fd88f58ea042b83878d4b"
+    },
+    {
+      "path": "mock-app/web/shared/client-v4.mjs",
+      "sha256": "82d2a13756a13e3db22d1dcdfec932b6b17950aa3f42866e48020365c13358f2"
+    },
+    {
+      "path": "mock-app/web/shared/consultation-v1.mjs",
+      "sha256": "cb442fb487c6cd459d43b22edb4bb904e91654756f1092b16c4729d24caa74c3"
+    },
+    {
+      "path": "mock-app/web/app.js",
+      "sha256": "e2b08c1f976d9c3a40cef6fd9315eeb19b0089e290593e6bb06f829896713b8c"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs_prototype/evidence/ai-first-failure-demo-fallback-2026-11-14.png",
+      "sha256": "975138100a6eeef39ed1bec626e46d4c733def8af104665a11d1eb4ca3df9512"
+    },
+    {
+      "path": "docs_prototype/evidence/ai-demo-after-fallback-2026-11-14.png",
+      "sha256": "fab77986231a291f331f191243b1832a1e1d53a0c9e77dee5eee21e575be4cc8"
+    }
+  ],
+  "scopeNotes": [
+    "Existing 3000/3002 state, SDK journal and user Gradle changes were not edited by the isolated regression.",
+    "Initial 293/20 Node and 46 JVM/2 device results remain historical; do not add them to this run.",
+    "Current commit CI status is available in PR11 checks."
+  ]
+}

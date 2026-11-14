@@ -66,9 +66,18 @@ export function coordinator(
         state.navigation?.observation ||
         state.vehicle.seenAt !== null ||
         state.vehicle.restrictionKnown ||
-        state.vehicle.foreground
+        state.vehicle.foreground ||
+        (state.consultation?.revision === 0 &&
+          state.consultation.turns.length === 0)
       ) {
         const next = cloneState();
+        // Previous AI preflight versions persisted an empty reservation on failure.
+        // Remove that reservation without deleting any actual conversation or owner.
+        if (
+          next.consultation?.revision === 0 &&
+          next.consultation.turns.length === 0
+        )
+          delete next.consultation;
         if (next.navigation) next.navigation.observation = null;
         next.vehicle.seenAt = null;
         next.vehicle.restrictionKnown = false;
@@ -98,14 +107,8 @@ export function coordinator(
         await expire();
         const hit = consultationGuard(state, id, request);
         if (hit) return { replayed: true, state: projection("web", id) };
-        if (!state.clientId || !state.consultation) {
-          const next = cloneState();
-          next.clientId = id;
-          next.consultation ??= { revision: 0, turns: [] };
-          next.version++;
-          validateStore(next);
-          await save(next);
-        }
+        // Preflight is read-only: a failed first provider call must not claim the
+        // browser or disable the existing demo/vehicle-start flow.
         return { turns: structuredClone(state.consultation?.turns || []) };
       }),
     consultationCommit: (id, request, result) =>
@@ -114,6 +117,7 @@ export function coordinator(
         const hit = consultationGuard(state, id, request);
         if (hit) return { replayed: true, state: projection("web", id) };
         const next = cloneState();
+        next.clientId = id;
         next.consultation ??= { revision: 0, turns: [] };
         next.consultation.turns.push({
           requestId: request.requestId,

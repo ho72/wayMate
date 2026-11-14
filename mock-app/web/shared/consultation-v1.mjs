@@ -32,6 +32,13 @@ export class ConsultationClient {
   setDraft(draft) {
     this.save({ ...this.local(), draft });
   }
+  useDemo() {
+    if (this.pending || this.api.state.consultation)
+      throw new Error("먼저 AI 응답의 저장 결과를 확인해 주세요.");
+    const draft = this.draft;
+    this.save({ enabled: false, draft });
+    return draft;
+  }
   observe() {
     const pending = this.pending;
     if (

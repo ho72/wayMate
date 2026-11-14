@@ -487,6 +487,13 @@ function renderConsultation(locked, owns) {
   $("ai-actions").hidden = !enabled || !fresh;
   $("ai-retry").hidden = !consultation.pending;
   $("ai-retry").disabled = busy || !online || !consultation.available;
+  $("ai-demo").hidden = !!s.consultation;
+  $("ai-demo").disabled =
+    busy ||
+    !!api.pending ||
+    !!consultation.pending ||
+    !online ||
+    !s.allowedActions.includes("ONBOARDING_ANSWER");
   $("ai-review").disabled = locked || !s.consultation?.turns.length;
   $("ai-introduction-review").hidden = !s.consultation;
   if (enabled) {
@@ -527,6 +534,28 @@ $("ai-review").onclick = () => {
   aiReview = true;
   persistProfileDraft();
   render();
+};
+$("ai-demo").onclick = () => {
+  if (
+    busy ||
+    api.pending ||
+    consultation.pending ||
+    api.state.consultation ||
+    !api.state.allowedActions.includes("ONBOARDING_ANSWER")
+  )
+    return;
+  const draft = consultation.useDemo();
+  aiReview = false;
+  aiDraftRevision = 0;
+  currentQuestion = null;
+  historyKey = null;
+  render();
+  $("answer").value = draft;
+  inputSource = "typed";
+  exampleText = null;
+  preserveDraft();
+  status("기본 시연 대화로 이어가요. 입력한 이야기는 초안으로 남겨뒀어요.");
+  $("answer").focus();
 };
 $("ai-retry").onclick = () =>
   work(async () => {

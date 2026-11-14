@@ -36,11 +36,101 @@ test("AI browser preserves exact message ID/body across a lost response and expl
   await assert.rejects(a.send("입력한 원문 ㅋㅋ"));
   assert.equal(a.draft, "입력한 원문 ㅋㅋ");
   assert.ok(a.pending);
+  assert.throws(() => a.useDemo(), /저장 결과/);
   const reloaded = new ConsultationClient(api);
   await reloaded.send("다른 텍스트로 덮지 않음");
   assert.deepEqual(sent[0], sent[1]);
   assert.equal(reloaded.pending, null);
   assert.equal(reloaded.draft, "");
+});
+
+test("known first AI failures unlock explicit demo fallback and preserve the original draft", async (t) => {
+  for (const [status, code] of [
+    [503, "AI_UNAVAILABLE"],
+    [503, "AI_TIMEOUT"],
+    [503, "AI_INCOMPLETE"],
+    [503, "AI_INVALID_RESPONSE"],
+    [503, "AI_NOT_CONFIGURED"],
+    [422, "AI_REFUSED"],
+  ]) {
+    await t.test(code, async (t) => {
+      storage(t);
+      const oldFetch = globalThis.fetch;
+      t.after(() => {
+        globalThis.fetch = oldFetch;
+      });
+      const api = new DemoClient();
+      api.state = {
+        schemaVersion: 4,
+        scope: "mobile-meeting-v4",
+        runId: "first-run",
+        allowedActions: ["ONBOARDING_ANSWER"],
+      };
+      globalThis.fetch = async () =>
+        new Response(
+          JSON.stringify({
+            ok: false,
+            error: { code, message: "test provider failure" },
+            state: api.state,
+          }),
+          { status },
+        );
+      const client = new ConsultationClient(api);
+      client.enable();
+      await assert.rejects(client.send("돌아가도 보존할 원문"));
+      assert.equal(client.pending, null);
+      const reloaded = new ConsultationClient(api);
+      assert.equal(reloaded.useDemo(), "돌아가도 보존할 원문");
+      assert.equal(reloaded.enabled, false);
+      assert.equal(reloaded.draft, "돌아가도 보존할 원문");
+      assert.ok(api.state.allowedActions.includes("ONBOARDING_ANSWER"));
+    });
+  }
+});
+
+test("unknown store failure keeps the pending AI request and refuses a potentially unsafe demo switch", async (t) => {
+  storage(t);
+  const oldFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = oldFetch;
+  });
+  const api = new DemoClient();
+  api.state = { schemaVersion: 4, scope: "mobile-meeting-v4", runId: "run" };
+  globalThis.fetch = async () =>
+    new Response(
+      JSON.stringify({
+        ok: false,
+        error: { code: "UNAVAILABLE", message: "unknown commit" },
+      }),
+      { status: 503 },
+    );
+  const client = new ConsultationClient(api);
+  client.enable();
+  await assert.rejects(client.send("미확인 원문"));
+  assert.ok(client.pending);
+  assert.equal(client.pending.message, "미확인 원문");
+  assert.throws(() => client.useDemo(), /저장 결과/);
+  assert.equal(client.enabled, true);
+});
+
+test("completed AI conversation cannot silently switch to demo and a pre-send switch never clears an unrelated command outbox", (t) => {
+  storage(t);
+  const api = {
+    id: "owner",
+    state: { runId: "run" },
+    pending: { commandId: "existing-command" },
+  };
+  const client = new ConsultationClient(api);
+  client.enable();
+  client.setDraft("아직 보내지 않은 원문");
+  assert.equal(client.useDemo(), "아직 보내지 않은 원문");
+  assert.equal(api.pending.commandId, "existing-command");
+  api.state.consultation = {
+    revision: 1,
+    turns: [{ requestId: "saved-turn" }],
+  };
+  assert.throws(() => client.useDemo(), /저장 결과/);
+  assert.equal(client.enabled, true);
 });
 
 test("AI browser observes an already saved response without automatically posting again", async (t) => {

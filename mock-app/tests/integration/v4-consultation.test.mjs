@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { mkdtemp, rm, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
@@ -63,8 +63,14 @@ async function fixture(t, aiProvider = provider(), extra = {}) {
       consent: true,
     };
   };
-  const command = async (type, payload, actor = "web", target = {}) => {
-    const s = await state(actor);
+  const command = async (
+    type,
+    payload,
+    actor = "web",
+    target = {},
+    client = id,
+  ) => {
+    const s = await state(actor, client);
     return request(
       "/api/commands",
       {
@@ -79,6 +85,7 @@ async function fixture(t, aiProvider = provider(), extra = {}) {
         payload,
       },
       actor,
+      client,
     );
   };
   return {
@@ -467,7 +474,7 @@ test("slow AI does not block vehicle/status reads; duplicate requests coalesce a
     ).status,
     200,
   );
-  assert.ok(!(await f.state("car")).allowedActions.includes("CAR_START_TRIP"));
+  assert.ok((await f.state("car")).allowedActions.includes("CAR_START_TRIP"));
   assert.equal(
     (
       await f.request("/api/consultation/turns", {
@@ -554,7 +561,10 @@ test("timeouts and provider failures preserve the saved conversation and return 
   const result = await f.request("/api/consultation/turns", await f.turn());
   assert.equal(result.status, 503);
   assert.equal(result.body.error.code, "AI_TIMEOUT");
-  assert.deepEqual((await f.state()).consultation, { revision: 0, turns: [] });
+  const after = await f.state();
+  assert.equal(after.consultation, undefined);
+  assert.equal(after.clientId, null);
+  assert.ok(after.allowedActions.includes("ONBOARDING_ANSWER"));
 });
 
 test("twenty-turn bound refuses a new provider call while saved replies remain recoverable", async (t) => {
@@ -607,6 +617,193 @@ test("shutdown aborts an in-flight provider call and releases the store without 
   await f.close();
   await request;
   const saved = JSON.parse(await readFile(f.file));
-  assert.deepEqual(saved.consultation.turns, []);
+  assert.equal(saved.consultation, undefined);
+  assert.equal(saved.clientId, null);
   await assert.rejects(readFile(f.file + ".lock"), (e) => e.code === "ENOENT");
+});
+
+test("first provider failure leaves the demo usable without resetting; a later successful retry commits owner and first turn together", async (t) => {
+  let failing = true;
+  const f = await fixture(
+    t,
+    provider(async () => {
+      if (failing)
+        throw Object.assign(new Error("provider unavailable"), {
+          status: 503,
+          code: "AI_UNAVAILABLE",
+        });
+      return draft();
+    }),
+  );
+  const req = await f.turn(),
+    before = await f.state();
+  assert.equal((await f.request("/api/consultation/turns", req)).status, 503);
+  await f.restart();
+  const after = await f.state();
+  assert.equal(after.runId, before.runId);
+  assert.equal(after.version, before.version);
+  assert.equal(after.clientId, null);
+  assert.equal(after.consultation, undefined);
+  assert.ok(after.allowedActions.includes("ONBOARDING_ANSWER"));
+  failing = false;
+  assert.equal((await f.request("/api/consultation/turns", req)).status, 200);
+  const saved = JSON.parse(await readFile(f.file));
+  assert.equal(saved.clientId, f.id);
+  assert.equal(saved.consultation.revision, 1);
+  assert.equal(saved.consultation.turns[0].requestId, req.requestId);
+});
+
+test("first unavailable/refused/invalid response permits an actual demo answer without O01", async (t) => {
+  for (const [status, code] of [
+    [503, "AI_UNAVAILABLE"],
+    [422, "AI_REFUSED"],
+    [503, "AI_INVALID_RESPONSE"],
+  ]) {
+    await t.test(code, async (t) => {
+      const f = await fixture(
+        t,
+        provider(async () => {
+          throw Object.assign(new Error("test failure"), { status, code });
+        }),
+      );
+      const req = await f.turn();
+      assert.equal(
+        (await f.request("/api/consultation/turns", req)).status,
+        status,
+      );
+      assert.equal((await f.state()).consultation, undefined);
+      const answer = await f.command("ONBOARDING_ANSWER", {
+        questionId: "interests",
+        answerText: "시연으로 이어갈 원문",
+        inputSource: "typed",
+      });
+      assert.equal(answer.status, 200);
+      assert.equal(
+        answer.body.state.onboarding.interests.answerText,
+        "시연으로 이어갈 원문",
+      );
+      assert.equal(answer.body.state.consultation, undefined);
+    });
+  }
+});
+
+test("late first AI response cannot overwrite a demo answer chosen by the same or another browser", async (t) => {
+  for (const otherOwner of [false, true])
+    await t.test(`other browser=${otherOwner}`, async (t) => {
+      const entered = deferred(),
+        finish = deferred();
+      const f = await fixture(
+        t,
+        provider(async () => {
+          entered.resolve();
+          await finish.promise;
+          return draft();
+        }),
+      );
+      const req = await f.turn(),
+        waiting = f.request("/api/consultation/turns", req);
+      await entered.promise;
+      const preflight = JSON.parse(await readFile(f.file));
+      assert.equal(preflight.clientId, null);
+      assert.equal(preflight.consultation, undefined);
+      const id = otherOwner ? randomUUID() : f.id;
+      const answer = await f.command(
+        "ONBOARDING_ANSWER",
+        {
+          questionId: "interests",
+          answerText: "먼저 저장한 시연 답변",
+          inputSource: "typed",
+        },
+        "web",
+        {},
+        id,
+      );
+      finish.resolve();
+      assert.equal(answer.status, 200);
+      assert.equal((await waiting).status, otherOwner ? 403 : 409);
+      const after = await f.state("web", id);
+      assert.equal(after.consultation, undefined);
+      assert.equal(
+        after.onboarding.interests.answerText,
+        "먼저 저장한 시연 답변",
+      );
+    });
+});
+
+test("first AI failure or a pending first response never prevents a parked vehicle from explicitly starting its demo trip", async (t) => {
+  for (const pending of [false, true])
+    await t.test(`pending=${pending}`, async (t) => {
+      const entered = deferred(),
+        finish = deferred();
+      const f = await fixture(
+        t,
+        provider(async () => {
+          if (!pending)
+            throw Object.assign(new Error("test unavailable"), {
+              status: 503,
+              code: "AI_UNAVAILABLE",
+            });
+          entered.resolve();
+          await finish.promise;
+          return draft();
+        }),
+      );
+      const req = await f.turn(),
+        waiting = f.request("/api/consultation/turns", req);
+      if (pending) await entered.promise;
+      else assert.equal((await waiting).status, 503);
+      const session = randomUUID();
+      await f.command(
+        "CAR_SESSION_OPEN",
+        {
+          deviceId: randomUUID(),
+          vehicleSessionId: session,
+          pendingAttempts: [],
+          navigationSource: "mock",
+        },
+        "car",
+      );
+      await f.command(
+        "CAR_STATUS",
+        {
+          vehicleSessionId: session,
+          statusSeq: 1,
+          restrictionKnown: true,
+          restricted: false,
+          foreground: true,
+          uiContext: "handoff",
+        },
+        "car",
+      );
+      const binding = (await f.state("car")).actionBindings.CAR_START_TRIP;
+      assert.ok(binding);
+      const started = await f.command(
+        binding.commandType,
+        binding.payload,
+        "car",
+        binding.target,
+      );
+      finish.resolve();
+      assert.equal(started.status, 200);
+      if (pending) assert.equal((await waiting).status, 409);
+      const after = await f.state("car");
+      assert.equal(after.vehicleActivation.origin, "demo_preset");
+      assert.equal(after.consultation, undefined);
+    });
+});
+
+test("startup removes legacy empty AI reservations but preserves their owner and restores demo actions", async (t) => {
+  const f = await fixture(t);
+  await f.close();
+  const legacy = JSON.parse(await readFile(f.file));
+  legacy.clientId = f.id;
+  legacy.consultation = { revision: 0, turns: [] };
+  await writeFile(f.file, JSON.stringify(legacy));
+  await f.restart();
+  const after = await f.state();
+  assert.equal(after.clientId, f.id);
+  assert.equal(after.runId, legacy.runId);
+  assert.equal(after.consultation, undefined);
+  assert.ok(after.allowedActions.includes("ONBOARDING_ANSWER"));
+  assert.equal(JSON.parse(await readFile(f.file)).consultation, undefined);
 });

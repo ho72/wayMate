@@ -48,7 +48,20 @@ export class DemoClient {
     }
     if (!response.ok) {
       const e = new Error(result.error?.message || "서버 오류");
-      e.definitive = response.status < 500 || response.status === 500;
+      e.code = result.error?.code;
+      // These provider failures happen before consultationCommit. Generic 503 /
+      // lost responses remain uncertain and retain the exact pending request.
+      const knownAiFailure =
+        path === "/api/consultation/turns" &&
+        [
+          "AI_NOT_CONFIGURED",
+          "AI_UNAVAILABLE",
+          "AI_TIMEOUT",
+          "AI_REFUSED",
+          "AI_INCOMPLETE",
+          "AI_INVALID_RESPONSE",
+        ].includes(e.code);
+      e.definitive = response.status <= 500 || knownAiFailure;
       throw e;
     }
     return result;
