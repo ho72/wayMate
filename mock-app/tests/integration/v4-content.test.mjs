@@ -2,7 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { fixture } from "../helpers/v4-fixture.mjs";
-import { profileAnswer, UNKNOWN } from "../../shared/config/content-v4.mjs";
+import {
+  profileAnswer,
+  UNKNOWN,
+  PEER_TOPIC_GENERAL,
+} from "../../shared/config/content-v4.mjs";
 import { peer } from "../../server/v4/social.mjs";
 const setup = async (t) => {
   const f = await fixture(t);
@@ -17,9 +21,9 @@ const current = async (f) =>
   );
 const reply = async (f) =>
   f.send("B_RESPONSE", { decision: "reply" }, "operator", await current(f));
-test("profile answers require every public fact; private A interests and missing B fields are unknown", () => {
+test("profile answers require public B facts and use a neutral topic when shared A interests are unavailable", () => {
   assert.notEqual(profileAnswer("Q1", peer), UNKNOWN);
-  assert.equal(profileAnswer("Q2", peer, []), UNKNOWN);
+  assert.equal(profileAnswer("Q2", peer, []), PEER_TOPIC_GENERAL);
   assert.notEqual(profileAnswer("Q2", peer, ["sea_walk", "cafe"]), UNKNOWN);
   for (const key of [
     "interests",
@@ -51,7 +55,7 @@ for (const id of ["M1", "M2"])
     assert.equal(await current(f), undefined);
     assert.equal(
       before.content.questions.find((q) => q.id === "Q2").known,
-      false,
+      true,
     );
     assert.equal((await f.read("web")).content, null);
     assert.equal((await f.read("operator")).content, null);

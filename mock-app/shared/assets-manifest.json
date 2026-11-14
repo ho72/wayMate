@@ -399,6 +399,21 @@
       "styleVariant": "neutral",
       "playbackSource": "prepared_synthetic_speech"
     },
+    "speech_db109d44ff5deb4885394f60": {
+      "assetId": "speech_db109d44ff5deb4885394f60",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_db109d44ff5deb4885394f60.m4a",
+      "captionId": "speech_db109d44ff5deb4885394f60",
+      "text": "같은 날 강릉을 여행한다는 이야기로 시작해보면 어때요? 오늘 어떤 여행을 하고 싶은지 직접 물어볼 수도 있어요.",
+      "speaker": "agent",
+      "sourceKind": "peer_agent",
+      "requiredPublicFields": [
+        "interests",
+        "conversationStyle"
+      ],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
     "speech_338da9a72b01a927b8c9787f": {
       "assetId": "speech_338da9a72b01a927b8c9787f",
       "kind": "audio",

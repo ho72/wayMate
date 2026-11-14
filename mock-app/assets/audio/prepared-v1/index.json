@@ -236,6 +236,14 @@
       "sourceKind": "prepared_narration"
     },
     {
+      "file": "speech_db109d44ff5deb4885394f60.m4a",
+      "sha256Text": "db109d44ff5deb4885394f60b831b7934b005bad4aacc5a354d96d5042cb3443",
+      "text": "같은 날 강릉을 여행한다는 이야기로 시작해보면 어때요? 오늘 어떤 여행을 하고 싶은지 직접 물어볼 수도 있어요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
       "file": "speech_338da9a72b01a927b8c9787f.m4a",
       "sha256Text": "338da9a72b01a927b8c9787f675aacfb166566f89d5c29b644050ea9208588a2",
       "text": "서로 어떤 여행을 좋아하는지 조금 알게 됐네. 이 답장만으로 만남이 정해진 건 아니야. 다음은 네가 고르면 돼.",

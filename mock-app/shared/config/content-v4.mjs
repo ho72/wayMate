@@ -22,6 +22,8 @@ export const REPLIES = {
   R2: "사진도 좋아하지만, 오늘은 느긋하게 쉬고 싶어요. 다음 일정도 지키면서요.",
 };
 export const UNKNOWN = "그건 제가 아는 소개에는 없어요. 직접 물어볼까요?";
+export const PEER_TOPIC_GENERAL =
+  "같은 날 강릉을 여행한다는 이야기로 시작해보면 어때요? 오늘 어떤 여행을 하고 싶은지 직접 물어볼 수도 있어요.";
 export const REPLY_DONE =
   "서로 어떤 여행을 좋아하는지 조금 알게 됐네. 이 답장만으로 만남이 정해진 건 아니야. 다음은 네가 고르면 돼.";
 export function profileAnswer(questionId, peer, ownerPublicInterests = []) {
@@ -45,9 +47,11 @@ export function profileAnswer(questionId, peer, ownerPublicInterests = []) {
     questionId === "Q2" &&
     seaCafe &&
     has("conversationStyle") &&
-    peer.conversationStyle === "quiet" &&
-    ["sea_walk", "cafe"].every((x) => ownerPublicInterests.includes(x))
-  )
-    return "둘 다 바다 산책이랑 카페를 좋아하니까, 오늘 본 바다 이야기로 시작해보면 어때요? 솔바람도 조용히 같이 있는 시간을 편하게 느낀대요.";
+    peer.conversationStyle === "quiet"
+  ) {
+    if (["sea_walk", "cafe"].every((x) => ownerPublicInterests.includes(x)))
+      return "둘 다 바다 산책이랑 카페를 좋아하니까, 오늘 본 바다 이야기로 시작해보면 어때요? 솔바람도 조용히 같이 있는 시간을 편하게 느낀대요.";
+    return PEER_TOPIC_GENERAL;
+  }
   return UNKNOWN;
 }

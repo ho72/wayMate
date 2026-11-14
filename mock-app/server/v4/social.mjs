@@ -483,9 +483,11 @@ export function socialProjection(s, actor, now) {
     meeting: structuredClone(m),
     peer:
       activePeer ||
-      (actor === "web" && publicReady(s) &&
+      (actor === "web" &&
+        publicReady(s) &&
         !["ended", "cancelled", "declined"].includes(c.status))
-        ? peer : null,
+        ? peer
+        : null,
     testRestricted: s.social.testRestricted,
     tripShareApproved: s.social.tripShareApproved,
     approvedFields: s.social.approvedFields,
