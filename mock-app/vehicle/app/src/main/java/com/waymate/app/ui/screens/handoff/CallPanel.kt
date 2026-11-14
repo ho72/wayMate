@@ -3,6 +3,8 @@ package com.waymate.app.ui.screens.handoff
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.ContentUiState
 import com.waymate.app.platform.speech.SpeechState
@@ -67,7 +69,7 @@ internal fun CallPanel(
                         else -> "샘플을 들으려면 직접 시작해 주세요."
                     }
                 )
-                Button(
+                VehicleButton(
                     onClick = {
                         if (finished) {
                             index = 0
@@ -85,7 +87,7 @@ internal fun CallPanel(
                 ) {
                     Text(if (finished) "샘플 다시 듣기" else "현재 문장부터 샘플 듣기")
                 }
-                OutlinedButton(
+                VehicleOutlineButton(
                     onClick = {
                         running = false
                         onStop()
@@ -94,7 +96,7 @@ internal fun CallPanel(
                 ) {
                     Text("샘플 일시중단")
                 }
-                OutlinedButton(
+                VehicleOutlineButton(
                     onClick = {
                         running = false
                         onStop()
@@ -112,7 +114,7 @@ internal fun CallPanel(
             else -> Text("직접 목소리로 인사해볼래? 둘 다 원할 때만 샘플을 시작할게.")
         }
         state.actions["CALL_PROPOSE"]?.let { b ->
-            Button(
+            VehicleButton(
                 onClick = {
                     onStop()
                     onAction("CALL_PROPOSE", b)
@@ -123,7 +125,7 @@ internal fun CallPanel(
             }
         }
         for (type in listOf("CALL_CANCEL", "CALL_END")) state.actions[type]?.let { b ->
-            OutlinedButton(
+            VehicleOutlineButton(
                 onClick = {
                     running = false
                     onStop()
@@ -134,7 +136,7 @@ internal fun CallPanel(
             }
         }
         if (call?.status !in listOf("requested", "active"))
-            OutlinedButton(
+            VehicleOutlineButton(
                 onClick = {
                     onStop()
                     onBack()

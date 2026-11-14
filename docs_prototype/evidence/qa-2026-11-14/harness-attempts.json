@@ -1,0 +1,22 @@
+[
+  {
+    "attempt": 1,
+    "classification": "test harness capture bug, not product",
+    "stage": "message confirmation before send",
+    "error": "Expected exactly 1 isRoot node, found 2 due Compose dialog",
+    "remedy": "capture all Compose roots"
+  },
+  {
+    "attempt": 2,
+    "classification": "test harness retry precondition bug, not product",
+    "stage": "connectedHome",
+    "error": "operator projection omits handoff; wrongly looked for load button after ACK",
+    "remedy": "use car projection for handoff ACK"
+  },
+  {
+    "attempt": 3,
+    "classification": "passed",
+    "result": "OK (1 test)",
+    "seconds": 39.13
+  }
+]

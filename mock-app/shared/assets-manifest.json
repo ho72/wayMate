@@ -3,10 +3,10 @@
   "characters": {
     "a-01": {
       "label": "블루 드래곤",
-      "assetId": "blue-dragon-v1",
-      "source": "assets/images/characters/blue-dragon-v1/reference.png",
-      "sha256": "5381e9dcffc64a159c4cdd07243c4d654a0f7010ea3010a6db08ef7b30f8300d",
-      "kind": "opaque_static_image",
+      "assetId": "dragon-design-v5",
+      "source": "assets/images/design-v5/dragon.png",
+      "sha256": "9823da502443a0da3ec49c161ae5bbadfe81144a6cab2ace010f1603f9a75cfd",
+      "kind": "transparent_static_image",
       "states": [
         "still",
         "idle",
@@ -15,28 +15,39 @@
       ],
       "webUrl": "/character.png",
       "androidDrawable": "blue_dragon",
-      "motion": "Compose transform of rendered still; no 3D rig or lip sync"
+      "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     },
     "a-02": {
-      "label": "햇살 친구",
-      "kind": "procedural_canvas",
-      "states": [
-        "still",
-        "idle",
-        "speaking",
-        "interrupted"
-      ]
-    },
-    "b-01": {
-      "label": "솔바람의 에이전트",
-      "kind": "procedural_canvas",
+      "label": "포근한 곰 친구",
+      "assetId": "bear-design-v5",
+      "source": "assets/images/design-v5/bear.png",
+      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "kind": "transparent_static_image",
       "states": [
         "still",
         "idle",
         "speaking",
         "interrupted"
       ],
-      "presentation": "existing prototype canvas"
+      "webUrl": "/bear.png",
+      "androidDrawable": "travel_bear",
+      "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
+    },
+    "b-01": {
+      "label": "솔바람의 곰 에이전트",
+      "assetId": "bear-design-v5",
+      "source": "assets/images/design-v5/bear.png",
+      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "kind": "transparent_static_image",
+      "states": [
+        "still",
+        "idle",
+        "speaking",
+        "interrupted"
+      ],
+      "webUrl": "/bear.png",
+      "androidDrawable": "travel_bear",
+      "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     }
   },
   "audioCues": {

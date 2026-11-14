@@ -1,0 +1,9 @@
+
+com.waymate.app.ui.screens.handoff.PreparedSpeechDeviceTest:..
+com.waymate.app.ui.screens.handoff.FirstPassWindowTest:...
+com.waymate.app.ui.screens.handoff.WindowPlaybackLifecycleDeviceTest:..
+com.waymate.app.ui.screens.handoff.DrivingSurfaceTest:..
+
+Time: 22.204
+
+OK (9 tests)

@@ -10,10 +10,12 @@ const staticFiles = new Map([
   [
     "/character.png",
     [
-      "../../assets/images/characters/blue-dragon-v1/reference.png",
+      "../../assets/images/design-v5/dragon.png",
       "image/png",
     ],
   ],
+  ["/bear.png", ["../../assets/images/design-v5/bear.png", "image/png"]],
+  ["/design-v5.css", ["../../web/design-v5.css", "text/css; charset=utf-8"]],
   ["/operator", ["../../web/operator.html", "text/html; charset=utf-8"]],
   ["/operator.js", ["../../web/operator.js", "text/javascript; charset=utf-8"]],
   ["/", ["../../web/index.html", "text/html; charset=utf-8"]],

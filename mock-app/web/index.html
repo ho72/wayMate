@@ -8,14 +8,15 @@
     />
     <title>wayMate · 내 친구와 여행 이야기</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/design-v5.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body class="conversation-page">
     <main class="mobile-shell chat-app">
       <header class="chat-header">
         <a href="/" class="chat-identity" aria-label="wayMate 대화"
-          ><span class="friend-mark" aria-hidden="true">w</span
-          ><span><strong>wayMate</strong><small>나의 여행 친구</small></span></a
+          ><span class="friend-mark" aria-hidden="true"><img src="/character.png" alt="" /></span
+          ><span><strong>말이통행</strong><small>나의 AI 여행 친구</small></span></a
         >
         <details class="journey-menu">
           <summary>내 여행</summary>
@@ -33,7 +34,8 @@
       <section class="conversation" aria-label="내 친구와의 대화" tabindex="0">
         <div class="thread">
           <div class="conversation-start">
-            <img src="/character.png" alt="함께 여행할 파란 드래곤 친구" />
+            <span class="scene-eyebrow">MY TRAVEL MATE</span>
+            <img id="scene-character" src="/character.png" alt="함께 여행할 파란 드래곤 친구" />
             <p>여행 전에, 우리 조금 알아갈까?</p>
             <span>편하게 말해줘. 한 번에 하나씩 준비하자.</span>
           </div>
@@ -102,11 +104,9 @@
                     ><span>블루 드래곤</span></label
                   >
                   <label
-                    ><input type="radio" name="avatar" value="a-02" /><span
-                      class="avatar-art sun-friend"
-                      aria-hidden="true"
-                      >☀</span
-                    ><span>햇살 친구</span></label
+                    ><input type="radio" name="avatar" value="a-02" /><span class="avatar-art"
+                      ><img src="/bear.png" alt="따뜻한 곰 친구" /></span
+                    ><span>포근한 곰 친구</span></label
                   >
                 </fieldset>
                 <button type="button" id="profile-next">

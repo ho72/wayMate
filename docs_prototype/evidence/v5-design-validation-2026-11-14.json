@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-14",
+  "baseMainCommit": "b84ebec1d274bf133af043ffe745e2e6fa90bac9",
+  "source": "user-provided 말이통행_v5_Interactive.html",
+  "sourceSha256": "d7089dfe761dcb76d4264bfb788ab2ad39c76c3c1032cf3a558d5441472f5734",
+  "branch": "feat/design-v5-character-ui",
+  "nodePassed": 314,
+  "jvmPassed": 46,
+  "mockDevicePassed": 21,
+  "realDevicePassed": 5,
+  "apkBuilds": [
+    "mockDebug",
+    "realDebug",
+    "mockDebugAndroidTest",
+    "realDebugAndroidTest"
+  ],
+  "lint": {
+    "errors": 0,
+    "fatal": 0,
+    "warningsEach": 33
+  },
+  "visualQa": "passed",
+  "originalScriptNotServedToBrowser": true,
+  "browserFlow": [
+    "four free-text answers",
+    "bear selection",
+    "profile confirmation",
+    "trip save",
+    "explicit publication dialog",
+    "explicit trip summary dialog",
+    "candidate detail"
+  ],
+  "browserConsoleErrors": 0,
+  "businessData": {
+    "state-v4.json": {
+      "businessFieldsPreserved": true,
+      "runSeq": 6
+    },
+    "ai-consultation-v4.json": {
+      "businessFieldsPreserved": true,
+      "runSeq": 2
+    }
+  },
+  "journalByteIdentical": true,
+  "localGradlePreserved": true,
+  "runtimeNavigation": {
+    "destinationName": "42dot",
+    "destinationLatitude": 37.48544722,
+    "destinationLongitude": 127.03636666,
+    "waypointCount": 0,
+    "naviMode": "ROUTE_GUIDING",
+    "isRouting": false,
+    "lookupPoiId": "36khp2hdj2cfcm5nqhe3",
+    "lookupLatitude": 37.4127749,
+    "lookupLongitude": 127.0947566,
+    "physicalMutationCalls": 0
+  },
+  "limitations": [
+    "native road-map background deferred",
+    "no precise lip sync or real 3D rig",
+    "not pixel-identical system fonts",
+    "no new live LLM generation during this design task"
+  ]
+}

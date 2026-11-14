@@ -3,6 +3,11 @@ package com.waymate.app.ui.screens.handoff
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
+import com.waymate.app.ui.components.VehicleBackground
+import com.waymate.app.ui.components.SpeechBubble
+import com.waymate.app.ui.components.VehicleInfoCard
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,12 +41,12 @@ fun EndingScreen(
     }
     DisposableEffect(state.scope) { onDispose { onStop() } }
     if (state.blocked) {
-        Surface(Modifier.fillMaxSize()) {
+        VehicleBackground {
             Column(Modifier.padding(32.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                 Text("정차 상태에서 여행 선택을 이어갈 수 있어요.", style = MaterialTheme.typography.headlineSmall)
                 Text("현재 차량·화면 상태를 확인하고 있어요.")
-                OutlinedButton(onClick = onStop) { Text("낭독 중단") }
-                OutlinedButton(
+                VehicleOutlineButton(onClick = onStop) { Text("낭독 중단") }
+                VehicleOutlineButton(
                     onClick = {
                         onStop()
                         onHome()
@@ -53,36 +58,29 @@ fun EndingScreen(
         }
         return
     }
-    Surface(Modifier.fillMaxSize()) {
+    VehicleBackground {
         CharacterScene(
             resetKey = "${state.phase}:$schedule",
             character = { characterModifier, wide ->
-                Column(characterModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Text("내 여행 친구", style = MaterialTheme.typography.headlineSmall)
+                Column(characterModifier, horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Text("말이통행", style = MaterialTheme.typography.headlineMedium, color = com.waymate.app.ui.theme.Forest)
+                    SpeechBubble(when(state.phase) {
+                        "pending" -> "지금은 어떤 마음이에요?"
+                        "together" -> "우리의 길이 이어졌어요"
+                        "my_agent" -> "새로운 풍경이 기다려요"
+                        "meeting" -> "안전하게 도착했어요"
+                        else -> "여행의 다음 장면으로"
+                    })
                     AgentCharacter(
-                        journey?.avatarId ?: "a-01",
-                        Modifier.fillMaxWidth().height(if (wide) 300.dp else 220.dp),
+                        if (state.phase in listOf("travel", "meeting", "pending")) "b-01" else journey?.avatarId ?: "a-01",
+                        Modifier.fillMaxWidth().height(if (wide) 300.dp else 420.dp),
                         speechPhase = speech.phase,
                         motionEnabled = state.canInteract,
                     )
-                    Text(if (state.replay) "최종 선택 재시연 · ${state.round}회" else "같은 여행, 다음 선택")
-                    Text(
-                        when (speech.phase) {
-                            "speaking" -> "말하는 중"
-                            "preparing" -> "낭독 준비 중"
-                            "unavailable" -> "음성 준비가 되지 않아 자막으로 안내해요"
-                            "interrupted" -> "낭독 중단 · 자동 재개하지 않아요"
-                            else -> "대기 중"
-                        }
-                    )
-                    OutlinedButton(onClick = onStop) { Text("낭독 중단") }
-                    OutlinedButton(
-                        onClick = {
-                            onStop()
-                            onHome()
-                        }
-                    ) {
-                        Text("내 친구 홈으로")
+                    if (state.replay) Text("최종 선택 재시연 · ${state.round}회", style = MaterialTheme.typography.labelMedium)
+                    if (speech.phase in listOf("speaking", "preparing", "interrupted")) {
+                        Text(if (speech.phase == "interrupted") "낭독 중단 · 자동 재개 없음" else "말하는 중", style = MaterialTheme.typography.bodySmall)
+                        VehicleOutlineButton(onClick = onStop) { Text("낭독 중단") }
                     }
                 }
             },
@@ -98,27 +96,13 @@ fun EndingScreen(
                             "cancelled" -> "여행 선택을 중단했어요"
                             else -> "내 친구와 여행을 이어가요"
                         },
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = com.waymate.app.ui.theme.Ink,
                     )
                     state.notice?.let { Text(it) }
-                    if (state.cleanupRequired)
-                        Card {
-                            Column(Modifier.padding(16.dp)) {
-                                Text("wayMate 내비 경유지가 남아 있어요. 결말·재시연으로 자동 제거하지 않아요.")
-                                Text("원래 목적지와 경유지 상태는 내비에서 확인해 주세요. 전체 초기화 정리는 별도 승인이 필요해요.")
-                                OutlinedButton(
-                                    onClick = {
-                                        onStop()
-                                        onNavigation()
-                                    }
-                                ) {
-                                    Text("내비 상태 확인")
-                                }
-                            }
-                        }
                     if (schedule) {
                         Schedule(journey)
-                        OutlinedButton(onClick = { schedule = false }) { Text("대화로 돌아가기") }
+                        VehicleOutlineButton(onClick = { schedule = false }) { Text("대화로 돌아가기") }
                     } else
                         when (state.phase) {
                             "travel" -> {
@@ -157,7 +141,7 @@ fun EndingScreen(
                                     }
                                 }
                                 if (state.lines.isNotEmpty()) {
-                                    OutlinedButton(
+                                    VehicleOutlineButton(
                                         onClick = {
                                             onSpeak(
                                                 state.lines[
@@ -171,7 +155,7 @@ fun EndingScreen(
                                     ) {
                                         Text("현재 대사 읽어주기")
                                     }
-                                    OutlinedButton(
+                                    VehicleOutlineButton(
                                         onClick = {
                                             onStop()
                                             lineIndex = (lineIndex + 1) % state.lines.size
@@ -188,7 +172,7 @@ fun EndingScreen(
                                 )
                             }
                             "pending" -> {
-                                Text("함께할 활동은 14:35~14:55 해변 산책이에요. 동승이나 전체 일정 변경은 아니에요.")
+                                Text("14:35–14:55 · 함께할 활동은 해변 산책이에요.")
                                 if (state.myChoice != null) {
                                     Text(
                                         "선택을 제출했어요. 두 사람의 선택이 모이면 결과를 알려드릴게요.",
@@ -200,13 +184,13 @@ fun EndingScreen(
                                             else "내 캐릭터와 여행 이어가기"
                                     )
                                 } else {
-                                    Text("상대가 무엇을 골랐는지 보지 않고 각자 한 번 제출해 주세요.")
+                                    Text("두 사람 모두 선택해요. 상대 선택은 공개되지 않아요.", style = MaterialTheme.typography.bodyMedium)
                                     Row(
                                         Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                                     ) {
                                         for (choice in
-                                            listOf("together", "my_agent")) OutlinedButton(
+                                            listOf("together", "my_agent")) VehicleOutlineButton(
                                             onClick = { selected = choice },
                                             enabled = state.canInteract,
                                             modifier = Modifier.weight(1f).heightIn(min = 64.dp),
@@ -220,17 +204,17 @@ fun EndingScreen(
                                     }
                                     state.actions["FINAL_CHOOSE_${selected.uppercase()}"]?.let { b
                                         ->
-                                        Button(
+                                        VehicleButton(
                                             onClick = { review = "FINAL_CHOOSE" to b },
                                             enabled = state.canInteract,
                                         ) {
                                             Text("선택을 제출하기")
                                         }
                                     }
-                                    Text("제출 후에는 이번 선택을 바꿀 수 없어요. 두 선택이 모두 모이기 전에는 결과를 확정하지 않아요.")
+                                    Text("제출 후 변경할 수 없어요. 두 선택이 모이면 결과를 알려드려요.", style = MaterialTheme.typography.bodySmall)
                                 }
                                 state.actions["CONNECT_END"]?.let { b ->
-                                    OutlinedButton(onClick = { review = "CONNECT_END" to b }) {
+                                    VehicleOutlineButton(onClick = { review = "CONNECT_END" to b }) {
                                         Text("선택 중단하고 내 여행으로")
                                     }
                                 }
@@ -247,7 +231,7 @@ fun EndingScreen(
                                     style = MaterialTheme.typography.titleLarge,
                                 )
                                 state.answers.forEach { a ->
-                                    OutlinedButton(
+                                    VehicleOutlineButton(
                                         onClick = {
                                             onStop()
                                             friendAnswer = a.id
@@ -262,37 +246,26 @@ fun EndingScreen(
                                     ?.let { a ->
                                         Text(a.reply, style = MaterialTheme.typography.titleLarge)
                                         Text(state.closing)
-                                        OutlinedButton(
+                                        VehicleOutlineButton(
                                             onClick = { onSpeak(a.reply + " " + state.closing) },
                                             enabled = state.canInteract && speech.available,
                                         ) {
                                             Text("내 친구 말 읽어주기")
                                         }
                                     }
-                                Text(
-                                    "다음 활동 · 해변에서 쉬기 · 14:55 다음 일정 준비 · 15:20 기존 방문\n준비된 시연 계획이며 실제 내비를 자동 변경하지 않아요."
-                                )
-                                OutlinedButton(
-                                    onClick = {
-                                        onStop()
-                                        friendAnswer = "rest"
-                                    },
-                                    enabled = state.canInteract,
-                                ) {
-                                    Text("내 캐릭터와 계속하기")
-                                }
-                                OutlinedButton(
-                                    onClick = {
-                                        onStop()
-                                        onHome()
-                                    }
-                                ) {
-                                    Text("오늘은 여기까지")
+                                Text("내 AI 친구와 다음 풍경을 만나요.", style = MaterialTheme.typography.bodyMedium)
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    VehicleButton(onClick = { onStop(); friendAnswer = "rest" }, enabled = state.canInteract, modifier = Modifier.weight(1f)) { Text("내 캐릭터와 계속하기") }
+                                    VehicleOutlineButton(onClick = { onStop(); onHome() }, modifier = Modifier.weight(1f)) { Text("오늘은 여기까지") }
                                 }
                             }
                         }
+                    if (state.cleanupRequired) {
+                        Text("추가한 경유지는 유지돼요. 제거는 별도 승인으로 진행해요.", style = MaterialTheme.typography.bodySmall)
+                        TextButton(onClick = { onStop(); onNavigation() }) { Text("내비 상태 확인") }
+                    }
                     if (!schedule)
-                        OutlinedButton(
+                        TextButton(
                             onClick = {
                                 onStop()
                                 schedule = true
@@ -302,11 +275,11 @@ fun EndingScreen(
                         }
                     if (state.pending) {
                         Text("선택 저장 결과 확인 중 · 새 요청으로 중복 제출하지 않아요.")
-                        OutlinedButton(onClick = onRetry, enabled = state.canRetry) {
+                        VehicleOutlineButton(onClick = onRetry, enabled = state.canRetry) {
                             Text("선택 요청 결과 확인·재전송")
                         }
                     }
-                    if (!schedule) Schedule(journey)
+                    TextButton(onClick = { onStop(); onHome() }) { Text("내 친구 홈으로") }
                 }
             },
         )

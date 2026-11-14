@@ -86,6 +86,12 @@ function showQuestion(id) {
   $("count").textContent = `${[...$("answer").value].length} / 500자`;
 }
 function render() {
+  const sceneAvatar = api.state?.profile?.avatarId || document.querySelector('input[name="avatar"]:checked')?.value || "a-01";
+  const scene = $("scene-character");
+  const src = sceneAvatar === "a-01" ? "/character.png" : "/bear.png";
+  if (scene.getAttribute("src") !== src) scene.setAttribute("src", src);
+  scene.alt = sceneAvatar === "a-01" ? "함께 여행할 파란 드래곤 친구" : "함께 여행할 포근한 곰 친구";
+
   const s = api.state;
   if (!s) return;
   consultation.observe();
@@ -626,7 +632,7 @@ function localSummary() {
   return v;
 }
 function profileLine(alias, avatar, summary) {
-  const labels = [alias, avatar === "a-01" ? "블루 드래곤" : "햇살 친구"];
+  const labels = [alias, avatar === "a-01" ? "블루 드래곤" : "포근한 곰 친구"];
   const interests = summary.interests.map((i) =>
     i === "sea_walk" ? "바다 산책" : "카페",
   );
@@ -1140,7 +1146,7 @@ function renderFlow(s, owns) {
 function publicPreview(s, fields) {
   const p = s.profile,
     v = p.privateSummary,
-    a = [p.alias, p.avatarId === "a-01" ? "블루 드래곤" : "햇살 친구"];
+    a = [p.alias, p.avatarId === "a-01" ? "블루 드래곤" : "포근한 곰 친구"];
   if (fields.has("interests") && v.interests.length)
     a.push(
       v.interests

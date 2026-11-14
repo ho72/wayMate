@@ -52,15 +52,10 @@ fun AgentCharacter(
             scaleY = scaleX
             rotationZ = if (mode == CharacterMotion.SPEAKING) (value - 0.5f) * 1.2f else 0f
         }
-    if (avatarId == "a-01")
-        Image(
-            painterResource(R.drawable.blue_dragon),
-            stringResource(R.string.character_blue_dragon),
-            animated,
-            contentScale = ContentScale.Fit,
-        )
-    else
-        Box(animated, contentAlignment = Alignment.Center) {
-            TravelFriend(Modifier.aspectRatio(1f), sunny = true)
-        }
+    Image(
+        painterResource(if (avatarId == "a-01") R.drawable.blue_dragon else R.drawable.travel_bear),
+        if (avatarId == "a-01") stringResource(R.string.character_blue_dragon) else "따뜻한 곰 여행 친구",
+        animated,
+        contentScale = ContentScale.Fit,
+    )
 }

@@ -3,6 +3,10 @@ package com.waymate.app.ui.screens.handoff
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
+import com.waymate.app.ui.components.VehicleBackground
+import com.waymate.app.ui.components.SpeechBubble
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,6 +33,8 @@ fun ContentScreen(
         rememberSaveable(state.scope) {
             mutableStateOf(if (state.peerAlias != null) "intro" else "friend")
         }
+    var showVoice by rememberSaveable(state.scope) { mutableStateOf(false) }
+    var showSchedule by rememberSaveable(state.scope) { mutableStateOf(false) }
     var selected by rememberSaveable(state.scope) { mutableStateOf("") }
     var question by rememberSaveable(state.scope) { mutableStateOf("") }
     var threadId by rememberSaveable(state.scope) { mutableStateOf("") }
@@ -85,13 +91,13 @@ fun ContentScreen(
             else -> null
         }
     if (state.blocked) {
-        Surface(Modifier.fillMaxSize()) {
+        VehicleBackground {
             Column(Modifier.padding(32.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                 Text("정차 상태에서 대화를 이어갈 수 있어요.", style = MaterialTheme.typography.headlineSmall)
                 Text("현재 차량·화면 상태를 확인하고 있어요.")
-                OutlinedButton(onClick = onStop) { Text("낭독 중단") }
+                VehicleOutlineButton(onClick = onStop) { Text("낭독 중단") }
                 for (type in listOf("CALL_CANCEL", "CALL_END")) state.actions[type]?.let { b ->
-                    OutlinedButton(
+                    VehicleOutlineButton(
                         onClick = {
                             onStop()
                             onAction(type, b)
@@ -100,86 +106,60 @@ fun ContentScreen(
                         Text(if (type == "CALL_CANCEL") "통화 제안 취소" else "통화 종료")
                     }
                 }
-                OutlinedButton(onClick = onBack) { Text("내 친구 홈으로") }
+                VehicleOutlineButton(onClick = onBack) { Text("내 친구 홈으로") }
             }
         }
         return
     }
-    Surface(Modifier.fillMaxSize()) {
+    VehicleBackground {
         CharacterScene(
             resetKey = page,
             character = { characterModifier, wide ->
-                Column(characterModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Text(
-                        if (page == "call") "일반 통화 · 준비된 샘플"
-                        else if (page in listOf("friend", "rest", "done")) "내 여행 친구"
-                        else "${state.peerAlias ?: "내 친구"}의 에이전트",
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
+                Column(characterModifier, horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text("말이통행", color = com.waymate.app.ui.theme.Forest, style = MaterialTheme.typography.headlineMedium)
+                    SpeechBubble(when(page) {
+                        "intro" -> "새로운 여행 친구를 만났어요"
+                        "profile", "list" -> "어떤 이야기를 시작할까요?"
+                        "draft" -> "전하고 싶은 말을 골라볼까요?"
+                        "messages" -> if (thread?.response != null) "답장이 도착했어요!" else "조금만 천천히 기다려요"
+                        "call" -> "목소리로도 이야기해요"
+                        "rest" -> "잠깐 쉬어가도 괜찮아요"
+                        else -> "네 이야기를 듣고 있어요"
+                    })
                     AgentCharacter(
-                        if (page in listOf("friend", "rest", "done")) journey?.avatarId ?: "a-01"
-                        else "b-01",
-                        Modifier.fillMaxWidth().height(if (wide) 260.dp else 220.dp),
+                        if (page in listOf("friend", "rest", "done")) journey?.avatarId ?: "a-01" else "b-01",
+                        Modifier.fillMaxWidth().height(if (wide) 260.dp else 420.dp),
                         speechPhase = if (page == "call") "resting" else speech.phase,
                         motionEnabled = state.canInteract,
                     )
-                    Text(
-                        when (speech.phase) {
-                            "speaking" -> if (page == "call") "통화 샘플 재생 중" else "말하는 중"
-                            "preparing" -> "읽을 준비 중"
-                            "interrupted" -> "낭독 중단 · 자동으로 다시 시작하지 않아요"
-                            "unavailable" -> "음성을 사용할 수 없어 자막으로 안내해요"
-                            "initializing" -> "음성 지원 확인 중"
-                            else -> "대기 중"
-                        }
-                    )
-                    if (caption != null && page != "rest") {
-                        OutlinedButton(
-                            onClick = { onSpeak(caption) },
-                            enabled = state.canInteract && speech.available,
-                        ) {
-                            Text("현재 문장 읽어주기")
-                        }
-                        OutlinedButton(
-                            onClick = onStop,
-                            enabled = speech.phase in listOf("speaking", "preparing"),
-                        ) {
-                            Text("낭독 중단")
-                        }
-                    }
-                    Text(
-                        "준비된 대본 · 합성 음성 샘플/기기 낭독\n실제 상대 음성·실시간 대화와 구분해요.",
-                        style = MaterialTheme.typography.labelMedium,
-                    )
-                    OutlinedButton(
-                        onClick = {
-                            onStop()
-                            onBack()
-                        },
-                        enabled = !callBusy,
-                    ) {
-                        Text("내 친구 홈으로")
-                    }
+                    Text(if (page in listOf("friend", "rest", "done")) "내 여행 친구" else "${state.peerAlias ?: "내 친구"}의 에이전트",
+                        color = com.waymate.app.ui.theme.Muted, style = MaterialTheme.typography.labelMedium)
+                    if (speech.phase in listOf("speaking", "preparing", "interrupted"))
+                        Text(if (speech.phase == "interrupted") "음성 중단 · 자동 재개 없음" else "짧은 음성 안내 중",
+                            color = com.waymate.app.ui.theme.Muted, style = MaterialTheme.typography.bodySmall)
                 }
             },
             content = { contentModifier ->
                 Column(contentModifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Text("서로를 알아가고 대화를 편하게 시작해요", style = MaterialTheme.typography.headlineSmall)
+                    Text(if (page == "intro") "${state.peerAlias}님의 AI 친구" else "서로의 이야기를 알아가요",
+                        style = MaterialTheme.typography.headlineLarge, color = com.waymate.app.ui.theme.Ink)
                     if (!state.canInteract) Text("정차·연결·화면 활성 상태를 확인해 주세요. 새 선택과 전송은 잠겼어요.")
                     state.notice?.let { Text(it) }
                     when (page) {
                         "intro" -> {
-                            Text(caption.orEmpty())
-                            Text("공개 프로필 기반 · 실제 B의 현재 답변이 아니에요.")
-                            Button(onClick = { navigate("list") }, enabled = state.canInteract) {
-                                Text("콘텐츠 고르기")
+                            Text("이제 조금씩 알아가 볼까요?", style = MaterialTheme.typography.titleLarge)
+                            Text("공개 프로필 기반 · 실제 B의 현재 답변이 아니에요.", style = MaterialTheme.typography.bodySmall)
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                                VehicleButton(onClick = { navigate("list") }, enabled = state.canInteract, modifier = Modifier.weight(1f)) { Text("이야기 시작") }
+                                VehicleOutlineButton(onClick = { navigate("rest") }, modifier = Modifier.weight(1f)) { Text("잠깐 쉬기") }
                             }
                         }
                         "list" -> {
-                            Button(onClick = { navigate("profile") }, enabled = state.canInteract) {
+                            VehicleButton(onClick = { navigate("profile") }, enabled = state.canInteract) {
                                 Text("상대 캐릭터와 알아가기")
                             }
-                            Button(
+                            VehicleButton(
                                 onClick = { navigate(if (thread != null) "messages" else "draft") },
                                 enabled = state.canInteract,
                             ) {
@@ -189,14 +169,14 @@ fun ContentScreen(
                                 )
                             }
                             if (state.actions.containsKey("CALL_PROPOSE") || callBusy)
-                                Button(
+                                VehicleButton(
                                     onClick = { navigate("call") },
                                     enabled = state.canInteract,
                                 ) {
                                     Text("둘이 직접 통화하기")
                                 }
-                            Button(onClick = { navigate("friend") }) { Text("내 에이전트와 이야기하기") }
-                            Button(
+                            VehicleButton(onClick = { navigate("friend") }) { Text("내 에이전트와 이야기하기") }
+                            VehicleButton(
                                 onClick = {
                                     onStop()
                                     onMeeting()
@@ -205,21 +185,21 @@ fun ContentScreen(
                             ) {
                                 Text("만남 제안 받기")
                             }
-                            OutlinedButton(onClick = { navigate("rest") }) { Text("지금은 쉬기") }
+                            VehicleOutlineButton(onClick = { navigate("rest") }) { Text("지금은 쉬기") }
                         }
                         "call" ->
                             CallPanel(state, speech, onSpeak, onStop, onAction) { navigate("list") }
                         "profile" -> {
                             Text("${state.peerAlias}의 에이전트 · 공개 프로필 기반")
                             state.questions.forEach { q ->
-                                OutlinedButton(
+                                VehicleOutlineButton(
                                     onClick = { selected = q.id },
                                     enabled = state.canInteract,
                                 ) {
                                     Text((if (selected == q.id) "✓ " else "") + q.text)
                                 }
                             }
-                            Button(
+                            VehicleButton(
                                 onClick = {
                                     question = selected
                                     navigate("answer")
@@ -233,18 +213,18 @@ fun ContentScreen(
                             Text(caption.orEmpty(), style = MaterialTheme.typography.titleLarge)
                             Text("공개 프로필에 근거한 준비된 답변 · B에게 전송되지 않아요.")
                             if (state.questions.find { it.id == question }?.known == false)
-                                Button(
+                                VehicleButton(
                                     onClick = { navigate("draft") },
                                     enabled = state.canInteract,
                                 ) {
                                     Text("직접 물어보기 · 보낼 말 확인")
                                 }
-                            OutlinedButton(onClick = { navigate("profile") }) { Text("다른 질문") }
+                            VehicleOutlineButton(onClick = { navigate("profile") }) { Text("다른 질문") }
                         }
                         "draft" -> {
                             Text("솔바람에게 전할 말을 먼저 확인해 주세요. 사적인 캐릭터 대화는 전송하지 않아요.")
                             state.messages.forEach { m ->
-                                OutlinedButton(
+                                VehicleOutlineButton(
                                     onClick = { selected = m.id },
                                     enabled = state.canInteract,
                                 ) {
@@ -260,7 +240,7 @@ fun ContentScreen(
                                     )
                                 }
                             state.actions["MESSAGE_SEND_$selected"]?.let { binding ->
-                                Button(
+                                VehicleButton(
                                     onClick = { review = "MESSAGE_SEND" to binding },
                                     enabled = state.canInteract,
                                 ) {
@@ -271,7 +251,7 @@ fun ContentScreen(
                         }
                         "messages" -> {
                             state.threads.forEach { t ->
-                                OutlinedButton(
+                                VehicleOutlineButton(
                                     onClick = {
                                         onStop()
                                         threadId = t.id
@@ -296,7 +276,7 @@ fun ContentScreen(
                                         Text("솔바람의 후속 질문: ${t.followup}")
                                         if (t.status == "received") {
                                             state.replies.forEach { r ->
-                                                OutlinedButton(
+                                                VehicleOutlineButton(
                                                     onClick = { selected = r.id },
                                                     enabled = state.canInteract,
                                                 ) {
@@ -308,7 +288,7 @@ fun ContentScreen(
                                             }
                                             state.actions["MESSAGE_REPLY_$selected"]?.let { binding
                                                 ->
-                                                Button(
+                                                VehicleButton(
                                                     onClick = {
                                                         review = "MESSAGE_REPLY" to binding
                                                     },
@@ -326,7 +306,7 @@ fun ContentScreen(
                                 }
                             }
                             if (state.actions.containsKey("MESSAGE_SEND_M1"))
-                                OutlinedButton(
+                                VehicleOutlineButton(
                                     onClick = { navigate("draft") },
                                     enabled = state.canInteract,
                                 ) {
@@ -340,7 +320,7 @@ fun ContentScreen(
                         }
                         "rest" -> {
                             Text(caption.orEmpty())
-                            Button(
+                            VehicleButton(
                                 onClick = {
                                     navigate(if (state.peerAlias != null) "list" else "friend")
                                 },
@@ -350,28 +330,29 @@ fun ContentScreen(
                             }
                         }
                     }
-                    if (state.peerAlias != null && page != "list" && !callBusy && page != "call")
-                        OutlinedButton(onClick = { navigate("list") }) { Text("콘텐츠 목록으로") }
+                    if (state.peerAlias != null && page !in listOf("list", "intro") && !callBusy && page != "call")
+                        VehicleOutlineButton(onClick = { navigate("list") }) { Text("콘텐츠 목록으로") }
                     if (
                         state.pendingType in listOf("MESSAGE_SEND", "MESSAGE_REPLY", "CALL_PROPOSE")
                     ) {
                         Text("전송 결과 확인 중 · 다른 메시지로 중복 전송하지 않아요.")
-                        OutlinedButton(onClick = onRetry, enabled = state.canRetry) {
+                        VehicleOutlineButton(onClick = onRetry, enabled = state.canRetry) {
                             Text("이전 요청 결과 확인·재전송")
                         }
                         state.actions["CANCEL_PENDING_COMMAND"]?.let { b ->
-                            OutlinedButton(onClick = { review = "CANCEL_PENDING_COMMAND" to b }) {
+                            VehicleOutlineButton(onClick = { review = "CANCEL_PENDING_COMMAND" to b }) {
                                 Text("미확인 전송 요청 중단")
                             }
                         }
                     }
-                    HorizontalDivider()
-                    journey?.let { j ->
-                        Text("내 여행 계획 · ${j.date}", style = MaterialTheme.typography.titleMedium)
-                        Text(
-                            "기존 다음 일정 ${j.nextVisit} · ${j.nextVisitLabel}\n${j.returnPlaceLabel} 도착 예상 ${j.returnEstimate} · 마감 ${j.returnDeadline}"
-                        )
+                    if (caption != null && page != "rest") {
+                        TextButton(onClick = { showVoice = !showVoice }) { Text(if (showVoice) "음성 안내 접기" else "음성 안내") }
+                        if (showVoice) VehicleOutlineButton(onClick = { onSpeak(caption) }, enabled = state.canInteract && speech.available) { Text("현재 문장 읽어주기") }
+                        if (speech.phase in listOf("speaking", "preparing")) VehicleOutlineButton(onClick = onStop) { Text("낭독 중단") }
                     }
+                    TextButton(onClick = { onStop(); onBack() }, enabled = !callBusy) { Text("내 친구 홈으로") }
+                    TextButton(onClick = { showSchedule = !showSchedule }) { Text(if (showSchedule) "내 일정 접기" else "내 일정 보기") }
+                    if (showSchedule) JourneySchedule(journey)
                 }
             },
         )
