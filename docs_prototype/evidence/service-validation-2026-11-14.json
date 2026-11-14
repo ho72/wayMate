@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-14",
+  "scope": "Local authenticated personal AI travel service; public deployment and new vehicle pairing excluded",
+  "runtime": {
+    "node": "22.22.2",
+    "port": 3004,
+    "database": "SQLite WAL, separate from mock-app",
+    "provider": "OpenAI Responses, store:false"
+  },
+  "automated": {
+    "service": {
+      "passed": 15,
+      "failed": 0,
+      "externalCalls": false
+    },
+    "existingMockApp": {
+      "passed": 314,
+      "failed": 0
+    }
+  },
+  "liveAI": {
+    "completedTurns": 3,
+    "toolCalls": {
+      "get_profile": 1,
+      "get_saved_trips": 1,
+      "propose_preferences": 1,
+      "propose_trip": 1
+    },
+    "confirmedPreferenceDrafts": 1,
+    "confirmedTrips": 1,
+    "syntheticAccountOnly": true
+  },
+  "browser": {
+    "viewportsCss": [
+      [
+        320,
+        820
+      ],
+      [
+        430,
+        932
+      ],
+      [
+        1360,
+        1000
+      ]
+    ],
+    "finalDefaultWidth": 319,
+    "horizontalOverflow": false,
+    "finalConsoleErrors": 0,
+    "finalConsoleWarnings": 0,
+    "restartAndReloginVerified": true,
+    "archiveRestoreVerified": true,
+    "consentRevocationVerified": true,
+    "leftLoggedOut": true
+  },
+  "preserved": {
+    "existingServers": true,
+    "existingVehicleEnvironment": true,
+    "navigationMutationPerformed": false,
+    "androidTestsRerun": false
+  }
+}
