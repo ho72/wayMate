@@ -135,6 +135,16 @@
                 },
                 "confirmedSummary": {
                   "$ref": "#/$defs/summary"
+                },
+                "introduction": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "consultationRevision": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20
                 }
               },
               "required": [
@@ -4289,7 +4299,10 @@
           ]
         },
         "summarySource": {
-          "const": "user_confirmed_demo"
+          "enum": [
+            "user_confirmed_demo",
+            "user_confirmed_ai"
+          ]
         }
       },
       "required": [
@@ -4950,6 +4963,16 @@
               "type": "null"
             }
           ]
+        },
+        "consultation": {
+          "anyOf": [
+            {
+              "$ref": "https://waymate.local/contracts/consultation-v1.schema.json#/$defs/conversation"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -5509,6 +5532,16 @@
             "mock",
             "unsupported"
           ]
+        },
+        "consultation": {
+          "anyOf": [
+            {
+              "$ref": "https://waymate.local/contracts/consultation-v1.schema.json#/$defs/conversation"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -5633,6 +5666,16 @@
         },
         "confirmed": {
           "const": true
+        },
+        "introduction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "consultationRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
         }
       },
       "required": [

@@ -57,6 +57,14 @@ export function project(s, actor, clientId, now) {
     view: actor,
     clientId: own ? s.clientId : null,
     onboarding: actor === "web" && own ? s.onboarding : {},
+    ...(s.consultation
+      ? {
+          consultation:
+            actor === "web" && own && !s.reset && !s.recovery
+              ? s.consultation
+              : null,
+        }
+      : {}),
     profile: actor === "web" && own ? s.profile : null,
     profileVersion: s.profileVersion,
     publicationVersion: s.publicationVersion,
@@ -89,7 +97,15 @@ export function project(s, actor, clientId, now) {
       uxRestrictions: s.vehicle.uxRestrictions ?? null,
       interactionMode: interactionMode(s, now),
       preparedAudioAllowed: interactionMode(s, now) === "driving_limited",
-      freshForMs: fresh(s, now) ? Math.max(0, Math.min(STATUS_TTL_MS, Math.floor(STATUS_TTL_MS - (now - s.vehicle.seenAt)))) : 0,
+      freshForMs: fresh(s, now)
+        ? Math.max(
+            0,
+            Math.min(
+              STATUS_TTL_MS,
+              Math.floor(STATUS_TTL_MS - (now - s.vehicle.seenAt)),
+            ),
+          )
+        : 0,
     },
     allowedActions: actions,
     actionBindings: {

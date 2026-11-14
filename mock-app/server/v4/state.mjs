@@ -10,6 +10,7 @@ import { questionOrder } from "../../shared/config/protocol-v4.mjs";
 import { randomUUID } from "node:crypto";
 import { sources, owner, approval } from "./handoff.mjs";
 import { assertContract } from "./validation.mjs";
+import { validateConsultationStore } from "./consultation.mjs";
 export function initialState() {
   return {
     storyContext: initialStory(),
@@ -126,7 +127,9 @@ function freezeReceipt(value) {
   }
 }
 export function validateStore(s) {
-  if (!consistentRestriction(s.vehicle)) throw new Error("주행 제한 관측 불일치");
+  validateConsultationStore(s);
+  if (!consistentRestriction(s.vehicle))
+    throw new Error("주행 제한 관측 불일치");
   // Existing entries are deeply immutable. Revalidate new entries only, while
   // keeping every receipt and still validating all business state and invariants.
   assertContract("store", { ...s, receipts: {}, resetHistory: [] });
@@ -278,6 +281,7 @@ export function validateStore(s) {
   if (
     s.profile &&
     s.vehicleActivation?.origin !== "demo_preset" &&
+    s.profile.privateSummary.summarySource !== "user_confirmed_ai" &&
     !questionOrder(s.onboarding).every((k) => s.onboarding[k]?.confirmed)
   )
     throw new Error("미확인 답변의 프로필");

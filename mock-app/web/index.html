@@ -38,7 +38,33 @@
             <span>편하게 말해줘. 한 번에 하나씩 준비하자.</span>
           </div>
           <section id="chat-card" aria-label="나눈 이야기">
+            <div id="ai-choice" class="inline-card">
+              <p id="ai-description">지금은 준비된 시연 대화예요.</p>
+              <label id="ai-consent-label" hidden
+                ><input id="ai-consent" type="checkbox" /> AI 상담을 위해 내가
+                입력한 대화를 OpenAI에 보내는 데 동의해요. 저장·공개는 별도로
+                확인해요.</label
+              >
+              <button id="ai-start" type="button" hidden>
+                AI와 이야기 시작
+              </button>
+            </div>
             <div id="history"></div>
+            <div id="ai-actions" hidden>
+              <button id="ai-retry" type="button" hidden>
+                같은 메시지 응답 다시 확인
+              </button>
+              <button id="ai-review" type="button">
+                이 이야기로 소개 확인
+              </button>
+              <button id="ai-demo" type="button" hidden>
+                기본 시연 대화로 이어가기
+              </button>
+              <p class="hint">
+                AI가 만든 소개는 초안이에요. 맞는 내용만 고르고 수정할 수
+                있어요.
+              </p>
+            </div>
           </section>
           <div class="agent-turn current-turn" id="current-turn">
             <span class="speaker">wayMate</span>
@@ -90,6 +116,20 @@
               <div id="summary-review" hidden>
                 <p class="card-kicker">네가 확인하는 소개</p>
                 <h2>이렇게 시작해볼까?</h2>
+                <div id="ai-introduction-review" hidden>
+                  <label for="ai-introduction">내가 확인할 소개 초안</label>
+                  <textarea
+                    id="ai-introduction"
+                    rows="4"
+                    maxlength="600"
+                  ></textarea>
+                  <p class="hint">300자 안에서 맞는 내용만 남겨 주세요.</p>
+                  <p class="hint">
+                    이 자유 서술 소개와 상담 원문은 본인 모바일에서만 볼 수
+                    있어요. 차량·다른 여행자에게는 아래에서 확인하고 별도로
+                    공개한 요약 항목을 사용해요.
+                  </p>
+                </div>
                 <p id="profile-preview" class="intro-preview"></p>
                 <details class="optional-editor">
                   <summary>소개에 조금 더 담고 싶어</summary>
@@ -287,7 +327,9 @@
         <p id="status" role="status" aria-live="polite">
           친구와 연결하고 있어요.
         </p>
-        <small class="demo-note">준비된 대화로 함께하는 프로토타입</small>
+        <small class="demo-note" id="conversation-mode"
+          >준비된 대화로 함께하는 프로토타입</small
+        >
       </footer>
       <dialog id="review-dialog" aria-labelledby="review-title">
         <h2 id="review-title"></h2>

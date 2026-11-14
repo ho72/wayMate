@@ -16,6 +16,7 @@ import { apply, fail, fresh, approval } from "./handoff.mjs";
 import { validateStore } from "./state.mjs";
 import { applyNavigation } from "./navigation.mjs";
 import { project } from "./projection.mjs";
+import { consultationGuard } from "./consultation.mjs";
 export function coordinator(
   file,
   initial,
@@ -65,9 +66,18 @@ export function coordinator(
         state.navigation?.observation ||
         state.vehicle.seenAt !== null ||
         state.vehicle.restrictionKnown ||
-        state.vehicle.foreground
+        state.vehicle.foreground ||
+        (state.consultation?.revision === 0 &&
+          state.consultation.turns.length === 0)
       ) {
         const next = cloneState();
+        // Previous AI preflight versions persisted an empty reservation on failure.
+        // Remove that reservation without deleting any actual conversation or owner.
+        if (
+          next.consultation?.revision === 0 &&
+          next.consultation.turns.length === 0
+        )
+          delete next.consultation;
         if (next.navigation) next.navigation.observation = null;
         next.vehicle.seenAt = null;
         next.vehicle.restrictionKnown = false;
@@ -92,6 +102,34 @@ export function coordinator(
       accepting = false;
       await queue;
     },
+    consultationContext: (id, request) =>
+      serial(async () => {
+        await expire();
+        const hit = consultationGuard(state, id, request);
+        if (hit) return { replayed: true, state: projection("web", id) };
+        // Preflight is read-only: a failed first provider call must not claim the
+        // browser or disable the existing demo/vehicle-start flow.
+        return { turns: structuredClone(state.consultation?.turns || []) };
+      }),
+    consultationCommit: (id, request, result) =>
+      serial(async () => {
+        await expire();
+        const hit = consultationGuard(state, id, request);
+        if (hit) return { replayed: true, state: projection("web", id) };
+        const next = cloneState();
+        next.clientId = id;
+        next.consultation ??= { revision: 0, turns: [] };
+        next.consultation.turns.push({
+          requestId: request.requestId,
+          message: request.message,
+          result: structuredClone(result),
+        });
+        next.consultation.revision++;
+        next.version++;
+        validateStore(next);
+        await save(next);
+        return { replayed: false, state: projection("web", id) };
+      }),
     read: (actor, id) =>
       serial(async () => {
         await expire();
@@ -199,7 +237,11 @@ export function coordinator(
           c.type === "CAR_STATUS" &&
           ["restrictionKnown", "restricted", "foreground"].every(
             (k) => next.vehicle[k] === state.vehicle[k],
-          ) && isDeepStrictEqual(next.vehicle.uxRestrictions ?? null, state.vehicle.uxRestrictions ?? null);
+          ) &&
+          isDeepStrictEqual(
+            next.vehicle.uxRestrictions ?? null,
+            state.vehicle.uxRestrictions ?? null,
+          );
         if (!heartbeat && c.type !== "NAV_OBSERVE") next.version++;
         const receipt = {
           runId: c.runId,

@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waymate.local/contracts/consultation-v1.schema.json",
+  "$defs": {
+    "draft": {
+      "type": "object",
+      "properties": {
+        "reply": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "introduction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "interests": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "sea_walk",
+                  "cafe"
+                ]
+              },
+              "minItems": 0,
+              "maxItems": 2,
+              "uniqueItems": true
+            },
+            "activityPreference": {
+              "anyOf": [
+                {
+                  "const": "walk_first_photos_occasional"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pace": {
+              "anyOf": [
+                {
+                  "const": "relaxed"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "conversationStyle": {
+              "anyOf": [
+                {
+                  "const": "quiet"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "expressionPresetIds": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "quiet-companion"
+                ]
+              },
+              "minItems": 0,
+              "maxItems": 1
+            },
+            "speakingStyle": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "calm",
+                    "light_humor"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "interests",
+            "activityPreference",
+            "pace",
+            "conversationStyle",
+            "expressionPresetIds",
+            "speakingStyle"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "reply",
+        "introduction",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "consent": {
+          "const": true
+        }
+      },
+      "required": [
+        "runId",
+        "requestId",
+        "expectedRevision",
+        "message",
+        "consent"
+      ],
+      "additionalProperties": false
+    },
+    "conversation": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "turns": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "result": {
+                "$ref": "#/$defs/draft"
+              }
+            },
+            "required": [
+              "requestId",
+              "message",
+              "result"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "revision",
+        "turns"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
