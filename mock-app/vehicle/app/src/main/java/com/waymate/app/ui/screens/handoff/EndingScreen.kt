@@ -1,5 +1,6 @@
 package com.waymate.app.ui.screens.handoff
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -10,6 +11,9 @@ import com.waymate.app.ui.components.SpeechBubble
 import com.waymate.app.ui.components.VehicleInfoCard
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.EndingUiState
 import com.waymate.app.model.Journey
@@ -31,7 +35,8 @@ fun EndingScreen(
     var selected by rememberSaveable(state.scope) { mutableStateOf("") }
     var friendAnswer by rememberSaveable(state.scope) { mutableStateOf("") }
     var schedule by rememberSaveable(state.scope) { mutableStateOf(false) }
-    var lineIndex by rememberSaveable(state.scope) { mutableIntStateOf(0) }
+    var lineIndex by rememberSaveable(state.scope, state.phase, state.lines) { mutableIntStateOf(0) }
+    var showAllLines by rememberSaveable(state.scope, state.phase, state.lines) { mutableStateOf(false) }
     var review by remember(state.scope) { mutableStateOf<Pair<String, String>?>(null) }
     LaunchedEffect(state.canInteract, state.myChoice, state.blocked) {
         if (!state.canInteract || state.myChoice != null || state.blocked) {
@@ -39,7 +44,7 @@ fun EndingScreen(
             onStop()
         }
     }
-    DisposableEffect(state.scope) { onDispose { onStop() } }
+    DisposableEffect(state.scope, state.phase, state.lines) { onDispose { onStop() } }
     if (state.blocked) {
         VehicleBackground {
             Column(Modifier.padding(32.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -126,31 +131,25 @@ fun EndingScreen(
                                         "준비된 첫 만남 재연 · 실제 접속·GPS 도착이 아니에요."
                                     else "두 분 모두 함께를 선택했어요. 14:35~14:55 해변 산책 뒤 각자의 다음 일정으로 이어가요."
                                 )
-                                state.lines.forEachIndexed { i, line ->
-                                    Card {
-                                        Column(Modifier.padding(14.dp)) {
-                                            Text(
-                                                "${line.speaker} · 재연",
-                                                style = MaterialTheme.typography.labelLarge,
-                                            )
-                                            Text(
-                                                line.text,
-                                                style = MaterialTheme.typography.titleLarge,
-                                            )
+                                if (state.lines.isNotEmpty()) {
+                                    val currentIndex = lineIndex.coerceIn(0, state.lines.lastIndex)
+                                    val currentLine = state.lines[currentIndex]
+                                    Card(
+                                        modifier = Modifier.fillMaxWidth().testTag("ending-current-line")
+                                            .semantics(mergeDescendants = true) { this.selected = true },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                        ),
+                                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+                                    ) {
+                                        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                            Text("현재 대사 ${currentIndex + 1}/${state.lines.size}", style = MaterialTheme.typography.labelLarge)
+                                            Text("발화자: ${currentLine.speaker} · 재연", style = MaterialTheme.typography.titleMedium)
+                                            Text(currentLine.text, style = MaterialTheme.typography.titleLarge)
                                         }
                                     }
-                                }
-                                if (state.lines.isNotEmpty()) {
                                     VehicleOutlineButton(
-                                        onClick = {
-                                            onSpeak(
-                                                state.lines[
-                                                        lineIndex.coerceAtMost(
-                                                            state.lines.lastIndex
-                                                        )]
-                                                    .text
-                                            )
-                                        },
+                                        onClick = { onSpeak(currentLine.text) },
                                         enabled = state.canInteract && speech.available,
                                     ) {
                                         Text("현재 대사 읽어주기")
@@ -158,11 +157,27 @@ fun EndingScreen(
                                     VehicleOutlineButton(
                                         onClick = {
                                             onStop()
-                                            lineIndex = (lineIndex + 1) % state.lines.size
+                                            lineIndex = (currentIndex + 1) % state.lines.size
                                         },
                                         enabled = state.canInteract,
                                     ) {
                                         Text("다음 대사 고르기")
+                                    }
+                                    VehicleOutlineButton(
+                                        onClick = { showAllLines = !showAllLines },
+                                        enabled = state.canInteract,
+                                    ) { Text(if (showAllLines) "전체 대사 접기" else "전체 대사 보기") }
+                                    if (showAllLines) state.lines.forEachIndexed { i, line ->
+                                        Card(
+                                            modifier = Modifier.fillMaxWidth().testTag("ending-script-line-$i")
+                                                .semantics { this.selected = i == currentIndex },
+                                            border = if (i == currentIndex) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
+                                        ) {
+                                            Column(Modifier.padding(14.dp)) {
+                                                Text("${if (i == currentIndex) "현재 선택 · " else ""}${line.speaker} · 재연", style = MaterialTheme.typography.labelLarge)
+                                                Text(line.text, style = MaterialTheme.typography.titleLarge)
+                                            }
+                                        }
                                     }
                                 }
                                 Text(

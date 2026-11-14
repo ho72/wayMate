@@ -496,10 +496,12 @@ class LargeFontWindowReviewTest {
                 {},
             )
         }
+        touch("다음 대사 고르기")
         ui.onNodeWithText(line).performScrollTo()
         fits(line)
+        fits("현재 대사 2/3")
+        fits("발화자: B · 재연")
         capture("font130-together-ending")
-        touch("다음 대사 고르기")
         touch("내 일정 보기")
         touch("대화로 돌아가기")
         ui.onNodeWithText("함께 여행 이어가기").performScrollTo().assertIsDisplayed()
