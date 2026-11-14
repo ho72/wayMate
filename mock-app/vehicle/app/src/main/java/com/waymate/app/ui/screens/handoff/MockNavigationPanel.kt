@@ -3,6 +3,8 @@ package com.waymate.app.ui.screens.handoff
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.NavigationUiState
 import org.json.JSONObject
@@ -24,7 +26,7 @@ internal fun MockNavigationPanel(state: NavigationUiState, onAction: (String, St
                 "NAV_CANCEL" to "실행 전 모의 승인 취소",
             )) {
             state.mockActions[key]?.let { binding ->
-                OutlinedButton(onClick = { reviewed = key to binding }) { Text(label) }
+                VehicleOutlineButton(onClick = { reviewed = key to binding }) { Text(label) }
             }
         }
         Text("승인만으로 성공 처리하지 않아요. O01에서 같은 요청의 성공·실패·미확인을 지정해야 해요. 미확인은 재시도를 잠그고 원래 목적지를 유지해요.")

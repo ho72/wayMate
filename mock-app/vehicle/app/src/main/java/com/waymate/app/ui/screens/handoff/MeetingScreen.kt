@@ -5,6 +5,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
+import com.waymate.app.ui.components.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.SocialUiState
@@ -20,62 +23,55 @@ fun MeetingScreen(
     journey: com.waymate.app.model.Journey? = null,
 ) {
     var review by remember { mutableStateOf<Pair<String, String>?>(null) }
-    Surface(Modifier.fillMaxSize()) {
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Text(
-                "${state.peerAlias ?: "내 친구"} · 만남",
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            JourneySchedule(journey)
-            Text("바다쉼표 카페", style = MaterialTheme.typography.headlineSmall)
-            Text("11월 14일 · 첫 만남 14:15~14:35 · 20분")
-            Text("가상 공개 장소 · 준비된 시연 일정", style = MaterialTheme.typography.labelLarge)
-            Card {
-                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("내 도착 예정 14:02 · 상대 도착 예정 14:10")
-                    Text("추가 주행 7분 / 도착 후 대기 약 13분 / 첫 만남 20분")
-                    Text("양쪽의 기존 일정이 가능한 시연 계획이에요. 이후 산책 20분은 만남 후 별도 선택이에요.")
-                }
+    var details by remember { mutableStateOf(false) }
+    VehicleBackground {
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(22.dp)) {
+            VehicleHeader("만남 동의")
+            SpeechBubble(when(state.meetingStatus) {
+                "confirmed" -> "서로 만나기로 했어요!"
+                "cancelled" -> "각자의 여행도 소중하니까요"
+                "proposed" -> "대답을 천천히 기다려요"
+                else -> "가볍게 만나볼까요?"
+            })
+            AgentCharacter(if (state.peerAlias != null) "b-01" else journey?.avatarId ?: "a-01",
+                Modifier.fillMaxWidth().height(320.dp), motionEnabled = state.canInteract)
+            Text("바다쉼표 카페", style = MaterialTheme.typography.headlineLarge)
+            Text("11월 14일 · 14:15–14:35 · 20분", color = com.waymate.app.ui.theme.Muted)
+            VehicleInfoCard(Modifier.fillMaxWidth()) {
+                Text(state.notice, style = MaterialTheme.typography.titleLarge)
+                Text(if (state.meetingStatus == "confirmed") "만남 동의 완료 · 내비는 다음 화면에서 따로 승인해요."
+                     else "상대도 같은 제안에 동의해야 만남이 확정돼요.")
+                Text("가상 공개 장소 · 준비된 시연 일정", style = MaterialTheme.typography.bodySmall,
+                    color = com.waymate.app.ui.theme.Muted)
             }
-            Text(state.notice, style = MaterialTheme.typography.titleLarge)
+            state.actions["MEETING_PROPOSE"]?.let { b ->
+                VehicleAction("이 장소·시간 제안하기", { review = "MEETING_PROPOSE" to b }, Modifier.fillMaxWidth(), state.canInteract)
+            }
+            if (state.meetingStatus == "confirmed" || state.cleanupRequired)
+                VehicleAction(if (state.cleanupRequired) "내비 경유지 정리 확인" else "만남 카페를 경유지로 추가",
+                    onNavigation, Modifier.fillMaxWidth())
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                state.actions["MEETING_PROPOSE"]?.let { b ->
-                    Button(
-                        onClick = { review = "MEETING_PROPOSE" to b },
-                        enabled = state.canInteract,
-                    ) {
-                        Text("이 장소·시간 제안하기")
-                    }
-                }
-                if (state.meetingStatus == "confirmed" || state.cleanupRequired)
-                    Button(onClick = onNavigation) {
-                        Text(if (state.cleanupRequired) "내비 경유지 정리 확인" else "만남 카페를 경유지로 추가")
-                    }
                 state.actions["MEETING_CANCEL"]?.let { b ->
-                    OutlinedButton(onClick = { review = "MEETING_CANCEL" to b }) { Text("만남 취소") }
+                    VehicleOutlineButton(onClick = { review = "MEETING_CANCEL" to b }) { Text("만남 취소") }
+                }
+                state.actions["MEETING_DECLINE"]?.let { b ->
+                    VehicleOutlineButton(onClick = { review = "MEETING_DECLINE" to b }, enabled = state.canInteract) { Text("이번에는 만나지 않기") }
                 }
             }
             state.actions["CANCEL_PENDING_COMMAND"]?.let { b ->
-                OutlinedButton(onClick = { review = "CANCEL_PENDING_COMMAND" to b }) {
-                    Text("미확인 요청 취소")
-                }
+                VehicleOutlineButton(onClick = { review = "CANCEL_PENDING_COMMAND" to b }) { Text("미확인 요청 취소") }
             }
-            if (state.retryPending)
-                OutlinedButton(onClick = onRetry, enabled = state.canRetry) {
-                    Text("이전 요청 결과 확인·재전송")
-                }
-            state.actions["MEETING_DECLINE"]?.let { b ->
-                OutlinedButton(
-                    onClick = { review = "MEETING_DECLINE" to b },
-                    enabled = state.canInteract,
-                ) {
-                    Text("이번에는 만나지 않기")
-                }
+            if (state.retryPending) VehicleOutlineButton(onClick = onRetry, enabled = state.canRetry) { Text("이전 요청 결과 확인·재전송") }
+            TextButton(onClick = { details = !details }) { Text(if (details) "이동 정보 접기" else "이동·내 일정 자세히 보기") }
+            if (details) VehicleInfoCard(Modifier.fillMaxWidth()) {
+                JourneySchedule(journey)
+                Text("내 도착 예정 14:02 · 상대 도착 예정 14:10")
+                Text("추가 주행 7분 · 도착 후 대기 약 13분")
+                Text("이동 시간은 준비된 시연 계획이에요. 만남 후 산책 20분은 별도로 선택해요.")
             }
-            OutlinedButton(onClick = onBack) { Text("내 친구 홈으로") }
+            TextButton(onClick = onBack) { Text("내 친구 홈으로") }
         }
     }
     review?.let { (type, binding) ->

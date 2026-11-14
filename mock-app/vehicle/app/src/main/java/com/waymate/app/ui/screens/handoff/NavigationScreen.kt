@@ -5,6 +5,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
+import com.waymate.app.ui.components.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.waymate.app.model.NavigationUiState
@@ -22,23 +25,25 @@ fun NavigationScreen(
     journey: com.waymate.app.model.Journey? = null,
 ) {
     var review by remember { mutableStateOf<Pair<String, String>?>(null) }
-    Surface(Modifier.fillMaxSize()) {
+    VehicleBackground {
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(32.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            JourneySchedule(journey)
+            VehicleHeader("경로 확인")
+            SpeechBubble(if (state.canRemove) "내가 추가한 경유지만 정리해요" else "경로를 바꿀까요? 직접 확인해 주세요")
+            AgentCharacter(journey?.avatarId ?: "a-01", Modifier.fillMaxWidth().height(240.dp), motionEnabled = false)
             if (state.source == "mock") {
                 MockNavigationPanel(state, onSocialAction)
                 social.actions["MEETING_CANCEL"]?.let { b ->
-                    OutlinedButton(onClick = { onSocialAction("MEETING_CANCEL", b) }) {
+                    VehicleOutlineButton(onClick = { onSocialAction("MEETING_CANCEL", b) }) {
                         Text("만남 취소")
                     }
                 }
-                OutlinedButton(onClick = onBack) { Text("차량 홈으로") }
+                VehicleOutlineButton(onClick = onBack) { Text("차량 홈으로") }
                 return@Column
             }
-            Text("wayMate · 내비 경유지", style = MaterialTheme.typography.headlineMedium)
+            Text("말이통행 · 내비 경유지", style = MaterialTheme.typography.headlineMedium)
             Text("현재 목적지: ${state.destination}", style = MaterialTheme.typography.titleLarge)
             Text(
                 if (social.meetingStatus != "none")
@@ -58,35 +63,37 @@ fun NavigationScreen(
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Button(
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                VehicleButton(
                     onClick = { state.reviewed?.let { review = "add" to it } },
                     enabled = state.canAdd,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
                 ) {
                     Text("경유지 추가 승인")
                 }
-                Button(
+                VehicleButton(
                     onClick = { state.reviewed?.let { review = "remove" to it } },
                     enabled = state.canRemove,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
                 ) {
                     Text("wayMate 경유지 제거 승인")
                 }
             }
-            if (state.canCancel) OutlinedButton(onClick = onCancel) { Text("실행 전 승인 취소") }
+            if (state.canCancel) VehicleOutlineButton(onClick = onCancel) { Text("실행 전 승인 취소") }
             social.actions["MEETING_CANCEL"]?.let { binding ->
-                OutlinedButton(onClick = { review = "meeting_cancel" to binding }) { Text("만남 취소") }
+                VehicleOutlineButton(onClick = { review = "meeting_cancel" to binding }) { Text("만남 취소") }
             }
             social.actions["CANCEL_PENDING_COMMAND"]?.let { binding ->
-                OutlinedButton(onClick = { onSocialAction("CANCEL_PENDING_COMMAND", binding) }) {
+                VehicleOutlineButton(onClick = { onSocialAction("CANCEL_PENDING_COMMAND", binding) }) {
                     Text("미확인 요청 취소")
                 }
             }
             if (social.retryPending)
-                OutlinedButton(onClick = onRetry, enabled = social.canRetry) {
+                VehicleOutlineButton(onClick = onRetry, enabled = social.canRetry) {
                     Text("이전 요청 결과 확인·재전송")
                 }
             if (state.busy) Text("반영을 확인 중이에요. 같은 요청은 자동으로 반복하지 않아요.")
-            OutlinedButton(onClick = onBack) { Text(if (social.visible) "만남으로 돌아가기" else "차량 홈으로") }
+            VehicleOutlineButton(onClick = onBack) { Text(if (social.visible) "만남으로 돌아가기" else "차량 홈으로") }
         }
     }
     review?.let { r ->

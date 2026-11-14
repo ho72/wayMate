@@ -190,7 +190,7 @@ class ExpandedWindowReviewTest {
             }
         }
         ui.onRoot().assertWidthIsEqualTo(1682.dp)
-        ui.onNodeWithContentDescription("블루 드래곤")
+        ui.onNodeWithContentDescription("따뜻한 곰 여행 친구")
             .assertWidthIsEqualTo(468.dp)
             .assertHeightIsEqualTo(300.dp)
         ui.onNodeWithText("함께 여행 이어가기").assertIsDisplayed().performClick()
@@ -365,6 +365,7 @@ class LargeFontWindowReviewTest {
                 { openedEnding++ },
             )
         }
+        ui.onNodeWithText("여행 관리").performScrollTo().performClick()
         for (label in listOf("만남·여행 선택 다시 보기", "대화 고르기", "만남 상태 확인", "연결 종료")) {
             ui.onNodeWithText(label).performScrollTo()
             fits(label)
@@ -409,7 +410,7 @@ class LargeFontWindowReviewTest {
                 {},
             )
         }
-        touch("콘텐츠 고르기")
+        touch("이야기 시작")
         touch("상대 캐릭터와 알아가기")
         touch("솔바람은 여행할 때 뭘 제일 좋아해?")
         touch("물어보기")

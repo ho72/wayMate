@@ -5,14 +5,14 @@ on:
     paths:
       - "mock-app/vehicle/**"
       - "mock-app/shared/**"
-      - "mock-app/assets/images/characters/**"
+      - "mock-app/assets/images/**"
       - ".github/workflows/vehicle-checks.yml"
   push:
     branches: [main]
     paths:
       - "mock-app/vehicle/**"
       - "mock-app/shared/**"
-      - "mock-app/assets/images/characters/**"
+      - "mock-app/assets/images/**"
       - ".github/workflows/vehicle-checks.yml"
   workflow_dispatch:
 

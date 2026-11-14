@@ -7,6 +7,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,7 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.waymate.app.R
-import com.waymate.app.ui.components.AgentCharacter
+import com.waymate.app.ui.components.*
+import androidx.compose.ui.text.style.TextAlign
 import com.waymate.app.ui.theme.*
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -34,112 +37,47 @@ fun HandoffScreen(
     var confirmStart by remember { mutableStateOf(false) }
     var startPreview by remember { mutableStateOf<com.waymate.app.model.Journey?>(null) }
     val journey = state.journey
-    Surface(Modifier.fillMaxSize(), color = Canvas) {
+    var showPlan by remember { mutableStateOf(false) }
+    var showManage by remember { mutableStateOf(false) }
+    VehicleBackground {
         BoxWithConstraints {
             val wide = useSideBySideLayout(maxWidth.value, maxHeight.value)
-            val bodyMinHeight = (maxHeight - 160.dp).coerceAtLeast(0.dp)
-            Column(
-                Modifier.fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(if (wide) 40.dp else 24.dp)
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        stringResource(R.string.home_brand),
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Forest,
-                    )
-                    Text(
-                        if (journey == null) stringResource(R.string.home_start_badge)
-                        else if (state.social.peerAlias != null) "${state.social.peerAlias} · 연결됨"
-                        else stringResource(R.string.home_private_badge),
-                        Modifier.background(Mint, RoundedCornerShape(30.dp)).padding(14.dp),
-                        color = Forest,
-                    )
-                }
-                if (journey != null) {
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        if (
-                            state.ending.phase in
-                                listOf(
-                                    "travel",
-                                    "meeting",
-                                    "pending",
-                                    "together",
-                                    "my_agent",
-                                    "cancelled",
-                                    "early_end",
-                                )
-                        )
-                            OutlinedButton(onClick = onOpenEnding) { Text("만남·여행 선택 다시 보기") }
-                        Button(onClick = onOpenContent) {
-                            Text(
-                                if (state.content.peerAlias != null)
-                                    if (state.content.threads.any { it.unread }) "새 답장 · 대화 고르기"
-                                    else "대화 고르기"
-                                else "내 친구와 이야기하기"
-                            )
-                        }
-                        if (state.social.peerAlias != null || state.social.meetingStatus != "none")
-                            Button(onClick = onOpenMeeting) {
-                                Text(
-                                    if (state.social.cleanupRequired) "내비 경유지 확인 필요"
-                                    else if (state.social.meetingStatus == "none") "만남 제안 받기"
-                                    else "만남 상태 확인"
-                                )
-                            }
-                        else Button(onClick = onOpenNavigation) { Text("내 여행 경유지") }
-                        state.social.actions["CONNECT_END"]?.let { binding ->
-                            OutlinedButton(onClick = { socialReview = "CONNECT_END" to binding }) {
-                                Text("연결 종료")
-                            }
-                        }
-                        state.social.actions["PROFILE_PRIVATE"]?.let { binding ->
-                            OutlinedButton(
-                                onClick = { socialReview = "PROFILE_PRIVATE" to binding }
-                            ) {
-                                Text("소개 공개 철회")
-                            }
-                        }
-                    }
-                }
-                Spacer(Modifier.height(28.dp))
-                if (wide)
-                    Row(
-                        Modifier.fillMaxWidth().heightIn(min = bodyMinHeight),
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
+            Column(Modifier.fillMaxSize()) {
+                VehicleHeader(if (journey == null) "여행 준비" else if (state.social.peerAlias != null) "여행 친구와 연결됨" else "나만의 여행")
+                val scroll = rememberScrollState()
+                Column(Modifier.weight(1f).verticalScroll(scroll).padding(horizontal = 32.dp, vertical = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                    if (wide) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(36.dp)) {
                         CharacterPanel(state, Modifier.weight(1f), true)
-                        JourneyPanel(
-                            state,
-                            onLoadJourney,
-                            {
-                                startPreview = state.preparation
-                                confirmStart = true
-                            },
-                            Modifier.weight(1f),
-                        )
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(22.dp)) {
+                            HomeJourneySummary(state)
+                            HomeActions(state, onLoadJourney, { startPreview = state.preparation; confirmStart = true },
+                                onOpenContent, onOpenMeeting, onOpenNavigation)
+                        }
+                    } else {
+                        CharacterPanel(state, Modifier.fillMaxWidth())
+                        HomeJourneySummary(state)
+                        HomeActions(state, onLoadJourney, { startPreview = state.preparation; confirmStart = true },
+                            onOpenContent, onOpenMeeting, onOpenNavigation)
                     }
-                else {
-                    CharacterPanel(state, Modifier.fillMaxWidth())
-                    JourneyPanel(
-                        state,
-                        onLoadJourney,
-                        {
-                            startPreview = state.preparation
-                            confirmStart = true
-                        },
-                        Modifier.fillMaxWidth(),
-                    )
+                    if (journey != null) {
+                        TextButton(onClick = { showPlan = !showPlan }) { Text(if (showPlan) "일정 접기" else "내 일정 자세히 보기") }
+                        if (showPlan) JourneyPanel(state, onLoadJourney, {}, Modifier.fillMaxWidth())
+                        TextButton(onClick = { showManage = !showManage }) { Text(if (showManage) "여행 관리 접기" else "여행 관리") }
+                        if (showManage) FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (state.ending.phase in listOf("travel", "meeting", "pending", "together", "my_agent", "cancelled", "early_end"))
+                                VehicleOutlineButton(onClick = onOpenEnding) { Text("만남·여행 선택 다시 보기") }
+                            state.social.actions["CONNECT_END"]?.let { binding ->
+                                TextButton(onClick = { socialReview = "CONNECT_END" to binding }) { Text("연결 종료") }
+                            }
+                            state.social.actions["PROFILE_PRIVATE"]?.let { binding ->
+                                TextButton(onClick = { socialReview = "PROFILE_PRIVATE" to binding }) { Text("소개 공개 철회") }
+                            }
+                        }
+                    }
+                    state.notice?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall) }
                 }
             }
         }
@@ -202,29 +140,50 @@ fun HandoffScreen(
 
 @Composable
 private fun CharacterPanel(state: HandoffUiState, modifier: Modifier, wide: Boolean = false) {
-    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            state.journey?.let { stringResource(R.string.home_greeting, it.alias) }
-                ?: stringResource(R.string.home_welcome),
-            fontSize = 28.sp,
-            lineHeight = 38.sp,
-            fontWeight = FontWeight.Bold,
-            color = Ink,
-        )
-        AgentCharacter(
-            state.journey?.avatarId ?: state.preparation?.avatarId ?: "a-01",
-            Modifier.fillMaxWidth().height(if (wide) 440.dp else 300.dp),
-            motionEnabled =
-                state.loadEnabled ||
-                    state.startEnabled ||
-                    (state.journey != null && !state.content.blocked),
-        )
-        Text(
-            if (state.journey != null) stringResource(R.string.home_companion)
-            else stringResource(R.string.home_prepare_help),
-            color = Muted,
-            fontSize = 17.sp,
-        )
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(if (state.journey == null) "MOBILE FIRST" else "MY TRAVEL MATE", color = Muted,
+            style = MaterialTheme.typography.labelMedium)
+        SpeechBubble(if (state.journey == null) "여행 전에, 우리 조금 알아갈까?" else "오늘도 좋은 길이네요!")
+        AgentCharacter(state.journey?.avatarId ?: state.preparation?.avatarId ?: "a-01",
+            Modifier.fillMaxWidth().height(if (state.journey == null) 340.dp else 460.dp),
+            motionEnabled = state.loadEnabled || state.startEnabled || (state.journey != null && !state.content.blocked))
+        Text(if (state.journey == null) "먼저 모바일에서 준비해요" else "우리, 어디까지 왔을까?",
+            style = MaterialTheme.typography.headlineLarge, color = Ink, textAlign = TextAlign.Center)
+        Text(if (state.journey == null) "내 친구와 이야기하고 여행 계획을 저장해 주세요." else "나만의 페이스로 여행을 이어가요.",
+            color = Muted, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+    }
+}
+
+@Composable
+private fun HomeJourneySummary(state: HandoffUiState) {
+    val journey = state.journey
+    VehicleInfoCard(Modifier.fillMaxWidth()) {
+        Text(if (journey == null) "차량에서도, 대화를 이어서" else "다음 일정", color = Muted, style = MaterialTheme.typography.bodySmall)
+        Text(journey?.let { "${it.nextVisit} · ${it.nextVisitLabel}" } ?: "모바일에서 준비한 나의 여행",
+            style = MaterialTheme.typography.titleLarge, color = Ink)
+        Text(journey?.let { "${it.returnPlaceLabel} · ${it.returnDeadline}까지 복귀" }
+            ?: "저장한 소개와 여행 계획은 직접 불러올 때 연결돼요.", color = Muted)
+    }
+}
+
+@Composable
+private fun HomeActions(state: HandoffUiState, onLoad: () -> Unit, onStart: () -> Unit,
+                        onContent: () -> Unit, onMeeting: () -> Unit, onNavigation: () -> Unit) {
+    if (state.journey == null) {
+        VehicleAction(if (state.retryPending) stringResource(R.string.home_retry) else stringResource(R.string.home_load),
+            onLoad, Modifier.fillMaxWidth(), enabled = state.loadEnabled && !state.isLoading)
+        VehicleAction(if (state.preparation != null) stringResource(R.string.home_start_stored) else stringResource(R.string.home_start_default),
+            onStart, Modifier.fillMaxWidth(), enabled = state.startEnabled && !state.isLoading, secondary = true)
+    } else {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            VehicleAction(if (state.content.peerAlias != null) {
+                if (state.content.threads.any { it.unread }) "새 답장 · 대화 고르기" else "대화 고르기"
+            } else "내 친구와 이야기하기", onContent, Modifier.weight(1f))
+            val meeting = state.social.peerAlias != null || state.social.meetingStatus != "none"
+            VehicleAction(if (state.social.cleanupRequired) "내비 경유지 확인 필요" else if (meeting) {
+                if (state.social.meetingStatus == "none") "만남 제안 받기" else "만남 상태 확인"
+            } else "내 여행 경유지", if (meeting) onMeeting else onNavigation, Modifier.weight(1f), secondary = true)
+        }
     }
 }
 
@@ -259,7 +218,7 @@ private fun JourneyPanel(
                     fontSize = 18.sp,
                     lineHeight = 28.sp,
                 )
-                Button(
+                VehicleButton(
                     onClick = onLoad,
                     enabled = state.loadEnabled && !state.isLoading,
                     modifier = Modifier.fillMaxWidth().height(58.dp),
@@ -270,7 +229,7 @@ private fun JourneyPanel(
                         fontSize = 18.sp,
                     )
                 }
-                OutlinedButton(
+                VehicleOutlineButton(
                     onClick = onStart,
                     enabled = state.startEnabled && !state.isLoading,
                     modifier = Modifier.fillMaxWidth().height(58.dp),

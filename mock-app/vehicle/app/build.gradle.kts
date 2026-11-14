@@ -84,11 +84,16 @@ dependencies {
 }
 
 val copyCharacter by tasks.registering(Copy::class) {
-    from("../../assets/images/characters/blue-dragon-v1/reference.png")
+    from("../../assets/images/design-v5/dragon.png")
     into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
     rename { "blue_dragon.png" }
 }
-tasks.named("preBuild") { dependsOn(copyCharacter) }
+val copyBear by tasks.registering(Copy::class) {
+    from("../../assets/images/design-v5/bear.png")
+    into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
+    rename { "travel_bear.png" }
+}
+tasks.named("preBuild") { dependsOn(copyCharacter, copyBear) }
 
 val copyPreparedSpeech by tasks.registering(Copy::class) {
     from("../../assets/audio/prepared-v1")

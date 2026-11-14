@@ -3,6 +3,8 @@ package com.waymate.app.ui.screens.handoff
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.waymate.app.ui.components.VehicleButton
+import com.waymate.app.ui.components.VehicleOutlineButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -12,7 +14,7 @@ import com.waymate.app.model.DrivingUiState
 import com.waymate.app.model.Journey
 import com.waymate.app.platform.restrictions.InteractionMode
 import com.waymate.app.platform.speech.SpeechState
-import com.waymate.app.ui.components.AgentCharacter
+import com.waymate.app.ui.components.*
 import com.waymate.app.ui.theme.*
 import android.os.SystemClock
 import kotlinx.coroutines.delay
@@ -42,13 +44,13 @@ fun DrivingScreen(
         if (!driving || !state.canPlayPreparedAudio) onStop()
     }
     DisposableEffect(Unit) { onDispose { onStop() } }
-    Surface(Modifier.fillMaxSize().testTag(if (driving) "driving-mode" else "blocked-mode"), color = Canvas) {
+    VehicleBackground(Modifier.testTag(if (driving) "driving-mode" else "blocked-mode")) {
         Column(
             Modifier.fillMaxSize().padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            Text("wayMate", color = Forest, style = MaterialTheme.typography.headlineMedium)
+            Text("말이통행", color = Forest, style = MaterialTheme.typography.headlineMedium)
             Text(
                 if (driving) "주행 · 간편 모드" else "차량 상태 확인 · 기능 제한",
                 style = MaterialTheme.typography.titleLarge,
@@ -64,8 +66,8 @@ fun DrivingScreen(
             Text(
                 if (driving) state.status else "상태를 확인한 뒤 여행을 이어갈게요",
                 style = MaterialTheme.typography.headlineSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
             Text(
                 when (speech.phase) {
@@ -79,13 +81,13 @@ fun DrivingScreen(
                 color = Muted,
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                if (driving) Button(
+                if (driving) VehicleButton(
                     onClick = { onSpeak(DrivingUiState.NARRATION) },
                     enabled = state.canPlayPreparedAudio && leaseValid && speech.available &&
                         speech.phase !in listOf("speaking", "preparing"),
-                    modifier = Modifier.weight(1f).heightIn(min = 64.dp),
+                    modifier = Modifier.weight(1f).heightIn(min = 80.dp),
                 ) { Text("친구 한마디 듣기", style = MaterialTheme.typography.titleLarge) }
-                OutlinedButton(onClick = onStop, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
+                VehicleOutlineButton(onClick = onStop, modifier = Modifier.weight(1f).heightIn(min = 80.dp)) {
                     Text("음성 멈추기", style = MaterialTheme.typography.titleLarge)
                 }
             }

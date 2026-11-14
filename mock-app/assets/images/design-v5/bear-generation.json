@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen__imagegen",
+  "useCase": "background-extraction / stylized-concept",
+  "reference": "bear_master.png",
+  "output": "bear.png",
+  "prompt": "Use case: background-extraction / stylized-concept. Asset type: one transparent character PNG for a polished automotive companion app, displayed about 430x390dp. Input image 1 is the character identity/style reference, not a scene to retain. Create one adorable warm caramel brown teddy bear matching the reference's rounded face, small round ears, cream muzzle, glossy dark brown eyes, friendly open smile and small olive green scarf. Keep this character's soft high-end 3D plush render style, warm gentle personality and proportions. Show the complete bear including feet, centered, standing in a welcoming front three-quarter pose with one paw gently waving, full body uncropped with generous clear margins. Infer a small rounded plush body and short legs naturally from the upperbody reference. Soft diffuse studio lighting and clean crisp silhouette. Output genuine alpha transparency. Remove every background, map, UI, button, line, bubble and word from the reference. Absolutely no text, logos, borders, floor, scene, rectangle, or decorative objects. Single bear only, no duplicate views or sheet. High quality PNG at least 1024 square, actual transparent background.",
+  "transparentBackground": true,
+  "sourceDocument": "말이통행_v5_Interactive.html (user-provided)",
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  }
+}

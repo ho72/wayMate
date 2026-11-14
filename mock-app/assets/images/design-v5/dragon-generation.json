@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "background-extraction",
+  "source": "dragon_master.png",
+  "output": "dragon.png",
+  "transparentBackground": true,
+  "dimensions": {
+    "width": 1254,
+    "height": 1254
+  },
+  "prompt": "Use case: background-extraction. Asset type: transparent character PNG for an automotive companion app. Input image 1 is the edit target. Preserve the exact cute blue baby dragon character, its cream belly, curved cream horns, blue ears and tail, large amber eyes, plush detailed high-quality 3D animated-movie finish, and friendly waving front three-quarter pose. Remove ALL existing background including pale blue/mint scenery and white marks. Output ONLY one centered whole-body dragon including complete horns, waving hand, tail, claws and both feet, with generous fully transparent margin all around. No text, UI, frame, objects, floor rectangle, background or extra characters. Keep the character's identity, proportions, colors and expression unchanged. Use genuine alpha transparency. Intended UI slot about 430 x 390 dp; high-resolution square PNG with at least 700 pixels per edge.",
+  "review": "Whole body including horns, waving hand, tail, claws and feet is visible. No background, text, UI or frame. Alpha channel verified using sips."
+}
