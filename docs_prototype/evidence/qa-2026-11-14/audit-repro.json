@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "kind": "A_cancel",
+      "meetingStatus": "cancelled",
+      "connectionStatus": "linked",
+      "peer": "솔바람",
+      "content": null,
+      "phase": "early_end",
+      "canWithdraw": false
+    },
+    {
+      "kind": "B_reject",
+      "meetingStatus": "declined",
+      "connectionStatus": "linked",
+      "peer": "솔바람",
+      "content": null,
+      "phase": "early_end",
+      "canWithdraw": false
+    },
+    {
+      "kind": "B_cancel",
+      "meetingStatus": "cancelled",
+      "connectionStatus": "linked",
+      "peer": "솔바람",
+      "content": null,
+      "phase": "early_end",
+      "canWithdraw": false
+    },
+    {
+      "kind": "A_decline",
+      "meetingStatus": "declined",
+      "connectionStatus": "ended",
+      "content": null,
+      "phase": "early_end",
+      "canWithdraw": true
+    }
+  ],
+  "q2WithOwnInterests": "둘 다 바다 산책이랑 카페를 좋아하니까, 오늘 본 바다 이야기로 시작해보면 어때요? 솔바람도 조용히 같이 있는 시간을 편하게 느낀대요.",
+  "q2WithoutOwnInterests": "그건 제가 아는 소개에는 없어요. 직접 물어볼까요?"
+}
