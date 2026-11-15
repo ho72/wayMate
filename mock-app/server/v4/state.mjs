@@ -280,6 +280,7 @@ export function validateStore(s) {
     throw new Error("프로필 없는 비공개 상태");
   if (
     s.profile &&
+    s.profile.source !== "account" &&
     s.vehicleActivation?.origin !== "demo_preset" &&
     s.profile.privateSummary.summarySource !== "user_confirmed_ai" &&
     !questionOrder(s.onboarding).every((k) => s.onboarding[k]?.confirmed)

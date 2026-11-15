@@ -47,7 +47,7 @@ export function resetReasons(s) {
   return [
     ...(s.recovery ? [s.recovery.message] : []),
     ...(pending(s) ? ["미확정 내비 실행 기록 확인 필요"] : []),
-    ...(s.navigation?.owned ? ["wayMate 경유지 제거 승인·실제 정리 필요"] : []),
+    ...(s.navigation?.owned ? ["두루밋 경유지 제거 승인·실제 정리 필요"] : []),
     ...(s.mockNavigation?.owned
       ? ["모의 경유지 제거 승인·모의 결과 확인 필요"]
       : []),

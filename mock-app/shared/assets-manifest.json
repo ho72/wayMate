@@ -63,6 +63,30 @@
       "styleVariant": "neutral",
       "playbackSource": "prepared_synthetic_speech"
     },
+    "speech_80d22aa2e59da1ba21ea4251": {
+      "assetId": "speech_80d22aa2e59da1ba21ea4251",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_80d22aa2e59da1ba21ea4251.m4a",
+      "captionId": "speech_80d22aa2e59da1ba21ea4251",
+      "text": "가상 추천 장소는 바다쉼터예요. 이동과 휴식을 합쳐 28분 정도예요. 바다를 보며 잠깐 쉬어가기 좋은 곳이에요.",
+      "speaker": "agent",
+      "sourceKind": "own_agent",
+      "requiredPublicFields": [],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
+    "speech_2c42520da2439714bf84066c": {
+      "assetId": "speech_2c42520da2439714bf84066c",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_2c42520da2439714bf84066c.m4a",
+      "captionId": "speech_2c42520da2439714bf84066c",
+      "text": "가상 추천 장소는 바다한상이에요. 이동은 7분, 식사는 50분 정도로 예상해요. 실제 대기 시간은 도착 전에 확인해 주세요.",
+      "speaker": "agent",
+      "sourceKind": "own_agent",
+      "requiredPublicFields": [],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
     "speech_1e1e6d3af138643d41ca6125": {
       "assetId": "speech_1e1e6d3af138643d41ca6125",
       "kind": "audio",

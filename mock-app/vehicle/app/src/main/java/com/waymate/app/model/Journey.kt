@@ -1,5 +1,8 @@
 package com.waymate.app.model
 
+data class PlannedStop(val time: String?, val title: String, val description: String)
+data class PlannedDay(val number: Int, val date: String?, val stops: List<PlannedStop>)
+
 data class Journey(
     val handoffId: String?,
     val handoffVersion: Int,
@@ -19,4 +22,8 @@ data class Journey(
     val pace: String? = null,
     val conversationStyle: String? = null,
     val expressionPresetIds: List<String> = emptyList(),
+    val planTitle: String? = null,
+    val destination: String? = null,
+    val plannedDays: List<PlannedDay> = emptyList(),
+    val introduction: String? = null,
 ) {}

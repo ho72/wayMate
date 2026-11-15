@@ -3,9 +3,12 @@ import { mkdir, open, unlink, chmod } from "node:fs/promises";
 import { dirname } from "node:path";
 import { randomUUID, createHash } from "node:crypto";
 import { error, validate } from "./contracts.mjs";
+import { installVehicleSchema, vehicleStore } from "./vehicle-store.mjs";
+import { installOnboardingSchema, onboardingStore } from "./onboarding-store.mjs";
+import { DEFAULT_PLAN, DEFAULT_TRIP_ID } from "../shared/travel.mjs";
 const parse = (value) => JSON.parse(value);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-export async function openRepository(file) {
+export async function openRepository(file, { now = Date.now } = {}) {
   await mkdir(dirname(file), { recursive: true, mode: 0o700 });
   const lock = await open(file + ".lock", "wx", 0o600).catch(() => {
     throw error(
@@ -23,7 +26,7 @@ export async function openRepository(file) {
     db.exec(
       "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;",
     );
-    if (db.prepare("PRAGMA user_version").get().user_version > 1)
+    if (db.prepare("PRAGMA user_version").get().user_version > 2)
       throw new Error("Unsupported database version");
     db.exec(`
       CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, handle TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, profile TEXT NOT NULL, profile_version INTEGER NOT NULL DEFAULT 1, consent_at INTEGER, created_at INTEGER NOT NULL);
@@ -33,11 +36,15 @@ export async function openRepository(file) {
       CREATE UNIQUE INDEX IF NOT EXISTS one_pending_turn ON turns(chat_id) WHERE status='pending';
       CREATE TABLE IF NOT EXISTS drafts(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,chat_id TEXT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,turn_id TEXT NOT NULL REFERENCES turns(id) ON DELETE CASCADE,kind TEXT NOT NULL,body TEXT NOT NULL,base_profile_version INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'proposed',confirmed_id TEXT,created_at INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS trips(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,draft_id TEXT NOT NULL UNIQUE REFERENCES drafts(id),body TEXT NOT NULL,created_at INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS chat_trip_context(chat_id TEXT PRIMARY KEY REFERENCES chats(id) ON DELETE CASCADE,user_id TEXT NOT NULL REFERENCES users(id),trip_id TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS registered_trips(user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,body TEXT NOT NULL,created_at INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS trip_draft_origins(draft_id TEXT PRIMARY KEY REFERENCES drafts(id),user_id TEXT NOT NULL REFERENCES users(id),trip_id TEXT NOT NULL,trip_version TEXT NOT NULL);
       CREATE INDEX IF NOT EXISTS chats_owner ON chats(user_id,updated_at);
       CREATE INDEX IF NOT EXISTS turns_chat ON turns(chat_id,created_at);
-      PRAGMA user_version=1;
       UPDATE turns SET status='failed',error_code='INTERRUPTED' WHERE status='pending';
     `);
+    installVehicleSchema(db);
+    installOnboardingSchema(db);
   } catch (e) {
     db?.close();
     await unlink(file + ".lock");
@@ -73,6 +80,7 @@ export async function openRepository(file) {
     body: parse(row.body),
     status: row.status,
     confirmedId: row.confirmed_id,
+    version: hash(row.body),
   });
   const userView = (row) => ({
     id: row.id,
@@ -80,6 +88,7 @@ export async function openRepository(file) {
     profile: parse(row.profile),
     profileVersion: row.profile_version,
     aiConsent: !!row.consent_at,
+    onboarding: repo.onboardingState(row.id),
   });
   const repo = {
     getUser(id) {
@@ -100,7 +109,7 @@ export async function openRepository(file) {
           about: "",
         };
       try {
-        run(
+        transaction(() => { run(
           "INSERT INTO users(id,handle,password_hash,profile,created_at) VALUES(?,?,?,?,?)",
           id,
           handle,
@@ -108,6 +117,8 @@ export async function openRepository(file) {
           JSON.stringify(profile),
           Date.now(),
         );
+        run("INSERT INTO onboarding(user_id) VALUES(?)", id);
+        });
       } catch (e) {
         if (
           e.code?.includes("SQLITE") &&
@@ -172,18 +183,25 @@ export async function openRepository(file) {
         Number(archived),
       );
     },
-    newChat(user) {
+    newChat(user, tripId = null) {
+      const trip = tripId ? repo.trip(user, tripId) : null;
       const id = randomUUID(),
         now = Date.now();
       run(
         "INSERT INTO chats(id,user_id,title,created_at,updated_at) VALUES(?,?,?,?,?)",
         id,
         user,
-        "새로운 여행 이야기",
+        trip ? trip.title + " 함께 다듬기" : "새로운 여행 이야기",
         now,
         now,
       );
+      if (trip) run("INSERT INTO chat_trip_context VALUES(?,?,?)", id, user, trip.id);
       return repo.chat(user, id);
+    },
+    chatTripContext(user, id) {
+      ownerChat(user, id);
+      const row = q("SELECT trip_id FROM chat_trip_context WHERE user_id=? AND chat_id=?", user, id);
+      return row ? repo.trip(user, row.trip_id) : null;
     },
     archive(user, id, archived) {
       ownerChat(user, id);
@@ -228,6 +246,7 @@ export async function openRepository(file) {
         version: chat.version,
         archived: !!chat.archived,
         turns,
+        planningTrip: repo.chatTripContext(user, id),
       };
     },
     turn: ownerTurn,
@@ -371,7 +390,12 @@ export async function openRepository(file) {
             draft.baseProfileVersion,
             Date.now(),
           );
+          if (draft.kind === "trip" && draft.baseTripId) {
+            repo.trip(user,draft.baseTripId);
+            run("INSERT INTO trip_draft_origins VALUES(?,?,?,?)",draft.id,user,draft.baseTripId,draft.baseTripVersion);
+          }
         }
+        repo.recordOnboardingDraft(user, turn.chat_id, drafts);
         run(
           "UPDATE turns SET status='completed',assistant_text=?,events=?,completed_at=? WHERE id=?",
           reply,
@@ -409,9 +433,54 @@ export async function openRepository(file) {
       return all(
         "SELECT * FROM trips WHERE user_id=? ORDER BY created_at DESC LIMIT 200",
         user,
-      ).map((t) => ({ id: t.id, ...parse(t.body), createdAt: t.created_at }));
+      ).map((t) => ({ id: t.id, ...parse(t.body), version: hash(t.body), createdAt: t.created_at }));
     },
-    confirmDraft(user, id) {
+    trip(user, id) {
+      if (id === DEFAULT_TRIP_ID) return repo.registeredTrip(user);
+      const row = q("SELECT * FROM trips WHERE id=? AND user_id=?", id, user);
+      if (!row) throw error(404, "NOT_FOUND", "저장한 여행을 찾을 수 없어요.");
+      return { id: row.id, ...parse(row.body), version: hash(row.body), createdAt: row.created_at };
+    },
+    registeredTrip(user) {
+      run("INSERT OR IGNORE INTO registered_trips VALUES(?,?,?)", user, JSON.stringify(DEFAULT_PLAN), Date.now());
+      const row = q("SELECT * FROM registered_trips WHERE user_id=?", user);
+      return { id: DEFAULT_TRIP_ID, ...parse(row.body), version: hash(row.body), createdAt: row.created_at };
+    },
+    latestTripDraft(user, chatId) {
+      ownerChat(user, chatId);
+      const row = q("SELECT * FROM drafts WHERE user_id=? AND chat_id=? AND kind='trip' ORDER BY created_at DESC,rowid DESC LIMIT 1", user, chatId);
+      if (row && (row.status !== "confirmed" || !repo.chatTripContext(user, chatId))) return draftView(row);
+      const trip = repo.chatTripContext(user, chatId);
+      return trip ? { id: trip.id, kind: "trip", body: Object.fromEntries(["title","destination","startDate","endDate","summary","days","notes"].map(k=>[k,trip[k]])), status: "confirmed" } : null;
+    },
+    tripDraftOrigin(user,id) {
+      return q("SELECT trip_id AS id,trip_version AS version FROM trip_draft_origins WHERE draft_id=? AND user_id=?",id,user)||null;
+    },
+    updateTripDraft(user, id, { version, plan }) {
+      return transaction(() => {
+        const row = q("SELECT * FROM drafts WHERE id=? AND user_id=? AND kind='trip'", id, user);
+        if (!row) throw error(404, "NOT_FOUND", "여행 초안을 찾을 수 없어요.");
+        if (row.status !== "proposed") throw error(409, "DRAFT_SAVED", "이미 저장한 여행이에요. 내 여행에서 수정해 주세요.");
+        if (hash(row.body) !== version) throw error(409, "VERSION_CONFLICT", "초안이 바뀌었어요. 최신 계획을 다시 확인해 주세요.");
+        if (ownerChat(user, row.chat_id).archived || q("SELECT id FROM turns WHERE chat_id=? AND status='pending'", row.chat_id))
+          throw error(409, "CHAT_BUSY", "친구의 답변이 끝난 뒤 계획을 수정해 주세요.");
+        validate("trip", plan);
+        run("UPDATE drafts SET body=? WHERE id=?", JSON.stringify(plan), id);
+        run("UPDATE chats SET version=version+1,updated_at=? WHERE id=?", Date.now(), row.chat_id);
+        return draftView(q("SELECT * FROM drafts WHERE id=?", id));
+      });
+    },
+    updateTrip(user, id, { version, plan }) {
+      return transaction(() => {
+        const current = repo.trip(user, id);
+        if (current.version !== version) throw error(409, "VERSION_CONFLICT", "여행 계획이 바뀌었어요. 다시 불러와 주세요.");
+        validate("trip", plan);
+        if (id === DEFAULT_TRIP_ID) run("UPDATE registered_trips SET body=? WHERE user_id=?", JSON.stringify(plan), user);
+        else run("UPDATE trips SET body=? WHERE id=? AND user_id=?", JSON.stringify(plan), id, user);
+        return repo.trip(user, id);
+      });
+    },
+    confirmDraft(user, id, expectedVersion) {
       return transaction(() => {
         const row = q(
           "SELECT * FROM drafts WHERE id=? AND user_id=?",
@@ -419,21 +488,31 @@ export async function openRepository(file) {
           user,
         );
         if (!row) throw error(404, "NOT_FOUND", "초안을 찾을 수 없어요.");
+        if (expectedVersion !== undefined && hash(row.body) !== expectedVersion)
+          throw error(409, "VERSION_CONFLICT", "초안이 바뀌었어요. 최신 계획을 확인하고 저장해 주세요.");
         if (row.status === "confirmed")
           return { id: row.confirmed_id, kind: row.kind, replayed: true };
         const body = parse(row.body);
         let confirmedId = user;
         if (row.kind === "trip") {
           validate("trip", body);
-          confirmedId = randomUUID();
-          run(
+          const origin=repo.tripDraftOrigin(user,id);
+          if(origin) {
+            if(repo.trip(user,origin.id).version!==origin.version)throw error(409,"VERSION_CONFLICT","저장한 여행이 바뀌었어요. 최신 계획으로 다시 다듬어 주세요.");
+            if(origin.id===DEFAULT_TRIP_ID)run("UPDATE registered_trips SET body=? WHERE user_id=?",JSON.stringify(body),user);
+            else run("UPDATE trips SET body=? WHERE id=? AND user_id=?",JSON.stringify(body),origin.id,user);
+            confirmedId=origin.id;
+          } else {
+            confirmedId = randomUUID();
+            run(
             "INSERT INTO trips VALUES(?,?,?,?,?)",
             confirmedId,
             user,
             id,
             row.body,
             Date.now(),
-          );
+            );
+          }
         } else {
           const current = repo.getUser(user);
           validate("preferences", body);
@@ -448,6 +527,7 @@ export async function openRepository(file) {
           confirmedId,
           id,
         );
+        if (row.kind === "preferences") repo.onboardingConfirmed(user, id);
         return { id: confirmedId, kind: row.kind, replayed: false };
       });
     },
@@ -456,5 +536,10 @@ export async function openRepository(file) {
       await unlink(file + ".lock");
     },
   };
+  Object.assign(
+    repo,
+    vehicleStore({ q, all, run, transaction, getUser: repo.getUser, now }),
+    onboardingStore({ q, run, transaction, repo }),
+  );
   return repo;
 }

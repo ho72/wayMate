@@ -1,9 +1,10 @@
 import { createHash } from "node:crypto";
-import { mkdir, writeFile, readFile, access } from "node:fs/promises";
+import { mkdir, writeFile, readFile, access, stat } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { GENERAL_CALL, FAMILIAR_CALL } from "../shared/config/call-v4.mjs";
 import { DRIVING_NARRATION } from "../shared/config/driving-v4.mjs";
+import drivingRecommendations from "../shared/config/driving-recommendations.json" with { type: "json" };
 import {
   GENERAL_MEETING,
   FAMILIAR_MEETING,
@@ -28,6 +29,7 @@ await mkdir(directory, { recursive: true });
 await mkdir(temp, { recursive: true });
 const items = [
   { text: DRIVING_NARRATION },
+  ...drivingRecommendations.entries.map((entry) => ({ text: entry.narration })),
   ...GENERAL_CALL,
   ...FAMILIAR_CALL,
   ...GENERAL_MEETING,
@@ -68,6 +70,7 @@ for (const item of items) {
   const output = new URL(file, directory);
   try {
     await access(output);
+    if ((await stat(output)).size < 1024) throw new Error("Empty prepared clip");
   } catch {
     const intermediate = new URL(hash + ".aiff", temp);
     execFileSync(
@@ -75,7 +78,7 @@ for (const item of items) {
       ["-v", voice, "-r", "165", "-o", fileURLToPath(intermediate), text],
       { stdio: "pipe" },
     );
-    execFileSync(
+    try { execFileSync(
       "/usr/bin/afconvert",
       [
         "-f",
@@ -88,7 +91,12 @@ for (const item of items) {
         fileURLToPath(output),
       ],
       { stdio: "pipe" },
-    );
+    ); } catch {
+      // Some macOS hosts do not expose the AAC encoder to afconvert.
+      execFileSync("ffmpeg", ["-nostdin", "-y", "-i", fileURLToPath(intermediate),
+        "-c:a", "aac", "-b:a", "48k", fileURLToPath(output)], { stdio: "pipe" });
+    }
+    if ((await stat(output)).size < 1024) throw new Error("Speech synthesis produced an empty clip");
   }
   index.entries.push({
     file,

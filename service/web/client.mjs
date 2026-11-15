@@ -1,3 +1,5 @@
+export { ServerSpeech } from "./speech-client.mjs";
+export { CHARACTERS, character } from "../shared/characters.mjs";
 export class ServiceClient {
   constructor({
     storage = globalThis.localStorage,
@@ -39,6 +41,64 @@ export class ServiceClient {
         { status: response.status, code: data.error?.code },
       );
     return data;
+  }
+  async speech(body, signal) {
+    const epoch = this.epoch;
+    const response = await this.fetch("/api/tts", {
+      method: "POST", credentials: "same-origin", signal,
+      headers: { "Content-Type": "application/json", "X-CSRF-Token": this.csrf },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error?.message || "음성 서비스에 연결하지 못했어요.");
+    }
+    if (!/^audio\/mpeg(?:;|$)/i.test(response.headers.get("content-type") || ""))
+      throw new Error("음성 응답을 확인해 주세요.");
+    const blob = await response.blob();
+    if (epoch !== this.epoch) throw new Error("계정이 바뀌었어요. 현재 화면에서 다시 들어 주세요.");
+    return blob;
+  }
+  vehiclePendingKey(deviceId, owner = this.userId) {
+    return `waymate.service.vehicle-pending.${owner}.${deviceId}`;
+  }
+  vehiclePending(deviceId) {
+    try {
+      return JSON.parse(
+        this.storage.getItem(this.vehiclePendingKey(deviceId)) || "null",
+      );
+    } catch {
+      return null;
+    }
+  }
+  async sendVehicle(deviceId, body) {
+    if (this.vehiclePending(deviceId))
+      throw Object.assign(
+        new Error("먼저 이전 여행의 전송 결과를 확인해 주세요."),
+        { code: "VEHICLE_PENDING" },
+      );
+    this.storage.setItem(
+      this.vehiclePendingKey(deviceId),
+      JSON.stringify(body),
+    );
+    return this.resolveVehicle(deviceId);
+  }
+  async resolveVehicle(deviceId) {
+    const body = this.vehiclePending(deviceId),
+      owner = this.userId;
+    if (!body) throw new Error("확인할 전송 요청이 없어요.");
+    try {
+      const result = await this.request(
+        `/api/vehicles/${deviceId}/deliveries`,
+        body,
+      );
+      this.storage.removeItem(this.vehiclePendingKey(deviceId, owner));
+      return result;
+    } catch (e) {
+      if (e.status && e.status < 500 && e.status !== 429)
+        this.storage.removeItem(this.vehiclePendingKey(deviceId, owner));
+      throw e;
+    }
   }
   pendingKey(chatId) {
     return `waymate.service.pending.${this.userId}.${chatId}`;

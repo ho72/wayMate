@@ -10,6 +10,9 @@
   "scripts": {
     "start": "node server/main.mjs",
     "start:ai": "node --env-file=.env server/main.mjs",
+    "start:tts": "node --env-file=.env server/main.mjs",
+    "start:scenario": "node --env-file=.env scripts/start-gangneung-demo.mjs",
+    "prepare:scenario": "node --env-file=.env scripts/prepare-gangneung-demo.mjs --generate-once",
     "test": "node --test tests/**/*.test.mjs",
     "examples": "node scripts/update-contract-examples.mjs && node scripts/update-v4-examples.mjs",
     "start:v3": "node server/main-v3.mjs"

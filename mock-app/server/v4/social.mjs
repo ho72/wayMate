@@ -46,7 +46,7 @@ export const initialSocial = () => ({
     status: "none",
     placeId: "fiction-cafe-01",
     name: "바다쉼표 카페",
-    date: "2026-11-14",
+    date: "2026-12-14",
     start: "14:15",
     end: "14:35",
     aConsent: false,
@@ -452,14 +452,14 @@ export function socialProjection(s, actor, now) {
       ? [
           {
             id: "B",
-            name: "솔바람",
+            name: s.trip?.peerLabel || "솔바람",
             reason:
               s.social.approvedFields.includes("interests") &&
               s.profile.privateSummary.interests.some((i) =>
                 peer.interests.includes(i),
               )
                 ? "공개한 관심사와 공통 시간이 맞아요."
-                : "같은 날 강릉 해변권 · 공통 시간 14:00~15:00",
+                : s.trip?.plan ? `${s.trip.plan.destination} · 공통 시간 ${c.sharedWindow.join("~")}` : "같은 날 강릉 해변권 · 공통 시간 14:00~15:00",
             detailAvailable: true,
           },
           {
@@ -486,7 +486,7 @@ export function socialProjection(s, actor, now) {
       (actor === "web" &&
         publicReady(s) &&
         !["ended", "cancelled", "declined"].includes(c.status))
-        ? peer
+        ? { ...peer, alias: s.trip?.peerLabel || peer.alias }
         : null,
     testRestricted: s.social.testRestricted,
     tripShareApproved: s.social.tripShareApproved,

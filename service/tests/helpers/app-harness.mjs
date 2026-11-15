@@ -1,5 +1,10 @@
 import vm from "node:vm";
+import { webcrypto } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { CHARACTERS, character } from "../../shared/characters.mjs";
+import { createJourneyFlow, registeredJourney } from "../../web/journey.js";
+import { DEFAULT_TRIP_ID, planBody, dateLabel, stopCount } from "../../shared/travel.mjs";
+import { routeMap,tripStops,tripEditor,readTripForm,adjustPlan } from "../../web/trip-ui.js";
 // Run the shipped browser handlers with controlled I/O; rendering is observed, not reimplemented.
 export async function appHarness(api) {
   const source = await readFile(
@@ -24,10 +29,23 @@ export async function appHarness(api) {
         classList: { toggle() {} },
         setAttribute() {},
         reset() {},
+        open: false,
+        close() {
+          this.open = false;
+        },
+        showModal() {
+          this.open = true;
+        },
       });
     return elements.get(id);
   };
   const context = {
+    DEFAULT_TRIP_ID,planBody,dateLabel,stopCount,routeMap,tripStops,tripEditor,readTripForm,adjustPlan,
+    createJourneyFlow,
+    registeredJourney,
+    CHARACTERS,
+    character,
+    crypto: webcrypto,
     ServiceClient: class {
       constructor() {
         return api;
@@ -81,12 +99,12 @@ export async function appHarness(api) {
     },
   };
   vm.runInNewContext(
-    source.slice(0, boot).replace(/^import .*?;\n/, "") +
+    source.slice(0, boot).replace(/^import .*?;\n/gm, "") +
       `
     draw=()=>{stats.draws++;stats.displayed=S.chat?.id??S.view;};
     renderChrome=()=>{};updateComposer=()=>{};scrollBottom=()=>{};
     notice=message=>stats.notices.push(message);refresh=async()=>{};
-    globalThis.app={S,route,newChat,stream,turnView,identity,submit:$('message-form').onsubmit};
+    globalThis.app={S,route,newChat,stream,turnView,identity,refreshVehicles,reviewVehicleSend,vehicleAction,vehicleTripControls,submit:$('message-form').onsubmit};
   `,
     context,
   );

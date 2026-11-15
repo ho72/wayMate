@@ -1,0 +1,72 @@
+[
+  {
+    "scene": "messages",
+    "title": "답장 확인",
+    "file": "messages-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "call-active",
+    "title": "동의 후 통화 샘플",
+    "file": "call-active-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "meeting",
+    "title": "만남 제안",
+    "file": "meeting-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "itinerary",
+    "title": "저장 일정 확인",
+    "file": "itinerary-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "mc-active",
+    "title": "MC 참여",
+    "file": "mc-active-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "voice",
+    "title": "자막 대화 시작",
+    "file": "voice-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "voice-talking",
+    "title": "자막 대화",
+    "file": "voice-talking-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "ending-my_agent",
+    "title": "각자 여행 결과",
+    "file": "ending-my_agent-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "friend",
+    "title": "friend",
+    "file": "friend-3split.png",
+    "width": 841,
+    "height": 1210
+  },
+  {
+    "scene": "request",
+    "title": "request",
+    "file": "request-3split.png",
+    "width": 841,
+    "height": 1210
+  }
+]

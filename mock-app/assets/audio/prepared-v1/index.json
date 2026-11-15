@@ -12,6 +12,22 @@
       "sourceKind": "prepared_narration"
     },
     {
+      "file": "speech_80d22aa2e59da1ba21ea4251.m4a",
+      "sha256Text": "80d22aa2e59da1ba21ea425115935da1c678f14a74ac11dec9c2fafdd29d7ef3",
+      "text": "가상 추천 장소는 바다쉼터예요. 이동과 휴식을 합쳐 28분 정도예요. 바다를 보며 잠깐 쉬어가기 좋은 곳이에요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_2c42520da2439714bf84066c.m4a",
+      "sha256Text": "2c42520da2439714bf84066cebcb3d6026a5843e050a947d8fab9248ab86762c",
+      "text": "가상 추천 장소는 바다한상이에요. 이동은 7분, 식사는 50분 정도로 예상해요. 실제 대기 시간은 도착 전에 확인해 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
       "file": "speech_1e1e6d3af138643d41ca6125.m4a",
       "sha256Text": "1e1e6d3af138643d41ca6125c666dbc7d63e1cfaaccc1485186f24a5ef47cd11",
       "text": "안녕하세요. 먼저 목소리로 인사드려요.",

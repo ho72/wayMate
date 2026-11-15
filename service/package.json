@@ -8,6 +8,8 @@
   },
   "scripts": {
     "start": "node --env-file-if-exists=../mock-app/.env --env-file-if-exists=.env server/main.mjs",
+    "start:scenario": "node --env-file-if-exists=../mock-app/.env --env-file-if-exists=.env server/scenario-main.mjs",
+    "test:scenario": "node --test tests/scenario-flow.test.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

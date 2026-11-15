@@ -1,6 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { startServer } from "./v4/http.mjs";
 import { aiFromEnvironment } from "./ai/openai.mjs";
+import { vehicleDialogueFromEnvironment } from "./ai/vehicle-dialogue.mjs";
+import { elevenLabsFromEnvironment } from "../../shared/server/elevenlabs.mjs";
 const file =
   process.env.WAYMATE_STATE_FILE ||
   fileURLToPath(new URL("../runtime/state-v4.json", import.meta.url));
@@ -12,9 +14,12 @@ try {
     file,
     port,
     aiProvider: aiFromEnvironment(),
+    dialogueProvider: vehicleDialogueFromEnvironment(),
+    dialogueMaxCalls: Number(process.env.WAYMATE_DIALOGUE_MAX_CALLS || 3),
+    speechProvider: elevenLabsFromEnvironment(),
   });
   console.log(
-    `wayMate 준비 완료: http://127.0.0.1:${app.port} (v4 모바일 연결·차량 만남)`,
+    `두루밋 준비 완료: http://127.0.0.1:${app.port} (v4 모바일 연결·차량 만남)`,
   );
   for (const signal of ["SIGINT", "SIGTERM"])
     process.once(signal, async () => {

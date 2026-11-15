@@ -459,7 +459,7 @@ class HandoffRepository(
                 } ?: JSONObject.NULL)
                 .put(
                     "uiContext",
-                    if (navigationVisible) "navigation"
+                    if (navigationVisible || state?.optJSONObject("reset") != null) "navigation"
                     else if (meetingVisible) "meeting"
                     else if (loaded != null) "home" else "handoff",
                 )
@@ -1210,6 +1210,9 @@ class HandoffRepository(
             peerAlias = peer,
             connectionStatus = s?.optJSONObject("connection")?.optString("status") ?: "none",
             meetingStatus = status,
+            meeting = s?.optJSONObject("meeting")?.let { m ->
+                com.waymate.app.model.MeetingPlan(m.getString("name"), m.getString("date"), m.getString("start"), m.getString("end"))
+            },
             notice =
                 socialNotice
                     ?: when (status) {
@@ -1498,6 +1501,15 @@ class HandoffRepository(
                     )
                 )
         }
+    }
+
+    fun speechScope(): String? = state?.let { it.getString("storeId") + ":" + it.getString("runId") }
+
+    fun dialogueRevision(): String? = state?.let { current ->
+        listOf(speechScope(), current.optInt("profileVersion"), current.optInt("tripVersion"),
+            current.optInt("publicationVersion"), current.optInt("tripShareVersion"),
+            current.optJSONObject("social")?.optJSONObject("connection")?.optInt("version"),
+            current.optJSONObject("social")?.optJSONObject("connection")?.optString("status") == "linked").joinToString(":")
     }
 
     fun mayPlayDrivingAudio(): Boolean {

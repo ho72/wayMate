@@ -1,0 +1,2 @@
+.scenario-operator { max-width: 900px; margin: 32px auto; padding: 20px; }
+.scenario-operator select { font: inherit; max-width: 100%; padding: 12px; border: 1px solid #ccdce9; border-radius: 12px; background: white; }

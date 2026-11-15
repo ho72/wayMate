@@ -27,7 +27,7 @@ function providerTypes(schema) {
   }
 }
 providerTypes(providerSchema);
-const instructions = `너는 wayMate의 여행 친구다. 한국어로 편안하고 자연스럽게 대화한다.
+const instructions = `너는 두루밋의 여행 친구다. 한국어로 편안하고 자연스럽게 대화한다.
 사용자의 말에 구체적으로 반응하고 필요할 때만 관련된 질문 하나를 짧게 한다.
 고정 설문 순서를 강요하지 않는다. 여행 취향, 속도, 편한 대화 방식과 소개 말투를 알아간다.
 사용자가 말하지 않은 취향·성격·건강·민감정보를 추측하지 않는다. 불명확한 필드는 null 또는 빈 배열이다.

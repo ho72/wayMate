@@ -106,3 +106,5 @@
 @media (prefers-reduced-motion: reduce) {
   .chat-app button { transition: none; }
 }
+
+.chat-app button.voice-listen:hover:not(:disabled) { background:#dcecfb; color:#244f6a; }

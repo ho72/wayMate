@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "rest-1",
+      "query": "nearby30",
+      "placeName": "바다쉼터",
+      "summary": "이동 4분 · 휴식 20분 · 복귀 4분",
+      "total": "총 28분",
+      "reason": "바다를 보며 잠깐 쉬어가기",
+      "narration": "가상 바다쉼터는 바다를 보며 쉬고 돌아오는 총 28분 예시 코스야."
+    },
+    {
+      "id": "lunch-1",
+      "query": "lunch",
+      "placeName": "바다한상",
+      "summary": "이동 7분 · 식사 50분 예상",
+      "total": "식사 추천",
+      "reason": "여유롭게 한 끼 먹기",
+      "narration": "가상 바다한상은 이동 7분 예시로, 여유롭게 한 끼 쉬어가는 후보야."
+    }
+  ]
+}

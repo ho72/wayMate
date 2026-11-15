@@ -1,6 +1,8 @@
 package com.waymate.app.data.api
 
 import com.waymate.app.model.Journey
+import com.waymate.app.model.PlannedDay
+import com.waymate.app.model.PlannedStop
 import org.json.JSONObject
 
 object JourneyParser {
@@ -30,11 +32,11 @@ object JourneyParser {
             summary.getJSONArray("interests").let { a -> List(a.length()) { a.getString(it) } }
         val style =
             if (summary.isNull("speakingStyle")) null else summary.getString("speakingStyle")
-        require(owner.getString("avatarId") in listOf("a-01", "a-02"))
+        require(owner.getString("avatarId") in listOf("a-01", "a-02", "a-03"))
         require(style == null || style in listOf("calm", "light_humor"))
         require(
             alias == java.text.Normalizer.normalize(alias, java.text.Normalizer.Form.NFC).trim() &&
-                alias.codePointCount(0, alias.length) in 1..10 &&
+                alias.codePointCount(0, alias.length) in 1..30 &&
                 !alias.contains('\n') &&
                 !alias.contains('\r')
         )
@@ -63,6 +65,22 @@ object JourneyParser {
             (if (owner.isNull("speakingStyle")) null else owner.getString("speakingStyle")) == style
         )
         val versions = json.getJSONObject("sourceVersions")
+        val plan = trip.optJSONObject("plan")
+        val days = plan?.getJSONArray("days")
+        if (days != null) require(days.length() in 1..14)
+        val plannedDays = if (days == null) emptyList() else List(days.length()) { index ->
+            val day = days.getJSONObject(index)
+            require(day.getInt("dayNumber") == index + 1)
+            val stops = day.getJSONArray("stops")
+            require(stops.length() in 1..12)
+            PlannedDay(index + 1, if (day.isNull("date")) null else day.getString("date"), List(stops.length()) { i ->
+                val stop = stops.getJSONObject(i)
+                val time = if (stop.isNull("time")) null else stop.getString("time")
+                require(time == null || Regex("([01]\\d|2[0-3]):[0-5]\\d").matches(time))
+                require(stop.getString("title").isNotBlank() && stop.getString("title").length <= 100)
+                PlannedStop(time, stop.getString("title"), stop.getString("description"))
+            })
+        }
         require(versions.getInt("profile") > 0 && versions.getInt("trip") > 0)
         return Journey(
             null,
@@ -85,6 +103,10 @@ object JourneyParser {
             if (summary.isNull("conversationStyle")) null
             else summary.getString("conversationStyle"),
             expressions,
+            planTitle = plan?.getString("title"),
+            destination = plan?.getString("destination"),
+            plannedDays = plannedDays,
+            introduction = if (owner.isNull("introduction")) null else owner.getString("introduction"),
         )
     }
 }

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>두루밋 · 내 친구와 첫 이야기</title>
+    <link rel="icon" href="/assets/dragon.png">
+    <link rel="stylesheet" href="/app.css">
+    <link rel="stylesheet" href="/welcome.css">
+    <link rel="stylesheet" href="/companion-theme.css">
+    <link rel="stylesheet" href="/scene.css">
+    <script type="module" src="/welcome.js"></script>
+  </head>
+  <body class="welcome-body">
+    <div class="welcome-shell">
+      <header class="welcome-header">
+        <a class="welcome-brand" href="/#home" aria-label="두루밋 홈"><span class="brand-art" aria-hidden="true"><img src="/assets/logo.png" alt=""></span></a>
+        <span id="step-label" class="step-label">내 친구와 첫 이야기</span>
+        <a class="welcome-later" href="/#home">나중에 이어하기</a>
+      </header>
+      <nav class="welcome-steps" aria-label="개인화 진행 단계" id="steps"></nav>
+      <main id="welcome-main" class="welcome-main" tabindex="-1"><p class="welcome-loading" role="status">친구를 만나러 가고 있어요.</p></main>
+      <section id="welcome-composer" class="welcome-composer" hidden>
+        <div id="suggestions" class="welcome-suggestions"></div>
+        <form id="welcome-message-form" class="welcome-message-form">
+          <label class="sr-only" for="welcome-message">친구에게 답하기</label>
+          <textarea id="welcome-message" rows="1" maxlength="4000" placeholder="나에 대해 편하게 들려줘" aria-describedby="composer-hint"></textarea>
+          <button type="submit" id="welcome-send" aria-label="답변 보내기" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+          <button type="button" id="welcome-stop" data-action="stop" aria-label="답변 생성 멈추기" hidden>■</button>
+        </form>
+        <p id="composer-hint">편하게 이야기해요. 기억할 내용은 마지막에 함께 확인해요.</p>
+      </section>
+    </div>
+    <p id="welcome-notice" class="welcome-notice" role="status" hidden></p>
+  </body>
+</html>

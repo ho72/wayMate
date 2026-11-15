@@ -39,3 +39,8 @@ key.properties
 /service/runtime/*
 !/service/runtime/.gitkeep
 /service/output/
+
+# Local diagnostic/build verification artifacts
+/output/
+**/.playwright-cli/
+/film/output/

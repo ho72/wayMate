@@ -1,3 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
- <application android:networkSecurityConfig="@xml/network_security_config" />
+ <application android:networkSecurityConfig="@xml/network_security_config">
+  <activity android:name=".ui.testing.VehiclePagesPreviewActivity" android:exported="true" android:resizeableActivity="true" android:label="두루밋 차량 화면 미리보기" />
+ </application>
 </manifest>

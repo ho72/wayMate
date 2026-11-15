@@ -1,0 +1,156 @@
+[
+  {
+    "file": "live-my-agent-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "1202f4cd9ed86ffd6565b9e0f7cd298697a97bb9530ef473732688fdbc49b0c5",
+    "source": "MainActivity/3015"
+  },
+  {
+    "file": "live-my-agent-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "f7c28b9c6eaa5ea6592f6f294af9c64e45bfeaabc0a8eb1eca6f3fd0e4462616",
+    "source": "MainActivity/3015"
+  },
+  {
+    "file": "friend-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "89c08a1da043750c420b243a573abb3bf54105724e9f516d9dfdb8c9d00b6dba",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "friend-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "1a2680454870a28b2e4b5634bfc82b98c1c0a8325d85ecb57e3399f87f092c06",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "request-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "4be55a1f2ccba365d1058c15fab4e88c754840588609da1ee5b4b994b3a0eb4f",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "request-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "70f7cb355aa07c1d175b83230b26dac3f9e19cd823610d8183d404a5a0d032e5",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "voice-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "11e538b00cdf3f52726afda3aa18903692fb2e17b5f216055f83f9a5eb032004",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "voice-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "25e8fc02fcdd7c23749f291ae4f16da91886c179878b835ce8f7bfb1076296ff",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "voice-talking-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "1bc2f897d4c2483f96077b6c788d5aee2c90f9e55c0c9fed206394a0f3160154",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "voice-talking-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "a0fa1dbc06ad8f857d285add198aa7f533f5f954e5ca8c5754e0e737218abfc8",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "mc-active-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "892ea3b645c775533a7a2e550af68ebee6661592a66a7e4118981847ef60db95",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "mc-active-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "986430024d971b40c31585b6cc925b16a8ae1b58c64ef26d7ef382132a91d9b3",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "meeting-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "b1d2400b1c0e803628a9997464316e6afa325554c4ec73eade5702827076599b",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "meeting-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "3b3357e8744c77a074d6576c0603b7b5e0c51da1e3f3057eaf4e5af9bb6a9442",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "itinerary-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "102e78012c0de73c3310dc1866c961f19156d0b329a23da005df214401a48e29",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "itinerary-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "d72694c5d87e77b3a38ee67817ec2e90b07688732cbe610c9eec161eb36e190e",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "messages-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "09fc24e8da217bb187e3ee87a3c5ee026b5157fb2ada14db5e4059fd9eab2e19",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "messages-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "94c15d59267b9cf39a924b9d592955ce4b1fcd0f88c5b04ff6deec611f59a80d",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "call-active-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "cffc4e9d7689e281ee8a68c1e55d0b6ff9da97959ba6275494593d35e84de1c1",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "call-active-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "ac945d272936a1833a3dee4ab1f68f07f85c756b5ac1ad34bbbf0a7ebf7204be",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "ending-my_agent-2split.png",
+    "width": 1682,
+    "height": 1210,
+    "sha256": "282f9860d952baa23d805d92b45bf549a738b755c3a45cbe31a8c6d6b248237f",
+    "source": "Debug fixture"
+  },
+  {
+    "file": "ending-my_agent-3split.png",
+    "width": 841,
+    "height": 1210,
+    "sha256": "439c508e9a0cf1e0a4ffc552a289652baa405c377ab08a664f0f93eceb97b331",
+    "source": "Debug fixture"
+  }
+]

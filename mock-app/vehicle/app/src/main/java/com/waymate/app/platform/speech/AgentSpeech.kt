@@ -13,6 +13,9 @@ import android.util.Log
 import java.security.MessageDigest
 import java.text.Normalizer
 import java.util.Locale
+import java.io.FileInputStream
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 import org.json.JSONObject
 
 data class SpeechState(
@@ -35,6 +38,16 @@ class AgentSpeech(context: Context, private val changed: (SpeechState) -> Unit) 
     private var text: String? = null
     private var source = "none"
     private var player: MediaPlayer? = null
+    private val network = Executors.newSingleThreadExecutor()
+    private var pending: Future<*>? = null
+    private var remote: SpeechApi? = null
+    private var remoteReady = false
+    fun checkServer(api: SpeechApi, changed: (Boolean) -> Unit) {
+        network.execute {
+            val ready = runCatching { api.available() }.getOrDefault(false)
+            main.post { if (!closed) { remoteReady = ready; publish(phase); changed(ready) } }
+        }
+    }
     private val clips =
         runCatching {
                 val index =
@@ -97,7 +110,7 @@ class AgentSpeech(context: Context, private val changed: (SpeechState) -> Unit) 
 
     private fun publish(value: String) {
         phase = value
-        changed(SpeechState(value, ttsReady || clips.isNotEmpty(), text, source))
+        changed(SpeechState(value, remoteReady || ttsReady || clips.isNotEmpty(), text, source))
     }
 
     private fun callback(id: String?, value: String, terminal: Boolean) {
@@ -187,6 +200,47 @@ class AgentSpeech(context: Context, private val changed: (SpeechState) -> Unit) 
         }
     }
 
+    fun speakFromServer(value: String, api: SpeechApi, voice: String, stillAllowed: () -> Boolean) {
+        interrupt()
+        if (closed || !allowed || !stillAllowed()) return
+        text = value; source = "elevenlabs"
+        val token = gate.begin()
+        remote = api
+        publish("preparing")
+        pending = network.submit {
+            try {
+                val file = api.download(value, voice, context.cacheDir)
+                main.post {
+                    try {
+                        if (closed || !allowed || !gate.accepts(token) || !stillAllowed()) return@post
+                        if (audio.requestAudioFocus(focus) != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                            gate.finish(token); publish("unavailable"); return@post
+                        }
+                        val current = MediaPlayer()
+                        player = current
+                        current.setAudioAttributes(attributes)
+                        FileInputStream(file).use { current.setDataSource(it.fd) }
+                        current.setOnPreparedListener {
+                            if (!closed && allowed && gate.accepts(token) && player === current && stillAllowed()) {
+                                if (runCatching { current.start(); true }.getOrDefault(false)) publish("speaking")
+                                else finish(current, token, "unavailable")
+                            } else if (player === current) interrupt()
+                        }
+                        current.setOnCompletionListener { finish(current, token, "finished") }
+                        current.setOnErrorListener { _, _, _ -> finish(current, token, "unavailable"); true }
+                        current.prepareAsync()
+                    } catch (_: Exception) {
+                        if (gate.accepts(token)) { interrupt(); publish("unavailable") }
+                    } finally { file.delete() }
+                }
+            } catch (_: Exception) {
+                main.post { if (!closed && gate.accepts(token)) {
+                    gate.finish(token); publish("unavailable")
+                } }
+            }
+        }
+    }
+
     private fun finish(current: MediaPlayer, token: Long, result: String) {
         if (closed || !gate.accepts(token) || player !== current) return
         gate.finish(token)
@@ -208,6 +262,10 @@ class AgentSpeech(context: Context, private val changed: (SpeechState) -> Unit) 
 
     fun interrupt() {
         gate.interrupt()
+        pending?.cancel(true)
+        pending = null
+        remote?.cancel()
+        remote = null
         tts?.stop()
         releasePlayer()
         audio.abandonAudioFocusRequest(focus)
@@ -227,5 +285,6 @@ class AgentSpeech(context: Context, private val changed: (SpeechState) -> Unit) 
         closed = true
         tts?.shutdown()
         tts = null
+        network.shutdownNow()
     }
 }

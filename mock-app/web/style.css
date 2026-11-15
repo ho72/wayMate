@@ -856,3 +856,6 @@ dialog p {
   margin: 24px;
   align-self: start;
 }
+
+.voice-status { position:fixed; z-index:40; bottom:24px; left:50%; transform:translateX(-50%); width:min(92vw,580px); display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:16px; border-radius:18px; background:white; border:1px solid #d7e8f2; box-shadow:0 8px 30px #16365024; }
+.voice-status[hidden] { display:none; }

@@ -199,6 +199,7 @@ export async function fixture(t) {
     );
   return {
     close: () => app.close(),
+    dialogueContext: () => app.dialogueContext(),
     read,
     receipt: (actor, runId, commandId) =>
       app.receipt(actor, actor === "web" ? id : null, runId, commandId),
