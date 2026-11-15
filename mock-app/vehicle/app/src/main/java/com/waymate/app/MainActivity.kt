@@ -118,6 +118,12 @@ class MainActivity : ComponentActivity() {
                     }) else null,
                     dialogue = dialogue,
                     onNarrate = ::narrate,
+                    onSpeakDriving = { text ->
+                        // Read-only page summaries use local output only and the same live audio lease.
+                        if (DrivingModePolicy.select(ux) == InteractionMode.DRIVING_LIMITED &&
+                            !ui.reset.visible && repository.mayPlayDrivingAudio()) speech.speak(text)
+                        else speech.interrupt()
+                    },
                 )
             }
         }

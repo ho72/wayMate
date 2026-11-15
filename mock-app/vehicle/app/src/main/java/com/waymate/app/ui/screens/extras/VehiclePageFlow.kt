@@ -146,6 +146,12 @@ data class VehiclePageFlow(
         VehiclePage.NAV_PENDING -> this // A pending request cannot be cancelled from this page.
         else -> home()
     }
+    /** Pause interactions while retaining the page. An uncommitted route approval is discarded. */
+    fun suspended(): VehiclePageFlow = copy(
+        page = if (page in listOf(VehiclePage.WAYPOINT_REVIEW, VehiclePage.DESTINATION_REVIEW)) origin else page,
+        voicePhase = if (voicePhase == "talking") "paused" else voicePhase,
+        mcPhase = if (mcPhase == "active") "paused" else mcPhase,
+    )
     fun unavailable(): VehiclePageFlow = copy(
         page = if (page in listOf(VehiclePage.WAYPOINT_REVIEW, VehiclePage.DESTINATION_REVIEW)) origin else VehiclePage.HOME,
         status = if (status == PreviewStatus.PENDING) PreviewStatus.UNKNOWN else status,

@@ -306,6 +306,166 @@
       "speaker": "agent",
       "voice": "Yuna",
       "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_30832d199a234ad1a4bc1761.m4a",
+      "sha256Text": "30832d199a234ad1a4bc1761013c367a38c9d5678a91fe220028221b14b6686a",
+      "text": "다음 일정과 복귀 계획을 기억하고 있어요. 안전하게 이동해요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_4617d07c135b8ada1092e193.m4a",
+      "sha256Text": "4617d07c135b8ada1092e1935524596bd0a13b4e45a3bf9771f0c1fefc7be298",
+      "text": "친구와 나누던 이야기를 기억하고 있어요. 정차하면 그 자리에서 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_94ca98c59eb3b46d6e59b3ff.m4a",
+      "sha256Text": "94ca98c59eb3b46d6e59b3ff319785739f096cdb8e604637e554e7e3332d207d",
+      "text": "친구의 답장이 도착했어요. 답장 내용은 간단히 표시하고, 답변 전송은 정차 후에 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_c7104969ed8091100dc34990.m4a",
+      "sha256Text": "c7104969ed8091100dc34990203b68f124d3848b111f773035e28cfabda4abca",
+      "text": "통화 시연 상태를 유지하고 있어요. 새 통화나 대사 선택은 정차 후에 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_60e6bde59d261080e039581e.m4a",
+      "sha256Text": "60e6bde59d261080e039581eb11a3405de12342794bb155c07666d57d16fbc98",
+      "text": "보고 있던 장소를 기억하고 있어요. 자세한 비교와 경로 승인은 정차 후에 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_724157d50089c8cd84be6c95.m4a",
+      "sha256Text": "724157d50089c8cd84be6c959218590438d687474d7edd7a5663e1970e681561",
+      "text": "저장한 여행 일정을 기억하고 있어요. 다음 일정과 복귀 시간을 확인해 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_17152e8721b51154ea0da2a3.m4a",
+      "sha256Text": "17152e8721b51154ea0da2a3d7b5e4ac746088315bbd417dcfe69d07d5045a70",
+      "text": "확인하던 경로를 기억하고 있어요. 주행 전의 승인은 취소했어요. 정차 후 다시 확인해 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_5fc14fc20ff2c0e3f95618ac.m4a",
+      "sha256Text": "5fc14fc20ff2c0e3f95618ace2c7f85148fe69e0c2a9d75296d6a8236a15a979",
+      "text": "요청한 안내의 결과를 확인하고 있어요. 같은 요청을 다시 보내지 않아요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_f0e8f16a85aec8121bdc3029.m4a",
+      "sha256Text": "f0e8f16a85aec8121bdc3029a674af2e5a3d8135042a80d949d923e2a6d10419",
+      "text": "시연 경로의 반영 결과를 확인했어요. 다음 일정에 맞춰 안전하게 이동해요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_2fc1075b8649a639f4d71f9f.m4a",
+      "sha256Text": "2fc1075b8649a639f4d71f9f44af9a05174ba3ebbd20eb50cd13de641288380b",
+      "text": "안내를 반영하지 못했어요. 기존 목적지는 유지하고, 정차 후 다시 확인해 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_87b2de8c6e8cf9415a4e1a28.m4a",
+      "sha256Text": "87b2de8c6e8cf9415a4e1a28a93983994269155a09ff0e4c25ef1e26dea7cbd0",
+      "text": "안내 결과를 아직 확인하지 못했어요. 새 요청은 보내지 않고 정차 후 확인해요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_7cbbec410d0da8af505de492.m4a",
+      "sha256Text": "7cbbec410d0da8af505de492c73bc913ec945bf3aed868e09de2b205811aaea2",
+      "text": "친구와의 만남 계획을 기억하고 있어요. 장소와 시간에 대한 동의는 정차 후에 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_8889b496d63dd453b971163a.m4a",
+      "sha256Text": "8889b496d63dd453b971163a5e1451ccc2c04030717547964601db44644e777b",
+      "text": "여행의 다음 이야기를 기억하고 있어요. 남은 여행의 선택은 정차 후에 이어가요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_35c069a57780ecc7bc8f18ff.m4a",
+      "sha256Text": "35c069a57780ecc7bc8f18ff2a478d6365009b03db583af588f56d8ee8c31ae6",
+      "text": "여행 준비 내용을 기억하고 있어요. 여행 불러오기와 시작은 정차 후에 진행해 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_477f141c15463fd374158cac.m4a",
+      "sha256Text": "477f141c15463fd374158cacf2e6b34b930234cabfd5f2c685ae3c9d98ab71a5",
+      "text": "음성 대화 화면을 보고 있어요. 이 버전은 마이크가 연결되지 않은 시연이에요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_8031f4dbaab5f23922596605.m4a",
+      "sha256Text": "8031f4dbaab5f23922596605a3b3f723a69b0f4949366e9c4b25d7235da58c28",
+      "text": "여행 상태를 확인하고 있어요. 정차 후 확인 화면에서 이어가 주세요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_b108cc41c3939d5e8b0c7741.m4a",
+      "sha256Text": "b108cc41c3939d5e8b0c77410e2eb252df82a3534b0c608b2b6f70a7478b72c4",
+      "text": "저는 오늘 만난 조용한 바다가 기억에 남아요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_31a4231b5925fa1f0ce5caf5.m4a",
+      "sha256Text": "31a4231b5925fa1f0ce5caf5c8822c8cf3dc760b8fa8ce6fca8afe02ab76c03e",
+      "text": "저도 바다를 보며 걷는 게 좋아요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_65c23925c9e0bacbc2df1c7e.m4a",
+      "sha256Text": "65c23925c9e0bacbc2df1c7ef3878f14f52186bd7148ad4378611d62e320cee2",
+      "text": "저는 조용한 카페도 좋아해요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
+    },
+    {
+      "file": "speech_caf38ce39521ff475fba7c4c.m4a",
+      "sha256Text": "caf38ce39521ff475fba7c4c28d0ea2e65d3319d5ebe6c8ed5c34b625674667c",
+      "text": "안녕하세요. 오늘 바다 풍경이 참 좋네요.",
+      "speaker": "agent",
+      "voice": "Yuna",
+      "sourceKind": "prepared_narration"
     }
   ]
 }

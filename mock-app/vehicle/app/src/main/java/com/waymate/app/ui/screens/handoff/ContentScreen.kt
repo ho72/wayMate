@@ -38,6 +38,7 @@ fun ContentScreen(
     onOpenMc: (() -> Unit)? = null,
     onOpenItinerary: (() -> Unit)? = null,
     initialPage: String? = null,
+    onDrivingContext: (com.waymate.app.model.DrivingContext) -> Unit = {},
 ) {
     val script = LocalScenarioDialogue.current
     val narrator = LocalAgentNarrator.current
@@ -114,6 +115,8 @@ fun ContentScreen(
             "rest" -> script.line("friend.rest", "대화는 잠깐 쉬어가요. 다시 이어갈 때 직접 골라 주세요.")
             else -> null
         }
+    val drivingContext = com.waymate.app.model.DrivingContexts.content(page, state, journey, caption, thread)
+    LaunchedEffect(drivingContext) { onDrivingContext(drivingContext) }
     if (state.blocked) {
         VehicleBackground(pageTag = "캐릭터 대화", mode = com.waymate.app.platform.restrictions.InteractionMode.BLOCKED) {
             CompanionScene(avatarId = journey?.avatarId ?: "a-01", bubble = "잠시 기다려 주세요",

@@ -36,6 +36,11 @@ android {
             applicationIdSuffix = ".real"
             versionNameSuffix = "-real"
         }
+        create("demo") {
+            dimension = "environment"
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-offline-demo"
+        }
         create("mock") {
             dimension = "environment"
             applicationIdSuffix = ".mock"
@@ -43,6 +48,7 @@ android {
         }
     }
 
+    sourceSets["demo"].java.srcDir("src/mock/java")
     sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/character-res"))
     sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("generated/speech-assets"))
     sourceSets["main"].java.srcDir(drivingSourceDirectory)

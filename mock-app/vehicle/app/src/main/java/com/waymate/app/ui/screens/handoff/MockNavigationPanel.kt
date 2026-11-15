@@ -21,7 +21,7 @@ internal fun MockNavigationPanel(
     var reviewed by remember { mutableStateOf<Pair<String, String>?>(null) }
     content({
         CompanionInfoCard {
-            Text("모의 내비 · 실제 SDK 호출 없음", style = MaterialTheme.typography.titleLarge)
+            Text("모의 내비 시연", style = MaterialTheme.typography.titleLarge)
             Text("현재 목적지 · ${state.destination}")
             Text("바다쉼표 카페 · 가상 경로\n모의 경유지 · ${if (state.mockWaypointPresent) "있음" else "없음"}")
             Text(state.status, style = MaterialTheme.typography.titleLarge)

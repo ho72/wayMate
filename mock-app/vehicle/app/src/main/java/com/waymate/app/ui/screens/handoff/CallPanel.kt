@@ -94,7 +94,7 @@ internal fun CallPanel(
             horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Box(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), contentAlignment = Alignment.Center) {
                 val participants: @Composable () -> Unit = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(if (wide) 20.dp else 14.dp)) {
                         Text("${state.peerAlias ?: "친구"}님과 통화", fontSize = 38.sp, lineHeight = 48.sp, fontWeight = FontWeight.Bold, color = Ink)
                         Surface(color = Mint, shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)) {
                             Text(when (call?.status) {
@@ -107,9 +107,9 @@ internal fun CallPanel(
                         }
                         AgentVoiceBadge(callVoice, if (currentSpeaker == state.peerAlias && currentSpeaker != null) agentName("b-01") else if (currentSpeaker != null) agentName(myAvatar) else null)
                         Row(horizontalArrangement = Arrangement.spacedBy(28.dp), verticalAlignment = Alignment.CenterVertically) {
-                            CallParticipant(myAvatar, "나", if (currentSpeaker != null && currentSpeaker != state.peerAlias) callVoice else AgentVoicePresentation(AgentVoicePhase.IDLE))
+                            CallParticipant(myAvatar, "나", if (currentSpeaker != null && currentSpeaker != state.peerAlias) callVoice else AgentVoicePresentation(AgentVoicePhase.IDLE), compact = !wide)
                             Text(if (active) "···" else "↔", color = Forest, fontSize = 32.sp)
-                            CallParticipant("b-01", state.peerAlias ?: "친구", if (currentSpeaker == state.peerAlias) callVoice else AgentVoicePresentation(AgentVoicePhase.IDLE))
+                            CallParticipant("b-01", state.peerAlias ?: "친구", if (currentSpeaker == state.peerAlias) callVoice else AgentVoicePresentation(AgentVoicePhase.IDLE), compact = !wide)
                         }
                     }
                 }
@@ -117,7 +117,7 @@ internal fun CallPanel(
                     CompanionInfoCard {
                         state.notice?.let { Text(it) }
                         if (active) {
-                            Text("준비된 통화 자막", style = MaterialTheme.typography.bodySmall, color = Muted)
+                            if (wide) Text("준비된 통화 자막", style = MaterialTheme.typography.bodySmall, color = Muted)
                             line?.let { Text(it.speaker, style = MaterialTheme.typography.titleMedium, color = Forest)
                                 Text(it.text, fontSize = 30.sp, lineHeight = 42.sp, fontWeight = FontWeight.SemiBold) }
                             Text(when {
@@ -134,7 +134,7 @@ internal fun CallPanel(
                             "ended", "cancelled" -> "이전 동의로 새 통화를 자동 시작하지 않아요."
                             else -> "목소리로 인사해볼까요? 두 분이 원할 때만 시작해요."
                         }, style = MaterialTheme.typography.titleLarge)
-                        Text("준비된 음성·자막 시연이에요. 마이크와 실시간 상대 통신은 연결하지 않아요.", style = MaterialTheme.typography.bodySmall, color = Muted)
+                        Text(if (wide) "준비된 음성·자막 시연이에요. 마이크와 실시간 상대 통신은 연결하지 않아요." else "준비된 음성·자막 시연 · 마이크 꺼짐", style = MaterialTheme.typography.bodySmall, color = Muted)
                     }
                 }
                 if (wide) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(36.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -178,9 +178,9 @@ internal fun CallPanel(
 }
 
 @Composable
-private fun CallParticipant(avatar: String, name: String, voice: AgentVoicePresentation) {
+private fun CallParticipant(avatar: String, name: String, voice: AgentVoicePresentation, compact: Boolean = false) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Box(Modifier.size(176.dp).background(Color.White.copy(alpha = .55f), CircleShape)) {
+        Box(Modifier.size(if (compact) 144.dp else 176.dp).background(Color.White.copy(alpha = .55f), CircleShape)) {
             AgentVoicePortrait(avatar, voice, Modifier.fillMaxSize().padding(12.dp), animate = true)
         }
         Text(name, style = MaterialTheme.typography.titleMedium)
