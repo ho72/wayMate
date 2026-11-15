@@ -1,0 +1,59 @@
+{
+  "capturedAt": "2026-11-15",
+  "sourceBranch": "feat/account-vehicle-pairing",
+  "sourceBaseCommit": "2610224375f9fbc1eb8ea1cbdac400197b00c2d9",
+  "mainBaseCommit": "c4dadd40fbce36e05eb3d765aebc98158f89622d",
+  "workingTree": true,
+  "characterNames": {
+    "a-01": "두루",
+    "a-02": "루밋",
+    "b-01": "루밋",
+    "a-03": "모카"
+  },
+  "assets": {
+    "mock-app/assets/images/design-v5/dragon.png": "9823da502443a0da3ec49c161ae5bbadfe81144a6cab2ace010f1603f9a75cfd",
+    "mock-app/assets/images/design-v5/rumit.png": "90a4d95474769366e2a250e774f12966936b2c31aa10fda729b5ec3fe94957f9",
+    "mock-app/assets/images/design-v5/bear-legacy.png": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc"
+  },
+  "uiSourceHashes": {
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/TravelFriend.kt": "7f6dd367ec2c50b4932bacc8c4edacec7afc9d4ae5d141eaa4899543c11fbb82",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/VehicleDesign.kt": "a528d8ad4893ab894962f1f91b3a75ccc46160c536a08b5bdea12da93f95e9de",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/CharacterMotionPolicy.kt": "b2402039faba3a05d5e3acc5244ae4035cc7798bab473633b46672e55d8bce66",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/AgentCharacter.kt": "f5f42f6441787bd50fa39d2fb22bd0493152cb37fe90d936ee8746b0550fa6f3",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/VehicleConfirmationDialog.kt": "ef0efc401d7d610cfcc4996acc4504bd48a04b774d77d94eb9d27fdbe4709d02",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/components/AgentVoiceVisual.kt": "e9f5adcbffe902ee6bd9e99eb5581db2522a8bb59f9739a2661c29f24836d048",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/theme/WayMateTheme.kt": "eabe59648b1efbb62454b23c71af2c23e645ff3247fc9cdcabc81f1c1bd2dfe0",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/EndingScreen.kt": "063996576a23d8277f969234bf0fc367551f0ec4541afd0e08cca8cd5d540579",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/MeetingScreen.kt": "6166e653af7ae5271188d22639ad139c28e21086c57218d7c097c3972fee386d",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/MockNavigationPanel.kt": "433f9fe248558affdae3b20cd82f632c28f4484d7091170a20579ba739855f29",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/DrivingScreen.kt": "4440359b3ea29e82330f513a9c616c379c9657a12fc0829d9351564f7cb42132",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/HandoffScreen.kt": "9f3f37e93e7ccc6c1600c0d623c891c8bc591584c691e57c34c0accb3d7e67b5",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/CallPanel.kt": "f51a39e4298d331ad27af2a19da02ce2f3e51a41f40ee4065dca5f09eb6a638c",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/NavigationScreen.kt": "081f1bbfee16dc3e728d17a7b7f749c4033771ebdb301298d770f22f4005b1ca",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/JourneySchedule.kt": "95760be2b61a786c6eec9df811decbd5af6300606efdb82b77982333e96dbd53",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/ReplyConversationPanel.kt": "789b47fb47d9d544b96e589ec0f79c16d0b7c950e158ed329675bd6d03b1846e",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/CompanionScene.kt": "cb2fa80324a56bae45f2b44d1665b4ae6df6ad56c67578dc19181236778dd969",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/ContentScreen.kt": "27a47c5b3363d4b131b6c99c39c4120556cfe0f8d56232ad76e87508671b77f6",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/HandoffUiState.kt": "aa4b95ba949ce0216be16f95445a428c4fe07e1c4ca1040c9662cf89490521d5",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/CompanionControls.kt": "9a51e997c9f0a377d4b2588aa52cab3ff427b0b2afb099331e364b9b54888d9b",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/WindowLayoutPolicy.kt": "3c541d6c44ec88605fbd3f3c3369f1b6935a5f76f5f0d697cf128ba05254b77b",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/handoff/ResetScreen.kt": "625bf9d171e3d6cd03970894bdd16097d296995628b2d38fb0faadbc3e0af91b",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/extras/VehicleExtraScreen.kt": "39d4bc5d1442d957c40037594d4b1b8ea9c5840e66b099c73703a6c1ab5cb40b",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/screens/extras/VehiclePageFlow.kt": "7a75f3d68a1267bf6a2d83f2a264301d38e162647924581d349277d73ca95e7a",
+    "mock-app/vehicle/app/src/debug/java/com/waymate/app/ui/testing/VehiclePagesPreviewActivity.kt": "1784fe514b0c02dbe47fad99c6931c8aef1c15371ee9f94f79046bbb62da395b",
+    "mock-app/vehicle/app/src/debug/java/com/waymate/app/ui/testing/CurrentHeaderPreview.kt": "aaba243246cf033c71f8789b27401d7ca47fe38a1da2d70374381c19cd859643",
+    "mock-app/vehicle/app/src/debug/java/com/waymate/app/ui/testing/DrivingRecommendationPreview.kt": "dfd5775a13c20ec1ea0eb102fc2063da6642c99a6a75be6885c8fdb3967fcb55",
+    "mock-app/vehicle/app/src/debug/java/com/waymate/app/ui/testing/CurrentButtonsPreview.kt": "216ac8b038f7c0ce7039569693d2b9e5a2d68a184524abd8779d9d2e34f73a09",
+    "mock-app/vehicle/app/src/debug/java/com/waymate/app/ui/testing/RemainingPagesPreview.kt": "650e1a55732c896ef3c1cb1e220d23a6fa71556934c546a6237a061a2e929ddd",
+    "mock-app/vehicle/app/src/main/java/com/waymate/app/ui/theme/CompanionPalette.kt": "ba26fe93709be607f6dfd65121ebae3b98af658b0290718b7934d208c36597e4",
+    "shared/design/companion-tokens.json": "6e7be636f90f40a9902aab9eec8d5ed56a9a3744448247b38928e29f76f4f58e"
+  },
+  "captureNotes": "All 204 screenshots and 18 videos recaptured from a single frozen UI source snapshot. Debug screenshot delay shortened from 1500ms to 700ms; production graphics, animations and vehicle restrictions unchanged.",
+  "isolatedPreviewApplicationId": "com.waymate.app.uipreview.mock",
+  "isolatedPreviewApkSha256": "7ec2b1690cb55d5d1ca40825150f07b3e3f6263e042404980d64a0dbad10f79d",
+  "captureDevices": [
+    "emulator-5556 (dedicated read-only Pleos AVD instance)"
+  ],
+  "mainCharacterCommit": "d1f2709",
+  "frozenSourceSnapshot": true
+}

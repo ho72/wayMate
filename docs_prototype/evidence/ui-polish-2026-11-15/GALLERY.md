@@ -1,5 +1,7 @@
 # 두루밋 차량 UI — 2분할·3분할 전체 캡처
 
+[최신 두루·루밋 전체204장](../vehicle-ui-latest-2026-11-15/GALLERY.md) · [최신 애니메이션](../vehicle-ui-latest-2026-11-15/ANIMATIONS.md)
+
 [캡처 목록](README.md) · [HTML 갤러리](index.html) · [범위·확인 기록](SCOPE.md)
 
 2026-11-15 로컬 UI 수정본입니다. 실제 정차한 Pleos의 오프라인 가상 데이터이며, 실제 서비스·SDK·음성 인식의 통합 완료를 뜻하지 않습니다.

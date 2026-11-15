@@ -2,7 +2,7 @@
 
 나를 알아가는 캐릭터 에이전트와 자동차 여행을 하며, 일정과 취향이 맞는 여행자와 자연스럽게 가까워지는 서비스의 개발 프로젝트입니다.
 
-**[차량 UI 최신 캡처 148장 바로 보기](docs_prototype/evidence/ui-polish-2026-11-15/GALLERY.md)**
+**[차량 UI 최신 캡처204장 · 두루·루밋 바로 보기](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/GALLERY.md)**
 
 **모바일은 탑승 전 준비·추천·매칭까지, Pleos는 탑승 후 이동 경험을 담당합니다.** 모바일에서 온보딩·여행 저장·후보와 이유 확인·연결 요청/수락·공통 시간 확인을 마칩니다. Pleos는 그 연결을 이어받아 큰 내 친구 홈·상대 캐릭터 대화·만남 제안·순정 내비·두 결말·다음 여정으로 이어갑니다. 매칭은 서로 알아갈 연결이며 실제로 함께 여행할지는 만남 뒤 별도로 선택합니다.
 
@@ -14,9 +14,11 @@
 
 ## 차량 UI 전체 캡처
 
-**[GitHub에서 2분할·3분할 전체 캡처 보기](docs_prototype/evidence/ui-polish-2026-11-15/GALLERY.md)** · [HTML 갤러리](docs_prototype/evidence/ui-polish-2026-11-15/index.html) · [캡처 범위·확인 기록](docs_prototype/evidence/ui-polish-2026-11-15/SCOPE.md)
+**[GitHub에서2분할·3분할204장 보기](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/GALLERY.md)** · [HTML 비교·검색·영상](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/index.html) · [애니메이션 모음](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/ANIMATIONS.md) · [확인 범위](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/SCOPE.md) · [검증 필요](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/VALIDATION.md)
 
-2026-11-15 로컬 차량 UI 수정본 **74개 상태·148장**입니다. GitHub에서는 이미지 모음으로 바로 볼 수 있고, HTML은 저장소를 내려받아 해당 폴더의 `index.html`을 브라우저로 열면 됩니다. 실제 정차 상태에서 가상 데이터로 촬영했으며 기능·실차 통합 검증은 별도입니다.
+2026-11-15 최신 UI 검토 자료 **102개 장면·204장, 영상18개·GIF14개**입니다. 캐릭터 이름 두루·루밋과 새 루밋 이미지를 반영했고, 모카의 별도 표시도 확인합니다. 모든 촬영은 실제 정차 상태의 오프라인 Debug 호스트에서 수행했습니다. 듣기·주행·MC 등의 강제 상태는 UI 시연이며 실제 마이크/STT나 실시간 상대 통신을 의미하지 않습니다.
+
+GitHub에서는 이미지/GIF 모음으로 바로 보고, HTML은 저장소를 내려받아 해당 폴더의 `index.html`을 여세요. 이번 게시는 갤러리·캐릭터 리소스/이름/네이티브 로딩을 포함하며, 전체 UI·모바일·백엔드 기능 코드를 모두 main에 병합했다는 뜻은 아닙니다. [캐릭터 변경 기록](docs_prototype/51_두루_루밋_및_전체_UI_갤러리.md).
 
 ## 모바일 실제 서비스
 
