@@ -1,0 +1,7 @@
+{
+  "name": "durumit-mobile-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "두루밋 모바일 웹 UI. backend에서 정적 파일과 API를 함께 제공합니다."
+}

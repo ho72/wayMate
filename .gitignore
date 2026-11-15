@@ -24,23 +24,31 @@ local.properties
 key.properties
 
 # Demo state, command receipts, SDK journals and machine verification records
-/mock-app/runtime/*
-!/mock-app/runtime/.gitkeep
-/mock-app/vehicle/captures/
+/backend/demo/runtime/*
+!/backend/demo/runtime/.gitkeep
+/vehicle-app/captures/
 
 # Local browser verification artifacts
-/mock-app/.playwright-cli/
-/mock-app/output/
+/backend/demo/.playwright-cli/
+/backend/demo/output/
 /.playwright-cli/
 
 /output/playwright/
 
 # Actual account/conversation database and local service verification
-/service/runtime/*
-!/service/runtime/.gitkeep
-/service/output/
+/backend/runtime/*
+!/backend/runtime/.gitkeep
+/backend/output/
 
 # Local diagnostic/build verification artifacts
 /output/
 **/.playwright-cli/
 /film/output/
+
+# Python helper caches
+__pycache__/
+*.pyc
+
+# Local planning, verification archives and film production
+/docs/
+/film/

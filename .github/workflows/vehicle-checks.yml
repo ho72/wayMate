@@ -3,16 +3,18 @@ name: Vehicle checks
 on:
   pull_request:
     paths:
-      - "mock-app/vehicle/**"
-      - "mock-app/shared/**"
-      - "mock-app/assets/images/**"
+      - "vehicle-app/**"
+      - "backend/demo/shared/**"
+      - "backend/demo/assets/**"
+      - "shared/design/**"
       - ".github/workflows/vehicle-checks.yml"
   push:
     branches: [main]
     paths:
-      - "mock-app/vehicle/**"
-      - "mock-app/shared/**"
-      - "mock-app/assets/images/**"
+      - "vehicle-app/**"
+      - "backend/demo/shared/**"
+      - "backend/demo/assets/**"
+      - "shared/design/**"
       - ".github/workflows/vehicle-checks.yml"
   workflow_dispatch:
 
@@ -29,7 +31,7 @@ jobs:
     timeout-minutes: 20
     defaults:
       run:
-        working-directory: mock-app/vehicle
+        working-directory: vehicle-app
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

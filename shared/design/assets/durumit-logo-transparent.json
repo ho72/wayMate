@@ -1,5 +1,5 @@
 {
-  "source": "mock-app/vehicle/app/src/main/res/drawable-nodpi/durumit_logo_b.png",
+  "source": "vehicle-app/app/src/main/res/drawable-nodpi/durumit_logo_b.png",
   "asset": "durumit-logo-transparent.png",
   "method": "built-in image_gen background removal",
   "transparent": true,

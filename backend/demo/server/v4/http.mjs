@@ -1,0 +1,296 @@
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { coordinator } from "./commands.mjs";
+import { initialState, validateStore } from "./state.mjs";
+import { openStore } from "../store.mjs";
+import { QUESTIONS } from "../../shared/config/protocol-v4.mjs";
+import { consultationService } from "./consultation.mjs";
+import { speechService } from "../../../../shared/server/speech.mjs";
+import { speechHttp } from "../../../../shared/server/speech-http.mjs";
+import { speechError } from "../../../../shared/server/elevenlabs.mjs";
+import { vehicleDialogueService } from "../ai/vehicle-dialogue.mjs";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const staticFiles = new Map([
+  ["/speech-client.mjs", ["../../../../mobile-web/src/speech-client.mjs", "text/javascript; charset=utf-8"]],
+  [
+    "/character.png",
+    [
+      "../../assets/images/design-v5/dragon.png",
+      "image/png",
+    ],
+  ],
+  ["/bear.png", ["../../assets/images/design-v5/bear.png", "image/png"]],
+  ["/design-v5.css", ["../../../../mobile-web/demo/design-v5.css", "text/css; charset=utf-8"]],
+  ["/operator", ["../../../../mobile-web/demo/operator.html", "text/html; charset=utf-8"]],
+  ["/operator.js", ["../../../../mobile-web/demo/operator.js", "text/javascript; charset=utf-8"]],
+  ["/", ["../../../../mobile-web/demo/index.html", "text/html; charset=utf-8"]],
+  ["/app.js", ["../../../../mobile-web/demo/app.js", "text/javascript; charset=utf-8"]],
+  [
+    "/shared/consultation-v1.mjs",
+    ["../../../../mobile-web/demo/shared/consultation-v1.mjs", "text/javascript; charset=utf-8"],
+  ],
+  ["/style.css", ["../../../../mobile-web/demo/style.css", "text/css; charset=utf-8"]],
+  [
+    "/shared/client-v4.mjs",
+    ["../../../../mobile-web/demo/shared/client-v4.mjs", "text/javascript; charset=utf-8"],
+  ],
+  [
+    "/protocol.mjs",
+    ["../../shared/config/protocol-v4.mjs", "text/javascript; charset=utf-8"],
+  ],
+]);
+export async function startServer({
+  file,
+  port = 3000,
+  now,
+  fault,
+  aiProvider = null,
+  aiTimeoutMs,
+  speechProvider = null,
+  speechTimeoutMs,
+  dialogueProvider = null,
+  dialogueMaxCalls = 3,
+  dialogueTimeoutMs,
+} = {}) {
+  const store = await openStore(file, initialState, validateStore);
+  const api = coordinator(file, store.data, { now, fault });
+  const ai = consultationService(api, aiProvider, { timeoutMs: aiTimeoutMs });
+  const speech = speechService(speechProvider, { timeoutMs: speechTimeoutMs });
+  let dialogue;
+  // Validate all projected store fields on startup rather than serving partial corrupted state.
+  try {
+    await api.read("web", store.data.clientId);
+    await api.read("car", null);
+    dialogue = await vehicleDialogueService(api, dialogueProvider, { file: `${file}.dialogue.json`, maxCalls: dialogueMaxCalls, timeoutMs: dialogueTimeoutMs });
+  } catch (e) {
+    await store.release();
+    throw e;
+  }
+  const server = createServer(async (req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader(
+      "Content-Security-Policy",
+      "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'",
+    );
+    const send = (status, value) => {
+      res.writeHead(status, {
+        "Content-Type": "application/json; charset=utf-8",
+      });
+      res.end(JSON.stringify(value));
+    };
+    let actor, id;
+    try {
+      const host = req.headers.host || "";
+      if (!/^(127\.0\.0\.1|localhost|10\.0\.2\.2)(:\d+)?$/.test(host))
+        throw Object.assign(new Error("로컬 접속만 지원합니다."), {
+          status: 403,
+          code: "ACTOR_FORBIDDEN",
+        });
+      const url = new URL(req.url, `http://${host}`);
+      if (req.method === "GET" && staticFiles.has(url.pathname)) {
+        const [p, type] = staticFiles.get(url.pathname);
+        res.writeHead(200, { "Content-Type": type });
+        return res.end(await readFile(new URL(p, import.meta.url)));
+      }
+      if (req.method === "GET" && url.pathname === "/favicon.ico") {
+        res.writeHead(204);
+        return res.end();
+      }
+      if (req.method === "GET" && url.pathname === "/health")
+        return send(200, await api.health());
+      actor = req.headers["x-demo-actor"];
+      id = actor === "web" ? req.headers["x-demo-client-id"] : null;
+      if (
+        !["web", "car", "operator"].includes(actor) ||
+        (actor === "web" && !UUID.test(id || ""))
+      )
+        throw Object.assign(
+          new Error("유효한 역할·클라이언트 ID가 필요합니다."),
+          { status: 403, code: "ACTOR_FORBIDDEN" },
+        );
+      if ((req.method === "GET" && url.pathname === "/api/tts/config") ||
+          (req.method === "POST" && url.pathname === "/api/tts")) {
+        if (!["web", "car"].includes(actor) ||
+            req.headers["sec-fetch-site"] === "cross-site" ||
+            (req.headers.origin && req.headers.origin !== `http://${host}`))
+          throw speechError(403, "ACTOR_FORBIDDEN", "본인 모바일 또는 차량에서 요청해 주세요.");
+        const state = await api.speechContext();
+        return await speechHttp({ req, res, speech,
+          principal: JSON.stringify([state.runId, actor, id]),
+          async assertAccess() {
+            const current = await api.speechContext();
+            if (current.runId !== state.runId || current.blocked ||
+                (actor === "web" && current.clientId && current.clientId !== id))
+              throw speechError(403, "TTS_CONTEXT_CHANGED", "현재 회차와 본인 연결 상태를 확인해 주세요.");
+          },
+        });
+      }
+      if (req.method === "GET" && url.pathname === "/api/scenario")
+        return send(200, {
+          schemaVersion: 4,
+          scope: "mobile-meeting-v4",
+          questions: actor === "web" ? QUESTIONS : {},
+          tripPresetIds: actor === "web" ? ["gangneung-01"] : [],
+          capabilities: {
+            myTrip: true,
+            meeting: true,
+            messages: true,
+            callSample: true,
+            mockNavigation: true,
+            registeredRecovery: false,
+            drivingVoice: false,
+            drivingLimited: true,
+            mcSample: false,
+            reviewSample: false,
+            reasonInput: false,
+            connected: true,
+            navigation: true,
+            driverWaypoint: true,
+            operator: true,
+            safeReset: true,
+            agentContent: true,
+            finalChoices: true,
+            aiConsultation: actor === "web" && ai.available,
+            vehicleDialogue: actor === "car" && dialogue.available,
+          },
+        });
+      if (req.method === "GET" && url.pathname === "/api/state") {
+        if (url.searchParams.get("view") !== actor)
+          throw Object.assign(new Error("역할과 view가 다릅니다."), {
+            status: 403,
+            code: "ACTOR_FORBIDDEN",
+          });
+        return send(200, await api.read(actor, id));
+      }
+      if (req.method === "GET" && url.pathname === "/api/handoff") {
+        if (actor !== "car")
+          throw Object.assign(
+            new Error("차량 역할만 전달본을 읽을 수 있습니다."),
+            { status: 403, code: "ACTOR_FORBIDDEN" },
+          );
+        return send(200, await api.handoff());
+      }
+      if (
+        req.method === "GET" &&
+        /^\/api\/commands\/[0-9a-f-]+$/.test(url.pathname)
+      )
+        return send(
+          200,
+          await api.receipt(
+            actor,
+            id,
+            url.searchParams.get("runId"),
+            url.pathname.split("/").pop(),
+          ),
+        );
+      if (
+        req.method === "POST" &&
+        ["/api/commands", "/api/consultation/turns", "/api/agent/dialogue"].includes(url.pathname)
+      ) {
+        if (url.pathname === "/api/agent/dialogue" && actor !== "car")
+          throw Object.assign(new Error("현재 차량에서만 이야기를 준비할 수 있어요."), { status: 403, code: "ACTOR_FORBIDDEN" });
+        if (url.pathname === "/api/consultation/turns" && actor !== "web")
+          throw Object.assign(
+            new Error("본인 모바일에서만 상담할 수 있어요."),
+            { status: 403, code: "ACTOR_FORBIDDEN" },
+          );
+        if (req.headers["sec-fetch-site"] === "cross-site" || (req.headers.origin && req.headers.origin !== `http://${host}`))
+          throw Object.assign(new Error("다른 출처에서 저장할 수 없습니다."), {
+            status: 403,
+            code: "ACTOR_FORBIDDEN",
+          });
+        if (
+          (req.headers["content-type"] || "").split(";")[0] !==
+          "application/json"
+        )
+          throw Object.assign(new Error("JSON 본문이 필요합니다."), {
+            status: 400,
+            code: "INVALID_PAYLOAD",
+          });
+        const chunks = [];
+        let bytes = 0;
+        for await (const chunk of req) {
+          chunks.push(chunk);
+          bytes += chunk.length;
+          if (bytes > 16384)
+            throw Object.assign(new Error("본문이 너무 큽니다."), {
+              status: 413,
+              code: "INVALID_PAYLOAD",
+            });
+        }
+        let c;
+        try {
+          c = JSON.parse(
+            new TextDecoder("utf-8", { fatal: true }).decode(
+              Buffer.concat(chunks),
+            ),
+          );
+        } catch {
+          throw Object.assign(new Error("잘못된 JSON입니다."), {
+            status: 400,
+            code: "INVALID_PAYLOAD",
+          });
+        }
+        return send(
+          200,
+          url.pathname === "/api/agent/dialogue"
+            ? await dialogue.prepare(c)
+            : url.pathname === "/api/consultation/turns"
+            ? await ai.turn(id, c)
+            : await api.command(c, actor, id),
+        );
+      }
+      send(404, {
+        ok: false,
+        error: { code: "NOT_FOUND", message: "지원하지 않는 경로입니다." },
+      });
+    } catch (e) {
+      if (res.destroyed) return;
+      const body = {
+        ok: false,
+        error: {
+          code: e.code || "UNAVAILABLE",
+          message: e.status ? e.message : "서버 처리에 실패했습니다.",
+        },
+      };
+      if (actor && ["web", "car", "operator"].includes(actor))
+        try {
+          body.state = await api.read(actor, id);
+        } catch {}
+      send(e.status || 503, body);
+    }
+  });
+  server.requestTimeout = 10000;
+  server.headersTimeout = 10000;
+  try {
+    await new Promise((resolve, reject) => {
+      server.once("error", reject);
+      server.listen(port, "127.0.0.1", resolve);
+    });
+  } catch (e) {
+    await dialogue.close();
+    await store.release();
+    throw e;
+  }
+  let shutdown;
+  return {
+    server,
+    port: server.address().port,
+    close: () =>
+      (shutdown ??= (async () => {
+        const stopped = new Promise((resolve, reject) =>
+          server.close((e) => (e ? reject(e) : resolve())),
+        );
+        // Stop accepting domain work and drain committed writes before dropping persistent
+        // browser/emulator sockets or releasing the single-writer lock.
+        await ai.close();
+        await dialogue.close();
+        await speech.close();
+        await api.close();
+        server.closeAllConnections();
+        await stopped;
+        await store.release();
+      })()),
+  };
+}

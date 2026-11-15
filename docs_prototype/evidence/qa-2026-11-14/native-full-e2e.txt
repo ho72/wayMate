@@ -1,6 +1,0 @@
-
-com.waymate.app.qa.ScenarioE2ETest:.
-
-Time: 39.13
-
-OK (1 test)

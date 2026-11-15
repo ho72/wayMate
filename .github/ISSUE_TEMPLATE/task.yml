@@ -27,7 +27,7 @@ body:
     attributes:
       label: 수정 경로와 인계물
       description: 소유할 폴더·파일과 다른 담당자에게 넘길 산출물을 적습니다. 분담 가이드의 책임 경계를 참고합니다.
-      placeholder: "경로: mock-app/vehicle/.../ui/screens/handoff/\n인계물: 화면 상태와 콜백을 받는 P01 화면"
+      placeholder: "경로: vehicle-app/.../ui/screens/handoff/\n인계물: 화면 상태와 콜백을 받는 P01 화면"
     validations:
       required: true
   - type: textarea

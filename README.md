@@ -1,99 +1,135 @@
-# 두루밋
+# 두루밋 · Doo Roo Meet
 
-**[모바일·백엔드·Pleos 통합 시연 실행·운영표](docs_prototype/53_모바일_Pleos_통합_시연_운영표.md)** — 같은 저장 여행으로 준비·연결·차량 수신·만남·두 결말까지 이어가는 3008 통합 실행 기준.
+**혼자 떠나는 자동차 여행에 AI 친구와 새로운 만남을 더하는 서비스입니다.**
 
-나를 알아가는 캐릭터 에이전트와 자동차 여행을 하며, 일정과 취향이 맞는 여행자와 자연스럽게 가까워지는 서비스의 개발 프로젝트입니다.
+모바일에서 여행 준비 → Pleos에서 상대 알아가기 → 짧은 만남 → 함께 또는 각자의 여행
 
-**[차량 UI 최신 캡처204장 · 두루·루밋 바로 보기](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/GALLERY.md)**
+[주요 화면](#주요-화면) · [코드 구조](#코드-구조) · [실행 방법](#실행-방법) · [검증](#기술-및-검증)
 
-**모바일은 탑승 전 준비·추천·매칭까지, Pleos는 탑승 후 이동 경험을 담당합니다.** 모바일에서 온보딩·여행 저장·후보와 이유 확인·연결 요청/수락·공통 시간 확인을 마칩니다. Pleos는 그 연결을 이어받아 큰 내 친구 홈·상대 캐릭터 대화·만남 제안·순정 내비·두 결말·다음 여정으로 이어갑니다. 매칭은 서로 알아갈 연결이며 실제로 함께 여행할지는 만남 뒤 별도로 선택합니다.
+| 개발 영역 | 바로 가기 | 담당 기능 |
+| --- | --- | --- |
+| **차량 목업 앱** | [vehicle-app/](vehicle-app/) | Pleos 캐릭터 UI·주행 모드·만남·내비 승인 |
+| **백엔드** | [backend/](backend/) | 계정·AI 대화·여행 저장·연결·차량 전달 |
+| **모바일 웹** | [mobile-web/](mobile-web/) | 여행 준비·취향 확인·일정 편집·여행자 연결 |
 
-후속 기획으로 식사·관광 중에는 모바일에서 다음 장소 후보를 준비하고, 재탑승하면 Pleos에서 확인해 안내를 이어가는 활용도 고려합니다. [기획안 5.4절](docs_prototype/01_목업_기획_범위_정의서.md#54-차-밖에서-모바일로-다음-여정-준비--후속-기획)에 설명했으며 이번 목업의 시연·화면·구현 범위에는 포함하지 않습니다.
+## 주요 화면
 
-현재 **모바일 준비·공개 확인·추천·최종 매칭 확인 → v4 연결 전달 → Pleos 홈·만남 동의·실제 내비 승인**을 연결했습니다. [O01 안전한 초기화](docs_prototype/14_O01_안전한_전체_초기화.md), [P02 대화·말 전달](docs_prototype/15_P02_캐릭터_대화_및_말_전달.md), [만남 재연·P04 두 결말과 재시연](docs_prototype/16_만남_재연_및_P04_두_결말.md), 준비 음성·통화 샘플·기능 완주 검수와 [캐릭터 중심 주행·정차 모드](docs_prototype/26_캐릭터_중심_주행_정차_모드.md)까지 반영했습니다. 확정 서비스 이름은 **두루밋**입니다. 저장소·패키지의 내부 식별자 `wayMate`/`waymate`는 유지합니다.
+### 모바일 · 대화로 준비하는 여행
 
-**현재 화면 캡처·구현 범위·작업 이력·SDK 연동·main 검증 결과·남은 개발 우선순위는 [개발 현황 README](docs_개발/README.md)에 정리했습니다.**
+<table>
+  <tr><th>AI 친구와 대화</th><th>여행 계획 확인·수정</th><th>여행자 연결</th></tr>
+  <tr>
+    <td><img src="assets/screenshots/mobile-chat.png" width="250" alt="AI 친구와 여행 취향을 이야기하는 모바일 채팅"></td>
+    <td><img src="assets/screenshots/mobile-trip.jpg" width="250" alt="대화 안에서 지도와 시간별 일정을 확인하는 여행 카드"></td>
+    <td><img src="assets/screenshots/mobile-match.jpg" width="250" alt="여정과 공통 시간을 확인하고 여행자를 연결하는 모바일 화면"></td>
+  </tr>
+  <tr><td>취향을 알아가는 대화</td><td>직접 다듬고 내 여행에 저장</td><td>공개 정보와 공통 시간 확인</td></tr>
+</table>
 
-## 차량 UI 전체 캡처
+### Pleos · 알아가고 만나기
 
-**[GitHub에서2분할·3분할204장 보기](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/GALLERY.md)** · [HTML 비교·검색·영상](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/index.html) · [애니메이션 모음](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/ANIMATIONS.md) · [확인 범위](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/SCOPE.md) · [검증 필요](docs_prototype/evidence/vehicle-ui-latest-2026-11-15/VALIDATION.md)
+<table>
+  <tr><th>상대 AI 친구와 첫 인사</th><th>짧은 만남 제안</th><th>경유지 추가 승인</th></tr>
+  <tr>
+    <td><img src="assets/screenshots/vehicle-peer.png" width="270" alt="상대 여행자의 AI 친구 루밋을 소개하는 Pleos 화면"></td>
+    <td><img src="assets/screenshots/vehicle-meeting.png" width="270" alt="장소와 시간, 다음 일정을 함께 확인하는 만남 제안 화면"></td>
+    <td><img src="assets/screenshots/vehicle-navigation.png" width="270" alt="기존 목적지를 유지하며 만남 장소를 경유지로 추가하는 승인 화면"></td>
+  </tr>
+  <tr><td>공개한 정보를 바탕으로 교류</td><td>서로 동의한 장소·시간에 만남</td><td>운전자가 확인한 뒤 경로 반영</td></tr>
+</table>
 
-2026-11-15 최신 UI 검토 자료 **102개 장면·204장, 영상18개·GIF14개**입니다. 캐릭터 이름 두루·루밋과 새 루밋 이미지를 반영했고, 모카의 별도 표시도 확인합니다. 모든 촬영은 실제 정차 상태의 오프라인 Debug 호스트에서 수행했습니다. 듣기·주행·MC 등의 강제 상태는 UI 시연이며 실제 마이크/STT나 실시간 상대 통신을 의미하지 않습니다.
+<details>
+<summary><strong>만남 이후 · 함께해도, 각자여도 이어지는 여행</strong></summary>
 
-GitHub에서는 이미지/GIF 모음으로 바로 보고, HTML은 저장소를 내려받아 해당 폴더의 `index.html`을 여세요. 이번 게시는 갤러리·캐릭터 리소스/이름/네이티브 로딩을 포함하며, 전체 UI·모바일·백엔드 기능 코드를 모두 main에 병합했다는 뜻은 아닙니다. [캐릭터 변경 기록](docs_prototype/51_두루_루밋_및_전체_UI_갤러리.md).
+두 사람은 상대의 선택을 보지 않고 독립적으로 결정합니다. 모두 동의하면 함께 여행하고, 각자 여행을 선택해도 내 AI 친구가 계속 동행합니다.
 
-최신 Pleos 연동 보완은 [작업·검증 기록](docs_prototype/52_차량_화면_및_백엔드_연동_정리.md)과 [2·3분할22장 비교](docs_prototype/evidence/pleos-alignment-2026-11-15/index.html)에 정리했습니다. 모바일을 제외하고 준비된 여행 수신부터 두 결말까지 차량 앱과 격리 서버에서 연속 확인했습니다.
+<table>
+  <tr><th>함께 여행 이어가기</th><th>내 AI 친구와 여행 이어가기</th></tr>
+  <tr>
+    <td><img src="assets/screenshots/ending-together.png" width="300" alt="두 사람이 모두 동행을 선택한 함께 여행 결말"></td>
+    <td><img src="assets/screenshots/ending-solo.png" width="300" alt="각자의 일정으로 돌아가 내 AI 친구와 이어가는 결말"></td>
+  </tr>
+</table>
 
-## 모바일 실제 서비스
+</details>
 
-**[두루밋 모바일 AI 서비스](service/README.md)**를 `service/`에 추가했습니다. 가입·로그인, 사용자별 대화/취향/여행 저장, 실제 에이전트 도구와 확인 후 저장을 제공합니다. 로컬 `http://127.0.0.1:3004/`에서 실행하며 [새 계정↔차량 페어링·확정 여행 전달·ACK](docs_prototype/34_계정_차량_페어링_및_여행_전달.md)도 후속 브랜치에 구현했습니다. 공개 배포·동적 내비는 다음 범위입니다. 기존 `mock-app`의 차량 시연은 별도로 유지합니다. [구현·검증 기록](docs_prototype/29_모바일_실제_에이전트_서비스.md).
+<details>
+<summary>현재 구현과 캡처 범위</summary>
 
-## 저장소 구조
+| 구분 | 범위 |
+| --- | --- |
+| 실제 구현 | 계정·AI 스트리밍·도구 호출·여행 저장·차량 수신/ACK·독립 선택 |
+| 시나리오 재현 | 고정 여행자 후보·상대 응답·만남 장소/시간·준비된 통화 샘플·모의 내비 |
+| 별도 SDK 검증 | 고정 POI의 NaviHelper 경유지 추가/제거·차량 UX 제한·음성 중단 |
+| 후속 개발 | 실시간 교통 기반 만남 추천·상대와의 실시간 통화·마이크/STT·Gleo |
 
-모바일 웹·시연자 웹·전달 서버·Pleos 차량 앱을 하나의 저장소에서 관리합니다. 디렉터리 이름은 [개발 및 연동 명세서](docs_prototype/04_개발_및_연동_명세서.md)의 계약을 따릅니다.
+모바일 캡처는 실제 웹 UI의 촬영·검수 자료이며 대화에는 고정 응답을 사용했습니다. 차량 캡처는 Pleos 에뮬레이터의 오프라인 Debug 미리보기입니다. 각 이미지는 다른 회차의 예시이며 실제 SDK 성공이나 전체 통합 시연 완주를 뜻하지 않습니다.
+
+[캡처 안내](assets/README.md) · [통합 시나리오 테스트](backend/tests/scenario-flow.test.mjs)
+
+</details>
+
+## 코드 구조
 
 ```text
 wayMate/
-├── .github/               # 작업·버그 이슈 양식, PR 양식
-├── docs_개발/             # 개발 현황·작업 이력·main 검증·인계 요약
-├── docs_prototype/        # 프로토타입 제작·시연·화면·연동·검수 문서
-├── docs_proposal/         # 최종 제출 기획안 문서
-├── service/               # 실제 계정·SQLite·AI 에이전트·모바일 웹
-├── mock-app/
-│   ├── server/            # 공통 상태·명령·저장·HTTP API
-│   │   └── fixtures/      # 시연용 원본 데이터
-│   ├── web/               # 목표 모바일 M01~M04, 시연자 O01
-│   │   └── views/         # 화면별 UI
-│   ├── vehicle/           # 목표 Pleos P01~P04, P05 추가
-│   │   └── app/src/       # main · mock · real · test
-│   ├── shared/            # 웹·서버·차량의 schema·소재 manifest
-│   ├── assets/            # 공통 이미지·준비 음성
-│   ├── scripts/           # 소재 동기화 등 개발 스크립트
-│   ├── tests/             # 서버·API·상태 전환 테스트
-│   └── runtime/           # 로컬 상태·실행 기록, Git 추적 제외
-└── CONTRIBUTING.md        # 브랜치·커밋·PR 작업 기준
+├── vehicle-app/       # 차량 목업 앱 · Kotlin / Jetpack Compose / Pleos
+├── backend/           # 계정·AI·여행 API · Node.js / SQLite
+│   ├── server/        # 실제 계정·AI·여행·차량 API
+│   └── demo/          # 기본 시연 서버·고정 데이터·공통 소재
+├── mobile-web/        # 모바일 웹 · HTML / CSS / JavaScript
+│   ├── src/           # 여행 준비·AI 채팅·연결 UI
+│   ├── shared/        # 모바일·서버 공통 데이터 함수
+│   └── demo/          # 기본 시연 웹·진행자 패널
+├── shared/            # 공통 디자인·서버 음성 모듈
+├── assets/            # README용 대표 UI 캡처
+└── .github/           # 서버·차량 빌드 및 테스트 CI
 ```
 
-[앱 디렉터리 안내](mock-app/README.md)와 [협업 안내](CONTRIBUTING.md)를 참고하세요. `.gitkeep`은 GitHub에 빈 디렉터리를 유지하는 파일이며, 실제 구현 파일을 추가하면 제거할 수 있습니다.
+**모바일 웹 ↔ 백엔드 ↔ 차량 앱**으로 연결합니다. 모바일 화면은 백엔드가 API와 함께 제공하며, 차량은 확인한 여행을 저장하고 ACK를 보냅니다.
 
-전체 팀 5명의 개발 참여 인원·담당은 아직 미정입니다. [개발 아키텍처·분담 가이드](docs_prototype/06_개발_아키텍처_및_분담_가이드.md)에 웹·서버·차량 UI·플랫폼·소재의 책임 경로와 개발 1명/2명/3명일 때의 배치 예시, 기획서와 함께 진행할 산출물, 첫 실제 전달 순서를 정리했습니다.
+## 실행 방법
 
-## 개발 준비
+Node.js **22.22.2** 기준, 저장소 루트에서 실행합니다.
 
-- 웹·서버: 명세서 기준 Node.js `22.22.2`. 버전은 `mock-app/.nvmrc`에 기록합니다.
-- 차량: Kotlin·Jetpack Compose, JDK 21, 컴파일 SDK 35, 실행 대상 Pleos Connect API 34. Android Studio에서 `mock-app/vehicle/`을 엽니다. [차량 앱 빌드·실행 안내](mock-app/vehicle/README.md)를 참고하세요.
-- 차량 앱은 `assembleMockDebug` 빌드와 `lintMockDebug`, Pleos 설치·실행을 확인했습니다. 웹·서버는 `mock-app/`에서 `npm ci --ignore-scripts` 후 `npm start`로 실행하고 `npm test`로 검증합니다.
+```sh
+npm run setup
+npm run start:demo    # 키 없는 기본 시연 · http://127.0.0.1:3000
+```
 
-## 문서
+실제 AI·계정·차량 통합 시연은 `backend/.env.example`을 참고해 `backend/.env`에 API 키를 설정한 뒤 실행합니다.
 
-문서는 목적에 따라 나눠 관리합니다.
+```sh
+npm start            # 통합 시연 · http://127.0.0.1:3008
+npm test             # 백엔드·시연 서버·모바일 클라이언트 회귀 검사
+```
 
-- [프로토타입 제작 문서](docs_prototype/README.md): 당장 개발할 기능·화면·연동·시연·검수 기준.
-- [개발 현황·작업 이력](docs_개발/README.md): 구현한 기능·PR 이력·SDK 연결 범위·최신 main 검증·실행/인계·남은 작업.
-- [최종 제출 기획안](docs_proposal/README.md): 제출할 서비스 기획과 설명을 다듬는 공간. 기존 문서를 복사한 초안부터 시작합니다.
+차량 앱은 JDK **21**·Android SDK **35**·Pleos **API 34** 환경에서 빌드합니다.
 
-여행 계획을 Pleos 기본 홈에 지속 표시하는 요구를 반영한 뒤 분리했습니다. 이후에는 목적에 맞는 폴더에 수정·PR을 올리고, 양쪽에 영향을 주는 결정은 각각 반영합니다. 아래 상세 목록은 프로토타입 제작 기준입니다.
+```sh
+cd vehicle-app
+./gradlew :app:assembleMockDebug :app:assembleRealDebug \
+  -PwaymateApiPort=3008 -PwaymatePersonalApiPort=3008
+```
 
-- [문서 목록과 작성 순서](docs_prototype/README.md)
-- [01. 목업 기획 및 범위 정의서](docs_prototype/01_목업_기획_범위_정의서.md)
-- [02. 시연 시나리오 및 대본](docs_prototype/02_시연_시나리오_및_대본.md)
-- [03. 화면 및 상호작용 설계서](docs_prototype/03_화면_및_상호작용_설계서.md)
-- [04. 개발 및 연동 명세서](docs_prototype/04_개발_및_연동_명세서.md)
-- [05. 제작 일정·업무 및 검수표](docs_prototype/05_제작_일정_업무_및_검수표.md)
-- [06. 개발 아키텍처 및 분담 가이드](docs_prototype/06_개발_아키텍처_및_분담_가이드.md)
-- [07. 첫 전달 실행 및 계약](docs_prototype/07_첫_전달_실행_및_계약.md)
-- [09. 캐릭터 기준 및 개발 실행 계획](docs_prototype/09_캐릭터_기준_및_개발_실행_계획.md)
-- [11. 실제 내비 좌표·경유지 추가 및 제거 검증](docs_prototype/11_실제_내비_좌표_및_경유지_검증.md)
-- [12. 차량 앱 내비 승인 연동](docs_prototype/12_차량_앱_내비_승인_연동.md)
-- [10. v3 여행 준비·차량 홈 및 내비 시험](docs_prototype/10_v3_여행_준비_차량_홈_및_내비_시험.md)
-- [08. 목업 화면 설계서 및 와이어프레임](docs_prototype/08_목업_화면_설계서_및_와이어프레임.md) · [전체 PDF](docs_prototype/wireframes/v1/waymate-screen-spec-v0.4.pdf)
+[백엔드 설정](backend/README.md) · [모바일 웹 안내](mobile-web/README.md) · [차량 빌드·설치](vehicle-app/README.md)
 
-서비스가 지향하는 경험과 이번 목업에서 실제 구현하거나 대본으로 재현할 범위는 범위 정의서에서 구분합니다.
+## 기술 및 검증
 
-온보딩은 **자유 입력 채팅이 기본이고 예시는 초안 보조**입니다. 08의 WF-002와 주행 중 음성 목표 WF-051을 참고하세요. 08의 최신 설계는 v0.4(53개 화면)이며 WF-006~008·052는 모바일 추천·매칭·공개 확인, WF-012는 연결 후 차량 홈, WF-053은 본인 여행 전용 시작입니다. 현재 connected/my_trip 전달은 schemaVersion 4이며 [13번](docs_prototype/13_v4_화면_전환_및_연동.md)을 따릅니다. 10~12의 v3 기록은 보존하고, 후속 음성 문답 목표와 현재 구현한 준비 음원 주행 모드는 [26번](docs_prototype/26_캐릭터_중심_주행_정차_모드.md)에서 구분합니다.
+| 영역 | 기술·검사 |
+| --- | --- |
+| 모바일 웹 | HTML · CSS · JavaScript, 반응형 UI |
+| 백엔드 | Node.js · SQLite · OpenAI Responses API · JSON Schema · SSE |
+| 차량 앱 | Kotlin · Jetpack Compose · Pleos Connect · NaviHelper |
+| 자동 검증 | Node 회귀 테스트 · Kotlin/JVM · Android Lint · GitHub Actions |
+
+[백엔드 테스트](backend/tests/) · [시연 서버 테스트](backend/demo/tests/) · [차량 단위 테스트](vehicle-app/app/src/test/) · [CI 설정](.github/workflows/)
+
+저장소·패키지의 내부 식별자 `wayMate` / `waymate`는 유지합니다.
+
 
 ## 백엔드 없는 Pleos 시연 APK
 
-[오프라인 APK 다운로드](https://github.com/ho72/wayMate/releases/tag/v0.1.0-offline-demo-20261115) · [설치·시연 방법과 검증 범위](docs/offline-demo.md)
+[오프라인 APK 다운로드](https://github.com/ho72/wayMate/releases/tag/v0.1.0-offline-demo-20261115) · [빌드·설치 안내](vehicle-app/README.md)
 
-백엔드 없이 준비된 38개 차량 장면을 둘러볼 수 있습니다. 에뮬레이터의 실제 정차·주행 상태에 따라 같은 화면의 맥락을 유지하며 전환합니다. 실제 음성 인식·상대 통신·순정 내비 변경은 포함하지 않습니다.
+백엔드 없이 준비된 38개 차량 장면과 실제 정차·주행 전환을 볼 수 있습니다. 실제 음성 인식·상대 통신·순정 내비 변경은 포함하지 않습니다.

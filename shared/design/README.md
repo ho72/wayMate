@@ -9,7 +9,7 @@ node shared/design/sync-theme.mjs --check
 
 첫 명령은 웹 `companion-theme.css`와 Android `CompanionPalette.kt`를 생성한다. 두 번째 명령은 두 산출물이 원본과 일치하는지 확인한다.
 
-모바일은 `service/web/scene.css`, 차량은 `WayMateTheme.kt`·`VehicleDesign.kt`에서 이 값을 사용한다. 승인된 B안 로고의 배경 제거 PNG도 양쪽이 같은 파일과 같은 표시 영역을 사용한다. 원본은 보존하고 `assets/durumit-logo-transparent.png`와 작업 기록 JSON을 별도로 둔다.
+모바일은 `mobile-web/src/scene.css`, 차량은 `WayMateTheme.kt`·`VehicleDesign.kt`에서 이 값을 사용한다. 승인된 B안 로고의 배경 제거 PNG도 양쪽이 같은 파일과 같은 표시 영역을 사용한다. 원본은 보존하고 `assets/durumit-logo-transparent.png`와 작업 기록 JSON을 별도로 둔다.
 
 - 배경 위 장식용 색 번짐·점·후광은 추가하지 않는다.
 - 모든 항목을 별도 카드로 쪼개지 않는다. 관련된 대화 시작 항목은 하나의 목록으로 묶는다.

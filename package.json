@@ -1,0 +1,15 @@
+{
+  "name": "durumit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.22.2" },
+  "scripts": {
+    "setup": "npm --prefix backend ci --ignore-scripts && npm --prefix backend/demo ci --ignore-scripts",
+    "start": "npm --prefix backend run start:scenario",
+    "start:personal": "npm --prefix backend start",
+    "start:demo": "npm --prefix backend/demo start",
+    "test": "npm --prefix backend test && npm --prefix backend/demo test",
+    "test:scenario": "npm --prefix backend run test:scenario"
+  }
+}
