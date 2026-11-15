@@ -14,24 +14,14 @@
 
 ## 시연 영상
 
-**먼저 보기 · 스토리로 이해하는 두루밋**
-
-혼자 떠나는 여행에서 AI 친구를 만나고, 새로운 인연과 함께하거나 각자의 여행을 이어가는 흐름을 스토리와 화면 시연으로 소개합니다.
-
-<a href="https://youtu.be/jOdiGIpvDeM"><img src="https://img.youtube.com/vi/jOdiGIpvDeM/hqdefault.jpg" width="640" alt="두루밋 스토리 시연 영상 재생"></a>
-
-[▶ 메인 스토리 시연 영상 보기](https://youtu.be/jOdiGIpvDeM)
-
-<details>
-<summary><strong>더 보기 · 실제 Pleos 시스템에서의 구현 시연</strong></summary>
-
-실제 Pleos 시스템에서 구현한 화면과 조작 흐름을 더 자세히 보고 싶다면 아래 영상을 확인해 주세요.
-
-<a href="https://youtu.be/4jAi-i0g0ng"><img src="https://img.youtube.com/vi/4jAi-i0g0ng/hqdefault.jpg" width="480" alt="실제 Pleos 시스템 구현 시연 영상 재생"></a>
-
-[▶ Pleos 구현 시연 영상 보기](https://youtu.be/4jAi-i0g0ng)
-
-</details>
+<table>
+  <tr><th>목업 스토리 시연</th><th>Pleos 시스템 구현 시연</th></tr>
+  <tr>
+    <td><a href="https://youtu.be/jOdiGIpvDeM"><img src="https://img.youtube.com/vi/jOdiGIpvDeM/hqdefault.jpg" width="320" alt="목업 스토리 시연 영상 보기"></a></td>
+    <td><a href="https://youtu.be/4jAi-i0g0ng"><img src="https://img.youtube.com/vi/4jAi-i0g0ng/hqdefault.jpg" width="320" alt="Pleos 시스템 구현 시연 영상 보기"></a></td>
+  </tr>
+  <tr><td>스토리로 살펴보는 서비스 이용 흐름</td><td>실제 Pleos에서 확인하는 화면과 조작 흐름</td></tr>
+</table>
 
 ## 주요 화면
 
