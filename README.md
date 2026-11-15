@@ -1,3 +1,5 @@
+<p><img src="shared/design/assets/durumit-logo-transparent.png" width="320" alt="두루밋 로고"></p>
+
 # 두루밋 · Doo Roo Meet
 
 **혼자 떠나는 자동차 여행에 AI 친구와 새로운 만남을 더하는 서비스입니다.**
