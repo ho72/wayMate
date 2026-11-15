@@ -4,7 +4,7 @@
 
 모바일에서 여행 준비 → Pleos에서 상대 알아가기 → 짧은 만남 → 함께 또는 각자의 여행
 
-[주요 화면](#주요-화면) · [코드 구조](#코드-구조) · [실행 방법](#실행-방법) · [검증](#기술-및-검증)
+[제출 APK](apk/말할카말카_두루밋_release.apk) · [주요 화면](#주요-화면) · [코드 구조](#코드-구조) · [실행 방법](#실행-방법) · [테스트 환경](#테스트-환경-및-필요한-설정) · [검증](#기술-및-검증)
 
 | 개발 영역 | 바로 가기 | 담당 기능 |
 | --- | --- | --- |
@@ -82,11 +82,22 @@ wayMate/
 │   ├── shared/        # 모바일·서버 공통 데이터 함수
 │   └── demo/          # 기본 시연 웹·진행자 패널
 ├── shared/            # 공통 디자인·서버 음성 모듈
+├── apk/               # 말할카말카_두루밋_release.apk · 제출용 release APK
 ├── assets/            # README용 대표 UI 캡처
 └── .github/           # 서버·차량 빌드 및 테스트 CI
 ```
 
 **모바일 웹 ↔ 백엔드 ↔ 차량 앱**으로 연결합니다. 모바일 화면은 백엔드가 API와 함께 제공하며, 차량은 확인한 여행을 저장하고 ACK를 보냅니다.
+
+## 제출 APK
+
+**팀명: 말할카말카 · 앱 이름: 두루밋**
+
+- 파일: [`apk/말할카말카_두루밋_release.apk`](apk/말할카말카_두루밋_release.apk)
+- 빌드: **demoRelease**, `debuggable=false`, 전용 release 서명
+- 실행: **Pleos Connect ARM 2.1.0 / API 34**에 설치한 뒤 **두루밋 오프라인 시연** 실행
+- 설정: 서버·계정·인터넷·API 키 없이 준비된 여행·대화·만남·두 결말을 재현
+- [APK 정보·설치 방법](apk/README.md) · [SHA-256](apk/SHA256SUMS.txt)
 
 ## 실행 방법
 
@@ -108,11 +119,28 @@ npm test             # 백엔드·시연 서버·모바일 클라이언트 회�
 
 ```sh
 cd vehicle-app
+./gradlew :app:assembleDemoRelease  # 로컬 release 서명 설정 필요
+# 서버 연동 개발용 Debug 빌드
 ./gradlew :app:assembleMockDebug :app:assembleRealDebug \
   -PwaymateApiPort=3008 -PwaymatePersonalApiPort=3008
 ```
 
 [백엔드 설정](backend/README.md) · [모바일 웹 안내](mobile-web/README.md) · [차량 빌드·설치](vehicle-app/README.md)
+
+## 테스트 환경 및 필요한 설정
+
+| 항목 | 검증 환경 |
+| --- | --- |
+| Pleos Connect 에뮬레이터 | **ARM 2.1.0 / Android API 34** |
+| 전체 디스플레이 | **2560 × 1440px**, 밀도 **160dpi** |
+| 3분할 앱 영역 | **841 × 1210dp** |
+| 2분할 앱 영역 | **1682 × 1210dp** |
+| Android 빌드 | JDK **21**, compile SDK **35**, Build Tools **35.0.0** |
+| 웹·서버 | Node.js **22.22.2** |
+
+제출용 오프라인 APK는 서버·계정·API 키 없이 실행합니다. 실제 AI를 사용하는 모바일·차량 통합 모드는 `backend/.env`의 API 키와 3008 서버가 필요하며, 차량의 API 주소는 `http://10.0.2.2:3008`입니다.
+
+정차 상태에서 상세 화면과 시연 메뉴를 사용합니다. 실제 차량 UX 제한이 주행 상태이면 간편 화면으로 전환하며, 속도 0만으로 정차로 판단하지 않습니다.
 
 ## 기술 및 검증
 
@@ -126,10 +154,3 @@ cd vehicle-app
 [백엔드 테스트](backend/tests/) · [시연 서버 테스트](backend/demo/tests/) · [차량 단위 테스트](vehicle-app/app/src/test/) · [CI 설정](.github/workflows/)
 
 저장소·패키지의 내부 식별자 `wayMate` / `waymate`는 유지합니다.
-
-
-## 백엔드 없는 Pleos 시연 APK
-
-[오프라인 APK 다운로드](https://github.com/ho72/wayMate/releases/tag/v0.1.0-offline-demo-20261115) · [빌드·설치 안내](vehicle-app/README.md)
-
-백엔드 없이 준비된 38개 차량 장면과 실제 정차·주행 전환을 볼 수 있습니다. 실제 음성 인식·상대 통신·순정 내비 변경은 포함하지 않습니다.

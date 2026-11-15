@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,6 +12,19 @@ val personalApiPort = providers.gradleProperty("waymatePersonalApiPort").orElse(
 val drivingSourceDirectory = layout.buildDirectory.dir("generated/driving-policy-source")
 val drivingTestResources = layout.buildDirectory.dir("generated/driving-policy-test-resources")
 val recommendationSourceDirectory = layout.buildDirectory.dir("generated/driving-recommendation-source")
+val releaseSigningProperties = Properties().apply {
+    val settings = rootProject.file("release-signing.properties")
+    if (settings.isFile) settings.inputStream().use { load(it) }
+}
+fun releaseCredential(name: String, environment: String): String? =
+    providers.environmentVariable(environment).orNull
+        ?: releaseSigningProperties.getProperty(name)?.takeIf { it.isNotBlank() }
+val releaseStoreFile = releaseCredential("storeFile", "WAYMATE_RELEASE_STORE_FILE")
+val releaseStorePassword = releaseCredential("storePassword", "WAYMATE_RELEASE_STORE_PASSWORD")
+val releaseKeyAlias = releaseCredential("keyAlias", "WAYMATE_RELEASE_KEY_ALIAS")
+val releaseKeyPassword = releaseCredential("keyPassword", "WAYMATE_RELEASE_KEY_PASSWORD")
+val hasReleaseSigning = listOf(releaseStoreFile, releaseStorePassword, releaseKeyAlias, releaseKeyPassword)
+    .all { !it.isNullOrBlank() }
 
 android {
     namespace = "com.waymate.app"
@@ -27,6 +41,23 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) create("submissionRelease") {
+            storeFile = rootProject.file(releaseStoreFile!!)
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
+            storeType = releaseCredential("storeType", "WAYMATE_RELEASE_STORE_TYPE") ?: "PKCS12"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isDebuggable = false
+            isMinifyEnabled = false
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("submissionRelease")
+        }
     }
 
     flavorDimensions += "environment"
@@ -64,6 +95,14 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+tasks.matching { it.name.matches(Regex("package(?:Demo|Mock|Real)Release")) }.configureEach {
+    doFirst {
+        check(hasReleaseSigning) {
+            "Release signing is required. Configure vehicle-app/release-signing.properties or WAYMATE_RELEASE_* environment variables."
+        }
     }
 }
 

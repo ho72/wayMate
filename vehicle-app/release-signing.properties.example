@@ -1,0 +1,7 @@
+# Copy to release-signing.properties and use your local release keystore.
+# Paths are relative to vehicle-app/. The real file and keystore are ignored by Git.
+storeFile=.signing/durumit-release.p12
+storeType=PKCS12
+storePassword=replace-with-local-store-password
+keyAlias=durumit-release
+keyPassword=replace-with-local-key-password

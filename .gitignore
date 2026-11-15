@@ -21,7 +21,14 @@ local.properties
 *.aab
 *.jks
 *.keystore
+*.p12
 key.properties
+/vehicle-app/.signing/
+/vehicle-app/release-signing.properties
+
+# Only the final submission APK belongs in Git.
+!/apk/
+!/apk/*_release.apk
 
 # Demo state, command receipts, SDK journals and machine verification records
 /backend/demo/runtime/*

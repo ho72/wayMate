@@ -2,7 +2,6 @@
     <!-- This APK has no server, map download, paid voice or account traffic. -->
     <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
     <application android:label="@string/app_name" tools:replace="android:label">
-        <activity android:name=".ui.testing.VehiclePagesPreviewActivity" android:enabled="false" />
         <activity android:name=".MainActivity" android:enabled="false" />
         <activity android:name=".personal.PersonalTripActivity" android:enabled="false" />
         <activity android:name="com.waymate.app.demo.OfflineDemoActivity" android:exported="true" android:resizeableActivity="true">
