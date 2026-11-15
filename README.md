@@ -18,12 +18,12 @@
 
 <table>
   <tr>
-    <th><a href="https://youtu.be/jOdiGIpvDeM">목업 스토리 시연<br>▶ YouTube에서 보기 ↗</a></th>
-    <th><a href="https://youtu.be/4jAi-i0g0ng">Pleos 시스템 구현 시연<br>▶ YouTube에서 보기 ↗</a></th>
+    <th><a href="https://youtu.be/4jAi-i0g0ng">목업 스토리 시연<br>▶ YouTube에서 보기 ↗</a></th>
+    <th><a href="https://youtu.be/jOdiGIpvDeM">Pleos 시스템 구현 시연<br>▶ YouTube에서 보기 ↗</a></th>
   </tr>
   <tr>
-    <td><a href="https://youtu.be/jOdiGIpvDeM"><img src="https://img.youtube.com/vi/jOdiGIpvDeM/hqdefault.jpg" width="320" alt="목업 스토리 시연 · 클릭하여 YouTube에서 보기"></a></td>
-    <td><a href="https://youtu.be/4jAi-i0g0ng"><img src="https://img.youtube.com/vi/4jAi-i0g0ng/hqdefault.jpg" width="320" alt="Pleos 시스템 구현 시연 · 클릭하여 YouTube에서 보기"></a></td>
+    <td><a href="https://youtu.be/4jAi-i0g0ng"><img src="https://img.youtube.com/vi/4jAi-i0g0ng/hqdefault.jpg" width="320" alt="목업 스토리 시연 · 클릭하여 YouTube에서 보기"></a></td>
+    <td><a href="https://youtu.be/jOdiGIpvDeM"><img src="https://img.youtube.com/vi/jOdiGIpvDeM/hqdefault.jpg" width="320" alt="Pleos 시스템 구현 시연 · 클릭하여 YouTube에서 보기"></a></td>
   </tr>
   <tr><td>스토리로 살펴보는 서비스 이용 흐름</td><td>실제 Pleos에서 확인하는 화면과 조작 흐름</td></tr>
 </table>
