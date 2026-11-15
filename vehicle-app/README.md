@@ -67,6 +67,8 @@ Kotlin·Jetpack Compose로 구현한 차량 앱입니다. Android Studio에서 �
 
 ## 준비 환경
 
+**Pleos가 설치되어 있지 않다면** [공식 에뮬레이터 설치·실행 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)를 먼저 완료해 주세요. 이후 안내는 Pleos가 설치·부팅되어 있고, Platform-Tools의 `adb`를 터미널에서 실행할 수 있는 상태를 기준으로 합니다.
+
 JDK 21 · Android SDK 35 · Build Tools 35.0.0 · **Pleos Connect ARM 2.1.0 / API 34** 에뮬레이터.
 
 전체 화면은 2560×1440px / 160dpi, 앱 영역은 3분할 841×1210dp·2분할 1682×1210dp입니다.
@@ -74,6 +76,8 @@ JDK 21 · Android SDK 35 · Build Tools 35.0.0 · **Pleos Connect ARM 2.1.0 / AP
 캐릭터·준비 음성·주행 정책은 `../backend/demo/`에서, 디자인 토큰은 `../shared/`에서 읽습니다.
 
 ## 빌드
+
+모바일 웹·백엔드·차량을 함께 실행하려면 [메인 README의 서버 연동 실행 순서](../README.md#실행-방법)를 따릅니다. `assemble`은 APK 생성까지만 수행하며, Pleos 기동·APK 설치·앱 실행·여행 전달은 별도 단계입니다. 일반적인 연동 체험은 `mockDebug`로 진행하고 실제 내비 SDK 시험 시 `realDebug`를 사용합니다.
 
 저장소 루트에서:
 
@@ -92,6 +96,19 @@ app/build/outputs/apk/<mock|real|demo>/debug/
 
 통합 백엔드는 루트의 `npm start`로 실행하며 에뮬레이터 API 주소는 `http://10.0.2.2:3008`입니다. 기본 시연 서버 3000을 사용한다면 빌드 포트도 3000으로 맞춥니다.
 
+통합 실행 시 **같은 PC**에서 3008 서버를 켜 둔 채, `vehicle-app/`에서 빌드한 `mockDebug`를 설치·실행합니다. 아래는 에뮬레이터 한 대를 연결한 macOS/Linux 셸 기준입니다.
+
+```sh
+adb devices
+PLEOS_USER_ID=$(adb shell am get-current-user | tr -d '\r')
+adb install -r --user "$PLEOS_USER_ID" \
+  app/build/outputs/apk/mock/debug/app-mock-debug.apk
+adb shell am start --user "$PLEOS_USER_ID" \
+  -n com.waymate.app.mock/com.waymate.app.MainActivity
+```
+
+모바일에서 여행 저장·연결 준비 후 **Pleos로 이어가기**, 차량에서 **웹에서 준비한 여행 불러오기**와 여행 시작까지 진행합니다. 모바일의 수신 완료는 차량 확인 이후 표시됩니다. 상대 수락·답장은 모바일과 같은 계정의 `/scenario-operator`에서 재현합니다. 개인 여행을 연결 코드로 받는 별도 흐름은 메인 README의 추가 기능에 정리했습니다.
+
 ## 오프라인 시연
 
 [제출용 release APK](../apk/말할카말카_두루밋_release.apk) · [설치 방법](../apk/README.md)
@@ -100,8 +117,8 @@ app/build/outputs/apk/<mock|real|demo>/debug/
 
 ```sh
 adb devices
-adb shell am get-current-user
-adb install ../apk/말할카말카_두루밋_release.apk
+PLEOS_USER_ID=$(adb shell am get-current-user | tr -d '\r')
+adb install --user "$PLEOS_USER_ID" ../apk/말할카말카_두루밋_release.apk
 ```
 
 설치한 Pleos 사용자 프로필에서 **두루밋 오프라인 시연**을 엽니다. 기존 Mock·Real 앱과 패키지가 달라 함께 설치할 수 있습니다.

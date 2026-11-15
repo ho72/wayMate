@@ -16,19 +16,23 @@
 
 ## 설치·실행
 
+Pleos가 없다면 [공식 에뮬레이터 설치·실행 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)를 먼저 완료해 주세요. 아래는 Pleos를 부팅하고 Android SDK Platform-Tools의 `adb`를 사용할 수 있는 상태를 기준으로 합니다.
+
 **Pleos Connect ARM 2.1.0 / Android API 34** 에뮬레이터를 사용합니다. 전체 화면은 **2560×1440px / 160dpi**, 앱 영역은 **3분할 841×1210dp · 2분할 1682×1210dp**입니다.
 
 저장소 루트에서:
 
 ```sh
 adb devices
-adb shell am get-current-user
-adb install apk/말할카말카_두루밋_release.apk
+PLEOS_USER_ID=$(adb shell am get-current-user | tr -d '\r')
+adb install --user "$PLEOS_USER_ID" apk/말할카말카_두루밋_release.apk
 ```
 
 설치한 Pleos 사용자 프로필에서 **두루밋 오프라인 시연**을 엽니다. 정차 상태에서 상단 **시연** 메뉴를 열어 준비된 장면을 선택하거나 일반 화면의 버튼으로 진행합니다.
 
 서버·계정·인터넷·API 키가 필요하지 않습니다. 여행·친구 답장·통화 샘플·만남·경유지 승인·두 결말은 로컬 시연 데이터이며 실제 마이크 입력·상대 통신·순정 내비 변경을 실행하지 않습니다. 차량 UX 제한의 현재값·콜백에 따라 정차·주행 화면을 전환합니다.
+
+이 APK는 백엔드를 실행해도 서버 연동 모드로 바뀌지 않습니다. 실제 AI·모바일 여행 전달을 확인하려면 [서버 연동 실행 안내](../README.md#실행-방법)에 따라 별도 `mockDebug`를 빌드·설치합니다.
 
 기존 `com.waymate.app.demo` debug APK와는 서명이 다릅니다. 기존 앱을 덮어쓰지 않도록 새 에뮬레이터에서 설치하세요.
 
@@ -52,4 +56,8 @@ shasum -a 256 -c SHA256SUMS.txt
 
 [Release 서명 설정과 빌드 방법](../vehicle-app/README.md#제출용-release-빌드)을 따릅니다. 서명 키와 실제 비밀번호는 로컬에만 보관하고 소스 저장소에는 포함하지 않습니다.
 
-서명 인증서 SHA-256: `bda2ff11172e48cf053714c1ed895f55007bf112d554e4929eb12cebb3d98368`
+서명 인증서 SHA-256:
+
+```text
+bda2ff11172e48cf053714c1ed895f55007bf112d554e4929eb12cebb3d98368
+```

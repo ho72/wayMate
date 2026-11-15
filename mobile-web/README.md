@@ -66,7 +66,9 @@ npm run start:demo   # http://127.0.0.1:3000 · 키 없는 기본 시연
 npm start           # http://127.0.0.1:3008 · 실제 AI 키 필요
 ```
 
-통합 시연의 계정·AI 키 설정은 [백엔드 안내](../backend/README.md)를 따릅니다. 모바일에서 확정한 여행을 차량이 저장·ACK한 뒤에만 수신 완료로 표시합니다.
+통합 시연에는 `backend/.env`의 **`OPENAI_API_KEY`(OpenAI API 키)**가 필요합니다. ElevenLabs 키는 선택적 음성 합성용입니다. 자세한 설정은 [백엔드 안내](../backend/README.md)를 따릅니다. 모바일에서 확정한 여행을 차량이 저장·ACK한 뒤에만 수신 완료로 표시합니다.
+
+`npm start`는 모바일 웹과 백엔드를 함께 제공하며, Pleos 설치·차량 앱 설치·여행 전달을 자동 수행하지 않습니다. 차량까지 연결하려면 [메인 README의 전체 실행 순서](../README.md#실행-방법)를 진행합니다. 제출용 오프라인 APK는 이 서버에 연결되지 않습니다.
 
 `npm start` 후 `http://127.0.0.1:3008`에서 가입·AI 친구 설정을 진행합니다. 여행 저장 후 `/#trips`에서 여행을 열고 연결을 준비합니다. 상대 응답은 같은 계정의 `/scenario-operator`에서 진행합니다. `npm run start:demo`는 별도 `demo/` 화면을 제공하는 키 없는 기본 시연입니다.
 

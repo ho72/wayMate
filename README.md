@@ -4,13 +4,34 @@
 
 모바일에서 여행 준비 → Pleos에서 상대 알아가기 → 짧은 만남 → 함께 또는 각자의 여행
 
-[제출 APK](apk/말할카말카_두루밋_release.apk) · [주요 화면](#주요-화면) · [코드 구조](#코드-구조) · [실행 방법](#실행-방법) · [테스트 환경](#테스트-환경-및-필요한-설정) · [검증](#기술-및-검증)
+[제출 APK](apk/말할카말카_두루밋_release.apk) · [시연 영상](#시연-영상) · [주요 화면](#주요-화면) · [코드 구조](#코드-구조) · [실행 방법](#실행-방법) · [테스트 환경](#테스트-환경-및-필요한-설정) · [검증](#기술-및-검증)
 
 | 개발 영역 | 바로 가기 | 담당 기능 |
 | --- | --- | --- |
 | **차량 목업 앱** | [vehicle-app/](vehicle-app/) | Pleos 캐릭터 UI·주행 모드·만남·내비 승인 |
 | **백엔드** | [backend/](backend/) | 계정·AI 대화·여행 저장·연결·차량 전달 |
 | **모바일 웹** | [mobile-web/](mobile-web/) | 여행 준비·취향 확인·일정 편집·여행자 연결 |
+
+## 시연 영상
+
+**먼저 보기 · 스토리로 이해하는 두루밋**
+
+혼자 떠나는 여행에서 AI 친구를 만나고, 새로운 인연과 함께하거나 각자의 여행을 이어가는 흐름을 스토리와 화면 시연으로 소개합니다.
+
+<a href="https://youtu.be/jOdiGIpvDeM"><img src="https://img.youtube.com/vi/jOdiGIpvDeM/hqdefault.jpg" width="640" alt="두루밋 스토리 시연 영상 재생"></a>
+
+[▶ 메인 스토리 시연 영상 보기](https://youtu.be/jOdiGIpvDeM)
+
+<details>
+<summary><strong>더 보기 · 실제 Pleos 시스템에서의 구현 시연</strong></summary>
+
+실제 Pleos 시스템에서 구현한 화면과 조작 흐름을 더 자세히 보고 싶다면 아래 영상을 확인해 주세요.
+
+<a href="https://youtu.be/4jAi-i0g0ng"><img src="https://img.youtube.com/vi/4jAi-i0g0ng/hqdefault.jpg" width="480" alt="실제 Pleos 시스템 구현 시연 영상 재생"></a>
+
+[▶ Pleos 구현 시연 영상 보기](https://youtu.be/4jAi-i0g0ng)
+
+</details>
 
 ## 주요 화면
 
@@ -111,29 +132,136 @@ wayMate/
 
 ## 실행 방법
 
-Node.js **22.22.2** 기준, 저장소 루트에서 실행합니다.
+### 0. Pleos가 아직 없다면 먼저 설치해 주세요
+
+차량 앱을 실행하려면 **Pleos Connect 에뮬레이터가 먼저 설치·실행되어 있어야 합니다.** [Pleos 공식 설치·실행 가이드](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)에 따라 Android Studio에 시스템 이미지를 추가하고 AVD를 생성해 주세요. 이 프로젝트의 검증 환경은 **Pleos Connect ARM 2.1.0 / API 34**입니다.
+
+설치 시 **Cold boot·RAM 4GB**로 설정하고 Device Manager에서 에뮬레이터를 켭니다. 아래 명령의 `adb`는 Android SDK의 **Platform-Tools**에 포함되어 있으며, 터미널에서 실행할 수 있도록 PATH에 추가해야 합니다.
+
+**이하 안내는 Pleos 설치와 부팅이 완료된 상태를 기준으로 합니다.** 명령은 macOS/Linux 셸 기준입니다. 에뮬레이터는 한 대만 연결하고 정차 상태에서 진행해 주세요. 여러 대라면 각 `adb` 명령에 `-s <기기 ID>`를 지정합니다.
+
+| 실행 목적 | 따라 할 안내 | 필요한 것 |
+| --- | --- | --- |
+| 제출 APK의 차량 화면·시나리오 체험 | **A. 제출 APK 실행** | Pleos·ADB. 서버·API 키·소스 빌드 불필요 |
+| 실제 AI·여행 저장·모바일 → 차량 연결 | **B. 서버 연동 실행** | Pleos·ADB·Node.js 22.22.2·JDK 21·Android SDK 35·OpenAI API 키 |
+
+### A. 제출 APK 실행 · 서버와 키 없이 체험
+
+저장소 루트에서 실행합니다. `adb devices`에 부팅한 Pleos 기기가 `device` 상태로 표시되어야 합니다.
+
+```sh
+adb devices
+PLEOS_USER_ID=$(adb shell am get-current-user | tr -d '\r')
+adb install --user "$PLEOS_USER_ID" apk/말할카말카_두루밋_release.apk
+```
+
+Pleos의 현재 사용자 프로필에서 **두루밋 오프라인 시연**을 엽니다. 정차 상태의 상단 **시연** 메뉴에서 장면을 선택하거나 화면 버튼으로 여행·교류·만남·두 결말을 확인할 수 있습니다.
+
+이 APK는 **독립 실행하는 오프라인 시연판**입니다. 아래의 백엔드를 실행해도 서버 연동 앱으로 바뀌지 않습니다. [APK 상세·설치 안내](apk/README.md)
+
+### B. 서버 연동 실행 · 모바일 웹 + 백엔드 + 차량 앱
+
+**서버 실행 → 차량 앱 빌드·설치 → 모바일에서 여행 준비·전달 → 차량에서 불러오기**까지 진행해야 연결됩니다. `npm start`는 백엔드와 모바일 웹을 제공하고, Gradle의 `assemble` 명령은 APK를 만들기만 합니다. Pleos 설치·앱 설치·여행 전달까지 자동으로 처리하지 않습니다.
+
+#### 1. 백엔드와 모바일 웹 실행
+
+Node.js **22.22.2**를 준비한 뒤 저장소 루트에서 실행합니다.
 
 ```sh
 npm run setup
-npm run start:demo    # 키 없는 기본 시연 · http://127.0.0.1:3000
+# backend/.env가 없다면 예제 파일을 복사합니다. 기존 설정은 유지합니다.
+[ -f backend/.env ] || cp backend/.env.example backend/.env
 ```
 
-실제 AI·계정·차량 통합 시연은 `backend/.env.example`을 참고해 `backend/.env`에 API 키를 설정한 뒤 실행합니다.
+`backend/.env`를 열어 아래 **OpenAI API 키**를 설정합니다. [OpenAI API 키 관리 페이지](https://platform.openai.com/api-keys)에서 발급한 본인 키를 사용합니다.
+
+```dotenv
+OPENAI_API_KEY=발급받은_OpenAI_API_키
+OPENAI_MODEL=gpt-4.1-mini
+```
+
+| 설정 | 필수 여부 | 용도 |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | **서버 연동 모드 필수** | 모바일 AI 대화·취향/일정 제안. 모델을 호출할 수 있는 API 프로젝트·사용 한도 필요 |
+| `OPENAI_MODEL` | 선택 | 사용할 모델. 기본값 `gpt-4.1-mini` |
+| `ELEVENLABS_API_KEY` + `ELEVENLABS_VOICE_ID` | 선택 | ElevenLabs 서버 음성 합성(TTS). 사용하지 않으면 둘 다 비워 두며 AI 텍스트 대화는 사용 가능 |
+
+차량의 AI 대사 생성은 별도 선택 사항입니다. 기본 준비 대사로도 차량 시연을 진행할 수 있고, 생성 기능을 쓰려면 `.env`에 `WAYMATE_DIALOGUE_PROVIDER=openai`를 추가해 같은 OpenAI 키를 사용합니다.
+
+키는 백엔드의 `.env`에만 입력합니다. 웹·Android 코드나 APK에 넣지 않습니다. `.env`는 Git에서 제외됩니다. 제출 APK와 키 없는 기본 시연에는 OpenAI 키가 필요하지 않습니다.
 
 ```sh
-npm start            # 통합 시연 · http://127.0.0.1:3008
-npm test             # 백엔드·시연 서버·모바일 클라이언트 회귀 검사
+npm start
 ```
 
-차량 앱은 JDK **21**·Android SDK **35**·Pleos **API 34** 환경에서 빌드합니다.
+이 터미널은 켜 둡니다. 브라우저에서 `http://127.0.0.1:3008`을 열면 모바일 웹을 사용할 수 있습니다. `http://127.0.0.1:3008/health`에서 `status: "ready"`를 확인합니다. 이는 서버 기동 확인이며, 실제 키·모델 호출은 웹에서 AI 답변을 받아 확인합니다.
+
+#### 2. 서버 연동 차량 앱 빌드·설치
+
+새 터미널에서 **JDK 21·Android SDK 35·Build Tools 35.0.0**을 준비합니다. 처음 빌드한다면 Android Studio에서 `vehicle-app/`을 열어 SDK 경로와 Gradle 동기화를 완료합니다. 저장소 루트에서 다음을 실행합니다.
 
 ```sh
 cd vehicle-app
-./gradlew :app:assembleDemoRelease  # 로컬 release 서명 설정 필요
-# 서버 연동 개발용 Debug 빌드
-./gradlew :app:assembleMockDebug :app:assembleRealDebug \
+./gradlew :app:assembleMockDebug \
   -PwaymateApiPort=3008 -PwaymatePersonalApiPort=3008
+adb devices
+PLEOS_USER_ID=$(adb shell am get-current-user | tr -d '\r')
+adb install -r --user "$PLEOS_USER_ID" \
+  app/build/outputs/apk/mock/debug/app-mock-debug.apk
+adb shell am start --user "$PLEOS_USER_ID" \
+  -n com.waymate.app.mock/com.waymate.app.MainActivity
 ```
+
+위 단계에서 설치하는 앱은 **서버 연동 `mockDebug`**이며, 제출용 `demoRelease`와 별도 패키지입니다. 모바일·백엔드는 PC의 `http://127.0.0.1:3008`, 차량 앱은 같은 PC를 가리키는 `http://10.0.2.2:3008`을 사용합니다. 백엔드는 Pleos를 실행한 **같은 PC**에서 켜 두어야 합니다. `mockDebug`의 내비는 모의 동작입니다.
+
+#### 3. 모바일에서 준비한 여행을 Pleos로 전달
+
+1. PC 브라우저의 `http://127.0.0.1:3008`에서 가입·로그인하고 AI 친구 설정·첫 대화를 진행합니다.
+2. AI와 여행 계획을 만든 뒤 일정 카드에서 **내 여행에 저장**합니다. **내 여행**에서 저장한 여행을 열어 소개와 만날 수 있는 날짜·시간을 확인합니다.
+3. 공개할 소개·여행 정보를 확인하고 연결을 요청합니다. 같은 계정으로 `/scenario-operator`를 열어 상대의 수락을 입력한 뒤 모바일에서 공통 시간을 확인합니다. 상대 역할은 진행자 패널로 재현합니다.
+4. 모바일에서 **Pleos로 이어가기**를 선택합니다. 전달 준비가 끝나도 차량에서 불러오기 전에는 수신 완료가 아닙니다.
+5. Pleos 앱에서 **웹에서 준비한 여행 불러오기 → 저장된 준비 확인하고 시작**을 누르고 여행을 확인한 뒤 시작합니다. 모바일의 **차량 수신 확인 완료** 표시까지 확인합니다. 이후 상대 소개·만남·경유지 승인·결말을 진행하며, 상대 응답은 진행자 패널에서 입력합니다.
+
+<details>
+<summary>추가 기능 · 내 계정 여행을 차량에 연결 코드로 보내기</summary>
+
+위의 만남 시나리오 전달과 별도로, 저장한 개인 여행을 계정 연결로 전송할 수 있습니다.
+
+1. 차량 앱의 **내 계정 여행 → 내 계정 연결 시작**에서 코드를 확인합니다.
+2. 모바일의 **마이 → 내 차와 연결**에 코드를 입력하고, 차량에서 **이 계정과 연결**을 승인합니다.
+3. 모바일에서 보낼 저장 여행을 선택해 전송하고, 차량에서 **이 여행 받기 → 확인**을 누릅니다.
+4. 차량이 여행을 저장하고 ACK를 보낸 뒤 모바일에서 수신 완료를 확인합니다. 개인 여행 수신만으로 내비 경로를 변경하지 않습니다.
+
+</details>
+
+#### 연결 확인·문제 해결
+
+| 확인 지점 | 정상 상태·확인할 설정 |
+| --- | --- |
+| Pleos 설치·ADB | `adb devices`에 `device` 표시. 앱은 설치한 현재 사용자 프로필에서 실행 |
+| 백엔드 | PC에서 `/health` 응답. 3008 포트 사용 여부와 실행 터미널의 오류 확인 |
+| 실제 AI | `.env`의 OpenAI 키·모델·API 사용 한도 확인 후 서버 재시작, 웹에서 답변 수신 확인 |
+| 차량 → 백엔드 | 같은 PC에서 백엔드 실행, 두 Gradle 포트 모두 3008로 빌드한 `mockDebug` 설치. 제출 APK는 서버에 연결하지 않음 |
+| 여행 불러오기 | 모바일에서 여행 저장·연결 준비·Pleos 전달 완료 후 차량에서 불러오기. 완료 표시는 차량 확인 이후 |
+| 상세 버튼 비활성 | 실제 차량 UX 제한이 정차 상태인지 확인. 속도 0만으로 정차를 판단하지 않음 |
+
+<details>
+<summary>선택 · 키 없는 웹 기본 시연과 개발 검증</summary>
+
+저장소 루트에서 실행합니다. 3000 기본 시연은 3008의 실제 AI·계정 통합 실행과 별도 모드입니다.
+
+```sh
+npm run setup
+npm run start:demo   # http://127.0.0.1:3000 · 고정 데이터 기본 시연
+```
+
+```sh
+npm test            # 백엔드·시연 서버·모바일 클라이언트 회귀 검사
+```
+
+실제 NaviHelper 시험용 `realDebug` 빌드와 release 재빌드는 [차량 앱 안내](vehicle-app/README.md)를 따릅니다. 제출 APK를 체험할 때는 release 서명 키나 재빌드가 필요하지 않습니다.
+
+</details>
 
 [백엔드 설정](backend/README.md) · [모바일 웹 안내](mobile-web/README.md) · [차량 빌드·설치](vehicle-app/README.md)
 
@@ -148,7 +276,7 @@ cd vehicle-app
 | Android 빌드 | JDK **21**, compile SDK **35**, Build Tools **35.0.0** |
 | 웹·서버 | Node.js **22.22.2** |
 
-제출용 오프라인 APK는 서버·계정·API 키 없이 실행합니다. 실제 AI를 사용하는 모바일·차량 통합 모드는 `backend/.env`의 API 키와 3008 서버가 필요하며, 차량의 API 주소는 `http://10.0.2.2:3008`입니다.
+제출용 오프라인 APK는 서버·계정·API 키 없이 실행합니다. 실제 AI를 사용하는 모바일·차량 통합 모드는 `backend/.env`의 `OPENAI_API_KEY`와 3008 서버가 필요하며, 차량의 API 주소는 `http://10.0.2.2:3008`입니다.
 
 정차 상태에서 상세 화면과 시연 메뉴를 사용합니다. 실제 차량 UX 제한이 주행 상태이면 간편 화면으로 전환하며, 속도 0만으로 정차로 판단하지 않습니다.
 
@@ -162,5 +290,19 @@ cd vehicle-app
 | 자동 검증 | Node 회귀 테스트 · Kotlin/JVM · Android Lint · GitHub Actions |
 
 [백엔드 테스트](backend/tests/) · [시연 서버 테스트](backend/demo/tests/) · [차량 단위 테스트](vehicle-app/app/src/test/) · [CI 설정](.github/workflows/)
+
+### Pleos SDK 확장 계획 · 현재는 미구현
+
+현재 서버 연동 모드의 모바일 AI는 OpenAI를 사용하고, 서버 음성 합성은 ElevenLabs 선택 옵션입니다. 차량에 적용할 플랫폼 기능은 다음과 같이 검토하고 있습니다.
+
+| 영역 | 검토할 연동 | 적용 범위·조건 |
+| --- | --- | --- |
+| 차량 음성 출력 | [Pleos TextToSpeech SDK](https://document.pleos.ai/en/api-reference/connect-sdk-pleos/TextToSpeech/intro) | 차량 내 ElevenLabs 음성 출력 경로를 전환하는 후보. 음색·한국어 품질·재생 중단 정책은 별도 검증 필요 |
+| 차량 음성 입력 | [Pleos SpeechToText SDK](https://document.pleos.ai/docs/pleos-only/connect-sdk-pleos/SpeechToText/intro) | 현재 미구현인 마이크 음성 입력을 텍스트로 변환하는 확장 |
+| 차량 음성 명령 | [Gleo Interface](https://document.pleos.ai/docs/pleos-only/app-integration-guide/guide/core-concepts) | 여행 조회 등 앱 기능을 Gleo가 호출하도록 App Schema·Action·Callback 연동 검토 |
+
+Pleos TTS/STT의 서버·하이브리드 모드는 앱 등록이 필요하며, 온디바이스 모드와 제공 조건이 다릅니다. 위 연동은 **현재 APK·소스에 구현된 기능이 아니므로 외부 API 키를 생략하는 실행 방법으로 사용할 수 없습니다.**
+
+OpenAI가 맡는 모바일 자유 대화·취향 정리·여행 계획 생성을 Gleo가 동일하게 대체하는지는 별도 검증 대상입니다. 현재 공식 [릴리스 노트](https://document.pleos.ai/en/docs/pleos-only/release-note/playground-release-note)는 LLM SDK 중단 및 Gleo Interface 사용을 안내합니다.
 
 저장소·패키지의 내부 식별자 `wayMate` / `waymate`는 유지합니다.

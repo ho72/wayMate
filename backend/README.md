@@ -50,6 +50,8 @@
 
 ## 실행
 
+차량까지 연결하려면 [메인 README의 설치·서버·앱·여행 전달 순서](../README.md#실행-방법)를 따릅니다. 아래 `npm start`는 백엔드와 모바일 웹을 실행하며 Pleos 설치·APK 설치·차량 실행은 별도로 진행합니다.
+
 Node 22.22.2 기준, 저장소 루트에서:
 
 ```sh
@@ -60,16 +62,29 @@ npm run start:personal  # 개인 AI 서비스 · 3004
 npm test
 ```
 
-실제 AI 모드는 [.env.example](.env.example)을 참고해 `backend/.env`에 `OPENAI_API_KEY`를 설정합니다. `OPENAI_MODEL`의 기본값은 `gpt-4.1-mini`입니다. `backend/.env`가 우선하며 기존 시연 설정은 `backend/demo/.env`에서 읽습니다.
+실제 AI 모드에 필요한 키는 **OpenAI API 키**입니다. [OpenAI API 키 관리 페이지](https://platform.openai.com/api-keys)에서 발급한 키를 [.env.example](.env.example)을 참고해 `backend/.env`에 설정합니다. `backend/.env`가 우선하며 기존 시연 설정은 `backend/demo/.env`에서 읽습니다. `.env`는 Git에서 제외되고 키는 백엔드에서만 사용합니다.
+
+```dotenv
+OPENAI_API_KEY=발급받은_OpenAI_API_키
+OPENAI_MODEL=gpt-4.1-mini
+```
 
 | 설정 | 기본값·용도 |
 | --- | --- |
+| `OPENAI_API_KEY` | **실제 AI 모드 필수**. 모바일 AI 대화·취향/일정 제안용. 해당 모델을 호출할 수 있는 API 프로젝트·사용 한도 필요 |
+| `OPENAI_MODEL` | 선택. 기본값 `gpt-4.1-mini` |
 | `SERVICE_PORT` | 개인 서비스 3004 |
 | `SERVICE_PUBLIC_ORIGIN` | `http://127.0.0.1:3004` |
 | `SERVICE_DB_PATH` | `runtime/waymate.sqlite` |
-| `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` | 선택적 서버 TTS |
+| `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` | 선택적 서버 TTS. 음성 합성을 사용할 때만 둘 다 설정하고, 사용하지 않으면 비워 둠 |
 
 `npm start`의 통합 시연은 전용 3008 포트·Origin·DB를 지정합니다. 모바일은 `http://127.0.0.1:3008/#trips`, 진행자는 같은 계정의 `/scenario-operator`입니다. 상대 수락·답장·만남 진행은 준비된 시나리오로 재현합니다.
+
+차량 AI 대사 생성은 `.env`에 `WAYMATE_DIALOGUE_PROVIDER=openai`를 추가할 때 같은 키를 사용하는 선택 기능입니다. 기본 준비 대사로도 차량 시연을 진행할 수 있습니다.
+
+설정 변경 후 서버를 재시작합니다. `http://127.0.0.1:3008/health`의 `status: "ready"`는 서버 기동을 뜻합니다. 실제 OpenAI 키·모델 호출은 모바일 웹에서 AI 답변을 받아 확인합니다. ElevenLabs 키 없이도 AI 텍스트 대화는 사용할 수 있으며, 제출용 오프라인 APK와 3000 기본 시연에는 OpenAI 키도 필요하지 않습니다.
+
+Pleos TTS/STT·Gleo Interface 연동은 [향후 확장 검토 범위](../README.md#pleos-sdk-확장-계획--현재는-미구현)이며, 현재 서버의 OpenAI 키 설정을 대체하지 않습니다.
 
 ## 주요 코드
 
