@@ -190,7 +190,7 @@ class ExpandedWindowReviewTest {
             }
         }
         ui.onRoot().assertWidthIsEqualTo(1682.dp)
-        ui.onNodeWithContentDescription("따뜻한 곰 여행 친구")
+        ui.onNodeWithContentDescription(ui.activity.getString(com.waymate.app.R.string.character_rumit))
             .assertWidthIsEqualTo(468.dp)
             .assertHeightIsEqualTo(300.dp)
         ui.onNodeWithText("함께 여행 이어가기").assertIsDisplayed().performClick()

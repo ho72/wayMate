@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_brand">말이통행</string>
+    <string name="home_brand">두루밋</string>
     <string name="home_start_badge">여행 시작</string>
     <string name="home_private_badge">내 여행 · 비공개</string>
     <string name="home_start_title">이 준비로 여행을 시작할까요?</string>
-    <string name="home_default_plan">저장된 준비가 없으면 시연용 기본 계획을 만들어요.\n여행자 · 블루 드래곤 · 소개값 없음\n2026-11-14 / 15:20 개인 방문지\n숙소 복귀 예상 15:45 · 마감 16:00\n\n기존 준비가 있으면 덮어쓰지 않아요.</string>
+    <string name="home_default_plan">저장된 준비가 없으면 시연용 기본 계획을 만들어요.\n여행자 · 두루 · 소개값 없음\n2026-11-14 / 15:20 개인 방문지\n숙소 복귀 예상 15:45 · 마감 16:00\n\n기존 준비가 있으면 덮어쓰지 않아요.</string>
     <string name="home_confirm_start">확인하고 차량에서 시작</string>
     <string name="home_back">돌아가기</string>
     <string name="home_welcome">내 여행을 이어갈 준비가 됐나요?</string>
@@ -31,7 +31,9 @@
     <string name="home_next_visit">다음 일정  %1$s\n%2$s</string>
     <string name="home_return_trip">복귀 장소  %1$s\n예상 %2$s · %3$s까지</string>
     <string name="home_interests">내가 확인한 관심사  %1$s</string>
-    <string name="character_blue_dragon">블루 드래곤</string>
+    <string name="character_blue_dragon">두루</string>
+    <string name="character_rumit">루밋</string>
+    <string name="character_mocha">모카</string>
     <string name="home_activity">산책 먼저 · 사진은 가끔</string>
     <string name="home_pace">여유로운 속도</string>
     <string name="home_conversation">조용한 대화</string>

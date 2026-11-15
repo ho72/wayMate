@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "characters": {
     "a-01": {
-      "label": "블루 드래곤",
+      "label": "두루",
       "assetId": "dragon-design-v5",
       "source": "assets/images/design-v5/dragon.png",
       "sha256": "9823da502443a0da3ec49c161ae5bbadfe81144a6cab2ace010f1603f9a75cfd",
@@ -18,10 +18,10 @@
       "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     },
     "a-02": {
-      "label": "포근한 곰 친구",
-      "assetId": "bear-design-v5",
-      "source": "assets/images/design-v5/bear.png",
-      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "label": "루밋",
+      "assetId": "rumit-design-v1",
+      "source": "assets/images/design-v5/rumit.png",
+      "sha256": "90a4d95474769366e2a250e774f12966936b2c31aa10fda729b5ec3fe94957f9",
       "kind": "transparent_static_image",
       "states": [
         "still",
@@ -34,10 +34,10 @@
       "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     },
     "b-01": {
-      "label": "솔바람의 곰 에이전트",
-      "assetId": "bear-design-v5",
-      "source": "assets/images/design-v5/bear.png",
-      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "label": "루밋",
+      "assetId": "rumit-design-v1",
+      "source": "assets/images/design-v5/rumit.png",
+      "sha256": "90a4d95474769366e2a250e774f12966936b2c31aa10fda729b5ec3fe94957f9",
       "kind": "transparent_static_image",
       "states": [
         "still",

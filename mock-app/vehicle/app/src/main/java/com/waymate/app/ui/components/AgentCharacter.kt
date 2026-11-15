@@ -53,9 +53,22 @@ fun AgentCharacter(
             rotationZ = if (mode == CharacterMotion.SPEAKING) (value - 0.5f) * 1.2f else 0f
         }
     Image(
-        painterResource(if (avatarId == "a-01") R.drawable.blue_dragon else R.drawable.travel_bear),
-        if (avatarId == "a-01") stringResource(R.string.character_blue_dragon) else "따뜻한 곰 여행 친구",
+        painterResource(when (avatarId) {
+            "a-01" -> R.drawable.blue_dragon
+            "a-03" -> R.drawable.travel_mocha
+            else -> R.drawable.travel_bear
+        }),
+        agentName(avatarId),
         animated,
         contentScale = ContentScale.Fit,
     )
 }
+
+/** Character identity is independent of the traveller's account nickname. Legacy avatar IDs remain valid. */
+@Composable
+internal fun agentName(avatarId: String): String =
+    stringResource(when (avatarId) {
+        "a-01" -> R.string.character_blue_dragon
+        "a-03" -> R.string.character_mocha
+        else -> R.string.character_rumit
+    })
