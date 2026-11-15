@@ -282,7 +282,7 @@
       "status": "ended",
       "placeId": "fiction-cafe-01",
       "name": "바다쉼표 카페",
-      "date": "2026-11-14",
+      "date": "2026-12-14",
       "start": "14:15",
       "end": "14:35",
       "aConsent": true,
@@ -338,7 +338,7 @@
     "introTemplateId": "INTRO_NEUTRAL"
   },
   "trip": {
-    "date": "2026-11-14",
+    "date": "2026-12-14",
     "nextVisit": "15:20",
     "nextVisitLabel": "기존 개인 방문지",
     "returnPlaceId": "a-lodging-01",
@@ -379,7 +379,7 @@
       }
     },
     "ownerTrip": {
-      "date": "2026-11-14",
+      "date": "2026-12-14",
       "nextVisit": "15:20",
       "nextVisitLabel": "기존 개인 방문지",
       "returnPlaceId": "a-lodging-01",
@@ -410,7 +410,7 @@
       }
     },
     "ownerTrip": {
-      "date": "2026-11-14",
+      "date": "2026-12-14",
       "nextVisit": "15:20",
       "nextVisitLabel": "기존 개인 방문지",
       "returnPlaceId": "a-lodging-01",
