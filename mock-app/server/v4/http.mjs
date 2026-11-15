@@ -5,8 +5,13 @@ import { initialState, validateStore } from "./state.mjs";
 import { openStore } from "../store.mjs";
 import { QUESTIONS } from "../../shared/config/protocol-v4.mjs";
 import { consultationService } from "./consultation.mjs";
+import { speechService } from "../../../shared/server/speech.mjs";
+import { speechHttp } from "../../../shared/server/speech-http.mjs";
+import { speechError } from "../../../shared/server/elevenlabs.mjs";
+import { vehicleDialogueService } from "../ai/vehicle-dialogue.mjs";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const staticFiles = new Map([
+  ["/speech-client.mjs", ["../../../service/web/speech-client.mjs", "text/javascript; charset=utf-8"]],
   [
     "/character.png",
     [
@@ -41,14 +46,22 @@ export async function startServer({
   fault,
   aiProvider = null,
   aiTimeoutMs,
+  speechProvider = null,
+  speechTimeoutMs,
+  dialogueProvider = null,
+  dialogueMaxCalls = 3,
+  dialogueTimeoutMs,
 } = {}) {
   const store = await openStore(file, initialState, validateStore);
   const api = coordinator(file, store.data, { now, fault });
   const ai = consultationService(api, aiProvider, { timeoutMs: aiTimeoutMs });
+  const speech = speechService(speechProvider, { timeoutMs: speechTimeoutMs });
+  let dialogue;
   // Validate all projected store fields on startup rather than serving partial corrupted state.
   try {
     await api.read("web", store.data.clientId);
     await api.read("car", null);
+    dialogue = await vehicleDialogueService(api, dialogueProvider, { file: `${file}.dialogue.json`, maxCalls: dialogueMaxCalls, timeoutMs: dialogueTimeoutMs });
   } catch (e) {
     await store.release();
     throw e;
@@ -58,7 +71,7 @@ export async function startServer({
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'",
+      "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'",
     );
     const send = (status, value) => {
       res.writeHead(status, {
@@ -96,6 +109,23 @@ export async function startServer({
           new Error("유효한 역할·클라이언트 ID가 필요합니다."),
           { status: 403, code: "ACTOR_FORBIDDEN" },
         );
+      if ((req.method === "GET" && url.pathname === "/api/tts/config") ||
+          (req.method === "POST" && url.pathname === "/api/tts")) {
+        if (!["web", "car"].includes(actor) ||
+            req.headers["sec-fetch-site"] === "cross-site" ||
+            (req.headers.origin && req.headers.origin !== `http://${host}`))
+          throw speechError(403, "ACTOR_FORBIDDEN", "본인 모바일 또는 차량에서 요청해 주세요.");
+        const state = await api.speechContext();
+        return await speechHttp({ req, res, speech,
+          principal: JSON.stringify([state.runId, actor, id]),
+          async assertAccess() {
+            const current = await api.speechContext();
+            if (current.runId !== state.runId || current.blocked ||
+                (actor === "web" && current.clientId && current.clientId !== id))
+              throw speechError(403, "TTS_CONTEXT_CHANGED", "현재 회차와 본인 연결 상태를 확인해 주세요.");
+          },
+        });
+      }
       if (req.method === "GET" && url.pathname === "/api/scenario")
         return send(200, {
           schemaVersion: 4,
@@ -122,6 +152,7 @@ export async function startServer({
             agentContent: true,
             finalChoices: true,
             aiConsultation: actor === "web" && ai.available,
+            vehicleDialogue: actor === "car" && dialogue.available,
           },
         });
       if (req.method === "GET" && url.pathname === "/api/state") {
@@ -155,14 +186,16 @@ export async function startServer({
         );
       if (
         req.method === "POST" &&
-        ["/api/commands", "/api/consultation/turns"].includes(url.pathname)
+        ["/api/commands", "/api/consultation/turns", "/api/agent/dialogue"].includes(url.pathname)
       ) {
+        if (url.pathname === "/api/agent/dialogue" && actor !== "car")
+          throw Object.assign(new Error("현재 차량에서만 이야기를 준비할 수 있어요."), { status: 403, code: "ACTOR_FORBIDDEN" });
         if (url.pathname === "/api/consultation/turns" && actor !== "web")
           throw Object.assign(
             new Error("본인 모바일에서만 상담할 수 있어요."),
             { status: 403, code: "ACTOR_FORBIDDEN" },
           );
-        if (req.headers.origin && req.headers.origin !== `http://${host}`)
+        if (req.headers["sec-fetch-site"] === "cross-site" || (req.headers.origin && req.headers.origin !== `http://${host}`))
           throw Object.assign(new Error("다른 출처에서 저장할 수 없습니다."), {
             status: 403,
             code: "ACTOR_FORBIDDEN",
@@ -201,7 +234,9 @@ export async function startServer({
         }
         return send(
           200,
-          url.pathname === "/api/consultation/turns"
+          url.pathname === "/api/agent/dialogue"
+            ? await dialogue.prepare(c)
+            : url.pathname === "/api/consultation/turns"
             ? await ai.turn(id, c)
             : await api.command(c, actor, id),
         );
@@ -211,6 +246,7 @@ export async function startServer({
         error: { code: "NOT_FOUND", message: "지원하지 않는 경로입니다." },
       });
     } catch (e) {
+      if (res.destroyed) return;
       const body = {
         ok: false,
         error: {
@@ -233,6 +269,7 @@ export async function startServer({
       server.listen(port, "127.0.0.1", resolve);
     });
   } catch (e) {
+    await dialogue.close();
     await store.release();
     throw e;
   }
@@ -248,6 +285,8 @@ export async function startServer({
         // Stop accepting domain work and drain committed writes before dropping persistent
         // browser/emulator sockets or releasing the single-writer lock.
         await ai.close();
+        await dialogue.close();
+        await speech.close();
         await api.close();
         server.closeAllConnections();
         await stopped;

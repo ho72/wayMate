@@ -1,0 +1,3 @@
+--------- beginning of main
+11-15 03:46:27.863  4821  4821 I WayMateAudio: prepared_start token=4 asset=speech_80d22aa2e59da1ba21ea4251.m4a
+11-15 03:46:37.183  4821  4821 I WayMateAudio: prepared_end token=4 result=finished

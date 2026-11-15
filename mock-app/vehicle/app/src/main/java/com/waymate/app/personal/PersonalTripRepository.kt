@@ -151,6 +151,8 @@ class PersonalTripRepository(
         if (active) executor.execute(::sync)
     }
     fun refresh() { if (active) executor.execute(::sync) }
+    fun speechApi() = com.waymate.app.platform.speech.SpeechApi(base + "/api/vehicle/tts", mapOf(
+        "X-Waymate-Device-Id" to deviceId, "Authorization" to "Bearer $deviceToken"))
     private fun action(path: String, body: JSONObject, before: (() -> Unit)? = null) {
         if (!locallyAllowed() || operation) return
         if (path != "enroll" && (!state.allowed || SystemClock.elapsedRealtime() - lastReceived >= 9000)) return

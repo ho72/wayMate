@@ -1,9 +1,12 @@
 import { error, UUID } from "./contracts.mjs";
+import { speechHttp } from "../../shared/server/speech-http.mjs";
 export async function nativeVehicleRoute({
   req,
   path,
   method,
   repo,
+  res,
+  speech,
   send,
   jsonBody,
   limit,
@@ -11,7 +14,7 @@ export async function nativeVehicleRoute({
   if (!path.startsWith("/api/vehicle/")) return false;
   if (req.headers.origin || req.headers.cookie || req.headers["sec-fetch-site"])
     throw error(403, "DEVICE_ONLY", "차량 앱에서 연결을 시작해 주세요.");
-  if (method !== "POST")
+  if (method !== "POST" && !(method === "GET" && path === "/api/vehicle/tts/config"))
     throw error(405, "METHOD_NOT_ALLOWED", "지원하지 않는 차량 요청이에요.");
   const ip = req.socket.remoteAddress;
   if (path === "/api/vehicle/enroll") {
@@ -26,6 +29,19 @@ export async function nativeVehicleRoute({
   if (typeof id !== "string" || !UUID.test(id) || !match)
     throw error(401, "DEVICE_UNAUTHORIZED", "차량 연결을 다시 시작해 주세요.");
   limit("vehicle-ip:" + ip, 600, 60_000);
+  if ((path === "/api/vehicle/tts" && method === "POST") ||
+      (path === "/api/vehicle/tts/config" && method === "GET")) {
+    const state = repo.vehicleState(id, match[1]);
+    const pairingId = state.pairing?.id;
+    await speechHttp({ req, res, speech, principal: "device:" + id + ":" + pairingId, jsonBody,
+      assertAccess() {
+        const current = repo.vehicleState(id, match[1]);
+        if (current.status !== "active" || current.pairing?.id !== pairingId)
+          throw error(403, "TTS_PAIRING_REQUIRED", "계정과 차량을 먼저 연결해 주세요.");
+      },
+    });
+    return true;
+  }
   const body = await jsonBody(req),
     token = match[1];
   if (path === "/api/vehicle/sync")

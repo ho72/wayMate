@@ -2,6 +2,6 @@
     <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
     <uses-permission android:name="pleos.car.permission.NAVI_ROUTE_SEARCH" />
     <application>
-        <activity android:name=".platform.navigation.NaviProbeActivity" android:exported="false" android:enabled="false" android:label="wayMate 내비 SDK 시험" />
+        <activity android:name=".platform.navigation.NaviProbeActivity" android:exported="false" android:enabled="false" android:label="두루밋 내비 SDK 시험" />
     </application>
 </manifest>

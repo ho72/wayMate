@@ -130,7 +130,8 @@
                 "avatarId": {
                   "enum": [
                     "a-01",
-                    "a-02"
+                    "a-02",
+                    "a-03"
                   ]
                 },
                 "confirmedSummary": {
@@ -1193,7 +1194,8 @@
                       "pace",
                       "conversationStyle",
                       "speakingStyle",
-                      "expressionPresetIds"
+                      "expressionPresetIds",
+                      "introduction"
                     ]
                   }
                 }
@@ -1463,10 +1465,13 @@
               "type": "object",
               "properties": {
                 "sharedWindow": {
-                  "const": [
-                    "14:00",
-                    "15:00"
-                  ]
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
                 }
               },
               "required": [
@@ -4322,12 +4327,13 @@
         "alias": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 10
+          "maxLength": 30
         },
         "avatarId": {
           "enum": [
             "a-01",
-            "a-02"
+            "a-02",
+            "a-03"
           ]
         },
         "summary": {
@@ -4345,6 +4351,11 @@
               "type": "null"
             }
           ]
+        },
+        "introduction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
         }
       },
       "required": [
@@ -4378,6 +4389,39 @@
         },
         "returnDeadline": {
           "type": "string"
+        },
+        "planId": {
+          "type": "string",
+          "pattern": "^[0-9a-f-]{36}$"
+        },
+        "plan": {
+          "$ref": "#/$defs/servicePlan"
+        },
+        "sourceVersion": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "availability": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ],
+          "additionalProperties": false
+        },
+        "peerLabel": {
+          "type": "string",
+          "maxLength": 30
         }
       },
       "required": [
@@ -5653,12 +5697,13 @@
         "alias": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 10
+          "maxLength": 30
         },
         "avatarId": {
           "enum": [
             "a-01",
-            "a-02"
+            "a-02",
+            "a-03"
           ]
         },
         "privateSummary": {
@@ -5676,6 +5721,9 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 20
+        },
+        "source": {
+          "const": "account"
         }
       },
       "required": [
@@ -5831,7 +5879,8 @@
               "pace",
               "conversationStyle",
               "speakingStyle",
-              "expressionPresetIds"
+              "expressionPresetIds",
+              "introduction"
             ]
           }
         },
@@ -6417,7 +6466,10 @@
           "const": "바다쉼표 카페"
         },
         "date": {
-          "const": "2026-11-14"
+          "enum": [
+            "2026-11-14",
+            "2026-12-14"
+          ]
         },
         "start": {
           "const": "14:15"
@@ -6497,7 +6549,8 @@
               "pace",
               "conversationStyle",
               "speakingStyle",
-              "expressionPresetIds"
+              "expressionPresetIds",
+              "introduction"
             ]
           }
         },
@@ -6581,7 +6634,8 @@
               "pace",
               "conversationStyle",
               "speakingStyle",
-              "expressionPresetIds"
+              "expressionPresetIds",
+              "introduction"
             ]
           }
         },
@@ -8505,6 +8559,141 @@
       "required": [
         "requiresDo",
         "activeRestrictions"
+      ],
+      "additionalProperties": false
+    },
+    "servicePlan": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "destination": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "startDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "endDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 800
+        },
+        "days": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 14,
+          "items": {
+            "type": "object",
+            "properties": {
+              "dayNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 14
+              },
+              "date": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "stops": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 12,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    },
+                    "category": {
+                      "type": "string",
+                      "enum": [
+                        "walk",
+                        "cafe",
+                        "food",
+                        "culture",
+                        "nature",
+                        "rest",
+                        "drive"
+                      ]
+                    },
+                    "placeQuery": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "maxLength": 150
+                    }
+                  },
+                  "required": [
+                    "time",
+                    "title",
+                    "description",
+                    "category",
+                    "placeQuery"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "dayNumber",
+              "date",
+              "stops"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "notes": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        }
+      },
+      "required": [
+        "title",
+        "destination",
+        "startDate",
+        "endDate",
+        "summary",
+        "days",
+        "notes"
       ],
       "additionalProperties": false
     }

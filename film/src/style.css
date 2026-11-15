@@ -1,0 +1,10 @@
+@font-face{font-family:Pretendard;src:url('/assets/PretendardVariable.woff2') format('woff2');font-weight:100 900;font-display:block}
+*{box-sizing:border-box}
+.app-surface{width:1240px;height:892px;position:absolute;inset:0;background:linear-gradient(165deg,#dfe9fa,#e5e5f5 47%,#d9eee5);transform-origin:top left;transform:scale(var(--app-scale,1));color:#284a58;overflow:hidden}
+.app-header{position:absolute;left:25px;right:25px;top:22px;display:flex;align-items:center;justify-content:space-between;font-size:22px;font-weight:650;color:#0b626c}
+.app-header .app-tag{padding:15px 21px;background:#ffffffb0;border-radius:40px;font-size:21px}
+.app-voice{font-size:22px;font-weight:650;display:flex;gap:11px;align-items:center;background:#ffffffeb;border-radius:40px;padding:15px 22px;color:#0b626c;margin-bottom:20px}
+.app-card{background:#ffffff79;border:1px solid #ffffffbb;border-radius:27px;padding:24px 27px;line-height:1.5;color:#284a58}
+.app-small{font-size:24px;color:#5d7586;line-height:1.55}
+.app-button{padding:24px 18px;background:#0b626c;color:#fff;border-radius:22px;font-size:26px;font-weight:650;text-align:center}
+.choice-option{display:flex;justify-content:space-between;gap:15px;padding:20px 19px;margin-bottom:12px;background:#ffffffb0;border-radius:17px;font-size:23px;white-space:nowrap}

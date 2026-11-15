@@ -1,10 +1,10 @@
 name: Handoff checks
 on:
   pull_request:
-    paths: ["mock-app/**", ".github/workflows/handoff-checks.yml"]
+    paths: ["mock-app/**", "shared/server/**", "service/web/speech-client.mjs", ".github/workflows/handoff-checks.yml"]
   push:
     branches: [main]
-    paths: ["mock-app/**", ".github/workflows/handoff-checks.yml"]
+    paths: ["mock-app/**", "shared/server/**", "service/web/speech-client.mjs", ".github/workflows/handoff-checks.yml"]
   workflow_dispatch:
 permissions:
   contents: read

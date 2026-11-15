@@ -2,7 +2,7 @@
   "schemaVersion": 4,
   "characters": {
     "a-01": {
-      "label": "블루 드래곤",
+      "label": "두루",
       "assetId": "dragon-design-v5",
       "source": "assets/images/design-v5/dragon.png",
       "sha256": "9823da502443a0da3ec49c161ae5bbadfe81144a6cab2ace010f1603f9a75cfd",
@@ -18,10 +18,10 @@
       "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     },
     "a-02": {
-      "label": "포근한 곰 친구",
-      "assetId": "bear-design-v5",
-      "source": "assets/images/design-v5/bear.png",
-      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "label": "루밋",
+      "assetId": "rumit-design-v1",
+      "source": "assets/images/design-v5/rumit.png",
+      "sha256": "90a4d95474769366e2a250e774f12966936b2c31aa10fda729b5ec3fe94957f9",
       "kind": "transparent_static_image",
       "states": [
         "still",
@@ -34,10 +34,10 @@
       "motion": "Rendered PNG with light transforms while parked; static during driving; no 3D rig or lip sync"
     },
     "b-01": {
-      "label": "솔바람의 곰 에이전트",
-      "assetId": "bear-design-v5",
-      "source": "assets/images/design-v5/bear.png",
-      "sha256": "8706a1615288014a052383b3f429eab2fd9b6baebfc7f6cb77b58995f325aecc",
+      "label": "루밋",
+      "assetId": "rumit-design-v1",
+      "source": "assets/images/design-v5/rumit.png",
+      "sha256": "90a4d95474769366e2a250e774f12966936b2c31aa10fda729b5ec3fe94957f9",
       "kind": "transparent_static_image",
       "states": [
         "still",
@@ -57,6 +57,30 @@
       "path": "assets/audio/prepared-v1/speech_20d2c76b7d862680b5badee3.m4a",
       "captionId": "speech_20d2c76b7d862680b5badee3",
       "text": "천천히, 안전하게 가요. 일정이랑 다음 이야기는 정차한 뒤 함께 확인해요.",
+      "speaker": "agent",
+      "sourceKind": "own_agent",
+      "requiredPublicFields": [],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
+    "speech_80d22aa2e59da1ba21ea4251": {
+      "assetId": "speech_80d22aa2e59da1ba21ea4251",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_80d22aa2e59da1ba21ea4251.m4a",
+      "captionId": "speech_80d22aa2e59da1ba21ea4251",
+      "text": "가상 추천 장소는 바다쉼터예요. 이동과 휴식을 합쳐 28분 정도예요. 바다를 보며 잠깐 쉬어가기 좋은 곳이에요.",
+      "speaker": "agent",
+      "sourceKind": "own_agent",
+      "requiredPublicFields": [],
+      "styleVariant": "neutral",
+      "playbackSource": "prepared_synthetic_speech"
+    },
+    "speech_2c42520da2439714bf84066c": {
+      "assetId": "speech_2c42520da2439714bf84066c",
+      "kind": "audio",
+      "path": "assets/audio/prepared-v1/speech_2c42520da2439714bf84066c.m4a",
+      "captionId": "speech_2c42520da2439714bf84066c",
+      "text": "가상 추천 장소는 바다한상이에요. 이동은 7분, 식사는 50분 정도로 예상해요. 실제 대기 시간은 도착 전에 확인해 주세요.",
       "speaker": "agent",
       "sourceKind": "own_agent",
       "requiredPublicFields": [],

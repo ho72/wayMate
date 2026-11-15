@@ -50,6 +50,7 @@ export const owner = (s) => ({
   avatarId: s.profile.avatarId,
   speakingStyle: s.profile.privateSummary.speakingStyle,
   summary: structuredClone(s.profile.privateSummary),
+  ...(s.profile.source === "account" ? { introduction: s.profile.introduction } : {}),
 });
 export const preparation = (s) =>
   s.profile && s.trip
@@ -303,7 +304,7 @@ export function apply(s, c, clientId, now) {
           mode: p.mode,
           owner: owner(s),
           ownerTrip: { ...s.trip },
-          peer: p.mode === "connected" ? peer : null,
+          peer: p.mode === "connected" ? { ...peer, alias: s.trip.peerLabel || peer.alias } : null,
           connection:
             p.mode === "connected"
               ? structuredClone(s.social.connection)

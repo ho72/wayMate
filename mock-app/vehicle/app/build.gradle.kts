@@ -10,6 +10,7 @@ val apiPort = providers.gradleProperty("waymateApiPort").orElse("3000").get().to
 val personalApiPort = providers.gradleProperty("waymatePersonalApiPort").orElse("3004").get().toInt().also { require(it in 1024..65535) }
 val drivingSourceDirectory = layout.buildDirectory.dir("generated/driving-policy-source")
 val drivingTestResources = layout.buildDirectory.dir("generated/driving-policy-test-resources")
+val recommendationSourceDirectory = layout.buildDirectory.dir("generated/driving-recommendation-source")
 
 android {
     namespace = "com.waymate.app"
@@ -45,6 +46,7 @@ android {
     sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/character-res"))
     sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("generated/speech-assets"))
     sourceSets["main"].java.srcDir(drivingSourceDirectory)
+    sourceSets["main"].java.srcDir(recommendationSourceDirectory)
     sourceSets["test"].resources.srcDir(drivingTestResources)
     androidResources { noCompress += "m4a" }
 
@@ -91,11 +93,23 @@ val copyCharacter by tasks.registering(Copy::class) {
     rename { "blue_dragon.png" }
 }
 val copyBear by tasks.registering(Copy::class) {
-    from("../../assets/images/design-v5/bear.png")
+    from("../../assets/images/design-v5/rumit.png")
     into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
     rename { "travel_bear.png" }
 }
-tasks.named("preBuild") { dependsOn(copyCharacter, copyBear) }
+val copyMocha by tasks.registering(Copy::class) {
+    from("../../assets/images/design-v5/bear-legacy.png")
+    into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
+    rename { "travel_mocha.png" }
+}
+tasks.named("preBuild") { dependsOn(copyCharacter, copyBear, copyMocha) }
+
+val copyCompanionLogo by tasks.registering(Copy::class) {
+    from("../../../shared/design/assets/durumit-logo-transparent.png")
+    into(layout.buildDirectory.dir("generated/character-res/drawable-nodpi"))
+    rename { "durumit_wordmark.png" }
+}
+tasks.named("preBuild") { dependsOn(copyCompanionLogo) }
 
 val copyPreparedSpeech by tasks.registering(Copy::class) {
     from("../../assets/audio/prepared-v1")
@@ -128,3 +142,33 @@ val generateDrivingProfiles by tasks.registering {
     }
 }
 tasks.named("preBuild") { dependsOn(generateDrivingProfiles) }
+
+val generateDrivingRecommendations by tasks.registering {
+    val samples = layout.projectDirectory.file("../../shared/config/driving-recommendations.json")
+    inputs.file(samples)
+    outputs.dir(recommendationSourceDirectory)
+    doLast {
+        val data = JsonSlurper().parse(samples.asFile) as Map<*, *>
+        require(data["schemaVersion"] == 1)
+        val entries = data["entries"] as List<*>
+        val fields = listOf("id", "query", "placeName", "summary", "total", "reason", "narration")
+        val rows = entries.map { entry ->
+            val row = entry as Map<*, *>
+            "DrivingRecommendation(" + fields.joinToString(", ") { field ->
+                val value = row[field] as String
+                require(value.isNotBlank())
+                groovy.json.JsonOutput.toJson(value).replace("\$", "\\\$")
+            } + ")"
+        }
+        val output = recommendationSourceDirectory.get().file("com/waymate/app/model/DrivingRecommendations.kt").asFile
+        output.parentFile.mkdirs()
+        output.writeText("package com.waymate.app.model\n\n" +
+            "// Generated from shared/config/driving-recommendations.json, also used by the audio generator.\n" +
+            "object DrivingRecommendations {\n" +
+            "    val entries = listOf(${rows.joinToString(",\n        ")})\n" +
+            "    fun forQuery(query: String?) = entries.firstOrNull { it.query == query }\n" +
+            "    fun allowsNarration(text: String) = entries.any { it.narration == text }\n" +
+            "}\n")
+    }
+}
+tasks.named("preBuild") { dependsOn(generateDrivingRecommendations) }

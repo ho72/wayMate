@@ -126,36 +126,23 @@ class ExpandedWindowReviewTest {
                         window = Rect(0f, 0f, it.size.width.toFloat(), it.size.height.toFloat())
                     }
                 ) {
-                    CharacterScene(
-                        "review",
-                        character = { modifier, isWide ->
-                            wide = isWide
-                            Column(
-                                modifier.onGloballyPositioned {
-                                    val p = it.positionInRoot()
-                                    character =
-                                        Rect(p.x, p.y, p.x + it.size.width, p.y + it.size.height)
-                                }
-                            ) {
-                                Text("캐릭터 열")
-                            }
+                    CompanionScene(
+                        avatarId = "a-01", bubble = "캐릭터 열", title = "내용 열", motionEnabled = false,
+                        card = {
+                            Column(Modifier.fillMaxWidth().onGloballyPositioned {
+                                val p = it.positionInRoot()
+                                content = Rect(p.x, p.y, p.x + it.size.width, p.y + it.size.height)
+                            }) { Text("설명 카드") }
                         },
-                        content = { modifier ->
-                            Column(
-                                modifier.onGloballyPositioned {
-                                    val p = it.positionInRoot()
-                                    content =
-                                        Rect(p.x, p.y, p.x + it.size.width, p.y + it.size.height)
-                                }
-                            ) {
-                                Text("내용 열")
-                            }
-                        },
+                        actions = {},
                     )
                 }
             }
         }
+        character = ui.onNodeWithContentDescription(ui.activity.getString(com.waymate.app.R.string.character_blue_dragon))
+            .fetchSemanticsNode().boundsInRoot
         ui.runOnIdle {
+            wide = content.left > window.width / 2 && character.right < window.width / 2
             assertEquals(
                 "Expand the actual Pleos window before this class",
                 1682f,
@@ -164,11 +151,11 @@ class ExpandedWindowReviewTest {
             )
             assertEquals(1210f, window.height, 1f)
             assertTrue(wide)
-            assertEquals(468f, character.width, 1f)
-            assertEquals(1138f, content.width, 1f)
-            assertEquals(28f, content.left - character.right, 1f)
-            assertEquals(24f, character.left, 1f)
-            assertEquals(24f, window.right - content.right, 1f)
+            assertEquals(791f, character.width, 1f)
+            assertEquals(791f, content.width, 1f)
+            assertEquals(36f, content.left - character.right, 1f)
+            assertEquals(32f, character.left, 1f)
+            assertEquals(32f, window.right - content.right, 1f)
         }
         evidence(
             "expanded-columns",
@@ -190,7 +177,7 @@ class ExpandedWindowReviewTest {
             }
         }
         ui.onRoot().assertWidthIsEqualTo(1682.dp)
-        ui.onNodeWithContentDescription("따뜻한 곰 여행 친구")
+        ui.onNodeWithContentDescription(ui.activity.getString(com.waymate.app.R.string.character_rumit))
             .assertWidthIsEqualTo(468.dp)
             .assertHeightIsEqualTo(300.dp)
         ui.onNodeWithText("함께 여행 이어가기").assertIsDisplayed().performClick()

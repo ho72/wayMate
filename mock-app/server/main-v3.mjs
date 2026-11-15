@@ -6,7 +6,7 @@ const file =
 try {
   const app = await startServer({ file });
   console.log(
-    `wayMate 준비 완료: http://127.0.0.1:${app.port} (본인 여행 전달)`,
+    `두루밋 준비 완료: http://127.0.0.1:${app.port} (본인 여행 전달)`,
   );
   for (const signal of ["SIGINT", "SIGTERM"])
     process.once(signal, async () => {

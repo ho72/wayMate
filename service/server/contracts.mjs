@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+import { CHARACTER_IDS } from "../shared/characters.mjs";
 export const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const error = (status, code, message) =>
@@ -17,7 +18,7 @@ const object = (properties) => ({
 });
 export const profileSchema = object({
   displayName: str(30),
-  avatar: { enum: ["dragon", "bear"], type: "string" },
+  avatar: { enum: CHARACTER_IDS, type: "string" },
   interests: { type: "array", maxItems: 12, uniqueItems: true, items: str(40) },
   travelStyle: str(300, 0),
   about: str(500, 0),

@@ -143,7 +143,7 @@ function applyPhysicalNavigation(s, c, now) {
       fail(
         409,
         "NAV_NOT_READY",
-        "현재 경로에서 wayMate 경유지만 변경할 수 있어요.",
+        "현재 경로에서 두루밋 경유지만 변경할 수 있어요.",
       );
     n.attempts.push({
       attemptId: randomUUID(),

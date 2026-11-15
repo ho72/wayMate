@@ -1,3 +1,4 @@
+import { ServerSpeech } from "/speech-client.mjs";
 import { DemoClient } from "./shared/client-v4.mjs";
 import { ConsultationClient } from "./shared/consultation-v1.mjs";
 import {
@@ -10,6 +11,40 @@ import {
 const api = new DemoClient(),
   $ = (id) => document.getElementById(id);
 const consultation = new ConsultationClient(api);
+let demoVoice, demoVoiceConsent = false;
+function stopDemoVoice() { demoVoice?.stop(); }
+function voiceButton(text) {
+  const button = node("button", "음성으로 듣기", "secondary voice-listen");
+  button.type = "button";
+  button.onclick = async () => {
+    const run = api.state?.runId;
+    if (!demoVoiceConsent) {
+      if (!confirm("듣기를 누른 안내 문장을 ElevenLabs에 보내 음성으로 만들어요. 이 회차에서 음성 듣기를 사용할까요?")) return;
+      demoVoiceConsent = true;
+    }
+    const current = () => api.state?.runId === run && !api.state?.reset && !api.state?.recovery &&
+      (!api.state?.clientId || api.state.clientId === api.id) && !document.hidden;
+    if (!current()) return;
+    demoVoice ??= new ServerSpeech({
+      async request(body, signal) {
+        const response = await fetch("/api/tts", { method: "POST", signal,
+          headers: { "Content-Type": "application/json", "X-Demo-Actor": "web", "X-Demo-Client-Id": api.id },
+          body: JSON.stringify(body) });
+        if (!response.ok) throw new Error((await response.json()).error?.message || "음성에 연결하지 못했어요.");
+        if (!/^audio\/mpeg(?:;|$)/i.test(response.headers.get("content-type") || "")) throw new Error("음성 응답을 확인해 주세요.");
+        return response.blob();
+      },
+      changed(phase, message) {
+        $("voice-status").hidden = !["preparing", "speaking", "paused"].includes(phase);
+        $("voice-resume").hidden = phase !== "paused";
+        $("voice-status-text").textContent = phase === "preparing" ? "음성을 준비하고 있어요" : phase === "paused" ? "재생하기를 눌러 들어 주세요" : "친구가 이야기하고 있어요";
+        if (message) status(message);
+      },
+    });
+    await demoVoice.speak(text, api.state?.profile?.avatarId === "a-02" ? "bear" : "dragon", current);
+  };
+  return button;
+}
 let aiReview = false;
 let aiDraftRevision = 0;
 let renderedRun = null;
@@ -95,6 +130,7 @@ function render() {
   document.querySelector(".composer-area").hidden = resetting;
   document.querySelector(".journey-menu").hidden = resetting;
   if (resetting) {
+    stopDemoVoice(); demoVoiceConsent = false;
     clearPreparationUi();
     $("reset-detail").textContent =
       s.recovery?.message ||
@@ -102,7 +138,7 @@ function render() {
       "필요한 기기의 정리 확인을 기다리고 있어요.";
     return;
   }
-  if (renderedRun && renderedRun !== s.runId) clearPreparationUi();
+  if (renderedRun && renderedRun !== s.runId) { stopDemoVoice(); demoVoiceConsent = false; clearPreparationUi(); }
   renderedRun = s.runId;
   renderProfilePreview();
   const owns = !s.clientId || s.clientId === api.id,
@@ -137,8 +173,9 @@ function render() {
         agent = node("div", null, "message agent");
       user.append(node("p", turn.message, "raw"));
       agent.append(
-        node("span", "wayMate · AI", "speaker"),
+        node("span", "두루밋 · AI", "speaker"),
         node("p", turn.result.reply),
+        voiceButton(turn.result.reply),
       );
       history.append(user, agent);
     }
@@ -147,8 +184,9 @@ function render() {
       if (!a) continue;
       const agent = node("div", null, "message agent");
       agent.append(
-        node("span", "wayMate", "speaker"),
+        node("span", "두루밋", "speaker"),
         node("p", questionLine(id)),
+        voiceButton(questionLine(id)),
       );
       const user = node("div", null, "message user"),
         raw = node("p", a.answerText, "raw"),
@@ -1020,7 +1058,7 @@ function renderFlow(s, owns) {
     root.append(
       node(
         "p",
-        "상대에게 보일 여행 요약: 2026-11-14 · 강릉 해변권 · 13:00~15:00",
+        "상대에게 보일 여행 요약: 2026-12-14 · 강릉 해변권 · 13:00~15:00",
       ),
     );
     if (!s.social.tripShareApproved)
@@ -1052,7 +1090,7 @@ function renderFlow(s, owns) {
         root.append(
           node("h3", "솔바람 · 공개 소개"),
           node("p", s.social.peer.description),
-          node("p", "2026-11-14 · 강릉 해변권 · 공통 14:00~15:00 · 60분"),
+          node("p", "2026-12-14 · 강릉 해변권 · 공통 14:00~15:00 · 60분"),
         );
         action(
           root,
@@ -1105,7 +1143,7 @@ function renderFlow(s, owns) {
       ),
     );
     if (con.status === "accepted") {
-      root.append(node("h3", "2026년 11월 14일 · 14:00~15:00"));
+      root.append(node("h3", "2026년 12월 14일 · 14:00~15:00"));
       action(
         root,
         "CONFIRM_WINDOW",
@@ -1221,3 +1259,10 @@ for (const radio of document.querySelectorAll("input[name=avatar]"))
     persistProfileDraft();
     render();
   });
+
+$("voice-stop").onclick = stopDemoVoice;
+$("voice-revoke").onclick = () => { stopDemoVoice(); demoVoiceConsent = false; status("음성 전송 동의를 해제했어요."); };
+document.addEventListener("visibilitychange", () => { if (document.hidden) stopDemoVoice(); });
+globalThis.addEventListener?.("pagehide", stopDemoVoice);
+
+$("voice-resume").onclick = () => demoVoice?.resume?.();

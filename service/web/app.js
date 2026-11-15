@@ -1,4 +1,7 @@
-import { ServiceClient } from "./client.mjs";
+import { ServiceClient, ServerSpeech, CHARACTERS, character } from "./client.mjs";
+import { createJourneyFlow, registeredJourney } from "./journey.js";
+import { DEFAULT_TRIP_ID, planBody, dateLabel, stopCount } from "../shared/travel.mjs";
+import { routeMap, tripStops, tripEditor, readTripForm, adjustPlan } from "./trip-ui.js";
 const $ = (id) => document.getElementById(id),
   api = new ServiceClient();
 const S = {
@@ -11,6 +14,8 @@ const S = {
   openTripId: null,
   chats: [],
   trips: [],
+  registeredTrip: null,
+  tripEditor: null,
   chat: null,
   view: "home",
   chatId: null,
@@ -32,9 +37,10 @@ const esc = (value) =>
   );
 const icon = (name) =>
   `<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#ic-${name}"></use></svg>`;
-const art = () =>
-  S.user?.profile.avatar === "bear" ? "/assets/bear.png" : "/assets/dragon.png";
-const friend = () => (S.user?.profile.avatar === "bear" ? "모카" : "파도");
+const art = () => character(S.user?.profile.avatar).image;
+const friend = () => character(S.user?.profile.avatar).name;
+const together = () => character(S.user?.profile.avatar).together;
+const subject = () => character(S.user?.profile.avatar).subject;
 const pretty = (text) =>
   esc(text).replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
 const nav = [
@@ -63,11 +69,41 @@ const prompts = [
     "오늘은 조금 쉬고 싶은데, 나에게 맞는 여행을 같이 생각해 줄래?",
   ],
 ];
+const journeyFlow = createJourneyFlow({ api, getUser: () => S.user,
+  changed: () => { if (S.view.startsWith("journey")) draw(); }, notice,
+  planWithAgent: planningChat,
+  onTripSaved: data => { S.trips=data.trips;S.registeredTrip=data.registeredTrip; } });
+const journeyEntry = (home = false) => { const t=S.trips[0]||S.registeredTrip||registeredJourney();return `<a href="#journey-detail/${t.id}" class="journey-entry ${home ? "journey-entry-home" : ""}">${icon("route")}<span><strong>${esc(t.title)}</strong><small>${esc(t.destination)} · ${esc(dateLabel(t.startDate))} · ${stopCount(t)}곳의 일정</small></span>${icon("chevron")}</a>`; };
 let identityEpoch = 0,
   routeVersion = 0,
   toastTimer,
   submitting = false,
   autoScroll = true;
+let voicePlayer, voiceConsent = false, voiceReview = null;
+function stopVoice() {
+  voicePlayer?.stop();
+  voiceReview = null;
+  $("voice-consent-dialog")?.close?.();
+}
+async function listenToTurn(id) {
+  const context = viewContext();
+  const turn = S.chat?.turns.find((t) => t.id === id && t.status === "completed" && t.reply);
+  if (!turn) return;
+  if (!voiceConsent) {
+    voiceReview = { id, context };
+    $("voice-consent-dialog").showModal();
+    return;
+  }
+  voicePlayer ??= new ServerSpeech({ request: (body, signal) => api.speech(body, signal),
+    changed(phase, message) {
+      $("voice-status").hidden = !["preparing", "speaking", "paused"].includes(phase);
+      $("voice-resume").hidden = phase !== "paused";
+      $("voice-status-text").textContent = phase === "preparing" ? "음성을 준비하고 있어요" : phase === "paused" ? "재생하기를 눌러 들어 주세요" : `${subject()} 이야기하고 있어요`;
+      if (message) notice(message);
+    },
+  });
+  await voicePlayer.speak(turn.reply, S.user.profile.avatar, () => currentView(context) && !document.hidden && voiceConsent);
+}
 function notice(message) {
   $("notice").textContent = message;
   $("notice").hidden = false;
@@ -115,6 +151,9 @@ async function reloadChat(context, turnId = null) {
 }
 function identity(data) {
   if (S.user?.id !== data.user?.id) {
+    journeyFlow.close();
+    stopVoice();
+    voiceConsent = false;
     identityEpoch++;
     S.vehicleBusy = false;
     S.vehicleReadVersion++;
@@ -122,6 +161,8 @@ function identity(data) {
     S.vehicleCode = "";
     S.vehicleReview = null;
     S.openTripId = null;
+    S.registeredTrip = null;
+    S.tripEditor = null;
     $("vehicle-confirm-dialog")?.close?.();
     $("trip-dialog")?.close?.();
   }
@@ -129,6 +170,7 @@ function identity(data) {
   api.identity(data.user, data.user ? (data.csrf ?? api.csrf) : null);
   if (data.chats) S.chats = data.chats;
   if (data.trips) S.trips = data.trips;
+  if (data.registeredTrip) S.registeredTrip = data.registeredTrip;
   if (data.vehicles) S.vehicles = data.vehicles;
 }
 async function refresh() {
@@ -148,11 +190,11 @@ async function refresh() {
   return data;
 }
 function brand() {
-  return `<a href="#home" class="brand"><img src="${art()}" alt=""><span>두루밋</span></a>`;
+  return `<a href="#home" class="brand" aria-label="두루밋"><span class="brand-art" aria-hidden="true"><img src="/assets/logo.png" alt=""></span></a>`;
 }
 function renderChrome() {
   $("message-form").setAttribute("aria-label", `${friend()}에게 메시지 보내기`);
-  const active = S.view === "chat" ? "chat" : S.view;
+  const active = S.view.startsWith("journey") ? "trips" : S.view;
   document.querySelector(".side-navigation").innerHTML = nav
     .map(
       ([id, i, label]) =>
@@ -171,8 +213,10 @@ function renderChrome() {
     .classList.toggle("chat-mode", S.view === "chat");
   $("mobile-header").innerHTML =
     S.view === "chat"
-      ? `<div class="header-actions"><a href="#home" class="quiet icon-button" aria-label="홈으로">${icon("reply")}</a><span class="header-title">${esc(S.chat?.title || friend() + "와 이야기")}</span></div><div class="header-actions"><button class="quiet icon-button" data-action="history" aria-label="대화 기록">${icon("clock")}</button><button class="quiet icon-button" data-action="new-chat" aria-label="새 대화">${icon("edit")}</button></div>`
-      : `${brand()}<div class="header-actions">${S.user ? `<span class="header-context">${esc(S.user.profile.displayName)}님의 여행</span><a href="#me" class="profile-avatar" aria-label="내 프로필"><img src="${art()}" alt=""></a>` : '<button class="text-button" data-action="login">로그인</button>'}</div>`;
+      ? `<div class="header-actions"><a href="#home" class="quiet icon-button chat-back" aria-label="홈으로">${icon("chevron")}</a><span class="header-title">${esc(S.chat?.title || together() + " 이야기")}</span></div><div class="header-actions"><button class="quiet icon-button" data-action="history" aria-label="대화 기록">${icon("clock")}</button><button class="quiet icon-button" data-action="new-chat" aria-label="새 대화">${icon("edit")}</button></div>`
+      : S.view.startsWith("journey")
+        ? `<div class="header-actions"><a href="#trips" class="quiet icon-button chat-back" aria-label="내 여행으로">${icon("chevron")}</a><span class="header-title">${S.view === "journey-operator" ? "루밋 응답" : S.view === "journey-detail" ? "나의 여행" : "함께할 여행 준비"}</span></div><a href="#me" class="profile-avatar" aria-label="내 프로필"><img src="${art()}" alt=""></a>`
+        : `${brand()}<div class="header-actions">${S.user ? `<span class="header-context">${esc(S.user.profile.displayName)}님의 여행</span><a href="#me" class="profile-avatar" aria-label="내 프로필"><img src="${art()}" alt=""></a>` : '<button class="text-button" data-action="login">로그인</button>'}</div>`;
   $("sidebar-history").innerHTML = S.user
     ? S.chats.length
       ? S.chats
@@ -198,12 +242,12 @@ function renderChrome() {
 }
 function homeView() {
   const name = S.user?.profile.displayName;
-  return `<div class="page"><div class="page-intro"><div><p class="eyebrow">YOUR OWN JOURNEY</p><h1>${name ? `${esc(name)}님, 반가워요` : "나를 알아가는 여행의 시작"}</h1><p class="muted">내 속도로, 내 마음에 드는 여행을 함께 준비해요.</p></div><span class="date-label">${new Intl.DateTimeFormat("ko", { month: "long", day: "numeric", weekday: "short" }).format(new Date())}</span></div>
-    <section class="home-hero"><div class="hero-copy"><span class="hero-tag">나의 AI 여행 친구 · ${friend()}</span><h2>어디로 갈까보다,<br>어떤 내가 좋을까?</h2><p>취향부터 오늘의 마음까지.<br>이야기를 나누다 보면, 나다운 여행이 보여요.</p><button class="main-button" data-action="new-chat">${friend()}와 이야기하기 ${icon("chevron")}</button></div><img class="home-character" src="${art()}" alt="나의 여행 친구 ${friend()}"></section>
+  return `<div class="page">${S.user?.onboarding && S.user.onboarding.phase !== "completed" ? `<a class="onboarding-resume" href="/welcome"><span>내 친구와 첫 이야기<small>친구 선택 · 취향 알아가기</small></span><b>이어서 준비하기 ${icon("chevron")}</b></a>` : ""}<div class="page-intro"><div><p class="eyebrow">YOUR OWN JOURNEY</p><h1>${name ? `${esc(name)}님, 반가워요` : "나를 알아가는 여행의 시작"}</h1><p class="muted">내 속도로, 내 마음에 드는 여행을 함께 준비해요.</p></div><span class="date-label">${new Intl.DateTimeFormat("ko", { month: "long", day: "numeric", weekday: "short" }).format(new Date())}</span></div>
+    <section class="home-hero"><div class="hero-copy"><span class="hero-tag">나의 AI 여행 친구 · ${friend()}</span><h2>어디로 갈까보다,<br>어떤 내가 좋을까?</h2><p>취향부터 오늘의 마음까지.<br>이야기를 나누다 보면, 나다운 여행이 보여요.</p><button class="main-button" data-action="new-chat">${together()} 이야기하기 ${icon("chevron")}</button></div><img class="home-character" src="${art()}" alt="나의 여행 친구 ${friend()}"></section>
     <div class="section-heading"><h2>이런 이야기부터 어때요?</h2><span class="muted small">편하게 시작해요</span></div><div class="starter-grid">${prompts.map(([i, title, subtitle, prompt]) => `<button class="starter-card" data-action="prompt" data-prompt="${esc(prompt)}">${icon(i)}<b>${title}</b><span>${subtitle}</span></button>`).join("")}</div>
     <div class="home-columns"><section><div class="section-heading"><h2>기다려지는 나의 여행</h2><a href="#trips" class="text-button">모두 보기 ${icon("chevron")}</a></div>${
-      S.trips.length
-        ? S.trips
+      S.user
+        ? journeyEntry() + S.trips
             .slice(0, 2)
             .map((t) => tripCard(t, true))
             .join("")
@@ -211,18 +255,55 @@ function homeView() {
     }</section><section><div class="section-heading"><h2>친구가 기억하는 나</h2><a href="#me" class="text-button">살펴보기</a></div><div class="tip-card"><b>${S.user?.profile.interests.length ? "함께 알아간 취향" : "알아갈수록, 더 나다운 여행"}</b>${S.user?.profile.interests.length ? `<div class="interest-list">${S.user.profile.interests.map((x) => `<span class="interest-chip">${esc(x)}</span>`).join("")}</div><p>${esc(S.user.profile.travelStyle || "천천히 나만의 여행을 찾아가요.")}</p>` : "<p>좋아하는 풍경, 편한 여행 속도를 알려주세요. 내가 확인한 취향만 친구가 기억해요.</p>"}</div></section></div></div>`;
 }
 function tripCard(t, compact = false) {
-  return `<button class="trip-card ${compact ? "compact" : ""}" data-action="trip" data-id="${t.id}">${!compact ? `<span class="trip-symbol">${icon("pin")}</span>` : ""}<h3>${esc(t.title)}</h3><p>${esc(t.destination)} · ${t.startDate ? esc(t.startDate) : "날짜 미정"}${t.endDate && t.endDate !== t.startDate ? " – " + esc(t.endDate) : ""}</p>${!compact ? `<span class="trip-bottom">${icon("check")} 직접 저장한 ${t.days.length}일의 여행</span>` : ""}</button>`;
+  if(compact)return `<a class="journey-entry" href="#journey-detail/${t.id}">${icon("route")}<span><strong>${esc(t.title)}</strong><small>${esc(t.destination)} · ${esc(dateLabel(t.startDate))}</small></span>${icon("chevron")}</a>`;
+  return `<a class="registered-trip-card" href="#journey-detail/${t.id}"><div class="registered-trip-map">${routeMap(t,{compact:true})}<span>내가 저장한 여행</span></div><div class="registered-trip-info"><p>${esc(dateLabel(t.startDate))} · ${t.days.length}일의 여행</p><h2>${esc(t.title)}</h2><span>${esc(t.destination)} · ${stopCount(t)}곳의 일정</span><div><b>일정과 경로 보기</b>${icon("chevron")}</div></div></a>`;
 }
 function tripsView() {
-  return `<div class="page"><div class="page-intro"><div><p class="eyebrow">MY JOURNEYS</p><h1>마음에 담아둔 여행</h1><p class="muted">친구와 함께 준비하고, 내가 직접 저장한 계획이에요.</p></div></div>${S.trips.length ? `<div class="trip-grid">${S.trips.map((t) => tripCard(t)).join("")}</div>` : `<div class="empty-card">${icon("route")}<h2>다음 여행을 함께 그려볼까요?</h2><p>목적지가 정해지지 않아도 괜찮아요.</p><button class="main-button" data-action="prompt" data-prompt="여행 계획을 같이 세워보고 싶어.">첫 여행 준비하기</button></div>`}</div>`;
+  const trips=[...S.trips,S.registeredTrip||registeredJourney()];
+  return `<div class="page"><div class="page-intro"><div><p class="eyebrow">MY JOURNEYS</p><h1>마음에 담아둔 여행</h1><p class="muted">친구와 계획하고, 내가 확인해 저장한 여행이에요.</p></div><button class="text-button" data-action="plan-new">새 여행 계획하기 ${icon("edit")}</button></div>${S.user?`<div class="registered-trip-grid">${trips.map(t=>tripCard(t)).join("")}</div><div class="journey-list-footer"><span>가고 싶은 여행이 더 있나요?</span><button class="text-button" data-action="plan-new">${together()} 새 여행 이야기하기</button></div>`:`<div class="empty-card"><h2>나만의 여행을 준비해요</h2><button class="main-button" data-action="login">로그인하고 시작하기</button></div>`}</div>`;
 }
 function consentView() {
   return `<section class="consent-card"><label><input type="checkbox" id="ai-consent">대화와 저장한 취향·여행 정보를 OpenAI에 전달해 친구의 답변을 받는 데 동의해요. 여행 저장과 취향 변경은 별도로 확인해요.</label><button class="main-button" data-action="consent" disabled>동의하고 친구와 이야기하기</button></section>`;
 }
+async function planningChat(tripId) {
+  const context=viewContext();
+  const data=await api.request("/api/chats",{tripId});
+  if(!currentView(context))return;
+  S.chats=(await api.request("/api/chats")).chats;
+  location.hash="chat/"+data.chat.id;
+}
+async function draftPlanAction(action,button) {
+  if(action==="plan-new"){await newChat("여행을 함께 계획하고 싶어. 내가 원하는 여행부터 이야기해볼게.");return true;}
+  if(action==="plan-context"){await planningChat(button.dataset.id);return true;}
+  if(!action.startsWith("draft-plan-"))return false;
+  const op=action.slice("draft-plan-".length);
+  const draft=S.chat?.turns.flatMap(t=>t.drafts||[]).find(d=>d.id===(button.dataset.id||S.tripEditor?.id));
+  if(!draft||draft.kind!=="trip")return true;
+  if(op==="revise"){$("message").value="이 여행 계획에서 바꾸고 싶은 부분이 있어. ";updateComposer();$("message").focus();return true;}
+  if(S.chat.archived||S.chat.turns.some(t=>t.status==="pending"))throw new Error("친구의 답변이 끝난 뒤 계획을 다듬어 주세요.");
+  if(op==="edit"){S.tripEditor={id:draft.id,version:draft.version,body:structuredClone(draft.body)};draw();return true;}
+  if(op==="cancel"){S.tripEditor=null;draw();return true;}
+  if(S.tripEditor){S.tripEditor.body=adjustPlan(readTripForm($("chat-trip-editor"),S.tripEditor.body),op,Number(button.dataset.day),Number(button.dataset.stop));draw();}
+  return true;
+}
+async function saveDraftPlan(form) {
+  const context=viewContext(),editor=S.tripEditor;if(!editor)return;
+  const submit=form.querySelector('[type="submit"]');submit.disabled=true;
+  try {
+    await api.request(`/api/drafts/${editor.id}`,{version:editor.version,plan:readTripForm(form,editor.body)},"PUT");
+    if(!currentView(context))return;S.tripEditor=null;await reloadChat(context);notice("여행 초안에 수정 내용을 반영했어요. 확인하고 내 여행에 저장해 주세요.");
+  }catch(e){if(currentView(context))notice(e.message);}finally{submit.disabled=false;}
+}
 function draftCard(d) {
-  const trip = d.kind === "trip",
-    body = d.body;
-  return `<section class="draft-card"><div class="draft-top"><div class="draft-kicker">${icon(trip ? "route" : "spark")}${trip ? "우리의 여행 계획" : "친구가 기억할 취향"} · ${d.status === "confirmed" ? "저장 완료" : "함께 확인할 초안"}</div><h3>${esc(trip ? body.title : "이렇게 기억해도 괜찮을까요?")}</h3>${trip ? `<span class="draft-meta">${esc(body.destination)} · ${body.days.length}일${body.startDate ? " · " + esc(body.startDate) : " · 날짜 미정"}</span>` : ""}</div><div class="draft-body">${trip ? `<p>${esc(body.summary)}</p><div class="trip-preview-days">${body.days.map((day) => `<div class="preview-day"><span class="day-chip">DAY ${day.dayNumber}</span><span>${day.stops.map((s) => esc(s.title)).join(" · ")}</span></div>`).join("")}</div>` : `<div class="interest-list">${body.interests.map((x) => `<span class="interest-chip">${esc(x)}</span>`).join("")}</div><p>${esc(body.travelStyle)}</p><p>${esc(body.about)}</p>`}<div class="draft-actions">${d.status === "confirmed" ? `<span class="saved-indicator">${icon("check")}${trip ? "내 여행에 저장했어요" : "친구가 기억하고 있어요"}</span>` : `<button class="main-button" data-action="confirm-draft" data-id="${d.id}">${trip ? "내 여행에 저장하기" : "이 취향으로 기억해줘"}</button>`}</div>${trip ? '<p class="field-hint">영업·교통 정보는 출발 전 지도에서 확인해 주세요.</p>' : ""}</div></section>`;
+  const trip=d.kind==="trip",body=d.body;
+  if(trip){
+    const latest=S.chat?.turns.flatMap(t=>t.drafts||[]).filter(x=>x.kind==="trip").at(-1);
+    if(d.status!=="confirmed"&&latest&&latest.id!==d.id)return `<details class="draft-card previous-trip-draft"><summary>이전 여행 초안 · ${esc(body.title)}</summary><p>수정한 최신 계획은 아래 카드에서 확인해 주세요.</p>${tripStops(body,{compact:true})}</details>`;
+    const editing=S.tripEditor?.id===d.id;
+    const waiting=S.chat?.turns.some(t=>t.status==="pending");
+    return `<section class="draft-card chat-trip-card" id="draft-${d.id}"><div class="draft-top"><div class="draft-kicker">${icon("route")}우리의 여행 계획 · ${d.status==="confirmed"?"저장 완료":"함께 다듬는 초안"}</div><h3>${esc(body.title)}</h3><span class="draft-meta">${esc(body.destination)} · ${body.days.length}일 · ${esc(dateLabel(body.startDate))}</span></div><div class="draft-body">${editing?tripEditor(S.tripEditor.body,{formId:"chat-trip-editor",id:d.id,version:d.version,action:"draft-plan"}):`<p>${esc(body.summary)}</p><div class="trip-route-map">${routeMap(body,{compact:true})}</div><details class="chat-trip-plan"><summary>여행 계획 ${stopCount(body)}곳 살펴보기</summary>${tripStops(body,{compact:true})}</details><div class="chat-trip-actions">${d.status==="confirmed"?`<span class="saved-indicator">${icon("check")}내 여행에 저장했어요</span><a href="#journey-detail/${d.confirmedId}" class="main-button">저장한 여행 보기 ${icon("chevron")}</a><button type="button" class="text-button" data-action="plan-context" data-id="${d.confirmedId}">친구와 더 다듬기</button>`:`<button type="button" class="main-button" data-action="confirm-draft" data-id="${d.id}" ${waiting?"disabled":""}>${S.chat?.planningTrip?"이 계획으로 여행 업데이트":"이대로 내 여행에 저장"} ${icon("check")}</button><button type="button" class="outline-button" data-action="draft-plan-edit" data-id="${d.id}" ${waiting?"disabled":""}>장소와 시간 직접 수정 ${icon("edit")}</button><button type="button" class="text-button" data-action="draft-plan-revise" data-id="${d.id}">친구에게 수정 요청하기</button>`}</div>`}</div></section>`;
+  }
+  return `<section class="draft-card"><div class="draft-top"><div class="draft-kicker">${icon("spark")}친구가 기억할 취향 · ${d.status==="confirmed"?"저장 완료":"함께 확인할 초안"}</div><h3>이렇게 기억해도 괜찮을까요?</h3></div><div class="draft-body"><div class="interest-list">${body.interests.map(x=>`<span class="interest-chip">${esc(x)}</span>`).join("")}</div><p>${esc(body.travelStyle)}</p><p>${esc(body.about)}</p><div class="draft-actions">${d.status==="confirmed"?`<span class="saved-indicator">${icon("check")}친구가 기억하고 있어요</span>`:`<button class="main-button" data-action="confirm-draft" data-id="${d.id}">이 취향으로 기억해줘</button>`}</div></div></section>`;
 }
 function turnView(t) {
   const labels = [
@@ -232,13 +313,13 @@ function turnView(t) {
         .filter((label) => typeof label === "string" && label.trim()),
     ),
   ];
-  return `<article class="turn" id="turn-${t.id}"><div class="user-message">${esc(t.message)}</div><div class="agent-label"><img src="${art()}" alt="">${friend()}</div>${labels.length ? `<div class="tool-events">${labels.map((label) => `<span class="tool-event">${icon("check")}${esc(label.replace(" 있어요", " 있었어요"))}</span>`).join("")}</div>` : ""}<div class="agent-message" id="reply-${t.id}">${pretty(t.reply || "")}</div>${t.status === "pending" ? `<div class="thinking" id="thinking-${t.id}" role="status"><span class="thinking-dot"></span><span>${esc(S.phase || "이야기를 듣고 있어요")}</span></div>` : ""}${["failed", "cancelled"].includes(t.status) ? `<div class="failed-turn">${t.status === "cancelled" ? "답변을 멈췄어요." : "답변을 끝까지 받지 못했어요. 입력한 이야기는 그대로 남아 있어요."}<br><button class="text-button" data-action="retry-turn" data-id="${t.id}" data-attempt="${t.attempt}">이 메시지로 다시 이야기하기</button></div>` : ""}${(t.drafts || []).map(draftCard).join("")}</article>`;
+  return `<article class="turn" id="turn-${t.id}"><div class="user-message">${esc(t.message)}</div><div class="agent-label"><img src="${art()}" alt="">${friend()}</div>${labels.length ? `<div class="tool-events">${labels.map((label) => `<span class="tool-event">${icon("check")}${esc(label.replace(" 있어요", " 있었어요"))}</span>`).join("")}</div>` : ""}<div class="agent-message" id="reply-${t.id}">${pretty(t.reply || "")}</div>${t.status === "pending" ? `<div class="thinking" id="thinking-${t.id}" role="status"><span class="thinking-dot"></span><span>${esc(S.phase || "이야기를 듣고 있어요")}</span></div>` : ""}${["failed", "cancelled"].includes(t.status) ? `<div class="failed-turn">${t.status === "cancelled" ? "답변을 멈췄어요." : "답변을 끝까지 받지 못했어요. 입력한 이야기는 그대로 남아 있어요."}<br><button class="text-button" data-action="retry-turn" data-id="${t.id}" data-attempt="${t.attempt}">이 메시지로 다시 이야기하기</button></div>` : ""}${t.status === "completed" && t.reply ? `<button class="text-button voice-listen" data-action="listen" data-id="${t.id}">음성으로 듣기</button>` : ""}${(t.drafts || []).map(draftCard).join("")}</article>`;
 }
 function chatView() {
   if (!S.user)
     return `<div class="chat-page"><div class="chat-empty"><img src="${art()}" alt="여행 친구 ${friend()}"><h1>이야기를 오래 이어가요</h1><p>로그인하면 대화와 여행을 내 공간에 남길 수 있어요.</p><button class="main-button" data-action="login">로그인하고 이야기하기</button></div></div>`;
   const turns = S.chat?.turns || [];
-  return `<div class="chat-page">${!turns.length ? `<section class="chat-empty"><img src="${art()}" alt="반갑게 인사하는 ${friend()}"><p class="eyebrow">A LITTLE CHAT, A NEW JOURNEY</p><h1>안녕, 나는 ${friend()}야.</h1><p>오늘은 어떤 마음이야?<br>가고 싶은 곳이 없어도, 편하게 이야기해 줘.</p>${!S.user.aiConsent ? consentView() : `<div class="prompt-chips">${prompts.map(([, title, , p]) => `<button class="prompt-chip" data-action="fill-prompt" data-prompt="${esc(p)}">${title}</button>`).join("")}</div>`}</section>` : turns.map(turnView).join("")}${!S.user.aiConsent && turns.length ? consentView() : ""}${S.chatId && api.pending(S.chatId) ? '<section class="consent-card"><p>메시지의 전송 결과를 확인하고 있어요. 같은 내용으로 확인하면 중복 답변을 만들지 않아요.</p><button class="secondary-button" data-action="resolve-pending">전송 결과 확인</button></section>' : ""}</div>`;
+  return `<div class="chat-page">${S.chat?.planningTrip?`<section class="chat-planning-context"><span class="draft-kicker">함께 다듬는 여행</span><strong>${esc(S.chat.planningTrip.title)}</strong><p>${esc(S.chat.planningTrip.destination)} · ${esc(dateLabel(S.chat.planningTrip.startDate))}<br>바꾸고 싶은 장소나 시간을 편하게 이야기해 주세요.</p></section>`:""}${!turns.length ? `<section class="chat-empty"><img src="${art()}" alt="반갑게 인사하는 ${friend()}"><p class="eyebrow">A LITTLE CHAT, A NEW JOURNEY</p><h1>${S.chat?.planningTrip?"이 여행을 더 다듬어볼까?":`안녕, 나는 ${friend()}야.`}</h1><p>${S.chat?.planningTrip?"바꾸고 싶은 장소나 시간을 편하게 이야기해 줘.":"오늘은 어떤 마음이야?<br>가고 싶은 곳이 없어도, 편하게 이야기해 줘."}</p>${!S.user.aiConsent ? consentView() : `<div class="prompt-chips">${prompts.map(([, title, , p]) => `<button class="prompt-chip" data-action="fill-prompt" data-prompt="${esc(p)}">${title}</button>`).join("")}</div>`}</section>` : turns.map(turnView).join("")}${!S.user.aiConsent && turns.length ? consentView() : ""}${S.chatId && api.pending(S.chatId) ? '<section class="consent-card"><p>메시지의 전송 결과를 확인하고 있어요. 같은 내용으로 확인하면 중복 답변을 만들지 않아요.</p><button class="secondary-button" data-action="resolve-pending">전송 결과 확인</button></section>' : ""}</div>`;
 }
 function vehicleStatus(vehicle) {
   if (vehicle.status === "requested") return "차량에서 계정 확인을 기다려요";
@@ -400,17 +481,14 @@ function meView() {
   if (!S.user)
     return `<div class="page"><div class="empty-card"><img src="${art()}" width="130" height="130" alt=""><h1>나와 내 친구의 공간</h1><p>로그인하고 나다운 취향과 여행을 차곡차곡 남겨보세요.</p><button class="main-button" data-action="login">로그인하기</button></div></div>`;
   const p = S.user.profile;
-  return `<div class="page settings-page"><div class="page-intro"><div><p class="eyebrow">ME & MY FRIEND</p><h1>나와 내 친구의 공간</h1><p class="muted">내가 확인한 취향만 기억하고 있어요.</p></div></div><section class="profile-card"><div class="profile-person"><img src="${art()}" alt="내 친구"><div><h2>${esc(p.displayName)}</h2><p>@${esc(S.user.handle)} · 내 친구 ${friend()}</p></div></div><form id="profile-form"><label for="my-name">내 별명</label><input id="my-name" name="displayName" maxlength="30" required value="${esc(p.displayName)}"><label>함께할 친구</label><div class="avatar-options">${[
-    ["dragon", "파도"],
-    ["bear", "모카"],
-  ]
+  return `<div class="page settings-page"><div class="page-intro"><div><p class="eyebrow">ME & MY FRIEND</p><h1>나와 내 친구의 공간</h1><p class="muted">내가 확인한 취향만 기억하고 있어요.</p></div></div><section class="profile-card"><div class="profile-person"><img src="${art()}" alt="내 친구"><div><h2>${esc(p.displayName)}</h2><p>@${esc(S.user.handle)} · 내 친구 ${friend()}</p></div></div><form id="profile-form"><label for="my-name">내 별명</label><input id="my-name" name="displayName" maxlength="30" required value="${esc(p.displayName)}"><label>함께할 친구</label><div class="avatar-options">${CHARACTERS
     .map(
-      ([id, name]) =>
-        `<label class="avatar-choice"><input type="radio" name="avatar" value="${id}" ${p.avatar === id ? "checked" : ""}><img src="/assets/${id}.png" alt="${name}"><span>${name}</span></label>`,
+      ({id, name, image}) =>
+        `<label class="avatar-choice"><input type="radio" name="avatar" value="${id}" ${p.avatar === id ? "checked" : ""}><img src="${image}" alt="${name}"><span>${name}</span></label>`,
     )
     .join(
       "",
-    )}</div><label for="my-interests">좋아하는 것</label><input id="my-interests" name="interests" placeholder="바다 산책, 조용한 카페처럼 쉼표로 구분해 주세요" value="${esc(p.interests.join(", "))}"><label for="my-style">편한 여행 방식</label><textarea id="my-style" name="travelStyle" maxlength="300" rows="2" placeholder="여유롭게 걷고, 중간중간 쉬는 여행이 좋아요">${esc(p.travelStyle)}</textarea><label for="my-about">친구가 알아두면 좋을 이야기</label><textarea id="my-about" name="about" maxlength="500" rows="3" placeholder="여행할 때 나를 편하게 해주는 것들을 알려주세요">${esc(p.about)}</textarea><p class="field-hint">건강·연락처 같은 민감정보는 남기지 않는 게 좋아요.</p><button class="main-button" type="submit">내 정보 저장하기</button></form></section>${vehiclePanel()}<section class="profile-card"><div class="settings-row"><div><b>AI 대화 동의</b><p>대화와 저장한 취향·여행을 OpenAI에 전달해요.<br>동의를 철회하면 새 답변과 진행 중 답변을 멈춰요.</p></div><button class="outline-button" data-action="${S.user.aiConsent ? "revoke-consent" : "open-consent"}">${S.user.aiConsent ? "동의 철회" : "대화 시작하기"}</button></div></section><section class="profile-card"><div class="settings-row"><div><b>나의 계정</b><p>대화와 여행은 이 계정에 저장돼요.</p></div><button class="outline-button" data-action="logout">로그아웃</button></div></section></div>`;
+    )}</div><label for="my-interests">좋아하는 것</label><input id="my-interests" name="interests" placeholder="바다 산책, 조용한 카페처럼 쉼표로 구분해 주세요" value="${esc(p.interests.join(", "))}"><label for="my-style">편한 여행 방식</label><textarea id="my-style" name="travelStyle" maxlength="300" rows="2" placeholder="여유롭게 걷고, 중간중간 쉬는 여행이 좋아요">${esc(p.travelStyle)}</textarea><label for="my-about">친구가 알아두면 좋을 이야기</label><textarea id="my-about" name="about" maxlength="500" rows="3" placeholder="여행할 때 나를 편하게 해주는 것들을 알려주세요">${esc(p.about)}</textarea><p class="field-hint">건강·연락처 같은 민감정보는 남기지 않는 게 좋아요.</p><button class="main-button" type="submit">내 정보 저장하기</button></form></section>${vehiclePanel()}<section class="profile-card"><div class="settings-row"><div><b>친구의 음성</b><p>듣기를 누른 답변만 ElevenLabs에 보내요.</p></div><button class="outline-button" data-action="voice-revoke">음성 동의 해제</button></div></section><section class="profile-card"><div class="settings-row"><div><b>AI 대화 동의</b><p>대화와 저장한 취향·여행을 OpenAI에 전달해요.<br>동의를 철회하면 새 답변과 진행 중 답변을 멈춰요.</p></div><button class="outline-button" data-action="${S.user.aiConsent ? "revoke-consent" : "open-consent"}">${S.user.aiConsent ? "동의 철회" : "대화 시작하기"}</button></div></section><section class="profile-card"><div class="settings-row"><div><b>나의 계정</b><p>대화와 여행은 이 계정에 저장돼요.</p></div><button class="outline-button" data-action="logout">로그아웃</button></div></section></div>`;
 }
 function updateComposer() {
   const visible = S.view === "chat" && !!S.user;
@@ -423,6 +501,7 @@ function updateComposer() {
     !S.user.aiConsent ||
     !!S.chat?.archived ||
     S.loading ||
+    !!S.tripEditor ||
     !!pending ||
     submitting ||
     !$("message").value.trim() ||
@@ -436,8 +515,10 @@ function updateComposer() {
 function draw() {
   renderChrome();
   $("main-content").innerHTML = S.loading
-    ? '<div class="loading-state" role="status">이야기를 불러오고 있어요.</div>'
-    : S.view === "chat"
+    ? `<div class="loading-state" role="status">${S.view.startsWith("journey") ? "여행을" : "이야기를"} 불러오고 있어요.</div>`
+    : S.view.startsWith("journey")
+      ? journeyFlow.view()
+      : S.view === "chat"
       ? chatView()
       : S.view === "trips"
         ? tripsView()
@@ -457,17 +538,28 @@ function restoreInput() {
   updateComposer();
 }
 async function route() {
+  journeyFlow.close();
+  S.tripEditor = null;
+  stopVoice();
   const version = ++routeVersion;
   closeVehicleReview();
   closeStream();
   const match = location.hash.match(
-    /^#(home|chat|trips|me)(?:\/([\da-f-]+))?$/i,
+    /^#(home|chat|trips|me|journey|journey-detail|journey-edit|journey-operator)(?:\/([\da-f-]+))?$/i,
   );
   S.view = match?.[1] || "home";
   S.chatId = S.view === "chat" ? match?.[2] || null : null;
   S.chat = null;
-  S.loading = !!S.chatId;
+  S.loading = !!S.chatId || S.view.startsWith("journey");
   draw();
+  if (S.view.startsWith("journey")) {
+    await journeyFlow.open(S.view,match?.[2]||DEFAULT_TRIP_ID);
+    if (version !== routeVersion) return;
+    S.loading = false;
+    draw();
+    $("main-content").scrollTop = 0;
+    return;
+  }
   if (S.chatId && S.user)
     try {
       const data = await api.request(`/api/chats/${S.chatId}`);
@@ -641,6 +733,19 @@ document.addEventListener("click", async (event) => {
   const action = button.dataset.action;
   const context = viewContext();
   try {
+    if (await draftPlanAction(action, button)) return;
+    if (await journeyFlow.action(action, button)) return;
+    if (action === "listen") { await listenToTurn(button.dataset.id); return; }
+    if (["voice-stop", "voice-cancel"].includes(action)) { stopVoice(); return; }
+    if (action === "voice-resume") { voicePlayer?.resume?.(); return; }
+    if (action === "voice-revoke") { voiceConsent = false; stopVoice(); notice("음성 전송 동의를 해제했어요."); return; }
+    if (action === "voice-accept") {
+      const review = voiceReview;
+      $("voice-consent-dialog").close();
+      voiceReview = null;
+      if (review && currentView(review.context)) { voiceConsent = true; await listenToTurn(review.id); }
+      return;
+    }
     if (await vehicleAction(action, button)) return;
     if (action === "close-dialog") {
       button.closest("dialog").close();
@@ -709,6 +814,7 @@ document.addEventListener("click", async (event) => {
       return;
     }
     if (action === "revoke-consent") {
+      stopVoice();
       const data = await api.request("/api/consent", { accepted: false });
       closeStream();
       S.user = data.user;
@@ -717,6 +823,7 @@ document.addEventListener("click", async (event) => {
       return;
     }
     if (action === "logout") {
+      stopVoice();
       await api.request("/api/auth/logout", {});
       closeStream();
       identity({ user: null, chats: [], trips: [], csrf: null });
@@ -730,10 +837,11 @@ document.addEventListener("click", async (event) => {
       button.disabled = true;
       const data = await api.request(
         `/api/drafts/${button.dataset.id}/confirm`,
-        {},
+        {version:S.chat?.turns.flatMap(t=>t.drafts||[]).find(d=>d.id===button.dataset.id)?.version},
       );
       S.user = data.user;
       S.trips = data.trips;
+      if(data.registeredTrip)S.registeredTrip=data.registeredTrip;
       if (!currentView(context)) return;
       if (context.chatId) await reloadChat(context);
       if (!currentView(context)) return;
@@ -792,6 +900,10 @@ $("auth-form").onsubmit = async (event) => {
     );
     event.target.reset();
     $("auth-dialog").close();
+    if (S.user?.onboarding && S.user.onboarding.phase !== "completed") {
+      location.assign("/welcome");
+      return;
+    }
     location.hash = "chat";
     await route();
     if (S.queuedPrompt) {
@@ -806,11 +918,14 @@ $("auth-form").onsubmit = async (event) => {
   }
 };
 document.addEventListener("change", (event) => {
+  journeyFlow.change(event);
   if (event.target.id === "ai-consent")
     document.querySelector('[data-action="consent"]').disabled =
       !event.target.checked;
 });
 document.addEventListener("submit", async (event) => {
+  if(event.target.id==="chat-trip-editor") { event.preventDefault();await saveDraftPlan(event.target);return; }
+  if (event.target.id.startsWith("journey-")) { await journeyFlow.submit(event); return; }
   if (event.target.id === "vehicle-send-form") {
     event.preventDefault();
     try {
@@ -973,6 +1088,8 @@ $("message-form").onsubmit = async (event) => {
   }
 };
 addEventListener("hashchange", () => route().catch((e) => notice(e.message)));
+document.addEventListener("visibilitychange", () => journeyFlow.resume());
+document.addEventListener("input", event => journeyFlow.input(event));
 addEventListener("online", () =>
   notice("다시 연결됐어요. 이야기를 이어가 주세요."),
 );
@@ -981,6 +1098,8 @@ addEventListener("offline", () =>
 );
 try {
   await refresh();
+  if (S.user?.onboarding && S.user.onboarding.phase !== "completed" && !location.hash)
+    location.replace("/welcome");
   await route();
 } catch (e) {
   console.error("SERVICE_BOOT", e.name);
@@ -1004,3 +1123,6 @@ setInterval(() => {
     return;
   refreshVehicles().catch(() => {});
 }, 10000);
+
+document.addEventListener("visibilitychange", () => { if (document.hidden) stopVoice(); });
+addEventListener("pagehide", stopVoice);

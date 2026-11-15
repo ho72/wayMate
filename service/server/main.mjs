@@ -1,6 +1,8 @@
 import { resolve } from "node:path";
 import { startService } from "./http.mjs";
 import { openAIAgent } from "./agent.mjs";
+import { elevenLabsFromEnvironment } from "../../shared/server/elevenlabs.mjs";
+import { vehicleDialogueFromEnvironment } from "../../mock-app/server/ai/vehicle-dialogue.mjs";
 try {
   const port = Number(process.env.SERVICE_PORT || 3004),
     host = process.env.SERVICE_HOST || "127.0.0.1";
@@ -15,12 +17,16 @@ try {
     host,
     origin,
     file: resolve(process.env.SERVICE_DB_PATH || "runtime/waymate.sqlite"),
+    scenarioDemo: process.env.SERVICE_SCENARIO_DEMO === "1",
+    dialogueProvider: process.env.SERVICE_SCENARIO_DEMO === "1" ? vehicleDialogueFromEnvironment() : null,
+    dialogueMaxCalls: Number(process.env.WAYMATE_DIALOGUE_MAX_CALLS || 3),
+    speechProvider: elevenLabsFromEnvironment(),
     agent: openAIAgent({
       apiKey: process.env.OPENAI_API_KEY,
       model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
     }),
   });
-  console.log(`말이통행 서비스 준비 완료: ${origin}`);
+  console.log(`두루밋 서비스 준비 완료: ${origin}`);
   for (const signal of ["SIGINT", "SIGTERM"])
     process.once(signal, async () => {
       await app.close();

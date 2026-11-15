@@ -14,16 +14,22 @@
     <title>두루밋 · 나의 AI 여행 친구</title>
     <link rel="icon" type="image/png" href="/assets/dragon.png" />
     <link rel="stylesheet" href="/app.css" />
+    <link rel="stylesheet" href="/welcome.css" />
+    <link rel="stylesheet" href="/companion-theme.css" />
+    <link rel="stylesheet" href="/scene.css" />
+    <link rel="stylesheet" href="/journey.css" />
+    <link rel="stylesheet" href="/trip-ui.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body>
+    <dialog id="journey-confirm-dialog" class="confirm-dialog">
+      <div class="dialog-heading"><h2 id="journey-confirm-title"></h2><button class="quiet icon-button dialog-close" data-action="close-dialog" aria-label="닫기"></button></div>
+      <p id="journey-confirm-description"></p>
+      <div class="journey-actions"><button id="journey-confirm-action" class="main-button" type="button">확인</button><button class="text-button" type="button" data-action="close-dialog">계속 둘러보기</button></div>
+    </dialog>
     <div id="app" class="app-shell">
       <aside class="desktop-sidebar" aria-label="서비스 메뉴">
-        <a href="#home" class="brand"
-          ><img src="/assets/dragon.png" alt="" /><span
-            >두루밋<small>나의 AI 여행 친구</small></span
-          ></a
-        >
+        <a href="#home" class="brand" aria-label="두루밋"><span class="brand-art" aria-hidden="true"><img src="/assets/logo.png" alt=""></span></a>
         <button class="new-chat main-button" data-action="new-chat">
           새로운 이야기
         </button>
@@ -45,7 +51,7 @@
           <div class="loading-state" role="status">친구와 연결하고 있어요.</div>
         </main>
         <section id="composer" class="composer-dock" hidden>
-          <form id="message-form" aria-label="파도에게 메시지 보내기">
+          <form id="message-form" aria-label="두루에게 메시지 보내기">
             <div class="composer-box">
               <label class="sr-only" for="message">친구에게 이야기하기</label>
               <textarea
@@ -94,7 +100,7 @@
       <img
         class="auth-character"
         src="/assets/dragon.png"
-        alt="반갑게 손을 흔드는 파도"
+        alt="반갑게 손을 흔드는 두루"
       />
       <h2 id="auth-title">이야기를 오래 이어가요</h2>
       <p class="muted">나눈 대화와 여행을 내 공간에 남겨둘게요.</p>
@@ -197,6 +203,13 @@
         </button>
       </div>
     </dialog>
+    <dialog id="voice-consent-dialog" aria-labelledby="voice-consent-title">
+      <h2 id="voice-consent-title">친구의 목소리로 들어볼까요?</h2>
+      <p>듣기를 누른 답변을 ElevenLabs에 보내 음성으로 만들어요. 내 계정의 다른 대화와 취향은 보내지 않아요.</p>
+      <p class="field-hint">동의는 로그인한 동안 유지되며 마이에서 해제할 수 있어요.</p>
+      <div class="draft-actions"><button class="main-button" data-action="voice-accept">동의하고 듣기</button><button class="outline-button" data-action="voice-cancel">돌아가기</button></div>
+    </dialog>
+    <div id="voice-status" class="voice-status" role="status" hidden><span id="voice-status-text"></span><button id="voice-resume" class="outline-button" data-action="voice-resume" hidden>재생하기</button><button class="outline-button" data-action="voice-stop">음성 멈추기</button></div>
     <div
       id="notice"
       class="toast"

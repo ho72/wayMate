@@ -1,0 +1,18 @@
+{
+  "source": "mock-app/vehicle/app/src/main/res/drawable-nodpi/durumit_logo_b.png",
+  "asset": "durumit-logo-transparent.png",
+  "method": "built-in image_gen background removal",
+  "transparent": true,
+  "canvas": [
+    2172,
+    724
+  ],
+  "visibleCrop": {
+    "x": 97,
+    "y": 165,
+    "width": 1977,
+    "height": 405
+  },
+  "sha256": "1450dcdfd4e43a5809df3545515f2c94798e438b165dc9b545f8c2bb5d30be69",
+  "prompt": "Preserve the original teal route icon and Korean 두루밋 wordmark; remove the white background including letter counters; preserve clean antialiased edges and genuine alpha. No redesign, text, shadow, halo, gradient or decoration."
+}

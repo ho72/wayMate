@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
-    <title>wayMate · 내 친구와 여행 이야기</title>
+    <title>두루밋 · 내 친구와 여행 이야기</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/design-v5.css" />
     <script type="module" src="/app.js"></script>
@@ -14,9 +14,9 @@
   <body class="conversation-page">
     <main class="mobile-shell chat-app">
       <header class="chat-header">
-        <a href="/" class="chat-identity" aria-label="wayMate 대화"
+        <a href="/" class="chat-identity" aria-label="두루밋 대화"
           ><span class="friend-mark" aria-hidden="true"><img src="/character.png" alt="" /></span
-          ><span><strong>말이통행</strong><small>나의 AI 여행 친구</small></span></a
+          ><span><strong>두루밋</strong><small>나의 AI 여행 친구</small></span></a
         >
         <details class="journey-menu">
           <summary>내 여행</summary>
@@ -69,7 +69,7 @@
             </div>
           </section>
           <div class="agent-turn current-turn" id="current-turn">
-            <span class="speaker">wayMate</span>
+            <span class="speaker">두루밋</span>
             <p id="conversation-prompt"></p>
           </div>
           <form id="profile-form" hidden>
@@ -213,7 +213,7 @@
             >
               <p class="card-kicker">함께 살펴볼 여행</p>
               <h2>강릉 해안에서의 하루</h2>
-              <p>2026년 11월 14일 · 강릉 해변권</p>
+              <p>2026년 12월 14일 · 강릉 해변권</p>
               <dl>
                 <div>
                   <dt>만남 가능 시간</dt>
@@ -342,5 +342,6 @@
         </div>
       </dialog>
     </main>
+    <div id="voice-status" class="voice-status" role="status" hidden><span id="voice-status-text"></span><button id="voice-resume" type="button" hidden>재생하기</button><button id="voice-stop" type="button">음성 멈추기</button><button id="voice-revoke" type="button">음성 동의 해제</button></div>
   </body>
 </html>

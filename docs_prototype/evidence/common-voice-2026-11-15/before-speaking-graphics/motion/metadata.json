@@ -1,0 +1,47 @@
+{
+  "speaking": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1682,
+        "height": 1210,
+        "r_frame_rate": "1908000/84761",
+        "nb_frames": "67"
+      }
+    ],
+    "format": {
+      "duration": "4.620096"
+    }
+  },
+  "listening": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1682,
+        "height": 1210,
+        "r_frame_rate": "6210000/128267",
+        "nb_frames": "264"
+      }
+    ],
+    "format": {
+      "duration": "5.700756"
+    }
+  },
+  "driving-static": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 1682,
+        "height": 1210,
+        "r_frame_rate": "8340000/177931",
+        "nb_frames": "268"
+      }
+    ],
+    "format": {
+      "duration": "5.952368"
+    }
+  }
+}

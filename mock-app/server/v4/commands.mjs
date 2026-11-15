@@ -17,6 +17,7 @@ import { validateStore } from "./state.mjs";
 import { applyNavigation } from "./navigation.mjs";
 import { project } from "./projection.mjs";
 import { consultationGuard } from "./consultation.mjs";
+import { dialogueContext } from "../ai/vehicle-dialogue.mjs";
 export function coordinator(
   file,
   initial,
@@ -98,6 +99,51 @@ export function coordinator(
   const projection = (actor, id) =>
     assertContract("state", project(state, actor, id, now()));
   return {
+    // Internal account-service import. Never exposed by the demo command endpoint.
+    // The caller verifies ownership and the complete saved plan before this atomic save.
+    importPreparation: (id, { expectedVersion, profile, trip }) => serial(async () => {
+      await expire();
+      if (state.clientId && state.clientId !== id) fail(403, "ACTOR_FORBIDDEN", "본인의 여행만 준비할 수 있어요.");
+      if (state.reset || state.recovery || state.vehicleActivation || state.social.connection.attempted)
+        fail(409, "JOURNEY_LOCKED", "연결 중인 여행은 바꿀 수 없어요. 현재 여정을 마친 뒤 다시 준비해 주세요.");
+      const wanted = { ...structuredClone(profile), source: "account", confirmed: true, version: state.profileVersion };
+      if (isDeepStrictEqual(state.profile, wanted) && isDeepStrictEqual(state.trip, trip)) return projection("web", id);
+      if (state.version !== expectedVersion) fail(409, "STALE_STATE", "최신 여행과 소개를 다시 확인해 주세요.");
+      assertContract("trip", trip);
+      const next = cloneState();
+      next.clientId = id;
+      next.profileVersion++;
+      next.profile = { ...wanted, version: next.profileVersion };
+      next.tripVersion++;
+      next.trip = structuredClone(trip);
+      next.publication = "pending";
+      next.publicationVersion++;
+      next.social.approvedFields = [];
+      next.social.tripShareApproved = false;
+      next.tripShareVersion++;
+      if (trip.availability) {
+        const start = trip.availability.start, end = trip.availability.end;
+        const minutes = value => Number(value.slice(0,2))*60 + Number(value.slice(3));
+        const lo = minutes(start), hi = minutes(end);
+        const begin = hi-lo > 60 ? lo+60 : lo;
+        const time = value => String(Math.floor(value/60)).padStart(2,"0")+":"+String(value%60).padStart(2,"0");
+        next.social.connection.sharedWindow = [time(begin),end];
+      }
+      next.handoff = null; next.ack = null;
+      next.publicApproval = approval(next);
+      next.version++;
+      validateStore(next);
+      await save(next);
+      return projection("web", id);
+    }),
+    dialogueContext: () => serial(async () => {
+      await expire();
+      return dialogueContext(state, now());
+    }),
+    speechContext: () => serial(async () => {
+      await expire();
+      return { runId: state.runId, clientId: state.clientId, blocked: !!(state.reset || state.recovery) };
+    }),
     close: async () => {
       accepting = false;
       await queue;

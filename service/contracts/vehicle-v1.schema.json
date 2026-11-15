@@ -85,7 +85,8 @@
                     "avatar": {
                       "enum": [
                         "dragon",
-                        "bear"
+                        "bear",
+                        "mocha"
                       ]
                     }
                   },
@@ -155,7 +156,8 @@
                     "avatar": {
                       "enum": [
                         "dragon",
-                        "bear"
+                        "bear",
+                        "mocha"
                       ]
                     }
                   },

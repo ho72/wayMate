@@ -38,11 +38,11 @@ const agent = {
     return { reply: "검수 응답" };
   },
 };
-export async function vehicleFixture(t) {
+export async function vehicleFixture(t, extra = {}) {
   const dir = await mkdtemp(join(tmpdir(), "waymate-vehicle-")),
     file = join(dir, "data.sqlite");
   let clock = 1000000,
-    app = await startService({ file, port: 0, agent, vehicleNow: () => clock });
+    app = await startService({ file, port: 0, agent, vehicleNow: () => clock, ...extra });
   t.after(async () => {
     await app.close();
     await rm(dir, { recursive: true, force: true });
@@ -184,6 +184,7 @@ export async function vehicleFixture(t) {
         port: 0,
         agent,
         vehicleNow: () => clock,
+        ...extra,
       });
     },
   };

@@ -40,7 +40,7 @@ fun decodePersonalState(json: JSONObject, expectedDevice: String): PersonalVehic
         val trip = snapshot.getJSONObject("trip")
         val plan = trip.getJSONObject("plan")
         require(snapshot.getInt("profileVersion") > 0 && d.getInt("revision") > 0)
-        val avatar = owner.requiredText("avatar").also { require(it in listOf("dragon", "bear")) }
+        val avatar = owner.requiredText("avatar").also { require(it in listOf("dragon", "bear", "mocha")) }
         val days = plan.getJSONArray("days")
         require(days.length() in 1..14)
         val parsedDays = (0 until days.length()).map { i ->

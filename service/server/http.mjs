@@ -6,6 +6,12 @@ import { openRepository } from "./store.mjs";
 import { agentRunner } from "./agent.mjs";
 import { error, UUID } from "./contracts.mjs";
 import { nativeVehicleRoute, accountVehicleRoute } from "./vehicle-http.mjs";
+import { speechService } from "../../shared/server/speech.mjs";
+import { speechHttp } from "../../shared/server/speech-http.mjs";
+import { journeyService } from "./journey.mjs";
+import { journeyDialogueService } from "./journey-dialogue.mjs";
+import { journeyNativeRoute } from "./journey-http.mjs";
+import { DEFAULT_TRIP_ID } from "../shared/travel.mjs";
 const derive = promisify(scrypt);
 const key = () => randomBytes(32).toString("base64url");
 async function passwordHash(password, salt = randomBytes(16).toString("hex")) {
@@ -68,11 +74,29 @@ async function jsonBody(req) {
   }
 }
 const staticFiles = new Map([
+  ["/speech-client.mjs", ["../web/speech-client.mjs", "text/javascript; charset=utf-8"]],
   ["/", ["../web/index.html", "text/html; charset=utf-8"]],
   ["/app.js", ["../web/app.js", "text/javascript; charset=utf-8"]],
+  ["/journey.js", ["../web/journey.js", "text/javascript; charset=utf-8"]],
+  ["/journey-operator.mjs", ["../web/journey-operator.mjs", "text/javascript; charset=utf-8"]],
+  ["/scenario-operator", ["../web/scenario-operator.html", "text/html; charset=utf-8"]],
+  ["/scenario-operator.mjs", ["../web/scenario-operator.mjs", "text/javascript; charset=utf-8"]],
+  ["/scenario-operator.css", ["../web/scenario-operator.css", "text/css; charset=utf-8"]],
+  ["/journey.css", ["../web/journey.css", "text/css; charset=utf-8"]],
+  ["/trip-ui.js", ["../web/trip-ui.js", "text/javascript; charset=utf-8"]],
+  ["/trip-ui.css", ["../web/trip-ui.css", "text/css; charset=utf-8"]],
+  ["/shared/travel.mjs", ["../shared/travel.mjs", "text/javascript; charset=utf-8"]],
   ["/client.mjs", ["../web/client.mjs", "text/javascript; charset=utf-8"]],
+  ["/shared/characters.mjs", ["../shared/characters.mjs", "text/javascript; charset=utf-8"]],
   ["/app.css", ["../web/app.css", "text/css; charset=utf-8"]],
+  ["/companion-theme.css", ["../../shared/design/companion-theme.css", "text/css; charset=utf-8"]],
+  ["/scene.css", ["../web/scene.css", "text/css; charset=utf-8"]],
+  ["/welcome", ["../web/welcome.html", "text/html; charset=utf-8"]],
+  ["/welcome.js", ["../web/welcome.js", "text/javascript; charset=utf-8"]],
+  ["/welcome.css", ["../web/welcome.css", "text/css; charset=utf-8"]],
   ["/assets/icons.svg", ["../web/assets/icons.svg", "image/svg+xml"]],
+  ["/assets/gangneung-route.svg", ["../web/assets/gangneung-route.svg", "image/svg+xml"]],
+  ["/assets/logo.png", ["../../shared/design/assets/durumit-logo-transparent.png", "image/png"]],
   [
     "/assets/dragon.png",
     ["../../mock-app/assets/images/design-v5/dragon.png", "image/png"],
@@ -81,6 +105,8 @@ const staticFiles = new Map([
     "/assets/bear.png",
     ["../../mock-app/assets/images/design-v5/bear.png", "image/png"],
   ],
+  ["/assets/rumit.png", ["../../mock-app/assets/images/design-v5/rumit.png", "image/png"]],
+  ["/assets/mocha.png", ["../../mock-app/assets/images/design-v5/bear-legacy.png", "image/png"]],
 ]);
 export async function startService({
   file,
@@ -89,6 +115,12 @@ export async function startService({
   origin = `http://127.0.0.1:${port}`,
   agent,
   vehicleNow,
+  speechProvider = null,
+  speechTimeoutMs,
+  scenarioDemo = false,
+  dialogueProvider = null,
+  dialogueMaxCalls = 3,
+  dialogueTimeoutMs,
 } = {}) {
   if (!agent) throw new Error("A real agent provider is required");
   const originUrl = new URL(origin);
@@ -101,9 +133,15 @@ export async function startService({
     originUrl.hash
   )
     throw new Error("Invalid public origin");
+  if (scenarioDemo && (process.env.NODE_ENV === "production" || host !== "127.0.0.1"))
+    throw new Error("Scenario demo gateway requires a local development server");
   const repo = await openRepository(file, { now: vehicleNow || Date.now }),
     runner = agentRunner(repo, agent),
     limit = throttle();
+  const speech = speechService(speechProvider, { timeoutMs: speechTimeoutMs });
+  const journeys = journeyService({ directory: file + ".journeys", getUser: (id) => repo.getUser(id), getTrip: (user,id) => repo.trip(user,id), demo: scenarioDemo });
+  const dialogue = journeyDialogueService({ journeys, directory: file + ".journeys",
+    provider: dialogueProvider, maxCalls: dialogueMaxCalls, timeoutMs: dialogueTimeoutMs });
   const cookieName =
     originUrl.protocol === "https:" ? "__Host-waymate" : "waymate_session";
   const cookie = (value, clear = false) =>
@@ -128,7 +166,7 @@ export async function startService({
     );
     res.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
     );
     const send = (status, body) => {
       res.writeHead(status, {
@@ -141,7 +179,7 @@ export async function startService({
         port === 0 ? `127.0.0.1:${server.address().port}` : originUrl.host;
       const effectiveOrigin =
         port === 0 ? `http://${authority}` : originUrl.origin;
-      const nativePath = new URL(req.url, effectiveOrigin).pathname.startsWith(
+      const nativePath = req.headers["x-demo-actor"] === "car" || new URL(req.url, effectiveOrigin).pathname.startsWith(
         "/api/vehicle/",
       );
       const emulatorHost =
@@ -173,7 +211,9 @@ export async function startService({
           status: "ready",
           service: "waymate",
           agentConfigured: true,
+          speechConfigured: speech.config().available,
         });
+      if (await journeyNativeRoute({ req, res, path: url.pathname, method, journeys, dialogue, demo: scenarioDemo, send, jsonBody, speech })) return;
       if (!url.pathname.startsWith("/api/"))
         throw error(404, "NOT_FOUND", "페이지를 찾을 수 없어요.");
       if (!["GET", "POST", "PUT", "PATCH"].includes(method))
@@ -191,6 +231,8 @@ export async function startService({
           path: url.pathname,
           method,
           repo,
+          res,
+          speech,
           send,
           jsonBody,
           limit,
@@ -208,6 +250,7 @@ export async function startService({
                 csrf: session.csrf,
                 chats: repo.listChats(session.userId),
                 trips: repo.listTrips(session.userId),
+                registeredTrip: repo.registeredTrip(session.userId),
                 vehicles: repo.vehicleList(session.userId),
               }
             : { user: null, csrf: null, chats: [], trips: [] },
@@ -288,6 +331,7 @@ export async function startService({
           csrf,
           chats: repo.listChats(user.id),
           trips: repo.listTrips(user.id),
+          registeredTrip: repo.registeredTrip(user.id),
           vehicles: repo.vehicleList(user.id),
         });
       }
@@ -300,6 +344,36 @@ export async function startService({
           "페이지를 새로 열고 다시 시도해 주세요.",
         );
       const user = session.userId;
+      if (url.pathname === "/api/journey" && method === "GET") return send(200, await journeys.state(user,url.searchParams.get("tripId")||DEFAULT_TRIP_ID));
+      if (url.pathname.startsWith("/api/journey/")) {
+        limit("journey:" + user, 180, 60000);
+        if (url.pathname === "/api/journey/operator" && method === "GET") return send(200, await journeys.operator(user,url.searchParams.get("tripId")||DEFAULT_TRIP_ID));
+        const receipt = /^\/api\/journey\/receipts\/([\da-f-]+)$/i.exec(url.pathname);
+        if (receipt && method === "GET" && UUID.test(receipt[1])) return send(200, await journeys.receipt(user, url.searchParams.get("runId"), receipt[1],url.searchParams.get("tripId")||DEFAULT_TRIP_ID));
+        const action = url.pathname.slice("/api/journey/".length);
+        if (method === "POST" && ["prepare", "command", "respond", "transfer", "reset", "operate"].includes(action))
+          return send(200, await journeys[action](user, await jsonBody(req)));
+      }
+      if (url.pathname === "/api/onboarding" && method === "GET")
+        return send(200, repo.onboardingData(user));
+      if (url.pathname === "/api/onboarding/character" && method === "POST") {
+        limit("onboarding:" + user, 30, 60000);
+        return send(200, repo.startOnboarding(user, await jsonBody(req)));
+      }
+      if (url.pathname === "/api/onboarding/complete" && method === "POST") {
+        limit("onboarding:" + user, 30, 60000);
+        return send(200, repo.completeOnboarding(user, await jsonBody(req)));
+      }
+      if ((method === "GET" && url.pathname === "/api/tts/config") ||
+          (method === "POST" && url.pathname === "/api/tts")) {
+        limit("tts-http:" + user, 120, 60_000);
+        return await speechHttp({ req, res, speech, principal: "user:" + user, jsonBody,
+          assertAccess() {
+            if (!repo.session(rawToken))
+              throw error(401, "UNAUTHORIZED", "로그인하고 다시 요청해 주세요.");
+          },
+        });
+      }
       if (
         await accountVehicleRoute({
           req,
@@ -341,10 +415,24 @@ export async function startService({
         });
       if (method === "POST" && url.pathname === "/api/chats") {
         limit("new-chat:" + user, 20, 60000);
-        return send(201, { chat: repo.newChat(user) });
+        const body=await jsonBody(req);
+        if(body.tripId!==undefined&&!UUID.test(body.tripId))throw error(422,"INVALID_INPUT","수정할 여행을 다시 선택해 주세요.");
+        return send(201, { chat: repo.newChat(user,body.tripId||null) });
       }
       if (method === "GET" && url.pathname === "/api/trips")
-        return send(200, { trips: repo.listTrips(user) });
+        return send(200, { trips: repo.listTrips(user),registeredTrip:repo.registeredTrip(user) });
+      const tripMatch=/^\/api\/trips\/([\da-f-]+)$/i.exec(url.pathname);
+      if(tripMatch&&UUID.test(tripMatch[1])) {
+        if(method==="GET")return send(200,{trip:repo.trip(user,tripMatch[1])});
+        if(method==="PUT") {
+          const body=await jsonBody(req);
+          await journeys.assertEditable(user,tripMatch[1]);
+          return send(200,{trip:repo.updateTrip(user,tripMatch[1],body),trips:repo.listTrips(user),registeredTrip:repo.registeredTrip(user)});
+        }
+      }
+      const draftEdit=/^\/api\/drafts\/([\da-f-]+)$/i.exec(url.pathname);
+      if(draftEdit&&UUID.test(draftEdit[1])&&method==="PUT")
+        return send(200,{draft:repo.updateTripDraft(user,draftEdit[1],await jsonBody(req))});
       let match = url.pathname.match(/^\/api\/chats\/([\da-f-]+)$/i);
       if (match && UUID.test(match[1])) {
         if (method === "GET")
@@ -442,12 +530,17 @@ export async function startService({
         }
       }
       match = url.pathname.match(/^\/api\/drafts\/([\da-f-]+)\/confirm$/i);
-      if (match && UUID.test(match[1]) && method === "POST")
+      if (match && UUID.test(match[1]) && method === "POST") {
+        const body=await jsonBody(req);
+        const origin=repo.tripDraftOrigin(user,match[1]);
+        if(origin)await journeys.assertEditable(user,origin.id);
         return send(200, {
-          result: repo.confirmDraft(user, match[1]),
+          result: repo.confirmDraft(user, match[1],body.version),
           user: repo.getUser(user),
           trips: repo.listTrips(user),
+          registeredTrip: repo.registeredTrip(user),
         });
+      }
       throw error(404, "NOT_FOUND", "요청을 찾을 수 없어요.");
     } catch (e) {
       if (res.headersSent) {
@@ -472,6 +565,9 @@ export async function startService({
       server.listen(port, host, resolve);
     });
   } catch (e) {
+    await dialogue.close();
+    await journeys.close();
+    await speech.close();
     await runner.close();
     await repo.close();
     throw e;
@@ -481,6 +577,9 @@ export async function startService({
     repo,
     runner,
     async close() {
+      await dialogue.close();
+      await journeys.close();
+      await speech.close();
       await runner.close();
       await new Promise((r) => {
         server.close(r);

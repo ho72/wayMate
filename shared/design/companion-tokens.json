@@ -1,0 +1,22 @@
+{
+  "name": "두루밋 · 여정의 오로라",
+  "colors": {
+    "sceneTop": "#E0E9FA",
+    "sceneMiddle": "#E3E5F4",
+    "sceneBottom": "#DCEEE8",
+    "glowBlue": "#BCDDFC",
+    "glowLilac": "#C4BAEE",
+    "glowMint": "#B5E5DA",
+    "primary": "#0C6170",
+    "ink": "#23364B",
+    "muted": "#56677F",
+    "softText": "#687992",
+    "surface": "#F7F8FF",
+    "outline": "#BBCBDA",
+    "mint": "#BFEADD",
+    "accent": "#707DB6",
+    "focus": "#5977B9"
+  },
+  "surfaceOpacity": 0.58,
+  "radius": { "control": 18, "card": 28, "scene": 32 }
+}

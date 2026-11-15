@@ -1,0 +1,72 @@
+[
+  {
+    "scene": "common-friend-speaking",
+    "title": "common-friend-speaking",
+    "file": "common-friend-speaking-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-answer-speaking",
+    "title": "common-answer-speaking",
+    "file": "common-answer-speaking-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-request-speaking",
+    "title": "common-request-speaking",
+    "file": "common-request-speaking-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-call-active-speaking",
+    "title": "common-call-active-speaking",
+    "file": "common-call-active-speaking-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-driving-places-speaking",
+    "title": "common-driving-places-speaking",
+    "file": "common-driving-places-speaking-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-friend-listening",
+    "title": "common-friend-listening",
+    "file": "common-friend-listening-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-friend-idle",
+    "title": "common-friend-idle",
+    "file": "common-friend-idle-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "common-friend-paused",
+    "title": "common-friend-paused",
+    "file": "common-friend-paused-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "mc-active",
+    "title": "mc-active",
+    "file": "mc-active-2split.png",
+    "width": 1682,
+    "height": 1210
+  },
+  {
+    "scene": "voice-talking",
+    "title": "voice-talking",
+    "file": "voice-talking-2split.png",
+    "width": 1682,
+    "height": 1210
+  }
+]
